@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{746CC4C3-787F-4B0E-AA66-E388FE3FF4F6}</ProjectGuid>
+    <RootNamespace>FinalFight</RootNamespace>
+    <ProjectName>FinalFight</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>false</SDLCheck>
+      <ExceptionHandling>Sync</ExceptionHandling>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <ExceptionHandling>Sync</ExceptionHandling>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="Bred.h" />
+    <ClInclude Include="CodyAirDamageState.h" />
+    <ClInclude Include="CodyAttackStateOne.h" />
+    <ClInclude Include="CodyDamageState.h" />
+    <ClInclude Include="CodyIdleFallState.h" />
+    <ClInclude Include="CodyIdleJumpAttackState.h" />
+    <ClInclude Include="CodyIdleJumpState.h" />
+    <ClInclude Include="CodyIdleState.h" />
+    <ClInclude Include="CodyKilledState.h" />
+    <ClInclude Include="CodyMovementFallState.h" />
+    <ClInclude Include="CodyMovementJumpAttackState.h" />
+    <ClInclude Include="CodyMovementJumpState.h" />
+    <ClInclude Include="CodyMoveState.h" />
+    <ClInclude Include="CodyStateMachine.h" />
+    <ClInclude Include="Creature.h" />
+    <ClInclude Include="Dug.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyAttackState.h" />
+    <ClInclude Include="EnemyDamageState.h" />
+    <ClInclude Include="EnemyIdleState.h" />
+    <ClInclude Include="EnemyKilledState.h" />
+    <ClInclude Include="EnemyMoveState.h" />
+    <ClInclude Include="EnemyStateMachine.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="Attack.h" />
+    <ClInclude Include="Jake.h" />
+    <ClInclude Include="ModuleEntity.h" />
+    <ClInclude Include="Globals.h" />
+    <ClInclude Include="MemLeaks.h" />
+    <ClInclude Include="Module.h" />
+    <ClInclude Include="ModuleAudio.h" />
+    <ClInclude Include="ModuleCollision.h" />
+    <ClInclude Include="ModuleFadeToBlack.h" />
+    <ClInclude Include="ModuleInput.h" />
+    <ClInclude Include="ModuleLevelOneStageOne.h" />
+    <ClInclude Include="ModuleParticles.h" />
+    <ClInclude Include="ModuleRender.h" />
+    <ClInclude Include="ModuleTextures.h" />
+    <ClInclude Include="ModuleWindow.h" />
+    <ClInclude Include="Parson.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerStateMachine.h" />
+    <ClInclude Include="Point.h" />
+    <ClInclude Include="Section.h" />
+    <ClInclude Include="Simons.h" />
+    <ClInclude Include="Timer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Bred.cpp" />
+    <ClCompile Include="CodyAirDamageState.cpp" />
+    <ClCompile Include="CodyAttackStateOne.cpp" />
+    <ClCompile Include="CodyDamageState.cpp" />
+    <ClCompile Include="CodyIdleFallState.cpp" />
+    <ClCompile Include="CodyIdleJumpAttackState.cpp" />
+    <ClCompile Include="CodyIdleJumpState.cpp" />
+    <ClCompile Include="CodyIdleState.cpp" />
+    <ClCompile Include="CodyKilledState.cpp" />
+    <ClCompile Include="CodyMovementFallState.cpp" />
+    <ClCompile Include="CodyMovementJumpAttackState.cpp" />
+    <ClCompile Include="CodyMovementJumpState.cpp" />
+    <ClCompile Include="CodyMoveState.cpp" />
+    <ClCompile Include="CodyStateMachine.cpp" />
+    <ClCompile Include="Creature.cpp" />
+    <ClCompile Include="Dug.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyAttackState.cpp" />
+    <ClCompile Include="EnemyDamageState.cpp" />
+    <ClCompile Include="EnemyIdleState.cpp" />
+    <ClCompile Include="EnemyKilledState.cpp" />
+    <ClCompile Include="EnemyMoveState.cpp" />
+    <ClCompile Include="EnemyStateMachine.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Jake.cpp" />
+    <ClCompile Include="ModuleEntity.cpp" />
+    <ClCompile Include="Log.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ModuleAudio.cpp" />
+    <ClCompile Include="ModuleCollision.cpp" />
+    <ClCompile Include="ModuleFadeToBlack.cpp" />
+    <ClCompile Include="ModuleInput.cpp" />
+    <ClCompile Include="ModuleLevelOneStageOne.cpp" />
+    <ClCompile Include="ModuleParticles.cpp" />
+    <ClCompile Include="ModuleRender.cpp" />
+    <ClCompile Include="ModuleTextures.cpp" />
+    <ClCompile Include="ModuleWindow.cpp" />
+    <ClCompile Include="Parson.c" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerStateMachine.cpp" />
+    <ClCompile Include="Simons.cpp" />
+    <ClCompile Include="Timer.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
