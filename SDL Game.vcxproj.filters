@@ -178,6 +178,9 @@
     <ClInclude Include="Dug.h">
       <Filter>Game Entities\Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="PreciseTimer.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -308,6 +311,9 @@
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="PreciseTimer.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

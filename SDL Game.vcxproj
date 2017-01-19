@@ -114,6 +114,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerStateMachine.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="PreciseTimer.h" />
     <ClInclude Include="Section.h" />
     <ClInclude Include="Simons.h" />
     <ClInclude Include="Timer.h" />
@@ -160,6 +161,7 @@
     <ClCompile Include="Parson.c" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerStateMachine.cpp" />
+    <ClCompile Include="PreciseTimer.cpp" />
     <ClCompile Include="Simons.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>

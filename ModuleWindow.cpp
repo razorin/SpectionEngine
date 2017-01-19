@@ -12,7 +12,7 @@ ModuleWindow::ModuleWindow(const JSON_Object *json) : Module(json)
 	borderless = (bool)json_object_dotget_boolean(json, "borderless");
 	resizable = json_object_dotget_boolean(json, "resizable");
 	fullscreen_window = json_object_dotget_boolean(json, "fullscren_window");
-	screen_size = (int)json_object_dotget_number(json, "size");
+	screen_size = 3;//(int)json_object_dotget_number(json, "size");
 	title = json_object_dotget_string(json, "title");
 }
 
