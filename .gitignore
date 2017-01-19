@@ -28,6 +28,9 @@
 *.opendb
 *.sdf
 
+Debug/
+Release/
+
 SDL Game.VC.db
 Debug/FinalFight.tlog/CL.command.1.tlog
 Debug/FinalFight.tlog/CL.read.1.tlog
