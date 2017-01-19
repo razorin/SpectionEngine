@@ -3,7 +3,6 @@
 #include "ModuleInput.h"
 #include "ModuleRender.h"
 #include "ModuleCollision.h"
-#include "Entity.h"
 
 using namespace std;
 
@@ -81,9 +80,9 @@ bool ModuleCollision::CleanUp()
 	return true;
 }
 
-Collider* ModuleCollision::AddCollider(const SDL_Rect& rect, COLLIDER_TYPE type, bool ignore_z, bool ignore_y, std::function<void(const Collider &)> onCollision, Entity *owner)
+Collider* ModuleCollision::AddCollider(const SDL_Rect& rect, COLLIDER_TYPE type, bool ignore_z, bool ignore_y, std::function<void(const Collider &)> onCollision)
 {
-	Collider* ret = new Collider(rect, type, ignore_z, ignore_y, onCollision, owner);
+	Collider* ret = new Collider(rect, type, ignore_z, ignore_y, onCollision);
 
 	colliders.push_back(ret);
 

@@ -5,32 +5,11 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Game Modules">
-      <UniqueIdentifier>{15b5cbc6-cd68-4e6e-8935-b04f2fdf7bf4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Core Modules">
       <UniqueIdentifier>{72b85efa-930b-4213-a8ec-2f0f817410d1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{ad89cf24-f35e-4d0c-90e5-820c054c274d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game Entities">
-      <UniqueIdentifier>{0879100e-21bf-4122-91a2-99209f0239bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="StateMachines">
-      <UniqueIdentifier>{6498dd3c-e2af-4c4c-a644-14c4e59a71d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="StateMachines\Player">
-      <UniqueIdentifier>{eef28e9c-25c6-45cf-bedc-f8b2d8cb1ed8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="StateMachines\Player\Cody">
-      <UniqueIdentifier>{f13bdcfd-85d0-4223-84f4-62b5db23f215}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="StateMachines\Enemies">
-      <UniqueIdentifier>{c63633af-dfbc-4d35-bde9-65d14c412aa0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game Entities\Enemies">
-      <UniqueIdentifier>{1de5c9ca-201c-44d6-a185-8b37e11217c8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -76,21 +55,6 @@
     <ClInclude Include="ModuleCollision.h">
       <Filter>Core Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Game Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Creature.h">
-      <Filter>Game Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Game Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleEntity.h">
-      <Filter>Game Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleLevelOneStageOne.h">
-      <Filter>Game Modules</Filter>
-    </ClInclude>
     <ClInclude Include="Parson.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -100,83 +64,8 @@
     <ClInclude Include="Section.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerStateMachine.h">
-      <Filter>StateMachines\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="CodyStateMachine.h">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClInclude>
-    <ClInclude Include="CodyMoveState.h">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClInclude>
-    <ClInclude Include="CodyIdleState.h">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClInclude>
-    <ClInclude Include="CodyIdleJumpState.h">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClInclude>
-    <ClInclude Include="CodyIdleFallState.h">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClInclude>
-    <ClInclude Include="CodyAttackStateOne.h">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClInclude>
-    <ClInclude Include="CodyIdleJumpAttackState.h">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClInclude>
-    <ClInclude Include="CodyMovementFallState.h">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClInclude>
-    <ClInclude Include="CodyMovementJumpAttackState.h">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClInclude>
-    <ClInclude Include="CodyMovementJumpState.h">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyStateMachine.h">
-      <Filter>StateMachines\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyMoveState.h">
-      <Filter>StateMachines\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyIdleState.h">
-      <Filter>StateMachines\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyAttackState.h">
-      <Filter>StateMachines\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Game Entities\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="Bred.h">
-      <Filter>Game Entities\Enemies</Filter>
-    </ClInclude>
     <ClInclude Include="Attack.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="CodyAirDamageState.h">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClInclude>
-    <ClInclude Include="CodyDamageState.h">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClInclude>
-    <ClInclude Include="CodyKilledState.h">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyDamageState.h">
-      <Filter>StateMachines\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyKilledState.h">
-      <Filter>StateMachines\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="Simons.h">
-      <Filter>Game Entities\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="Jake.h">
-      <Filter>Game Entities\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="Dug.h">
-      <Filter>Game Entities\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -210,101 +99,11 @@
     <ClCompile Include="ModuleCollision.cpp">
       <Filter>Core Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Game Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Creature.cpp">
-      <Filter>Game Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Game Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleEntity.cpp">
-      <Filter>Game Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleLevelOneStageOne.cpp">
-      <Filter>Game Modules</Filter>
-    </ClCompile>
     <ClCompile Include="Parson.c">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="CodyMoveState.cpp">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClCompile>
-    <ClCompile Include="CodyIdleState.cpp">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClCompile>
-    <ClCompile Include="CodyIdleJumpState.cpp">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClCompile>
-    <ClCompile Include="CodyIdleFallState.cpp">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClCompile>
-    <ClCompile Include="CodyAttackStateOne.cpp">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClCompile>
-    <ClCompile Include="CodyIdleJumpAttackState.cpp">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClCompile>
-    <ClCompile Include="CodyMovementFallState.cpp">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClCompile>
-    <ClCompile Include="CodyMovementJumpAttackState.cpp">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClCompile>
-    <ClCompile Include="CodyMovementJumpState.cpp">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyStateMachine.cpp">
-      <Filter>StateMachines</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyMoveState.cpp">
-      <Filter>StateMachines\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyIdleState.cpp">
-      <Filter>StateMachines\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyAttackState.cpp">
-      <Filter>StateMachines\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Game Entities\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="Bred.cpp">
-      <Filter>Game Entities\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="CodyDamageState.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerStateMachine.cpp">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClCompile>
-    <ClCompile Include="CodyStateMachine.cpp">
-      <Filter>StateMachines\Player\Cody</Filter>
-    </ClCompile>
-    <ClCompile Include="CodyKilledState.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="CodyAirDamageState.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyDamageState.cpp">
-      <Filter>StateMachines\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyKilledState.cpp">
-      <Filter>StateMachines\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="Simons.cpp">
-      <Filter>Game Entities\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="Jake.cpp">
-      <Filter>Game Entities\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="Dug.cpp">
-      <Filter>Game Entities\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Main</Filter>

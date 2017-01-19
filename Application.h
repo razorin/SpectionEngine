@@ -14,9 +14,6 @@ class ModuleFadeToBlack;
 class ModuleCollision;
 class ModuleParticles;
 
-// Game modules ---
-class ModuleLevelOneStageOne;
-class ModuleEntity;
 
 class Application
 {
@@ -39,9 +36,6 @@ public:
 	ModuleCollision* collision;
 	ModuleParticles* particles;
 
-	// Game modules ---
-	ModuleLevelOneStageOne* levelOneStageOne;
-	ModuleEntity* entities;
 	JSON_Value *configuration;
 
 private:

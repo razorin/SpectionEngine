@@ -7,8 +7,6 @@
 #include "ModuleFadeToBlack.h"
 #include "ModuleCollision.h"
 #include "ModuleParticles.h"
-#include "ModuleLevelOneStageOne.h"
-#include "ModuleEntity.h"
 
 
 using namespace std;
@@ -24,10 +22,6 @@ Application::Application()
 	modules.push_back(renderer = new ModuleRender(json_object_dotget_object(root, "config.renderer")));
 	modules.push_back(textures = new ModuleTextures());
 	modules.push_back(audio = new ModuleAudio());
-
-	// Game Modules
-	modules.push_back(levelOneStageOne = new ModuleLevelOneStageOne(json_object_dotget_value(root, "config.levelOneStageOne"), false));
-	modules.push_back(entities = new ModuleEntity(json_object_dotget_value(root, "config.entities"), true));
 
 	// Modules to draw on top of game logic
 	modules.push_back(collision = new ModuleCollision());
@@ -58,7 +52,6 @@ bool Application::Init()
 	}
 
 	// Start the first scene --
-	fade->FadeToBlack(levelOneStageOne, nullptr, 3.0f);
 	return ret;
 }
 
