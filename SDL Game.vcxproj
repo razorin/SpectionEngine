@@ -71,7 +71,6 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Application.h" />
-    <ClInclude Include="Attack.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="MemLeaks.h" />
     <ClInclude Include="Module.h" />
@@ -85,7 +84,6 @@
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="Parson.h" />
     <ClInclude Include="Point.h" />
-    <ClInclude Include="Section.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>

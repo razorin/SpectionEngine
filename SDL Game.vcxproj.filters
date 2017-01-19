@@ -61,12 +61,6 @@
     <ClInclude Include="Timer.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Section.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Attack.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
