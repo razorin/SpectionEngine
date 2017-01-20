@@ -5,7 +5,6 @@
 #include "Module.h"
 #include <functional>
 #include "Point.h"
-#include "Entity.h"
 
 enum COLLIDER_TYPE {
 	NONE,
@@ -28,12 +27,11 @@ struct Collider
 	bool ignore_y = false;
 	COLLIDER_TYPE type;
 	std::function<void(const Collider &)> onCollision;
-	Entity *owner = nullptr;
 
 	// TODO 10: Add a way to notify other classes that a collision happened
 
-	Collider(SDL_Rect rectangle, COLLIDER_TYPE type, bool ignore_z, bool ignore_y, std::function<void(const Collider &)> onCollision, Entity *owner) : // expand this call if you need to
-		rect(rectangle), z(0), type(type), ignore_z(ignore_z), ignore_y(ignore_y), onCollision(onCollision), owner(owner)
+	Collider(SDL_Rect rectangle, COLLIDER_TYPE type, bool ignore_z, bool ignore_y, std::function<void(const Collider &)> onCollision) : // expand this call if you need to
+		rect(rectangle), z(0), type(type), ignore_z(ignore_z), ignore_y(ignore_y), onCollision(onCollision)
 	{
 
 	}
@@ -68,7 +66,7 @@ public:
 
 	bool CleanUp();
 
-	Collider* AddCollider(const SDL_Rect& rect, COLLIDER_TYPE type = COLLIDER_TYPE::NONE, bool ignore_z = false, bool ignore_y = false, std::function<void(const Collider &)> onCollision = nullptr, Entity *owner = nullptr);
+	Collider* AddCollider(const SDL_Rect& rect, COLLIDER_TYPE type = COLLIDER_TYPE::NONE, bool ignore_z = false, bool ignore_y = false, std::function<void(const Collider &)> onCollision = nullptr);
 	void DebugDraw();
 
 private:
