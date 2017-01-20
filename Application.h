@@ -14,6 +14,7 @@ class ModuleFadeToBlack;
 class ModuleCollision;
 class ModuleParticles;
 
+class PreciseTimer;
 
 class Application
 {
@@ -37,6 +38,7 @@ public:
 	ModuleParticles* particles;
 
 	JSON_Value *configuration;
+	PreciseTimer *pTimer;
 
 private:
 

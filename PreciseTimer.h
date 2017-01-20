@@ -16,12 +16,14 @@ public:
 	void Stop();
 	void Pause();
 	void Resume();
-	int Ellapsed() const;
+	float Ellapsed() const;
+	float EllapsedInMilliseconds() const;
 	float EllapsedInSeconds() const;
 
 private:
-	int start = 0;
-	int pause = 0;
+	float start = 0;
+	float pause = 0;
+	static float frequency;
 
 public:
 	TIMER_STATE state = TIMER_STOPPED;

@@ -7,6 +7,10 @@
 			"vsync": true
 		},
     "window": {
+	  "resolution": {
+        "width": 360,
+        "height": 196
+      },
       "fullscreen": false,
       "borderless": false,
       "resizable": false,
