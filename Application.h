@@ -14,6 +14,7 @@ class ModuleFadeToBlack;
 class ModuleCollision;
 class ModuleParticles;
 
+class Timer;
 class PreciseTimer;
 
 class Application
@@ -27,6 +28,8 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+	double CalculateAvgFPS();
+
 public:
 	ModuleRender* renderer;
 	ModuleWindow* window;
@@ -38,7 +41,13 @@ public:
 	ModuleParticles* particles;
 
 	JSON_Value *configuration;
-	PreciseTimer *pTimer;
+	Timer *gamestartTimer;
+	PreciseTimer *avgTimer;
+	PreciseTimer *updateTimer;
+	PreciseTimer *performanceTimer;
+	PreciseTimer *fpsTimer;
+	int frameCountGlobal = 0;
+	int frameCountPerSecond = 0;
 
 private:
 

@@ -21,6 +21,11 @@ void PreciseTimer::Stop() {
 	state = TIMER_STATE::TIMER_STOPPED;
 }
 
+void PreciseTimer::Restart() {
+	Stop();
+	Start();
+}
+
 void PreciseTimer::Pause() {
 	pause = (int)SDL_GetPerformanceCounter();
 	state = TIMER_STATE::TIMER_PAUSED;

@@ -1,11 +1,7 @@
 #ifndef PRECISETIMER_H
 #define PRECISETIMER_H
 
-enum TIMER_STATE {
-	TIMER_STARTED,
-	TIMER_STOPPED,
-	TIMER_PAUSED
-};
+#include "Timer.h"
 
 class PreciseTimer {
 public:
@@ -14,6 +10,7 @@ public:
 
 	void Start();
 	void Stop();
+	void Restart();
 	void Pause();
 	void Resume();
 	float Ellapsed() const;
