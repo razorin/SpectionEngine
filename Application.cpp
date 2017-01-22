@@ -11,6 +11,7 @@
 #include "Timer.h"
 #include "PreciseTimer.h"
 #include "Parson.h"
+#include "MathGeoLibSrc\MathGeoLib.h"
 #include <assert.h>
 
 using namespace std;
@@ -39,6 +40,10 @@ Application::Application()
 	modules.push_back(particles = new ModuleParticles());
 	modules.push_back(fade = new ModuleFadeToBlack());
 
+
+	//float2 mathGeoLib_test{ 1,2 };
+
+
 	JSON_Object* parameters = json_object_dotget_object(root, "config.app");
 	int fpsCap = (int)json_object_dotget_number(parameters, "fps_cap");
 	
@@ -48,8 +53,8 @@ Application::Application()
 	//Configurator *configurator = new Configurator();
 	//configuration = configurator->LoadConfiguration("config.json");
 
-	LOG("Read performance timer after App constructor: %f microseconds", performanceTimer->Ellapsed());
-	LOG("Read performance timer after App constructor: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
+	DLOG("Read performance timer after App constructor: %f microseconds", performanceTimer->Ellapsed());
+	DLOG("Read performance timer after App constructor: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
 
 	window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
 }
@@ -74,8 +79,8 @@ bool Application::Init()
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret; ++it)
 		ret = (*it)->Init(); // we init everything, even if not anabled
 
-	LOG("Read performance timer after Init: %f microseconds", performanceTimer->Ellapsed());
-	LOG("Read performance timer after Init: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
+	DLOG("Read performance timer after Init: %f microseconds", performanceTimer->Ellapsed());
+	DLOG("Read performance timer after Init: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
 
 	window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
 
@@ -87,8 +92,8 @@ bool Application::Init()
 			ret = (*it)->Start();
 	}
 
-	LOG("Read performance timer after Start: %f microseconds", performanceTimer->Ellapsed());
-	LOG("Read performance timer after Start: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
+	DLOG("Read performance timer after Start: %f microseconds", performanceTimer->Ellapsed());
+	DLOG("Read performance timer after Start: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
 
 	window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
 
@@ -110,7 +115,7 @@ update_status Application::Update()
 		fpsTimer->Start();
 	}
 	else if (fpsTimer->EllapsedInMilliseconds() >= 1000) {
-		LOG("Current FPS: %d", frameCountPerSecond);
+		DLOG("Current FPS: %d", frameCountPerSecond);
 		frameCountPerSecond = 0;
 		fpsTimer->Restart();
 	}
@@ -121,13 +126,13 @@ update_status Application::Update()
 	float previousFrameTime = lastFrameMilliseconds;
 	lastFrameMilliseconds = avgTimer->EllapsedInMilliseconds();
 	float dt = lastFrameMilliseconds - previousFrameTime;
-	LOG("DT: %f milliseconds", dt);
+	DLOG("DT: %f milliseconds", dt);
 
 	if (ellapsedTime < this->msByFrame) {
 		float beforeDelay = updateTimer->EllapsedInMilliseconds();
 		SDL_Delay(msByFrame - ellapsedTime);
 		float afterDelay = updateTimer->EllapsedInMilliseconds();
-		LOG("We waited for %f milliseconds and got back in %f milliseconds", msByFrame - ellapsedTime, afterDelay - beforeDelay);
+		DLOG("We waited for %f milliseconds and got back in %f milliseconds", msByFrame - ellapsedTime, afterDelay - beforeDelay);
 	}
 		
 	updateTimer->Restart();
@@ -146,9 +151,9 @@ update_status Application::Update()
 		if((*it)->IsEnabled() == true) 
 			ret = (*it)->PostUpdate(dt);
 	
-	LOG("Read timer since the game started: %i milliseconds", gamestartTimer->Ellapsed());
-	LOG("Read update timer: %f microseconds", updateTimer->Ellapsed());
-	LOG("Average FPS: %f", CalculateAvgFPS());
+	DLOG("Read timer since the game started: %i milliseconds", gamestartTimer->Ellapsed());
+	DLOG("Read update timer: %f microseconds", updateTimer->Ellapsed());
+	DLOG("Average FPS: %f", CalculateAvgFPS());
 	
 	return ret;
 }
@@ -162,8 +167,8 @@ bool Application::CleanUp()
 		if((*it)->IsEnabled() == true) 
 			ret = (*it)->CleanUp();
 
-	LOG("Read performance timer after CleanUp: %f microseconds", performanceTimer->Ellapsed());
-	LOG("Read performance timer after CleanUp: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
+	DLOG("Read performance timer after CleanUp: %f microseconds", performanceTimer->Ellapsed());
+	DLOG("Read performance timer after CleanUp: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
 	
 	return ret;
 }
