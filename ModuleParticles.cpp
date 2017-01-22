@@ -85,12 +85,12 @@ bool ModuleParticles::CleanUp()
 }
 
 // Update: draw background
-update_status ModuleParticles::Update()
+update_status ModuleParticles::Update(float dt)
 {
 	for (list<Particle*>::iterator it = active.begin(); it != active.end();)
 	{
 		Particle* p = *it;
-		if(p->Update() == false)
+		if(p->Update(dt) == false)
 		{
 			RELEASE(*it);
 			it = active.erase(it);
@@ -148,7 +148,7 @@ Particle::~Particle()
 	collider = nullptr;
 }
 
-bool Particle::Update()
+bool Particle::Update(float dt)
 {
 	bool ret = true;
 

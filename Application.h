@@ -48,6 +48,7 @@ public:
 	PreciseTimer *fpsTimer;
 	int frameCountGlobal = 0;
 	int frameCountPerSecond = 0;
+	float lastFrameMilliseconds = 0;
 
 private:
 	float msByFrame = 0;

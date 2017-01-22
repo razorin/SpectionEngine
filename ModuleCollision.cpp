@@ -24,7 +24,7 @@ ModuleCollision::ModuleCollision(const JSON_Object *json) : Module(json)
 ModuleCollision::~ModuleCollision()
 {}
 
-update_status ModuleCollision::PreUpdate()
+update_status ModuleCollision::PreUpdate(float dt)
 {
 	// Remove all colliders scheduled for deletion
 	for (list<Collider*>::iterator it = colliders.begin(); it != colliders.end();)
@@ -41,7 +41,7 @@ update_status ModuleCollision::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
-update_status ModuleCollision::Update()
+update_status ModuleCollision::Update(float dt)
 {
 	for (list<Collider*>::iterator it = colliders.begin(); it != colliders.end(); ++it){
 		for (list<Collider*>::iterator jt = std::next(it); jt != colliders.end(); ++jt) {

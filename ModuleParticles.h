@@ -40,8 +40,7 @@ struct Particle
 	Particle();
 	Particle(const Particle& p);
 	~Particle();
-	bool Update();
-	void OnCollision(COLLIDER_TYPE collider_type);
+	bool Update(float dt);
 };
 
 class ModuleParticles : public Module
@@ -51,7 +50,7 @@ public:
 	~ModuleParticles();
 
 	bool Start();
-	update_status Update();
+	update_status Update(float dt);
 	bool CleanUp();
 
 	void AddParticle(const Particle& particle, int x, int y); // feel free to expand this call

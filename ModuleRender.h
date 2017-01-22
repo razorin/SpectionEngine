@@ -20,9 +20,9 @@ public:
 	~ModuleRender();
 
 	bool Init();
-	update_status PreUpdate();
-	update_status Update();
-	update_status PostUpdate();
+	update_status PreUpdate(float dt);
+	update_status Update(float dt);
+	update_status PostUpdate(float dt);
 	bool CleanUp();
 
 	bool Blit(SDL_Texture* texture, iPoint &position, Frame* section, bool flip = false, float speed = 1.0f);

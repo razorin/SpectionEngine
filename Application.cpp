@@ -117,6 +117,12 @@ update_status Application::Update()
 
 	auto ellapsedTime = updateTimer->EllapsedInMilliseconds();
 
+	//Delta Time calculated
+	float previousFrameTime = lastFrameMilliseconds;
+	lastFrameMilliseconds = avgTimer->EllapsedInMilliseconds();
+	float dt = lastFrameMilliseconds - previousFrameTime;
+	LOG("DT: %f milliseconds", dt);
+
 	if (ellapsedTime < this->msByFrame) {
 		float beforeDelay = updateTimer->EllapsedInMilliseconds();
 		SDL_Delay(msByFrame - ellapsedTime);
@@ -125,21 +131,21 @@ update_status Application::Update()
 	}
 		
 	updateTimer->Restart();
-	frameCountGlobal++;
-	frameCountPerSecond++;
+	++frameCountGlobal;
+	++frameCountPerSecond;
 
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 		if((*it)->IsEnabled() == true) 
-			ret = (*it)->PreUpdate();
+			ret = (*it)->PreUpdate(dt);
 
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 		if((*it)->IsEnabled() == true) 
-			ret = (*it)->Update();
+			ret = (*it)->Update(dt);
 
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 		if((*it)->IsEnabled() == true) 
-			ret = (*it)->PostUpdate();
-
+			ret = (*it)->PostUpdate(dt);
+	
 	LOG("Read timer since the game started: %i milliseconds", gamestartTimer->Ellapsed());
 	LOG("Read update timer: %f microseconds", updateTimer->Ellapsed());
 	LOG("Average FPS: %f", CalculateAvgFPS());
