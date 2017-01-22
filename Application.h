@@ -50,7 +50,7 @@ public:
 	int frameCountPerSecond = 0;
 
 private:
-	int fpsCap = 0;
+	float msByFrame = 0;
 	std::list<Module*> modules;
 
 

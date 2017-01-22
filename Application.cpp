@@ -11,7 +11,7 @@
 #include "Timer.h"
 #include "PreciseTimer.h"
 #include "Parson.h"
-
+#include <assert.h>
 
 using namespace std;
 
@@ -40,7 +40,10 @@ Application::Application()
 	modules.push_back(fade = new ModuleFadeToBlack());
 
 	JSON_Object* parameters = json_object_dotget_object(root, "config.app");
-	fpsCap = (int)json_object_dotget_number(parameters, "fps_cap");
+	int fpsCap = (int)json_object_dotget_number(parameters, "fps_cap");
+	
+	assert(fpsCap > 0);
+	msByFrame = (1.f / (float)fpsCap) * 1000;
 
 	//Configurator *configurator = new Configurator();
 	//configuration = configurator->LoadConfiguration("config.json");
@@ -95,6 +98,8 @@ bool Application::Init()
 
 update_status Application::Update()
 {
+	update_status ret = UPDATE_CONTINUE;
+
 	if (avgTimer->state != TIMER_STATE::TIMER_STARTED) {
 		avgTimer->Start();
 	}
@@ -109,11 +114,19 @@ update_status Application::Update()
 		frameCountPerSecond = 0;
 		fpsTimer->Restart();
 	}
+
+	auto ellapsedTime = updateTimer->EllapsedInMilliseconds();
+
+	if (ellapsedTime < this->msByFrame) {
+		float beforeDelay = updateTimer->EllapsedInMilliseconds();
+		SDL_Delay(msByFrame - ellapsedTime);
+		float afterDelay = updateTimer->EllapsedInMilliseconds();
+		LOG("We waited for %f milliseconds and got back in %f milliseconds", msByFrame - ellapsedTime, afterDelay - beforeDelay);
+	}
+		
 	updateTimer->Restart();
 	frameCountGlobal++;
 	frameCountPerSecond++;
-	
-	update_status ret = UPDATE_CONTINUE;
 
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 		if((*it)->IsEnabled() == true) 
@@ -127,9 +140,10 @@ update_status Application::Update()
 		if((*it)->IsEnabled() == true) 
 			ret = (*it)->PostUpdate();
 
-	LOG("Read timer since the game started: %d milliseconds", gamestartTimer->Ellapsed());
+	LOG("Read timer since the game started: %i milliseconds", gamestartTimer->Ellapsed());
 	LOG("Read update timer: %f microseconds", updateTimer->Ellapsed());
 	LOG("Average FPS: %f", CalculateAvgFPS());
+	
 	return ret;
 }
 
