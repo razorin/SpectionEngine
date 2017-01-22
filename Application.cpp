@@ -10,6 +10,7 @@
 #include "ModuleParticles.h"
 #include "Timer.h"
 #include "PreciseTimer.h"
+#include "Parson.h"
 
 
 using namespace std;

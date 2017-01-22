@@ -6,6 +6,7 @@
 #include "SDL/include/SDL.h"
 #include "Animation.h"
 #include "ModuleCollision.h"
+#include "Parson.h"
 
 ModuleRender::ModuleRender(const JSON_Object *json) : Module(json)
 {

@@ -2,9 +2,15 @@
 #define __MODULE_H__
 
 #include "Globals.h"
-#include "Parson.h"
 
 class Application;
+
+struct json_value_t;
+typedef struct json_value_t  JSON_Value;
+struct json_object_t;
+typedef struct json_object_t  JSON_Object;
+
+
 
 class Module
 {

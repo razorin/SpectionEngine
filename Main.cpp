@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include "Application.h"
 #include "Globals.h"
-#include <ctime>
 #include "SDL/include/SDL.h"
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
@@ -23,7 +22,6 @@ int main(int argc, char ** argv)
 
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
-	srand(time(NULL));
 
 	while (state != MAIN_EXIT)
 	{

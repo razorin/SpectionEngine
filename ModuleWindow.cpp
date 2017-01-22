@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "SDL/include/SDL.h"
+#include "Parson.h"
 
 ModuleWindow::ModuleWindow(const JSON_Object *json) : Module(json)
 {
