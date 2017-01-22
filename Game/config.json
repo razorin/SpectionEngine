@@ -1,7 +1,8 @@
 {
 	"config": {
 		"app": {
-			"title": "Final Fight"
+      "title": "Final Fight",
+      "fps_cap": 30
 		},
 		"renderer": {
 			"vsync": true

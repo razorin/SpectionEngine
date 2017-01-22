@@ -39,6 +39,9 @@ Application::Application()
 	modules.push_back(particles = new ModuleParticles());
 	modules.push_back(fade = new ModuleFadeToBlack());
 
+	JSON_Object* parameters = json_object_dotget_object(root, "config.app");
+	fpsCap = (int)json_object_dotget_number(parameters, "fps_cap");
+
 	//Configurator *configurator = new Configurator();
 	//configuration = configurator->LoadConfiguration("config.json");
 
