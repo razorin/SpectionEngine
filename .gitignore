@@ -40,3 +40,5 @@ Debug/FinalFight.tlog/link.command.1.tlog
 Debug/FinalFight.tlog/link.read.1.tlog
 Debug/FinalFight.tlog/link.write.1.tlog
 Debug/vc140.idb
+
+*.suo
