@@ -11,8 +11,25 @@
 #include "Timer.h"
 #include "PreciseTimer.h"
 #include "Parson.h"
-#include "MathGeoLibSrc\MathGeoLib.h"
+#include "MathGeoLib\include\MathGeoLib.h"
 #include <assert.h>
+
+#ifdef _MSC_VER
+#	ifdef _WIN64
+#		ifdef _DEBUG
+#			pragma comment(lib, "MathGeoLib/libx64/Debug/MathGeoLib.lib.lib")
+#		else // RELEASE
+#			pragma comment(lib, "MathGeoLib/libx64/Release/MathGeoLib.lib.lib")
+#		endif // _DEBUG
+#	else // WIN32
+#		ifdef _DEBUG
+#			pragma comment(lib, "MathGeoLib/libx86/Debug/MathGeoLib.lib")
+#		else // RELEASE
+#			pragma comment(lib, "MathGeoLib/libx86/Release/MathGeoLib.lib")
+#		endif // _DEBUG	
+#	endif // _WIN64
+#endif // _MSC_VER
+
 
 using namespace std;
 
@@ -41,7 +58,7 @@ Application::Application()
 	modules.push_back(fade = new ModuleFadeToBlack());
 
 
-	//float2 mathGeoLib_test{ 1,2 };
+	float2 mathGeoLib_test{ 1,2 };
 
 
 	JSON_Object* parameters = json_object_dotget_object(root, "config.app");
