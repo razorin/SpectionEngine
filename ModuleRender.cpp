@@ -21,7 +21,7 @@ ModuleRender::~ModuleRender()
 // Called before render is available
 bool ModuleRender::Init()
 {
-	LOG("Creating Renderer context");
+	DLOG("Creating Renderer context");
 
 	camera.x = camera.y = 0;
 	camera.w = App->window->screen_width * App->window->screen_size;
@@ -39,7 +39,7 @@ bool ModuleRender::Init()
 	
 	if(renderer == nullptr)
 	{
-		LOG("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
+		DLOG("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 
@@ -83,7 +83,7 @@ update_status ModuleRender::PostUpdate(float dt)
 // Called before quitting
 bool ModuleRender::CleanUp()
 {
-	LOG("Destroying renderer");
+	DLOG("Destroying renderer");
 
 	//Destroy window
 	if(renderer != nullptr)
@@ -117,13 +117,13 @@ bool ModuleRender::Blit(SDL_Texture* texture, iPoint &position, Frame* frame, bo
 	if (!flip) {
 		if(SDL_RenderCopy(renderer, texture, &frame->section, &rect) != 0)
 		{
-			LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+			DLOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 			ret = false;
 		}
 	}
 	else {
 		if (SDL_RenderCopyEx(renderer, texture, &frame->section, &rect, NULL, nullptr, SDL_FLIP_HORIZONTAL) != 0) {
-			LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+			DLOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 			ret = false;
 		}
 	}
@@ -141,7 +141,7 @@ bool ModuleRender::StaticBlit(SDL_Texture* texture, const iPoint &position, cons
 	rec.h *= App->window->screen_size;
 	
 	if (SDL_RenderCopy(renderer, texture, &section, &rec) != 0) {
-		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+		DLOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
 	}
 
@@ -166,7 +166,7 @@ bool ModuleRender::DrawQuad(const Collider& collider, Uint8 r, Uint8 g, Uint8 b,
 
 	if (SDL_RenderFillRect(renderer, &rec) != 0)
 	{
-		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
+		DLOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
 	}
 
@@ -186,7 +186,7 @@ bool ModuleRender::DrawRect(const SDL_Rect &rect, Uint8 r, Uint8 g, Uint8 b, Uin
 	rec.h *= App->window->screen_size;
 
 	if (SDL_RenderFillRect(renderer, &rec) != 0) {
-		LOG("Cannot draw rectangle to screen. SDL_RenderFillRect error: %s", SDL_GetError());
+		DLOG("Cannot draw rectangle to screen. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
 	}
 

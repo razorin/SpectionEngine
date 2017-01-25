@@ -70,7 +70,7 @@ void ModuleCollision::DebugDraw()
 // Called before quitting
 bool ModuleCollision::CleanUp()
 {
-	LOG("Freeing all colliders");
+	DLOG("Freeing all colliders");
 
 	for (list<Collider*>::iterator it = colliders.begin(); it != colliders.end(); ++it)
 		RELEASE(*it);
