@@ -7,6 +7,7 @@
 #include "Animation.h"
 #include "ModuleCollision.h"
 #include "Parson.h"
+#include <math.h>
 
 ModuleRender::ModuleRender(const JSON_Object *json) : Module(json)
 {
@@ -57,19 +58,19 @@ update_status ModuleRender::PreUpdate(float dt)
 update_status ModuleRender::Update(float dt)
 {
 	// debug camera
-	int speed = 1;
+	double speed = 1;
 
-	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->renderer->camera.y += speed;
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		App->renderer->camera.y += ceil(speed*App->CalculateAvgFPS());
 
 	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->renderer->camera.y -= speed;
+		App->renderer->camera.y -= ceil(speed*App->CalculateAvgFPS());
 
 	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->renderer->camera.x += speed;
+		App->renderer->camera.x += ceil(speed*App->CalculateAvgFPS());
 
 	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->renderer->camera.x -= speed;
+		App->renderer->camera.x -= ceil(speed*App->CalculateAvgFPS());
 
 	return UPDATE_CONTINUE;
 }

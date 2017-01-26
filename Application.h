@@ -4,6 +4,9 @@
 #include<list>
 #include "Globals.h"
 #include "Module.h"
+//Forward declaration not working
+#include "ModuleTextures.h"
+#include "ModuleRender.h"
 
 class ModuleRender;
 class ModuleWindow;
@@ -13,6 +16,7 @@ class ModuleAudio;
 class ModuleFadeToBlack;
 class ModuleCollision;
 class ModuleParticles;
+class ModuleTestScene;
 
 class Timer;
 class PreciseTimer;
@@ -39,6 +43,7 @@ public:
 	ModuleFadeToBlack* fade;
 	ModuleCollision* collision;
 	ModuleParticles* particles;
+	ModuleTestScene* testScene;
 
 	JSON_Value *configuration;
 	Timer *gamestartTimer;
