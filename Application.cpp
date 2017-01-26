@@ -12,6 +12,12 @@
 #include "PreciseTimer.h"
 #include "Parson.h"
 #include "MathGeoLib\include\MathGeoLib.h"
+
+#include "Glew/include/GL/glew.h"
+#include "SDL/include/SDL_opengl.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
+
 #include <assert.h>
 
 #ifdef _MSC_VER
@@ -24,8 +30,10 @@
 #	else // WIN32
 #		ifdef _DEBUG
 #			pragma comment(lib, "MathGeoLib/libx86/Debug/MathGeoLib.lib")
+#			pragma comment(lib, "Glew/lib/Release/Win32/glew32s.lib")
 #		else // RELEASE
 #			pragma comment(lib, "MathGeoLib/libx86/Release/MathGeoLib.lib")
+#			pragma comment(lib, "Glew/lib/Release/Win32/glew32.lib")
 #		endif // _DEBUG	
 #	endif // _WIN64
 #endif // _MSC_VER
@@ -57,9 +65,7 @@ Application::Application()
 	modules.push_back(particles = new ModuleParticles());
 	modules.push_back(fade = new ModuleFadeToBlack());
 
-
 	float2 mathGeoLib_test{ 1,2 };
-
 
 	JSON_Object* parameters = json_object_dotget_object(root, "config.app");
 	int fpsCap = (int)json_object_dotget_number(parameters, "fps_cap");

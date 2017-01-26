@@ -23,6 +23,15 @@ bool ModuleRender::Init()
 {
 	DLOG("Creating Renderer context");
 
+	//OpenGL Inicialization
+	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+
 	camera.x = camera.y = 0;
 	camera.w = App->window->screen_width * App->window->screen_size;
 	camera.h = App->window->screen_height* App->window->screen_size;
@@ -36,6 +45,9 @@ bool ModuleRender::Init()
 	}
 
 	renderer = SDL_CreateRenderer(App->window->window, -1, flags);
+
+	//Create OpenGL Context
+	context = SDL_GL_CreateContext(App->window->window);
 	
 	if(renderer == nullptr)
 	{
@@ -77,6 +89,9 @@ update_status ModuleRender::Update(float dt)
 update_status ModuleRender::PostUpdate(float dt)
 {
 	SDL_RenderPresent(renderer);
+
+	//Swap Buffer (OpenGL)
+	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
 }
 
@@ -84,6 +99,8 @@ update_status ModuleRender::PostUpdate(float dt)
 bool ModuleRender::CleanUp()
 {
 	DLOG("Destroying renderer");
+
+	SDL_GL_DeleteContext(context);
 
 	//Destroy window
 	if(renderer != nullptr)

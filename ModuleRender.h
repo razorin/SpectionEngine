@@ -13,6 +13,8 @@ struct SDL_Rect;
 struct Frame;
 struct Collider;
 
+struct SDL_GLContext;
+
 class ModuleRender : public Module
 {
 public:
@@ -34,6 +36,8 @@ public:
 	SDL_Renderer* renderer = nullptr;
 	SDL_Rect camera;
 	bool vsync = false;
+
+	SDL_GLContext context;
 };
 
 #endif // __MODULERENDER_H__
