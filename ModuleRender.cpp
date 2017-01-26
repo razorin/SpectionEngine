@@ -61,16 +61,16 @@ update_status ModuleRender::Update(float dt)
 	double speed = 1;
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->renderer->camera.y += ceil(speed*App->CalculateAvgFPS());
+		App->renderer->camera.y += ceil(speed*dt);
 
 	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->renderer->camera.y -= ceil(speed*App->CalculateAvgFPS());
+		App->renderer->camera.y -= ceil(speed*dt);
 
 	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->renderer->camera.x += ceil(speed*App->CalculateAvgFPS());
+		App->renderer->camera.x += ceil(speed*dt);
 
 	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->renderer->camera.x -= ceil(speed*App->CalculateAvgFPS());
+		App->renderer->camera.x -= ceil(speed*dt);
 
 	return UPDATE_CONTINUE;
 }
