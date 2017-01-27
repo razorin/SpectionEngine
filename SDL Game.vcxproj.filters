@@ -11,6 +11,9 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{ad89cf24-f35e-4d0c-90e5-820c054c274d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game Modules">
+      <UniqueIdentifier>{2aba158f-380d-4e9a-a5ca-b259fc7bb59b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleRender.h">
@@ -64,6 +67,9 @@
     <ClInclude Include="PreciseTimer.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleTestScene.h">
+      <Filter>Game Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -107,6 +113,9 @@
     </ClCompile>
     <ClCompile Include="PreciseTimer.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleTestScene.cpp">
+      <Filter>Game Modules</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

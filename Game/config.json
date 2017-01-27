@@ -2,10 +2,10 @@
 	"config": {
 		"app": {
       "title": "Final Fight",
-      "fps_cap": 30
+      "fps_cap": 60
 		},
 		"renderer": {
-			"vsync": true
+			"vsync": false
 		},
     "window": {
 	  "resolution": {

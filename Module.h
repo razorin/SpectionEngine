@@ -22,6 +22,9 @@ public:
 	Module(const JSON_Value *json = nullptr, bool active = true) : active(active) {
 	}
 
+	Module(bool active = true) : active(active) {
+	}
+
 	virtual ~Module()
 	{}
 
