@@ -3,10 +3,11 @@
 #include "ModuleRender.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
-#include "SDL/include/SDL.h"
 #include "Animation.h"
 #include "ModuleCollision.h"
 #include "Parson.h"
+#include "SDL/include/SDL.h"
+#include "Glew/include/GL/glew.h"
 
 ModuleRender::ModuleRender(const JSON_Object *json) : Module(json)
 {
@@ -45,9 +46,20 @@ bool ModuleRender::Init()
 	}
 
 	renderer = SDL_CreateRenderer(App->window->window, -1, flags);
-
+	
 	//Create OpenGL Context
 	context = SDL_GL_CreateContext(App->window->window);
+
+	GLenum err = glewInit();
+	//Checking errors
+	if (GLEW_OK != err)
+	{
+		// glewInit failed
+		DLOG("Error on glewInit: %s", glewGetErrorString(err));
+	}
+	// Should be 2.0	DLOG("Using Glew %s", glewGetString(GLEW_VERSION));
+	
+	GetHWAndDriverCapabilities();
 	
 	if(renderer == nullptr)
 	{
@@ -208,4 +220,12 @@ bool ModuleRender::DrawRect(const SDL_Rect &rect, Uint8 r, Uint8 g, Uint8 b, Uin
 	}
 
 	return ret;
+}
+
+void ModuleRender::GetHWAndDriverCapabilities()
+{
+	DLOG("Vendor: %s", glGetString(GL_VENDOR));
+	DLOG("Renderer: %s", glGetString(GL_RENDERER));
+	DLOG("OpenGL version supported %s", glGetString(GL_VERSION));
+	DLOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 }

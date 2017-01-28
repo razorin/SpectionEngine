@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "Globals.h"
+#include "SDL\include\SDL_video.h"
 
 template <class TYPE> class Point;
 typedef Point<int> iPoint;
@@ -12,8 +13,6 @@ struct SDL_Renderer;
 struct SDL_Rect;
 struct Frame;
 struct Collider;
-
-struct SDL_GLContext;
 
 class ModuleRender : public Module
 {
@@ -32,6 +31,10 @@ public:
 
 	bool DrawQuad(const Collider& collider, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera = true);
 	bool DrawRect(const SDL_Rect &rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+
+private:
+	void GetHWAndDriverCapabilities();
+
 public:
 	SDL_Renderer* renderer = nullptr;
 	SDL_Rect camera;
