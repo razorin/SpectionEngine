@@ -3,11 +3,12 @@
 #include "ModuleRender.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
-#include "SDL/include/SDL.h"
 #include "Animation.h"
 #include "ModuleCollision.h"
 #include "Parson.h"
 #include <math.h>
+#include "SDL/include/SDL.h"
+#include "Glew/include/GL/glew.h"
 
 ModuleRender::ModuleRender(const JSON_Object *json) : Module(json)
 {
@@ -24,6 +25,15 @@ bool ModuleRender::Init()
 {
 	DLOG("Creating Renderer context");
 
+	//OpenGL Inicialization
+	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+
 	camera.x = camera.y = 0;
 	camera.w = App->window->screen_width * App->window->screen_size;
 	camera.h = App->window->screen_height* App->window->screen_size;
@@ -37,6 +47,36 @@ bool ModuleRender::Init()
 	}
 
 	renderer = SDL_CreateRenderer(App->window->window, -1, flags);
+	
+	//Create OpenGL Context
+	context = SDL_GL_CreateContext(App->window->window);
+
+	GLenum err = glewInit();
+	//Checking errors
+	if (GLEW_OK != err)
+	{
+		// glewInit failed
+		DLOG("Error on glewInit: %s", glewGetErrorString(err));
+	}
+	// Should be 2.0
+	DLOG("Using Glew %s", glewGetString(GLEW_VERSION));
+	
+	GetHWAndDriverCapabilities();
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	glClearDepth(1.0f);
+	glClearColor(0.f, 0.f, 0.f, 1.f);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_TEXTURE_2D);
 	
 	if(renderer == nullptr)
 	{
@@ -78,6 +118,9 @@ update_status ModuleRender::Update(float dt)
 update_status ModuleRender::PostUpdate(float dt)
 {
 	SDL_RenderPresent(renderer);
+
+	//Swap Buffer (OpenGL)
+	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
 }
 
@@ -85,6 +128,8 @@ update_status ModuleRender::PostUpdate(float dt)
 bool ModuleRender::CleanUp()
 {
 	DLOG("Destroying renderer");
+
+	SDL_GL_DeleteContext(context);
 
 	//Destroy window
 	if(renderer != nullptr)
@@ -192,4 +237,12 @@ bool ModuleRender::DrawRect(const SDL_Rect &rect, Uint8 r, Uint8 g, Uint8 b, Uin
 	}
 
 	return ret;
+}
+
+void ModuleRender::GetHWAndDriverCapabilities()
+{
+	DLOG("Vendor: %s", glGetString(GL_VENDOR));
+	DLOG("Renderer: %s", glGetString(GL_RENDERER));
+	DLOG("OpenGL version supported %s", glGetString(GL_VERSION));
+	DLOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 }
