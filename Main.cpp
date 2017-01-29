@@ -4,23 +4,26 @@
 #include "SDL/include/SDL.h"
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
+
 #ifdef _MSC_VER
+#	pragma comment (lib, "opengl32.lib")
+#	pragma comment (lib, "glu32.lib")
 #	ifdef _WIN64
 #		ifdef _DEBUG
-#			pragma comment(lib, "MathGeoLib/libx64/Debug/MathGeoLib.lib.lib")
+#			pragma comment(lib, "MathGeoLib/libx64/Debug/MathGeoLib.lib")
+#			pragma comment(lib, "Glew/lib/Release/Win32/glew32.lib")
 #		else // RELEASE
-#			pragma comment(lib, "MathGeoLib/libx64/Release/MathGeoLib.lib.lib")
+#			pragma comment(lib, "MathGeoLib/libx64/Release/MathGeoLib.lib")
+#			pragma comment(lib, "Glew/lib/Release/Win32/glew32.lib")
 #		endif // _DEBUG
 #	else // WIN32
 #		ifdef _DEBUG
 #			pragma comment(lib, "MathGeoLib/libx86/Debug/MathGeoLib.lib")
-#			pragma comment(lib, "Glew/lib/Release/Win32/glew32s.lib")
+#			pragma comment(lib, "Glew/lib/Release/Win32/glew32.lib")
 #		else // RELEASE
 #			pragma comment(lib, "MathGeoLib/libx86/Release/MathGeoLib.lib")
 #			pragma comment(lib, "Glew/lib/Release/Win32/glew32.lib")
-#		endif // _DEBUG	
-//#		pragma comment(lib, "opengl32.lib")
-//#		pragma comment(lib, "glu32.lib")
+#		endif // _DEBUG
 #	endif // _WIN64
 #endif // _MSC_VER
 
