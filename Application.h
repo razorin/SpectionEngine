@@ -4,9 +4,6 @@
 #include<list>
 #include "Globals.h"
 #include "Module.h"
-//Forward declaration not working
-#include "ModuleTextures.h"
-#include "ModuleRender.h"
 
 class ModuleRender;
 class ModuleWindow;

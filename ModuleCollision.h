@@ -2,8 +2,8 @@
 #define __ModuleCollision_H__
 
 #include<list>
-#include "Module.h"
 #include <functional>
+#include "Module.h"
 #include "Point.h"
 
 enum COLLIDER_TYPE {

@@ -1,14 +1,13 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleRender.h"
-#include "ModuleWindow.h"
 #include "ModuleInput.h"
-#include "Animation.h"
+#include "ModuleWindow.h"
 #include "ModuleCollision.h"
+#include "Animation.h"
 #include "Parson.h"
-#include <math.h>
 #include "SDL/include/SDL.h"
-#include "Glew/include/GL/glew.h"
+#include <math.h>
 
 ModuleRender::ModuleRender(const JSON_Object *json) : Module(json)
 {

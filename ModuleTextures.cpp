@@ -1,7 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
-#include "ModuleRender.h"
 #include "ModuleTextures.h"
+#include "ModuleRender.h"
 #include "SDL/include/SDL.h"
 
 #include "SDL_image/include/SDL_image.h"

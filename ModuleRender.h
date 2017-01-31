@@ -2,7 +2,6 @@
 #define __MODULERENDER_H__
 
 #include "Module.h"
-#include "Globals.h"
 #include "SDL\include\SDL_video.h"
 
 template <class TYPE> class Point;

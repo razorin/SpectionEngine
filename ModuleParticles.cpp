@@ -1,9 +1,10 @@
 #include <math.h>
-#include "ModuleParticles.h"
+#include "Globals.h"
 #include "Application.h"
-#include "ModuleAudio.h"
-#include "ModuleTextures.h"
+#include "ModuleParticles.h"
 #include "ModuleRender.h"
+#include "ModuleTextures.h"
+#include "ModuleAudio.h"
 #include "ModuleCollision.h"
 
 #include "SDL/include/SDL_timer.h"

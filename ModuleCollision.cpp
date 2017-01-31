@@ -1,8 +1,8 @@
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleCollision.h"
 #include "ModuleInput.h"
 #include "ModuleRender.h"
-#include "ModuleCollision.h"
 
 using namespace std;
 

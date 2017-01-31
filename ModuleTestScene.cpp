@@ -1,4 +1,8 @@
+#include "Globals.h"
+#include "Application.h"
 #include "ModuleTestScene.h"
+#include "ModuleRender.h"
+#include "ModuleTextures.h"
 #include "Animation.h"
 
 ModuleTestScene::ModuleTestScene(const JSON_Value *json, bool active) : Module(json, active) 

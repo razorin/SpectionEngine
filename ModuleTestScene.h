@@ -2,10 +2,6 @@
 #define ModuleTestScene_H
 
 #include "Module.h"
-#include "Application.h"
-#include <map>
-#include <vector>
-
 #include "Point.h"
 
 struct SDL_Texture;
