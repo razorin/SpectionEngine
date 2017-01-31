@@ -40,6 +40,13 @@ public:
 	bool vsync = false;
 
 	SDL_GLContext context;
+private:
+	uint vertexBuffId = NULL;
+	uint indexBuffId = NULL;
+	uint colourBuffId = NULL;
+	float *vertices;
+	uint *vertexIndices;
+	float *colours;
 };
 
 #endif // __MODULERENDER_H__

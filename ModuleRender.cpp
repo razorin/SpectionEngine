@@ -87,36 +87,61 @@ bool ModuleRender::Init()
 		glClearDepth(1.0f);
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		//glEnable(GL_DEPTH_TEST);
+		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
-		//glEnable(GL_TEXTURE_2D);
+		glEnable(GL_TEXTURE_2D);
 
+		// We are on GLMode view so we can setup the viewport
+		glViewport(0, 0, App->window->screen_width * App->window->screen_size, App->window->screen_height * App->window->screen_size);
 
-		camera.x = camera.y = 0;
-		camera.w = App->window->screen_width * App->window->screen_size;
-		camera.h = App->window->screen_height* App->window->screen_size;
+		// Create vertex array
+		vertices = new float [24] {
+			-0.5f, -0.5f, 0.5f, //a
+			0.5f, -0.5f, 0.5f, //b
+			-0.5f, 0.5f, 0.5f, //c
+			0.5f, 0.5f, 0.5f, //d
+			-0.5f, 0.5f, -0.5f, //e
+			0.5f, -0.5f, -0.5, //f
+			-0.5f, 0.5f, -0.5f, //g
+			0.5f, 0.5f, -0.5f //h
+		};
+		vertexIndices = new uint [36] {
+			2,0,1,
+			2,1,3,
+			3,1,5,
+			3,5,7,
+			3,7,6,
+			3,6,2,
+			6,0,2,
+			6,4,0,
+			6,5,4,
+			6,7,5,
+			4,5,1,
+			4,1,0
+		};
+		colours = new float[24]{
+			1, 1, 1,   1, 1, 0,   1, 0, 0,	 1, 0, 0,
+			1, 0, 1,   1, 1, 1,	  1, 1, 1,   1, 0, 1
+		};
 
-		Uint32 flags = 0;
+		// Load vertex buffer
+		glGenBuffers(1, (GLuint*) &(vertexBuffId));
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexBuffId);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 24, vertices, GL_STATIC_DRAW);
 
-		if (vsync == true)
-		{
-			flags |= SDL_RENDERER_PRESENTVSYNC;
-		}
+		// Load index buffer
+		glGenBuffers(1, (GLuint*) &(indexBuffId));
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 36, vertexIndices, GL_STATIC_DRAW);
 
-		renderer = SDL_CreateRenderer(App->window->window, -1, flags);
-
-		if (renderer == nullptr)
-		{
-			DLOG("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
-			ret = false;
-		}
-
-
-		//WE are on GLMode view so we can setup the viewport
+		// Load colour buffer
+		glGenBuffers(1, (GLuint*) &(colourBuffId));
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, colourBuffId);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 24, colours, GL_STATIC_DRAW);
 	}
-	
+
 	return ret;
 }
 
@@ -125,18 +150,11 @@ update_status ModuleRender::PreUpdate(float dt)
 	//SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	//SDL_RenderClear(renderer);
 
-
 	//Color c = cam->background; 
 	glClearColor(0.f, 0.f, 0.f, 1.f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
-	float4x4 viewMatrix = { 1.0f,0,0,0,0,1.0f,0,0,0,0,-0.4f,0,0,0,0,1.0f };
-	glLoadMatrixf((float*)viewMatrix.v);
-	glViewport(App->window->screen_width/2, App->window->screen_height/2, App->window->screen_width, App->window->screen_height);
-
-	//glOrtho(-1.0, 1.0, -1.0, 1.0, 0.0, 5.0); this works if view matrix is identity
-
-
+	glLoadIdentity();
 
 	return UPDATE_CONTINUE;
 }
@@ -144,30 +162,14 @@ update_status ModuleRender::PreUpdate(float dt)
 // Called every draw update
 update_status ModuleRender::Update(float dt)
 {
-	// debug camera
-	//double speed = 1;
-
-	//if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-	//	App->renderer->camera.y += floor(speed*dt);
-
-	//if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-	//	App->renderer->camera.y -= floor(speed*dt);
-
-	//if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-	//	App->renderer->camera.x += floor(speed*dt);
-
-	//if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-	//	App->renderer->camera.x -= floor(speed*dt);
-
-
-	glBegin(GL_TRIANGLES);
-
-	glColor3f(3.0f, 0.0f, 0.0f);
-	glVertex3f(-1.0f, -0.5f, 0.0f); //lower left vertex
-	glVertex3f(1.0f, -0.5f, 0.0f); //lower right vertex
-	glVertex3f(0.0f, 0.5f, 0.0f); // upper vertex
-
-	glEnd();
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
+	glVertexPointer(3, GL_FLOAT, 0, vertices);
+	glColorPointer(3, GL_FLOAT, 0, colours);
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
 
 	return UPDATE_CONTINUE;
 }
@@ -190,7 +192,7 @@ bool ModuleRender::CleanUp()
 	SDL_GL_DeleteContext(context);
 
 	//Destroy window
-	if(renderer != nullptr)
+	if (renderer != nullptr)
 	{
 		SDL_DestroyRenderer(renderer);
 	}
@@ -206,7 +208,7 @@ bool ModuleRender::Blit(SDL_Texture* texture, iPoint &position, Frame* frame, bo
 	rect.x = (int)(camera.x * speed) + (position.x + (flip ? -frame->offset_x : frame->offset_x)) * App->window->screen_size;
 	rect.y = (int)(camera.y * speed) + (position.y + frame->offset_y + position.z) * App->window->screen_size;
 
-	if(frame != NULL)
+	if (frame != NULL)
 	{
 		rect.w = frame->section.w;
 		rect.h = frame->section.h;
@@ -219,7 +221,7 @@ bool ModuleRender::Blit(SDL_Texture* texture, iPoint &position, Frame* frame, bo
 	rect.w *= App->window->screen_size;
 	rect.h *= App->window->screen_size;
 	if (!flip) {
-		if(SDL_RenderCopy(renderer, texture, &frame->section, &rect) != 0)
+		if (SDL_RenderCopy(renderer, texture, &frame->section, &rect) != 0)
 		{
 			DLOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 			ret = false;
@@ -243,7 +245,7 @@ bool ModuleRender::StaticBlit(SDL_Texture* texture, const iPoint &position, cons
 	rec.y = (int)(position.y  * App->window->screen_size);
 	rec.w *= App->window->screen_size;
 	rec.h *= App->window->screen_size;
-	
+
 	if (SDL_RenderCopy(renderer, texture, &section, &rec) != 0) {
 		DLOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
