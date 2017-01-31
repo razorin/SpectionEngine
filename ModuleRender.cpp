@@ -8,6 +8,8 @@
 #include "Parson.h"
 #include "SDL/include/SDL.h"
 #include <math.h>
+#include "MathGeoLib/include/MathGeoLib.h"
+
 
 ModuleRender::ModuleRender(const JSON_Object *json) : Module(json)
 {
@@ -85,7 +87,7 @@ bool ModuleRender::Init()
 		glClearDepth(1.0f);
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
@@ -110,6 +112,9 @@ bool ModuleRender::Init()
 			DLOG("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
 			ret = false;
 		}
+
+
+		//WE are on GLMode view so we can setup the viewport
 	}
 	
 	return ret;
@@ -117,8 +122,22 @@ bool ModuleRender::Init()
 
 update_status ModuleRender::PreUpdate(float dt)
 {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-	SDL_RenderClear(renderer);
+	//SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+	//SDL_RenderClear(renderer);
+
+
+	//Color c = cam->background; 
+	glClearColor(0.f, 0.f, 0.f, 1.f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+	glMatrixMode(GL_MODELVIEW);
+	float4x4 viewMatrix = { 1.0f,0,0,0,0,1.0f,0,0,0,0,-0.4f,0,0,0,0,1.0f };
+	glLoadMatrixf((float*)viewMatrix.v);
+	glViewport(App->window->screen_width/2, App->window->screen_height/2, App->window->screen_width, App->window->screen_height);
+
+	//glOrtho(-1.0, 1.0, -1.0, 1.0, 0.0, 5.0); this works if view matrix is identity
+
+
+
 	return UPDATE_CONTINUE;
 }
 
@@ -126,26 +145,37 @@ update_status ModuleRender::PreUpdate(float dt)
 update_status ModuleRender::Update(float dt)
 {
 	// debug camera
-	double speed = 1;
+	//double speed = 1;
 
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->renderer->camera.y += floor(speed*dt);
+	//if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	//	App->renderer->camera.y += floor(speed*dt);
 
-	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->renderer->camera.y -= floor(speed*dt);
+	//if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	//	App->renderer->camera.y -= floor(speed*dt);
 
-	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->renderer->camera.x += floor(speed*dt);
+	//if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	//	App->renderer->camera.x += floor(speed*dt);
 
-	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->renderer->camera.x -= floor(speed*dt);
+	//if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	//	App->renderer->camera.x -= floor(speed*dt);
+
+
+	glBegin(GL_TRIANGLES);
+
+	glColor3f(3.0f, 0.0f, 0.0f);
+	glVertex3f(-1.0f, -0.5f, 0.0f); //lower left vertex
+	glVertex3f(1.0f, -0.5f, 0.0f); //lower right vertex
+	glVertex3f(0.0f, 0.5f, 0.0f); // upper vertex
+
+	glEnd();
 
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleRender::PostUpdate(float dt)
 {
-	SDL_RenderPresent(renderer);
+	//SDL_RenderPresent(renderer);
+
 
 	//Swap Buffer (OpenGL)
 	SDL_GL_SwapWindow(App->window->window);
