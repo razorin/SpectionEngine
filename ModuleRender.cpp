@@ -23,6 +23,7 @@ ModuleRender::~ModuleRender()
 bool ModuleRender::Init()
 {
 	DLOG("Creating Renderer context");
+	bool ret = true;
 
 	//OpenGL Inicialization
 	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
@@ -33,56 +34,84 @@ bool ModuleRender::Init()
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
-	camera.x = camera.y = 0;
-	camera.w = App->window->screen_width * App->window->screen_size;
-	camera.h = App->window->screen_height* App->window->screen_size;
-
-	bool ret = true;
-	Uint32 flags = 0;
-
-	if(vsync == true)
-	{
-		flags |= SDL_RENDERER_PRESENTVSYNC;
-	}
-
-	renderer = SDL_CreateRenderer(App->window->window, -1, flags);
-	
 	//Create OpenGL Context
 	context = SDL_GL_CreateContext(App->window->window);
-
-	GLenum err = glewInit();
-	//Checking errors
-	if (GLEW_OK != err)
+	if (context == NULL)
 	{
-		// glewInit failed
-		DLOG("Error on glewInit: %s", glewGetErrorString(err));
-	}
-	// Should be 2.0
-	DLOG("Using Glew %s", glewGetString(GLEW_VERSION));
-	
-	GetHWAndDriverCapabilities();
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-	glClearDepth(1.0f);
-	glClearColor(0.f, 0.f, 0.f, 1.f);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_COLOR_MATERIAL);
-	glEnable(GL_TEXTURE_2D);
-	
-	if(renderer == nullptr)
-	{
-		DLOG("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
+		DLOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 
+	// Init Glew
+	GLenum err = glewInit();
+	//Checking errors
+	if (err != GLEW_OK)
+	{
+		DLOG("Error on glewInit: %s", glewGetErrorString(err));
+		ret = false;
+	}
+	else
+	{
+		// Should be 2.0
+		DLOG("Using Glew %s", glewGetString(GLEW_VERSION));
+	}
+
+
+	if (ret == true)
+	{
+		GetHWAndDriverCapabilities();
+
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		//Check for error
+		GLenum error = glGetError();
+		if (error != GL_NO_ERROR)
+		{
+			DLOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			ret = false;
+		}
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		//Check for error
+		error = glGetError();
+		if (error != GL_NO_ERROR)
+		{
+			DLOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			ret = false;
+		}
+
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+		glClearDepth(1.0f);
+		glClearColor(0.f, 0.f, 0.f, 1.f);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
+		glEnable(GL_LIGHTING);
+		glEnable(GL_COLOR_MATERIAL);
+		//glEnable(GL_TEXTURE_2D);
+
+
+		camera.x = camera.y = 0;
+		camera.w = App->window->screen_width * App->window->screen_size;
+		camera.h = App->window->screen_height* App->window->screen_size;
+
+		Uint32 flags = 0;
+
+		if (vsync == true)
+		{
+			flags |= SDL_RENDERER_PRESENTVSYNC;
+		}
+
+		renderer = SDL_CreateRenderer(App->window->window, -1, flags);
+
+		if (renderer == nullptr)
+		{
+			DLOG("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
+			ret = false;
+		}
+	}
+	
 	return ret;
 }
 
