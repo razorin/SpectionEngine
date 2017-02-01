@@ -6,6 +6,10 @@
 #include "ModuleCollision.h"
 #include "Animation.h"
 #include "Parson.h"
+#include "Primitive.h"
+#include "MyCube.h"
+#include "MyPlane.h"
+#include "MyCylinder.h"
 #include "SDL/include/SDL.h"
 #include <math.h>
 #include "MathGeoLib/include/MathGeoLib.h"
@@ -96,31 +100,14 @@ bool ModuleRender::Init()
 		// We are on GLMode view so we can setup the viewport
 		glViewport(0, 0, App->window->screen_width * App->window->screen_size, App->window->screen_height * App->window->screen_size);
 
-		// Create vertex array
-		vertices = new float [24] {
-			-0.5f, -0.5f, 0.5f, //a
-			0.5f, -0.5f, 0.5f, //b
-			-0.5f, 0.5f, 0.5f, //c
-			0.5f, 0.5f, 0.5f, //d
-			-0.5f, 0.5f, -0.5f, //e
-			0.5f, -0.5f, -0.5, //f
-			-0.5f, 0.5f, -0.5f, //g
-			0.5f, 0.5f, -0.5f //h
-		};
-		vertexIndices = new uint [36] {
-			2,0,1,
-			2,1,3,
-			3,1,5,
-			3,5,7,
-			3,7,6,
-			3,6,2,
-			6,0,2,
-			6,4,0,
-			6,5,4,
-			6,7,5,
-			4,5,1,
-			4,1,0
-		};
+		// Create primitives
+		cube = new MyCube();
+		plane = new MyPlane();
+		cylinder = new MyCylinder();
+
+		// Set primitive to print
+		targetPrimitive = cylinder;
+		
 		colours = new float[24]{
 			1, 1, 1,   1, 1, 0,   1, 0, 0,	 1, 0, 0,
 			1, 0, 1,   1, 1, 1,	  1, 1, 1,   1, 0, 1
@@ -129,17 +116,21 @@ bool ModuleRender::Init()
 		// Load vertex buffer
 		glGenBuffers(1, (GLuint*) &(vertexBuffId));
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexBuffId);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 24, vertices, GL_STATIC_DRAW);
+		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in vertices array"
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 36, targetPrimitive->vertices, GL_STATIC_DRAW);
 
 		// Load index buffer
 		glGenBuffers(1, (GLuint*) &(indexBuffId));
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 36, vertexIndices, GL_STATIC_DRAW);
+		// ---Second parameter in glBufferData must be sizeof(uint) * "number of positions in vertexIndices array"
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 60, targetPrimitive->vertexIndices, GL_STATIC_DRAW);
 
 		// Load colour buffer
 		glGenBuffers(1, (GLuint*) &(colourBuffId));
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, colourBuffId);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 24, colours, GL_STATIC_DRAW);
+		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in colours array"
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof (float) * 24, colours, GL_STATIC_DRAW);
+		
 	}
 
 	return ret;
@@ -165,9 +156,10 @@ update_status ModuleRender::Update(float dt)
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
-	glVertexPointer(3, GL_FLOAT, 0, vertices);
+	glVertexPointer(3, GL_FLOAT, 0, targetPrimitive->vertices);
 	glColorPointer(3, GL_FLOAT, 0, colours);
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
+	// ---Second parameter in glDrawElements must be "number of positions in vertexIndices array"
+	glDrawElements(GL_TRIANGLES, 60, GL_UNSIGNED_INT, NULL);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 

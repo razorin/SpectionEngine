@@ -14,6 +14,9 @@
     <Filter Include="Game Modules">
       <UniqueIdentifier>{2aba158f-380d-4e9a-a5ca-b259fc7bb59b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Geometric primitive">
+      <UniqueIdentifier>{f5c49001-1ff3-4236-b461-89f3c0ad6dc3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleRender.h">
@@ -70,6 +73,14 @@
     <ClInclude Include="ModuleTestScene.h">
       <Filter>Game Modules</Filter>
     </ClInclude>
+    <ClInclude Include="Primitive.h">
+      <Filter>Geometric primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="MyCube.h">
+      <Filter>Geometric primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="MyPlane.h" />
+    <ClInclude Include="MyCylinder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -116,6 +127,18 @@
     </ClCompile>
     <ClCompile Include="ModuleTestScene.cpp">
       <Filter>Game Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitive.cpp">
+      <Filter>Geometric primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="MyCube.cpp">
+      <Filter>Geometric primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="MyPlane.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="MyCylinder.cpp">
+      <Filter>Main</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
