@@ -1,9 +1,10 @@
 #include <math.h>
-#include "ModuleParticles.h"
+#include "Globals.h"
 #include "Application.h"
-#include "ModuleAudio.h"
-#include "ModuleTextures.h"
+#include "ModuleParticles.h"
 #include "ModuleRender.h"
+#include "ModuleTextures.h"
+#include "ModuleAudio.h"
 #include "ModuleCollision.h"
 
 #include "SDL/include/SDL_timer.h"
@@ -17,7 +18,7 @@ ModuleParticles::~ModuleParticles()
 // Load assets
 bool ModuleParticles::Start()
 {
-	LOG("Loading particles");
+	DLOG("Loading particles");
 	
 	/*graphics = App->textures->Load("rtype/particles.png");
 
@@ -73,7 +74,7 @@ bool ModuleParticles::Start()
 // Unload assets
 bool ModuleParticles::CleanUp()
 {
-	LOG("Unloading particles");
+	DLOG("Unloading particles");
 	App->textures->Unload(graphics);
 
 	for (list<Particle*>::iterator it = active.begin(); it != active.end(); ++it)
@@ -85,12 +86,12 @@ bool ModuleParticles::CleanUp()
 }
 
 // Update: draw background
-update_status ModuleParticles::Update()
+update_status ModuleParticles::Update(float dt)
 {
 	for (list<Particle*>::iterator it = active.begin(); it != active.end();)
 	{
 		Particle* p = *it;
-		if(p->Update() == false)
+		if(p->Update(dt) == false)
 		{
 			RELEASE(*it);
 			it = active.erase(it);
@@ -148,7 +149,7 @@ Particle::~Particle()
 	collider = nullptr;
 }
 
-bool Particle::Update()
+bool Particle::Update(float dt)
 {
 	bool ret = true;
 

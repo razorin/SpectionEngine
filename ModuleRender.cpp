@@ -1,11 +1,19 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleRender.h"
-#include "ModuleWindow.h"
 #include "ModuleInput.h"
-#include "SDL/include/SDL.h"
-#include "Animation.h"
+#include "ModuleWindow.h"
 #include "ModuleCollision.h"
+#include "Animation.h"
+#include "Parson.h"
+#include "Primitive.h"
+#include "MyCube.h"
+#include "MyPlane.h"
+#include "MyCylinder.h"
+#include "SDL/include/SDL.h"
+#include <math.h>
+#include "MathGeoLib/include/MathGeoLib.h"
+
 
 ModuleRender::ModuleRender(const JSON_Object *json) : Module(json)
 {
@@ -20,72 +28,163 @@ ModuleRender::~ModuleRender()
 // Called before render is available
 bool ModuleRender::Init()
 {
-	LOG("Creating Renderer context");
-
-	camera.x = camera.y = 0;
-	camera.w = App->window->screen_width * App->window->screen_size;
-	camera.h = App->window->screen_height* App->window->screen_size;
-
+	DLOG("Creating Renderer context");
 	bool ret = true;
-	Uint32 flags = 0;
 
-	if(vsync == true)
+	//OpenGL Inicialization
+	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+
+	//Create OpenGL Context
+	context = SDL_GL_CreateContext(App->window->window);
+	if (context == NULL)
 	{
-		flags |= SDL_RENDERER_PRESENTVSYNC;
+		DLOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
+		ret = false;
 	}
 
-	renderer = SDL_CreateRenderer(App->window->window, -1, flags);
-	
-	if(renderer == nullptr)
+	// Init Glew
+	GLenum err = glewInit();
+	//Checking errors
+	if (err != GLEW_OK)
 	{
-		LOG("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
+		DLOG("Error on glewInit: %s", glewGetErrorString(err));
 		ret = false;
+	}
+	else
+	{
+		// Should be 2.0
+		DLOG("Using Glew %s", glewGetString(GLEW_VERSION));
+	}
+
+
+	if (ret == true)
+	{
+		GetHWAndDriverCapabilities();
+
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		//Check for error
+		GLenum error = glGetError();
+		if (error != GL_NO_ERROR)
+		{
+			DLOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			ret = false;
+		}
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		//Check for error
+		error = glGetError();
+		if (error != GL_NO_ERROR)
+		{
+			DLOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			ret = false;
+		}
+
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+		glClearDepth(1.0f);
+		glClearColor(0.f, 0.f, 0.f, 1.f);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
+		glEnable(GL_LIGHTING);
+		glEnable(GL_COLOR_MATERIAL);
+		glEnable(GL_TEXTURE_2D);
+
+		// We are on GLMode view so we can setup the viewport
+		glViewport(0, 0, App->window->screen_width * App->window->screen_size, App->window->screen_height * App->window->screen_size);
+
+		// Create primitives
+		cube = new MyCube();
+		plane = new MyPlane();
+		cylinder = new MyCylinder();
+
+		// Set primitive to print
+		targetPrimitive = cylinder;
+		
+		colours = new float[24]{
+			1, 1, 1,   1, 1, 0,   1, 0, 0,	 1, 0, 0,
+			1, 0, 1,   1, 1, 1,	  1, 1, 1,   1, 0, 1
+		};
+
+		// Load vertex buffer
+		glGenBuffers(1, (GLuint*) &(vertexBuffId));
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexBuffId);
+		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in vertices array"
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 36, targetPrimitive->vertices, GL_STATIC_DRAW);
+
+		// Load index buffer
+		glGenBuffers(1, (GLuint*) &(indexBuffId));
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
+		// ---Second parameter in glBufferData must be sizeof(uint) * "number of positions in vertexIndices array"
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 60, targetPrimitive->vertexIndices, GL_STATIC_DRAW);
+
+		// Load colour buffer
+		glGenBuffers(1, (GLuint*) &(colourBuffId));
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, colourBuffId);
+		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in colours array"
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof (float) * 24, colours, GL_STATIC_DRAW);
+		
 	}
 
 	return ret;
 }
 
-update_status ModuleRender::PreUpdate()
+update_status ModuleRender::PreUpdate(float dt)
 {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-	SDL_RenderClear(renderer);
+	//SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+	//SDL_RenderClear(renderer);
+
+	//Color c = cam->background; 
+	glClearColor(0.f, 0.f, 0.f, 1.f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
 	return UPDATE_CONTINUE;
 }
 
 // Called every draw update
-update_status ModuleRender::Update()
+update_status ModuleRender::Update(float dt)
 {
-	// debug camera
-	int speed = 1;
-
-	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->renderer->camera.y += speed;
-
-	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->renderer->camera.y -= speed;
-
-	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->renderer->camera.x += speed;
-
-	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->renderer->camera.x -= speed;
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
+	glVertexPointer(3, GL_FLOAT, 0, targetPrimitive->vertices);
+	glColorPointer(3, GL_FLOAT, 0, colours);
+	// ---Second parameter in glDrawElements must be "number of positions in vertexIndices array"
+	glDrawElements(GL_TRIANGLES, 60, GL_UNSIGNED_INT, NULL);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
 
 	return UPDATE_CONTINUE;
 }
 
-update_status ModuleRender::PostUpdate()
+update_status ModuleRender::PostUpdate(float dt)
 {
-	SDL_RenderPresent(renderer);
+	//SDL_RenderPresent(renderer);
+
+
+	//Swap Buffer (OpenGL)
+	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
 }
 
 // Called before quitting
 bool ModuleRender::CleanUp()
 {
-	LOG("Destroying renderer");
+	DLOG("Destroying renderer");
+
+	SDL_GL_DeleteContext(context);
 
 	//Destroy window
-	if(renderer != nullptr)
+	if (renderer != nullptr)
 	{
 		SDL_DestroyRenderer(renderer);
 	}
@@ -101,7 +200,7 @@ bool ModuleRender::Blit(SDL_Texture* texture, iPoint &position, Frame* frame, bo
 	rect.x = (int)(camera.x * speed) + (position.x + (flip ? -frame->offset_x : frame->offset_x)) * App->window->screen_size;
 	rect.y = (int)(camera.y * speed) + (position.y + frame->offset_y + position.z) * App->window->screen_size;
 
-	if(frame != NULL)
+	if (frame != NULL)
 	{
 		rect.w = frame->section.w;
 		rect.h = frame->section.h;
@@ -114,15 +213,15 @@ bool ModuleRender::Blit(SDL_Texture* texture, iPoint &position, Frame* frame, bo
 	rect.w *= App->window->screen_size;
 	rect.h *= App->window->screen_size;
 	if (!flip) {
-		if(SDL_RenderCopy(renderer, texture, &frame->section, &rect) != 0)
+		if (SDL_RenderCopy(renderer, texture, &frame->section, &rect) != 0)
 		{
-			LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+			DLOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 			ret = false;
 		}
 	}
 	else {
 		if (SDL_RenderCopyEx(renderer, texture, &frame->section, &rect, NULL, nullptr, SDL_FLIP_HORIZONTAL) != 0) {
-			LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+			DLOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 			ret = false;
 		}
 	}
@@ -138,9 +237,9 @@ bool ModuleRender::StaticBlit(SDL_Texture* texture, const iPoint &position, cons
 	rec.y = (int)(position.y  * App->window->screen_size);
 	rec.w *= App->window->screen_size;
 	rec.h *= App->window->screen_size;
-	
+
 	if (SDL_RenderCopy(renderer, texture, &section, &rec) != 0) {
-		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+		DLOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
 	}
 
@@ -165,7 +264,7 @@ bool ModuleRender::DrawQuad(const Collider& collider, Uint8 r, Uint8 g, Uint8 b,
 
 	if (SDL_RenderFillRect(renderer, &rec) != 0)
 	{
-		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
+		DLOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
 	}
 
@@ -185,9 +284,17 @@ bool ModuleRender::DrawRect(const SDL_Rect &rect, Uint8 r, Uint8 g, Uint8 b, Uin
 	rec.h *= App->window->screen_size;
 
 	if (SDL_RenderFillRect(renderer, &rec) != 0) {
-		LOG("Cannot draw rectangle to screen. SDL_RenderFillRect error: %s", SDL_GetError());
+		DLOG("Cannot draw rectangle to screen. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
 	}
 
 	return ret;
+}
+
+void ModuleRender::GetHWAndDriverCapabilities()
+{
+	DLOG("Vendor: %s", glGetString(GL_VENDOR));
+	DLOG("Renderer: %s", glGetString(GL_RENDERER));
+	DLOG("OpenGL version supported %s", glGetString(GL_VERSION));
+	DLOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 }

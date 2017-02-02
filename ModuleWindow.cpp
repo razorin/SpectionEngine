@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "SDL/include/SDL.h"
+#include "Parson.h"
 
 ModuleWindow::ModuleWindow(const JSON_Object *json) : Module(json)
 {
@@ -24,12 +25,12 @@ ModuleWindow::~ModuleWindow()
 // Called before render is available
 bool ModuleWindow::Init()
 {
-	LOG("Init SDL window & surface");
+	DLOG("Init SDL window & surface");
 	bool ret = true;
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		LOG("SDL_VIDEO could not initialize! SDL_Error: %s\n", SDL_GetError());
+		DLOG("SDL_VIDEO could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 	else
@@ -44,11 +45,14 @@ bool ModuleWindow::Init()
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
 
+		//Add flag for OpenGL
+		flags |= SDL_WINDOW_OPENGL;
+
 		window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
 
 		if(window == nullptr)
 		{
-			LOG("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+			DLOG("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 			ret = false;
 		}
 		else
@@ -61,10 +65,16 @@ bool ModuleWindow::Init()
 	return ret;
 }
 
+void ModuleWindow::ChangeTitle(const char* title)
+{
+	this->title = title;
+	SDL_SetWindowTitle(window, this->title);
+}
+
 // Called before quitting
 bool ModuleWindow::CleanUp()
 {
-	LOG("Destroying SDL window and quitting all SDL systems");
+	DLOG("Destroying SDL window and quitting all SDL systems");
 
 	//Destroy window
 	if(window != nullptr)

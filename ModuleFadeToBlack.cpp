@@ -14,13 +14,13 @@ ModuleFadeToBlack::~ModuleFadeToBlack()
 // Load assets
 bool ModuleFadeToBlack::Start()
 {
-	LOG("Preparing Fade Screen");
+	DLOG("Preparing Fade Screen");
 	SDL_SetRenderDrawBlendMode(App->renderer->renderer, SDL_BLENDMODE_BLEND);
 	return true;
 }
 
 // Update: draw background
-update_status ModuleFadeToBlack::Update()
+update_status ModuleFadeToBlack::Update(float dt)
 {
 	if(start_time > 0)
 	{

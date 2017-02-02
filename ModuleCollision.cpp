@@ -1,9 +1,8 @@
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleCollision.h"
 #include "ModuleInput.h"
 #include "ModuleRender.h"
-#include "ModuleCollision.h"
-#include "Entity.h"
 
 using namespace std;
 
@@ -25,7 +24,7 @@ ModuleCollision::ModuleCollision(const JSON_Object *json) : Module(json)
 ModuleCollision::~ModuleCollision()
 {}
 
-update_status ModuleCollision::PreUpdate()
+update_status ModuleCollision::PreUpdate(float dt)
 {
 	// Remove all colliders scheduled for deletion
 	for (list<Collider*>::iterator it = colliders.begin(); it != colliders.end();)
@@ -42,7 +41,7 @@ update_status ModuleCollision::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
-update_status ModuleCollision::Update()
+update_status ModuleCollision::Update(float dt)
 {
 	for (list<Collider*>::iterator it = colliders.begin(); it != colliders.end(); ++it){
 		for (list<Collider*>::iterator jt = std::next(it); jt != colliders.end(); ++jt) {
@@ -71,7 +70,7 @@ void ModuleCollision::DebugDraw()
 // Called before quitting
 bool ModuleCollision::CleanUp()
 {
-	LOG("Freeing all colliders");
+	DLOG("Freeing all colliders");
 
 	for (list<Collider*>::iterator it = colliders.begin(); it != colliders.end(); ++it)
 		RELEASE(*it);
@@ -81,9 +80,9 @@ bool ModuleCollision::CleanUp()
 	return true;
 }
 
-Collider* ModuleCollision::AddCollider(const SDL_Rect& rect, COLLIDER_TYPE type, bool ignore_z, bool ignore_y, std::function<void(const Collider &)> onCollision, Entity *owner)
+Collider* ModuleCollision::AddCollider(const SDL_Rect& rect, COLLIDER_TYPE type, bool ignore_z, bool ignore_y, std::function<void(const Collider &)> onCollision)
 {
-	Collider* ret = new Collider(rect, type, ignore_z, ignore_y, onCollision, owner);
+	Collider* ret = new Collider(rect, type, ignore_z, ignore_y, onCollision);
 
 	colliders.push_back(ret);
 

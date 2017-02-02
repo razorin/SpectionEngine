@@ -13,10 +13,10 @@ class ModuleAudio;
 class ModuleFadeToBlack;
 class ModuleCollision;
 class ModuleParticles;
+class ModuleTestScene;
 
-// Game modules ---
-class ModuleLevelOneStageOne;
-class ModuleEntity;
+class Timer;
+class PreciseTimer;
 
 class Application
 {
@@ -29,6 +29,8 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+	double CalculateAvgFPS();
+
 public:
 	ModuleRender* renderer;
 	ModuleWindow* window;
@@ -38,14 +40,20 @@ public:
 	ModuleFadeToBlack* fade;
 	ModuleCollision* collision;
 	ModuleParticles* particles;
+	ModuleTestScene* testScene;
 
-	// Game modules ---
-	ModuleLevelOneStageOne* levelOneStageOne;
-	ModuleEntity* entities;
 	JSON_Value *configuration;
+	Timer *gamestartTimer;
+	PreciseTimer *avgTimer;
+	PreciseTimer *updateTimer;
+	PreciseTimer *performanceTimer;
+	PreciseTimer *fpsTimer;
+	int frameCountGlobal = 0;
+	int frameCountPerSecond = 0;
+	float lastFrameMilliseconds = 0;
 
 private:
-
+	float msByFrame = 0;
 	std::list<Module*> modules;
 
 

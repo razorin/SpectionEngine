@@ -1,10 +1,31 @@
 #include <stdlib.h>
 #include "Application.h"
 #include "Globals.h"
-#include <ctime>
 #include "SDL/include/SDL.h"
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
+
+#ifdef _MSC_VER
+#	pragma comment (lib, "opengl32.lib")
+#	pragma comment (lib, "glu32.lib")
+#	ifdef _WIN64
+#		ifdef _DEBUG
+#			pragma comment(lib, "MathGeoLib/libx64/Debug/MathGeoLib.lib")
+#			pragma comment(lib, "Glew/lib/Release/Win32/glew32.lib")
+#		else // RELEASE
+#			pragma comment(lib, "MathGeoLib/libx64/Release/MathGeoLib.lib")
+#			pragma comment(lib, "Glew/lib/Release/Win32/glew32.lib")
+#		endif // _DEBUG
+#	else // WIN32
+#		ifdef _DEBUG
+#			pragma comment(lib, "MathGeoLib/libx86/Debug/MathGeoLib.lib")
+#			pragma comment(lib, "Glew/lib/Release/Win32/glew32.lib")
+#		else // RELEASE
+#			pragma comment(lib, "MathGeoLib/libx86/Release/MathGeoLib.lib")
+#			pragma comment(lib, "Glew/lib/Release/Win32/glew32.lib")
+#		endif // _DEBUG
+#	endif // _WIN64
+#endif // _MSC_VER
 
 enum main_states
 {
@@ -23,7 +44,6 @@ int main(int argc, char ** argv)
 
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
-	srand(time(NULL));
 
 	while (state != MAIN_EXIT)
 	{
@@ -31,23 +51,23 @@ int main(int argc, char ** argv)
 		{
 		case MAIN_CREATION:
 
-			LOG("Application Creation --------------");
+			DLOG("Application Creation --------------");
 			App = new Application();
 			state = MAIN_START;
 			break;
 
 		case MAIN_START:
 
-			LOG("Application Init --------------");
+			DLOG("Application Init --------------");
 			if (App->Init() == false)
 			{
-				LOG("Application Init exits with error -----");
+				DLOG("Application Init exits with error -----");
 				state = MAIN_EXIT;
 			}
 			else
 			{
 				state = MAIN_UPDATE;
-				LOG("Application Update --------------");
+				DLOG("Application Update --------------");
 			}
 
 			break;
@@ -58,7 +78,7 @@ int main(int argc, char ** argv)
 
 			if (update_return == UPDATE_ERROR)
 			{
-				LOG("Application Update exits with error -----");
+				DLOG("Application Update exits with error -----");
 				state = MAIN_EXIT;
 			}
 
@@ -69,10 +89,10 @@ int main(int argc, char ** argv)
 
 		case MAIN_FINISH:
 
-			LOG("Application CleanUp --------------");
+			DLOG("Application CleanUp --------------");
 			if (App->CleanUp() == false)
 			{
-				LOG("Application CleanUp exits with error -----");
+				DLOG("Application CleanUp exits with error -----");
 			}
 			else
 				main_return = EXIT_SUCCESS;
@@ -85,6 +105,6 @@ int main(int argc, char ** argv)
 	}
 
 	RELEASE( App);
-	LOG("Bye :)\n");
+	DLOG("Bye :)\n");
 	return main_return;
 }

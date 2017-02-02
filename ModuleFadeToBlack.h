@@ -2,7 +2,6 @@
 #define __MODULEFADETOBLACK_H__
 
 #include "Module.h"
-#include "Globals.h"
 
 class ModuleFadeToBlack : public Module
 {
@@ -11,7 +10,7 @@ public:
 	~ModuleFadeToBlack();
 
 	bool Start();
-	update_status Update();
+	update_status Update(float dt);
 	void FadeToBlack(Module* module_on, Module* module_off = nullptr, float time = 1.0f);
 	bool isFading() const;
 

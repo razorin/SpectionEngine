@@ -21,6 +21,8 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	void ChangeTitle(const char* title);
+
 public:
 	//The window we'll be rendering to
 	SDL_Window* window = nullptr;
@@ -36,6 +38,8 @@ public:
 	bool fullscreen_window = false;
 	int screen_size = 0;
 	const char *title;
+
+	
 
 };
 
