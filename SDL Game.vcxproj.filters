@@ -85,7 +85,12 @@
     <ClInclude Include="SCylinder.h">
       <Filter>Geometric primitive</Filter>
     </ClInclude>
-    <ClInclude Include="ModulePrimitives.h" />
+    <ClInclude Include="ModulePrimitives.h">
+      <Filter>Core Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleCamera.h">
+      <Filter>Core Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -147,6 +152,9 @@
     </ClCompile>
     <ClCompile Include="ModulePrimitives.cpp">
       <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleCamera.cpp">
+      <Filter>Core Modules</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
+#include "ModuleCamera.h"
 #include "SDL/include/SDL.h"
 
 #define MAX_KEYS 300
@@ -102,6 +103,11 @@ update_status ModuleInput::PreUpdate(float dt)
 					case SDL_WINDOWEVENT_MAXIMIZED:
 					case SDL_WINDOWEVENT_RESTORED:
 					windowEvents[WE_SHOW] = true;
+					break;
+					case SDL_WINDOWEVENT_SIZE_CHANGED:
+						App->camera->ChangeWindowSize(event.window.data1, event.window.data2);
+						//App->camera->ChangeWindowSize(512,512);
+						
 					break;
 				}
 			break;

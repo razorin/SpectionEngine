@@ -7,7 +7,7 @@ class ModuleCamera :
 	public Module
 {
 public:
-	ModuleCamera();
+	ModuleCamera(const JSON_Object *json);
 	~ModuleCamera();
 	bool Init();
 	bool Start();
@@ -15,6 +15,7 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
+	void ChangeWindowSize(int width, int height);
 
 };
 
