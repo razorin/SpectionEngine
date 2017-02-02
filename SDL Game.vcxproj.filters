@@ -85,6 +85,10 @@
     <ClInclude Include="SCylinder.h">
       <Filter>Geometric primitive</Filter>
     </ClInclude>
+    <ClInclude Include="ModulePrimitives.h">
+      <Filter>Core Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleCamera.h">
     <ClInclude Include="ModuleCamera.h">
       <Filter>Core Modules</Filter>
     </ClInclude>
