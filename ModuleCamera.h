@@ -3,11 +3,13 @@
 
 
 #include "Module.h"
+
+
 class ModuleCamera :
 	public Module
 {
 public:
-	ModuleCamera();
+	ModuleCamera(const JSON_Object *json);
 	~ModuleCamera();
 	bool Init();
 	bool Start();
@@ -15,6 +17,17 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
+	void SetFOV(float verticalFov);
+	void SetAspectRatio(float aspectRatio);
+	void SetPlaneDistances(float near, float far);
+
+private:
+	Frustum *frustum = nullptr;
+	float aspectRatio = 1.78;
+	float verticalFov = 30;
+	float horizontalFov = 30;
+	float near = NULL;
+	float far = NULL;
 
 };
 
