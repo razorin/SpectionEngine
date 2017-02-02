@@ -36,12 +36,6 @@ update_status ModuleCamera::PreUpdate(float dt)
 
 update_status ModuleCamera::Update(float dt)
 {
-	//TODO: Change code location
-	projectionMatrix = frustum->ViewProjMatrix();
-	projectionMatrix.Transpose();
-
-	viewMatrix = frustum->ViewMatrix();
-	viewMatrix.Transpose3();
 
 	return UPDATE_CONTINUE;
 }
@@ -87,10 +81,39 @@ void ModuleCamera::SetPlaneDistances(float near, float far)
 
 float4x4 ModuleCamera::GetMatrixProjection() const
 {
+	float4x4 projectionMatrix = frustum->ViewProjMatrix();
+	projectionMatrix.Transpose();
 	return projectionMatrix;
 }
 
 float3x4 ModuleCamera::GetMatrixView() const
 {
+	float3x4 viewMatrix = frustum->ViewMatrix();
+	viewMatrix.Transpose3();
 	return viewMatrix;
+}
+void ModuleCamera::SetPosition(const math::vec &pos)
+{
+	this->pos = pos;
+	frustum->SetPos(pos);
+}
+
+// TODO Instead of a float it will receive a rotation matrix that will be multiplied by frustum->Up and frustum->Front
+void ModuleCamera::SetOrientation(Axis axis, float rotation)
+{
+	switch (axis) {
+	case X:
+		break;
+	case Y:
+		break;
+	case Z:
+		break;
+	}
+}
+
+// TODO An assert must check Front and Up vectors are in a 90 degree angle
+void ModuleCamera::SetLookAt(const math::vec & up, const math::vec & front)
+{
+	frustum->SetUp(up);
+	frustum->SetFront(front);
 }

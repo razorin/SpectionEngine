@@ -5,6 +5,11 @@
 #include "Module.h"
 #include "MathGeoLib/include/MathGeoLib.h"
 
+enum Axis {
+	X,
+	Y,
+	Z
+};
 
 class ModuleCamera :
 	public Module
@@ -24,6 +29,9 @@ public:
 	void SetPlaneDistances(float near, float far);
 	float4x4 GetMatrixProjection() const;
 	float3x4 GetMatrixView() const;
+	void SetPosition(const math::vec &pos);
+	void SetOrientation(Axis axis, float rotation);
+	void SetLookAt(const math::vec &up, const math::vec &front);
 
 private:
 	Frustum *frustum = nullptr;
@@ -32,9 +40,8 @@ private:
 	float horizontalFov = 30;
 	float near = 0;
 	float far = 0;
-	float4x4 projectionMatrix = float4x4::identity;
-	float3x4 viewMatrix = float3x4::identity;
 
+	math::vec pos = { 0,0,0 };
 
 };
 
