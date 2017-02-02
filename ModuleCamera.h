@@ -3,6 +3,7 @@
 
 #include "MathGeoLib\include\MathGeoLib.h"
 #include "Module.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 
 class ModuleCamera :
@@ -17,6 +18,7 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
+	void ChangeWindowSize(int width, int height);
 	void SetFOV(float verticalFov);
 	void SetAspectRatio(float aspectRatio);
 	void SetPlaneDistances(float near, float far);

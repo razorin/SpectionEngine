@@ -47,6 +47,8 @@ bool ModuleWindow::Init()
 
 		//Add flag for OpenGL
 		flags |= SDL_WINDOW_OPENGL;
+		//Add flag to make the window resizable
+		flags |= SDL_WINDOW_RESIZABLE;
 
 		window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
 
