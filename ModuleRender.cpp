@@ -6,10 +6,10 @@
 #include "ModuleCollision.h"
 #include "Animation.h"
 #include "Parson.h"
-#include "Primitive.h"
-#include "MyCube.h"
-#include "MyPlane.h"
-#include "MyCylinder.h"
+#include "SPrimitive.h"
+#include "SCube.h"
+#include "SPlane.h"
+#include "SCylinder.h"
 #include "SDL/include/SDL.h"
 #include <math.h>
 #include "MathGeoLib/include/MathGeoLib.h"
@@ -101,9 +101,9 @@ bool ModuleRender::Init()
 		glViewport(0, 0, App->window->screen_width * App->window->screen_size, App->window->screen_height * App->window->screen_size);
 
 		// Create primitives
-		cube = new MyCube();
-		plane = new MyPlane();
-		cylinder = new MyCylinder();
+		cube = new SCube();
+		plane = new SPlane();
+		cylinder = new SCylinder();
 
 		// Set primitive to print
 		targetPrimitive = cylinder;

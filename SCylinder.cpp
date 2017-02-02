@@ -1,8 +1,8 @@
-#include "MyCylinder.h"
+#include "SCylinder.h"
 #include <cmath>
 
 
-MyCylinder::MyCylinder()
+SCylinder::SCylinder()
 {
 	// Create cylinder vertex array
 	vertices = new float[36]{
@@ -62,6 +62,6 @@ MyCylinder::MyCylinder()
 }
 
 
-MyCylinder::~MyCylinder()
+SCylinder::~SCylinder()
 {
 }

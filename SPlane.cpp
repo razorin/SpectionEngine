@@ -1,8 +1,8 @@
-#include "MyPlane.h"
+#include "SPlane.h"
 
 
 
-MyPlane::MyPlane()
+SPlane::SPlane()
 {
 	// Create plane vertex array
 	vertices = new float[27]{
@@ -37,6 +37,6 @@ MyPlane::MyPlane()
 }
 
 
-MyPlane::~MyPlane()
+SPlane::~SPlane()
 {
 }

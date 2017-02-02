@@ -1,12 +1,10 @@
-#include "MyCube.h"
+#include "SCube.h"
 
-
-
-MyCube::MyCube()
+SCube::SCube()
 {
 
 	// Create cube vertex array
-	vertices = new float[24]{
+	this->vertices = new float[24]{
 		// ----- CUBE ----- 8verts 12tris
 		//    6-------7
 		//   /|      /|
@@ -26,7 +24,7 @@ MyCube::MyCube()
 		0.5f, 0.5f, -0.5f		//7		
 	};
 	// Create cube indices array
-	vertexIndices = new uint[36]{
+	this->vertexIndices = new uint[36]{
 		2,0,1,
 		2,1,3,
 		3,1,5,
@@ -43,6 +41,8 @@ MyCube::MyCube()
 }
 
 
-MyCube::~MyCube()
+SCube::~SCube()
 {
 }
+
+

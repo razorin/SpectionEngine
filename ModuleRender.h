@@ -13,10 +13,10 @@ struct SDL_Rect;
 struct Frame;
 struct Collider;
 
-class Primitive;
-class MyCube;
-class MyPlane;
-class MyCylinder;
+class SPrimitive;
+class SCube;
+class SPlane;
+class SCylinder;
 
 class ModuleRender : public Module
 {
@@ -49,10 +49,10 @@ private:
 	uint vertexBuffId = NULL;
 	uint indexBuffId = NULL;
 	uint colourBuffId = NULL;
-	Primitive *targetPrimitive = nullptr;
-	MyCube *cube = nullptr;
-	MyPlane *plane = nullptr;
-	MyCylinder *cylinder = nullptr;
+	SPrimitive *targetPrimitive = nullptr;
+	SCube *cube = nullptr;
+	SPlane *plane = nullptr;
+	SCylinder *cylinder = nullptr;
 	float *colours = nullptr;
 };
 

@@ -73,14 +73,19 @@
     <ClInclude Include="ModuleTestScene.h">
       <Filter>Game Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Primitive.h">
+    <ClInclude Include="SPrimitive.h">
       <Filter>Geometric primitive</Filter>
     </ClInclude>
-    <ClInclude Include="MyCube.h">
+    <ClInclude Include="SCube.h">
       <Filter>Geometric primitive</Filter>
     </ClInclude>
-    <ClInclude Include="MyPlane.h" />
-    <ClInclude Include="MyCylinder.h" />
+    <ClInclude Include="SPlane.h">
+      <Filter>Geometric primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="SCylinder.h">
+      <Filter>Geometric primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="ModulePrimitives.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -128,16 +133,19 @@
     <ClCompile Include="ModuleTestScene.cpp">
       <Filter>Game Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Primitive.cpp">
+    <ClCompile Include="SPrimitive.cpp">
       <Filter>Geometric primitive</Filter>
     </ClCompile>
-    <ClCompile Include="MyCube.cpp">
+    <ClCompile Include="SCube.cpp">
       <Filter>Geometric primitive</Filter>
     </ClCompile>
-    <ClCompile Include="MyPlane.cpp">
-      <Filter>Main</Filter>
+    <ClCompile Include="SPlane.cpp">
+      <Filter>Geometric primitive</Filter>
     </ClCompile>
-    <ClCompile Include="MyCylinder.cpp">
+    <ClCompile Include="SCylinder.cpp">
+      <Filter>Geometric primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="ModulePrimitives.cpp">
       <Filter>Main</Filter>
     </ClCompile>
   </ItemGroup>
