@@ -65,3 +65,29 @@ void ModuleCamera::SetPlaneDistances(float near, float far)
 	this->far = far;
 	frustum->SetViewPlaneDistances(near, far);
 }
+
+void ModuleCamera::SetPosition(const math::vec &pos)
+{
+	this->pos = pos;
+	frustum->SetPos(pos);
+}
+
+// TODO Instead of a float it will receive a rotation matrix that will be multiplied by frustum->Up and frustum->Front
+void ModuleCamera::SetOrientation(Axis axis, float rotation)
+{
+	switch (axis) {
+	case X:
+		break;
+	case Y:
+		break;
+	case Z:
+		break;
+	}
+}
+
+// TODO An assert must check Front and Up vectors are in a 90 degree angle
+void ModuleCamera::SetLookAt(const math::vec & up, const math::vec & front)
+{
+	frustum->Up = up;
+	frustum->Front = front;
+}

@@ -3,7 +3,13 @@
 
 
 #include "Module.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
+enum Axis {
+	X,
+	Y,
+	Z
+};
 
 class ModuleCamera :
 	public Module
@@ -20,14 +26,18 @@ public:
 	void SetFOV(float verticalFov);
 	void SetAspectRatio(float aspectRatio);
 	void SetPlaneDistances(float near, float far);
+	void SetPosition(const math::vec &pos);
+	void SetOrientation(Axis axis, float rotation);
+	void SetLookAt(const math::vec &up, const math::vec &front);
 
 private:
 	Frustum *frustum = nullptr;
 	float aspectRatio = 1.78;
 	float verticalFov = 30;
 	float horizontalFov = 30;
-	float near = NULL;
-	float far = NULL;
+	float near = 0;
+	float far = 0;
+	math::vec pos = { 0,0,0 };
 
 };
 
