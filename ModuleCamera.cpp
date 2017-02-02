@@ -1,6 +1,8 @@
 #include "ModuleCamera.h"
 #include "MathGeoLib/include/MathGeoLib.h"
 #include <math.h>
+#include "Application.h"
+#include "ModuleInput.h"
 
 
 
@@ -33,6 +35,13 @@ update_status ModuleCamera::PreUpdate(float dt)
 
 update_status ModuleCamera::Update(float dt)
 {
+	//TODO: Change code location
+	projectionMatrix = frustum->ViewProjMatrix();
+	projectionMatrix.Transpose();
+
+	viewMatrix = frustum->ViewMatrix();
+	viewMatrix.Transpose3();
+
 	return UPDATE_CONTINUE;
 }
 
@@ -64,4 +73,14 @@ void ModuleCamera::SetPlaneDistances(float near, float far)
 	this->near = near;
 	this->far = far;
 	frustum->SetViewPlaneDistances(near, far);
+}
+
+float4x4 ModuleCamera::GetMatrixProjection() const
+{
+	return projectionMatrix;
+}
+
+float3x4 ModuleCamera::GetMatrixView() const
+{
+	return viewMatrix;
 }
