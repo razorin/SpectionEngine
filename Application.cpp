@@ -30,8 +30,8 @@ Application::Application()
 	JSON_Object *root = json_value_get_object(configuration);
 	// Order matters: they will init/start/pre/update/post in this order
 	modules.push_back(input = new ModuleInput());
+	modules.push_back(camera = new ModuleCamera(json_object_dotget_object(root, "config.camera")));
 	modules.push_back(window = new ModuleWindow(json_object_dotget_object(root, "config.window")));
-	modules.push_back(camera = new ModuleCamera(json_object_dotget_object(root, "config.window")));
 
 	modules.push_back(renderer = new ModuleRender(json_object_dotget_object(root, "config.renderer")));
 	modules.push_back(textures = new ModuleTextures());
