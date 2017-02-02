@@ -10,8 +10,6 @@
 ModuleCamera::ModuleCamera(const JSON_Object *json) : Module(json)
 {
 	frustum = new Frustum();
-	verticalFov = 2 * atan(tan(horizontalFov * 0.5) * 1 / aspectRatio);
-	horizontalFov = 2 * atan(tan(verticalFov * 0.5) * aspectRatio);
 }
 
 
@@ -21,6 +19,9 @@ ModuleCamera::~ModuleCamera()
 
 bool ModuleCamera::Init()
 {
+	aspectRatio = App->window->screen_width / App->window->screen_height;
+	verticalFov = 2 * atan(tan(horizontalFov * 0.5) * 1 / aspectRatio);
+	horizontalFov = 2 * atan(tan(verticalFov * 0.5) * aspectRatio);
 	return true;
 }
 
@@ -67,9 +68,9 @@ void ModuleCamera::ChangeWindowSize(int width, int height)
 {
 	App->window->screen_width = width;
 	App->window->screen_height = height;
-	DLOG("HABEMUS CAMBIO!");
-	DLOG("LA NUEVA WIDTH ES: %d", App->window->screen_width);
-	DLOG("LA NUEVA HEIGHT ES: %d", App->window->screen_height);
+	aspectRatio = width / height;
+	verticalFov = 2 * atan(tan(horizontalFov * 0.5) * 1 / aspectRatio);
+	horizontalFov = 2 * atan(tan(verticalFov * 0.5) * aspectRatio);
 }
 
 void ModuleCamera::SetPlaneDistances(float near, float far)
