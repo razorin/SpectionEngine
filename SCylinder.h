@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SCYLINDER_H
+#define SCYLINDER_H
+
 #include "SPrimitive.h"
 
 class SCylinder :
@@ -8,3 +10,5 @@ public:
 	SCylinder();
 	~SCylinder();
 };
+
+#endif // !SCYLINDER_H

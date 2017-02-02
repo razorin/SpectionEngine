@@ -85,6 +85,7 @@
     <ClInclude Include="SCylinder.h">
       <Filter>Geometric primitive</Filter>
     </ClInclude>
+    <ClInclude Include="ModulePrimitives.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -143,6 +144,9 @@
     </ClCompile>
     <ClCompile Include="SCylinder.cpp">
       <Filter>Geometric primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="ModulePrimitives.cpp">
+      <Filter>Main</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

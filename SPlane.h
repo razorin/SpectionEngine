@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SPLANE_H
+#define SPLANE_H
+
 #include "SPrimitive.h"
 
 class SPlane :
@@ -9,3 +11,4 @@ public:
 	~SPlane();
 };
 
+#endif // !SPLANE_H
