@@ -36,8 +36,27 @@ update_status ModuleCamera::PreUpdate(float dt)
 }
 
 update_status ModuleCamera::Update(float dt)
-{
+{	
+	// We asume X axis -> Pitch, Y axis -> Yaw, Z axis -> Roll
+	// debug camera
+	double speed = 0.01;
+	// Camera pitch
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) {
+		DLOG("Pressing UP arrow");
+		RotateCamera(X, floor(speed*dt));
+	}
+		//App->renderer->camera.y += floor(speed*dt);
 
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		DLOG("Pressing DOWN arrow");
+		RotateCamera(X, -floor(speed*dt));
+	/*
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		//App->renderer->camera.x += floor(speed*dt);
+
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		//App->renderer->camera.x -= floor(speed*dt);
+	*/
 	return UPDATE_CONTINUE;
 }
 
@@ -117,4 +136,35 @@ void ModuleCamera::SetLookAt(const math::vec & up, const math::vec & front)
 {
 	frustum->SetUp(up);
 	frustum->SetFront(front);
+}
+
+void ModuleCamera::RotateCamera(Axis axis, float rotation)
+{
+	Quat quat;
+	math::vec u;
+	float s;
+	math::vec vprime;
+
+	switch (axis) {
+	case X:
+		DLOG("Rotating camera on X axis");
+		quat = { frustum->WorldRight(), rotation };
+
+		// Extract the vector part of the quaternion
+		u = { quat.x, quat.y, quat.z };
+
+		// Extract the scalar part of the quaternion
+		s = quat.w;
+
+		// Do the math
+		vprime = 2.0f * math::Dot(u, frustum->WorldRight()) * u
+			+ (s*s - math::Dot(u, u)) * frustum->WorldRight()
+			+ 2.0f * s * math::Cross(u, frustum->WorldRight());
+		frustum->SetFront(vprime);
+		break;
+	case Y:
+		break;
+	case Z:
+		break;
+	}
 }

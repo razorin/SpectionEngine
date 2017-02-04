@@ -32,6 +32,7 @@ public:
 	void SetPosition(const math::vec &pos);
 	void SetOrientation(Axis axis, float rotation);
 	void SetLookAt(const math::vec &up, const math::vec &front);
+	void RotateCamera(Axis axis, float rotation);
 
 private:
 	Frustum *frustum = nullptr;
