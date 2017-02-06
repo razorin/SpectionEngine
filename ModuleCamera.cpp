@@ -22,6 +22,14 @@ bool ModuleCamera::Init()
 	aspectRatio = App->window->screen_width / App->window->screen_height;
 	verticalFov = 2 * atan(tan(horizontalFov * 0.5) * 1 / aspectRatio);
 	horizontalFov = 2 * atan(tan(verticalFov * 0.5) * aspectRatio);
+	frustum->SetVerticalFovAndAspectRatio(verticalFov, this->aspectRatio);
+	frustum->SetHorizontalFovAndAspectRatio(this->horizontalFov, aspectRatio);
+
+	SetPlaneDistances(0.2f, 100.f);
+	SetPosition(math::vec{ -5,0,0 });
+	SetLookAt(math::vec{ 0,1,0 }, math::vec{ 1,0,0 });
+
+	frustum->SetKind(FrustumProjectiveSpace::FrustumSpaceGL, FrustumHandedness::FrustumRightHanded);
 	return true;
 }
 
@@ -92,18 +100,18 @@ void ModuleCamera::SetPlaneDistances(float near, float far)
 	frustum->SetViewPlaneDistances(near, far);
 }
 
-float4x4 ModuleCamera::GetMatrixProjection() const
+float * ModuleCamera::GetMatrixProjection() const
 {
 	float4x4 projectionMatrix = frustum->ViewProjMatrix();
 	projectionMatrix.Transpose();
-	return projectionMatrix;
+	return &projectionMatrix[0][0];
 }
 
-float3x4 ModuleCamera::GetMatrixView() const
+float * ModuleCamera::GetMatrixView() const
 {
 	float3x4 viewMatrix = frustum->ViewMatrix();
 	viewMatrix.Transpose3();
-	return viewMatrix;
+	return &viewMatrix[0][0];
 }
 void ModuleCamera::SetPosition(const math::vec &pos)
 {

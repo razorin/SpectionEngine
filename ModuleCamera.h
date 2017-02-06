@@ -27,8 +27,8 @@ public:
 	void SetFOV(float verticalFov);
 	void SetAspectRatio(float aspectRatio);
 	void SetPlaneDistances(float near, float far);
-	float4x4 GetMatrixProjection() const;
-	float3x4 GetMatrixView() const;
+	float * GetMatrixProjection() const;
+	float * GetMatrixView() const;
 	void SetPosition(const math::vec &pos);
 	void SetOrientation(Axis axis, float rotation);
 	void SetLookAt(const math::vec &up, const math::vec &front);
