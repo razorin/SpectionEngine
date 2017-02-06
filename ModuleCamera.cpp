@@ -45,18 +45,11 @@ update_status ModuleCamera::Update(float dt)
 		DLOG("Pressing UP arrow");
 		RotateCamera(X, floor(speed*dt));
 	}
-		//App->renderer->camera.y += floor(speed*dt);
 
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
 		DLOG("Pressing DOWN arrow");
 		RotateCamera(X, -floor(speed*dt));
-	/*
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		//App->renderer->camera.x += floor(speed*dt);
-
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		//App->renderer->camera.x -= floor(speed*dt);
-	*/
+	}
 	return UPDATE_CONTINUE;
 }
 
@@ -160,6 +153,7 @@ void ModuleCamera::RotateCamera(Axis axis, float rotation)
 		vprime = 2.0f * math::Dot(u, frustum->WorldRight()) * u
 			+ (s*s - math::Dot(u, u)) * frustum->WorldRight()
 			+ 2.0f * s * math::Cross(u, frustum->WorldRight());
+		
 		frustum->SetFront(vprime);
 		break;
 	case Y:

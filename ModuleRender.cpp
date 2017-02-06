@@ -85,7 +85,7 @@ bool ModuleRender::Init()
 		cylinder = new SCylinder();
 
 		// Set primitive to print
-		targetPrimitive = cube;
+		targetPrimitive = plane;
 		
 		colours = new float[24]{
 			1, 1, 1,   1, 1, 0,   1, 0, 0,	 1, 0, 0,
@@ -96,20 +96,19 @@ bool ModuleRender::Init()
 		glGenBuffers(1, (GLuint*) &(vertexBuffId));
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexBuffId);
 		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in vertices array"
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 24, targetPrimitive->vertices, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 27, targetPrimitive->vertices, GL_STATIC_DRAW);
 
 		// Load index buffer
 		glGenBuffers(1, (GLuint*) &(indexBuffId));
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
 		// ---Second parameter in glBufferData must be sizeof(uint) * "number of positions in vertexIndices array"
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 36, targetPrimitive->vertexIndices, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 24, targetPrimitive->vertexIndices, GL_STATIC_DRAW);
 
 		// Load colour buffer
 		glGenBuffers(1, (GLuint*) &(colourBuffId));
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, colourBuffId);
 		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in colours array"
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 24, colours, GL_STATIC_DRAW);
-		
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 27, colours, GL_STATIC_DRAW);
 	}
 
 	return ret;
@@ -141,7 +140,7 @@ update_status ModuleRender::Update(float dt)
 	glVertexPointer(3, GL_FLOAT, 0, targetPrimitive->vertices);
 	glColorPointer(3, GL_FLOAT, 0, colours);
 	// ---Second parameter in glDrawElements must be "number of positions in vertexIndices array"
-	glDrawElements(GL_TRIANGLES, 60, GL_UNSIGNED_INT, NULL);
+	glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, NULL);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 
