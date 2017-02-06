@@ -31,8 +31,7 @@ bool ModuleRender::Init()
 	DLOG("Creating Renderer context");
 	bool ret = true;
 
-	//OpenGL Inicialization
-	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
@@ -67,26 +66,6 @@ bool ModuleRender::Init()
 	{
 		GetHWAndDriverCapabilities();
 
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		//Check for error
-		GLenum error = glGetError();
-		if (error != GL_NO_ERROR)
-		{
-			DLOG("Error initializing OpenGL! %s\n", gluErrorString(error));
-			ret = false;
-		}
-
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		//Check for error
-		error = glGetError();
-		if (error != GL_NO_ERROR)
-		{
-			DLOG("Error initializing OpenGL! %s\n", gluErrorString(error));
-			ret = false;
-		}
-
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		glClearDepth(1.0f);
 		glClearColor(0.f, 0.f, 0.f, 1.f);
@@ -98,7 +77,7 @@ bool ModuleRender::Init()
 		glEnable(GL_TEXTURE_2D);
 
 		// We are on GLMode view so we can setup the viewport
-		glViewport(0, 0, App->window->screen_width * App->window->screen_size, App->window->screen_height * App->window->screen_size);
+		//glViewport(0, 0, App->window->screen_width * App->window->screen_size, App->window->screen_height * App->window->screen_size);
 
 		// Create primitives
 		cube = new SCube();
@@ -106,7 +85,7 @@ bool ModuleRender::Init()
 		cylinder = new SCylinder();
 
 		// Set primitive to print
-		targetPrimitive = cylinder;
+		targetPrimitive = cube;
 		
 		colours = new float[24]{
 			1, 1, 1,   1, 1, 0,   1, 0, 0,	 1, 0, 0,
@@ -117,19 +96,19 @@ bool ModuleRender::Init()
 		glGenBuffers(1, (GLuint*) &(vertexBuffId));
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexBuffId);
 		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in vertices array"
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 36, targetPrimitive->vertices, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 24, targetPrimitive->vertices, GL_STATIC_DRAW);
 
 		// Load index buffer
 		glGenBuffers(1, (GLuint*) &(indexBuffId));
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
 		// ---Second parameter in glBufferData must be sizeof(uint) * "number of positions in vertexIndices array"
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 60, targetPrimitive->vertexIndices, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 36, targetPrimitive->vertexIndices, GL_STATIC_DRAW);
 
 		// Load colour buffer
 		glGenBuffers(1, (GLuint*) &(colourBuffId));
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, colourBuffId);
 		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in colours array"
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof (float) * 24, colours, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 24, colours, GL_STATIC_DRAW);
 		
 	}
 
@@ -144,8 +123,11 @@ update_status ModuleRender::PreUpdate(float dt)
 	//Color c = cam->background; 
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	glFrustum(-1.0f, 1.0f, -1.0f, 1.0f, 0.2f, 5);
 
 	return UPDATE_CONTINUE;
 }
@@ -162,6 +144,7 @@ update_status ModuleRender::Update(float dt)
 	glDrawElements(GL_TRIANGLES, 60, GL_UNSIGNED_INT, NULL);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
+
 
 	return UPDATE_CONTINUE;
 }
