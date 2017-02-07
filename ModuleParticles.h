@@ -6,6 +6,7 @@
 #include "Animation.h"
 #include "Point.h"
 #include "ModuleCollision.h"
+#include "MemLeaks.h"
 
 struct SDL_Texture;
 

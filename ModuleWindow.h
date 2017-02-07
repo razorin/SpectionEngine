@@ -2,6 +2,7 @@
 #define __MODULEWINDOW_H__
 
 #include "Module.h"
+#include "MemLeaks.h"
 
 struct SDL_Window;
 struct SDL_Surface;

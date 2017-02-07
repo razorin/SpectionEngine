@@ -4,6 +4,7 @@
 #include "MathGeoLib\include\MathGeoLib.h"
 #include "Module.h"
 #include "MathGeoLib/include/MathGeoLib.h"
+#include "MemLeaks.h"
 
 enum Axis {
 	X,
@@ -35,7 +36,7 @@ public:
 	void RotateCamera(Axis axis, float rotation);
 
 private:
-	Frustum *frustum = nullptr;
+	Frustum frustum;
 	float aspectRatio = 1.78;
 	float verticalFov = 30;
 	float horizontalFov = 30;

@@ -4,6 +4,7 @@
 #include "Module.h"
 #include <list>
 #include "SPrimitive.h"
+#include "MemLeaks.h"
 
 struct json_value_t;
 typedef struct json_value_t  JSON_Value;

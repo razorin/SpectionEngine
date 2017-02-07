@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Module.h"
+#include "MemLeaks.h"
 
 #define DEFAULT_MUSIC_FADE_TIME 2.0f
 

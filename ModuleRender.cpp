@@ -128,9 +128,6 @@ update_status ModuleRender::PreUpdate(float dt)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->GetMatrixView());
 
-
-	//glFrustum(-1.0f, 1.0f, -1.0f, 1.0f, 0.2f, 5);
-
 	return UPDATE_CONTINUE;
 }
 
@@ -175,7 +172,10 @@ bool ModuleRender::CleanUp()
 	{
 		SDL_DestroyRenderer(renderer);
 	}
-
+	RELEASE(cube);
+	RELEASE(plane);
+	RELEASE(cylinder);
+	RELEASE(colours);
 	return true;
 }
 

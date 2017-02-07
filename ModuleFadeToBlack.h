@@ -2,6 +2,7 @@
 #define __MODULEFADETOBLACK_H__
 
 #include "Module.h"
+#include "MemLeaks.h"
 
 class ModuleFadeToBlack : public Module
 {

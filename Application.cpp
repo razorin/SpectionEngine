@@ -55,7 +55,7 @@ Application::Application()
 
 	//DLOG("Read performance timer after App constructor: %f microseconds", performanceTimer->Ellapsed());
 	//DLOG("Read performance timer after App constructor: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
-
+	
 	window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
 }
 
@@ -63,6 +63,8 @@ Application::~Application()
 {
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end(); ++it)
 		RELEASE(*it);
+
+	json_value_free(configuration);
 
 	RELEASE(gamestartTimer);
 	RELEASE(avgTimer);
