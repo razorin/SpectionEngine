@@ -55,29 +55,25 @@ update_status ModuleCamera::Update(float dt)
 		DLOG("Camera FRONT vector: %f, %f, %f", frustum.Front().x, frustum.Front().y, frustum.Front().z);
 	}
 
-	double speed = 0.01;
+	float speed = 0.01f;
 
 	// We asume X axis -> Pitch, Y axis -> Yaw, Z axis -> Roll
 	// Camera pitch
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) {
-		DLOG("Pressing UP arrow");
-		RotateCamera(X, floor(speed*dt));
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN) {
+		RotateCamera(X, speed*dt);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
-		DLOG("Pressing DOWN arrow");
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN) {
 		RotateCamera(X, -floor(speed*dt));
 	}
 	
 	// Camera yaw
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
-		DLOG("Pressing RIGHT arrow");
-		RotateCamera(X, floor(speed*dt));
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN) {
+		RotateCamera(Y, floor(speed*dt));
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
-		DLOG("Pressing LEFT arrow");
-		RotateCamera(X, -floor(speed*dt));
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN) {
+		RotateCamera(Y, -floor(speed*dt));
 	}
 	return UPDATE_CONTINUE;
 }
@@ -171,7 +167,8 @@ void ModuleCamera::RotateCamera(Axis axis, float rotation)
 
 	switch (axis) {
 	case X:
-		DLOG("Rotating camera on X axis");
+		DLOG("Rotating camera on X axis %f", rotation);
+		
 		quat = { frustum.WorldRight(), rotation };
 
 		// Extract the vector part of the quaternion
