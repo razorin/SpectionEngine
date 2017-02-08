@@ -5,7 +5,7 @@ SCube::SCube()
 
 	// Create cube vertex array
 
-	float z = -1;
+	float z = -2;
 
 	this->vertices = new float[24]{
 		// ----- CUBE ----- 8verts 12tris

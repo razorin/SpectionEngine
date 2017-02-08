@@ -95,9 +95,9 @@ bool ModuleRender::Init()
 
 		// Load vertex buffer
 		glGenBuffers(1, (GLuint*) &(vertexBuffId));
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexBuffId);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffId);
 		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in vertices array"
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 24, targetPrimitive->vertices, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 24, targetPrimitive->vertices, GL_STATIC_DRAW);
 
 		// Load index buffer
 		glGenBuffers(1, (GLuint*) &(indexBuffId));
@@ -107,9 +107,9 @@ bool ModuleRender::Init()
 
 		// Load colour buffer
 		glGenBuffers(1, (GLuint*) &(colourBuffId));
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, colourBuffId);
+		glBindBuffer(GL_ARRAY_BUFFER, colourBuffId);
 		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in colours array"
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 24, colours, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 24, colours, GL_STATIC_DRAW);
 	}
 
 	return ret;
@@ -117,16 +117,17 @@ bool ModuleRender::Init()
 
 update_status ModuleRender::PreUpdate(float dt)
 {
-	//SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-	//SDL_RenderClear(renderer);
-
-	//Color c = cam->background; 
+ 
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
 	glLoadMatrixf(App->camera->GetMatrixProjection());
 	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 	glLoadMatrixf(App->camera->GetMatrixView());
+	//glFrustum(-1.0f, 1.0f, -1.0f, 1.0f, 1,5);
+
 
 	return UPDATE_CONTINUE;
 }
@@ -134,15 +135,30 @@ update_status ModuleRender::PreUpdate(float dt)
 // Called every draw update
 update_status ModuleRender::Update(float dt)
 {
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetMatrixView());
+	//glEnableClientState(GL_VERTEX_ARRAY);
+	//glEnableClientState(GL_COLOR_ARRAY);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
+	//glVertexPointer(3, GL_FLOAT, 0, targetPrimitive->vertices);
+	//glColorPointer(3, GL_FLOAT, 0, colours);
+	//// ---Second parameter in glDrawElements must be "number of positions in vertexIndices array"
+	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
+	//glDisableClientState(GL_VERTEX_ARRAY);
+	//glDisableClientState(GL_COLOR_ARRAY);
+
+
+
+
 	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffId);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
 	glEnableClientState(GL_COLOR_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, colourBuffId);
+	glColorPointer(3, GL_FLOAT, 0, NULL);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
-	glVertexPointer(3, GL_FLOAT, 0, targetPrimitive->vertices);
-	glColorPointer(3, GL_FLOAT, 0, colours);
-	// ---Second parameter in glDrawElements must be "number of positions in vertexIndices array"
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
+	glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, NULL);
+
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 
