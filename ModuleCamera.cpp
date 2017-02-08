@@ -20,15 +20,14 @@ ModuleCamera::~ModuleCamera()
 bool ModuleCamera::Init()
 {
 	aspectRatio = App->window->screen_width / App->window->screen_height;
-	verticalFov = 90 * DEGTORAD;
-	horizontalFov = 90 * DEGTORAD;
+	verticalFov = 30 * DEGTORAD;
+	horizontalFov = 30 * DEGTORAD;
 	frustum.SetPerspective(horizontalFov, verticalFov);
 
-	frustum.SetPos(math::vec{ 0,0,0 });
-	frustum.SetFront(math::vec{ 0,0,-1 });
-	frustum.SetUp(math::vec{ 0,1,0 });
+	SetPosition(math::vec{ 5,0,0 });
+	SetLookAt(math::vec{ 0,1,0 }, math::vec{ -1,0,0 });
 
-	frustum.SetViewPlaneDistances(0.1f, 100.0f);
+	SetPlaneDistances(0.1f, 100.0f);
 
 	frustum.SetKind(FrustumProjectiveSpace::FrustumSpaceGL, FrustumHandedness::FrustumRightHanded);
 
@@ -47,6 +46,7 @@ update_status ModuleCamera::PreUpdate(float dt)
 
 update_status ModuleCamera::Update(float dt)
 {	
+	DLOG("VALUE: %f", horizontalFov);
 	// We asume X axis -> Pitch, Y axis -> Yaw, Z axis -> Roll
 	// debug camera
 	double speed = 0.01;
@@ -90,9 +90,11 @@ void ModuleCamera::ChangeWindowSize(int width, int height)
 {
 	App->window->screen_width = width;
 	App->window->screen_height = height;
-	aspectRatio = width / height;
-	verticalFov = 2 * atan(tan(horizontalFov * 0.5) * 1 / aspectRatio);
-	horizontalFov = 2 * atan(tan(verticalFov * 0.5) * aspectRatio);
+	aspectRatio = (float)width / (float)height;
+	SetAspectRatio(aspectRatio);
+
+	//verticalFov = 2 * atan(tan(horizontalFov * 0.5) * 1 / aspectRatio);
+	//horizontalFov = 2 * atan(tan(verticalFov * 0.5) * aspectRatio);
 }
 
 void ModuleCamera::SetPlaneDistances(float near, float far)

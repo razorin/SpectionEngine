@@ -1,7 +1,6 @@
 #ifndef MODULE_CAMERA_H
 #define MODULE_CAMERA_H
 
-#include "MathGeoLib\include\MathGeoLib.h"
 #include "Module.h"
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "MemLeaks.h"

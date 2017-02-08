@@ -4,9 +4,6 @@ SCube::SCube()
 {
 
 	// Create cube vertex array
-
-	float z = -2;
-
 	this->vertices = new float[24]{
 		// ----- CUBE ----- 8verts 12tris
 		//    6-------7
@@ -17,14 +14,14 @@ SCube::SCube()
 		//  |/      |/
 		//  0-------1
 
-		-0.5f, -0.5f,  0.5f+z,		//0
-		 0.5f, -0.5f,  0.5f+z,		//1
-		-0.5f,  0.5f,  0.5f+z,		//2
-		 0.5f,  0.5f,  0.5f+z,		//3
-		-0.5f, -0.5f,  -0.5f+z,		//4
-		 0.5f, -0.5f,  -0.5f+z,		    //5
-		-0.5f,  0.5f,  -0.5f+z,		//6
-		 0.5f,  0.5f,  -0.5f+z		    //7		
+		-0.5f, -0.5f,  0.5,		//0
+		 0.5f, -0.5f,  0.5,		//1
+		-0.5f,  0.5f,  0.5,		//2
+		 0.5f,  0.5f,  0.5,		//3
+		-0.5f, -0.5f,  -0.5,	//4
+		 0.5f, -0.5f,  -0.5,	//5
+		-0.5f,  0.5f,  -0.5,	//6
+		 0.5f,  0.5f,  -0.5		//7		
 	};
 	// Create cube indices array
 	this->vertexIndices = new uint[36]{
