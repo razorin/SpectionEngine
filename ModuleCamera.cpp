@@ -45,11 +45,19 @@ update_status ModuleCamera::PreUpdate(float dt)
 }
 
 update_status ModuleCamera::Update(float dt)
-{	
-	DLOG("VALUE: %f", horizontalFov);
-	// We asume X axis -> Pitch, Y axis -> Yaw, Z axis -> Roll
-	// debug camera
+{
+	// Print position and orientation
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
+		DLOG("Camera position: %f, %f, %f", pos.x, pos.y, pos.z);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN) {
+		DLOG("Camera UP vector: %f, %f, %f", frustum.Up().x, frustum.Up().y, frustum.Up().z);
+		DLOG("Camera FRONT vector: %f, %f, %f", frustum.Front().x, frustum.Front().y, frustum.Front().z);
+	}
+
 	double speed = 0.01;
+
+	// We asume X axis -> Pitch, Y axis -> Yaw, Z axis -> Roll
 	// Camera pitch
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) {
 		DLOG("Pressing UP arrow");
@@ -58,6 +66,17 @@ update_status ModuleCamera::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
 		DLOG("Pressing DOWN arrow");
+		RotateCamera(X, -floor(speed*dt));
+	}
+	
+	// Camera yaw
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
+		DLOG("Pressing RIGHT arrow");
+		RotateCamera(X, floor(speed*dt));
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
+		DLOG("Pressing LEFT arrow");
 		RotateCamera(X, -floor(speed*dt));
 	}
 	return UPDATE_CONTINUE;
