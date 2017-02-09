@@ -141,7 +141,7 @@ update_status ModuleRender::Update(float dt)
 	glVertexPointer(3, GL_FLOAT, 0, targetPrimitive->vertices);
 	glColorPointer(3, GL_FLOAT, 0, colours);
 	// ---Second parameter in glDrawElements must be "number of positions in vertexIndices array"
-	glDrawElements(GL_TRIANGLES, 60, GL_UNSIGNED_INT, NULL);
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 
