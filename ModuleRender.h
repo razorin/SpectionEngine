@@ -5,6 +5,9 @@
 #include "SDL\include\SDL_video.h"
 #include "MemLeaks.h"
 
+#define CHECKERS_HEIGHT 64
+#define CHECKERS_WIDTH 64
+
 template <class TYPE> class Point;
 typedef Point<int> iPoint;
 
@@ -55,6 +58,7 @@ private:
 	SPlane *plane = nullptr;
 	SCylinder *cylinder = nullptr;
 	float *colours = nullptr;
+	GLuint ImageName;
 };
 
 #endif // __MODULERENDER_H__
