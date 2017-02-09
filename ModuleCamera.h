@@ -39,6 +39,11 @@ public:
 	float * GetMatrixProjection() const;
 	float * GetMatrixView() const;
 
+public:
+	//These two params may be added as json config
+	float movementSpeed = NULL;
+	float rotationSpeed = NULL;
+
 private:
 	Frustum frustum;
 	float aspectRatio = 1.78;

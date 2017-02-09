@@ -138,9 +138,15 @@ void ModuleCamera::Move(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT)
 		movement -= float3::unitY;
 
+	movementSpeed = 2.0f;
+
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+		movement *= 2;
+
+
 	if (movement.Equals(float3::zero) == false)
 	{
-		frustum.Translate(movement * dt / 1000);
+		frustum.Translate(movement * movementSpeed * dt / 1000);
 		//This line below is required so viewmatrix is actualized.
 		SetPosition(frustum.Pos());
 	}
