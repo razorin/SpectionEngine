@@ -183,11 +183,14 @@ void ModuleCamera::Rotate(float dt)
 	float angleY = 0;
 	float angleChange = rotationSpeed * (dt / 1000);
 
-	iPoint mouseMotion = App->input->GetMouseMotion();
+	fPoint mouseMotion = App->input->GetMouseMotion();
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
 	{
-		angleX += mouseMotion.y / 2 * angleChange;
-		angleY += mouseMotion.x / 2 * angleChange;
+		angleX += (mouseMotion.y / 2) * angleChange;
+		angleY += (mouseMotion.x / 2) * angleChange;
+		DLOG("MousemotionY %f", mouseMotion.y);
+		DLOG("MousemotionX %f", mouseMotion.x);
+
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)

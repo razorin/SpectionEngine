@@ -124,8 +124,8 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 		case SDL_MOUSEMOTION:
-			mouse_motion.x = event.motion.xrel / App->window->screen_size;
-			mouse_motion.y = event.motion.yrel / App->window->screen_size;
+			mouse_motion.x = (float)event.motion.xrel / (float)App->window->screen_size;
+			mouse_motion.y = (float)event.motion.yrel / (float)App->window->screen_size;
 			mouse.x = event.motion.x / App->window->screen_size;
 			mouse.y = event.motion.y / App->window->screen_size;
 			break;
@@ -161,12 +161,12 @@ const iPoint& ModuleInput::GetMousePosition() const
 	return mouse;
 }
 
+const fPoint& ModuleInput::GetMouseMotion() const
+{
+	return mouse_motion;
+}
+
 const int & ModuleInput::GetMouseWheel() const
 {
 	return mouseWheel;
-}
-
-const iPoint& ModuleInput::GetMouseMotion() const
-{
-	return mouse_motion;
 }

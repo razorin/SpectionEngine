@@ -62,15 +62,15 @@ public:
 	bool GetWindowEvent(EventWindow code) const;
 
 	// Get mouse / axis position
-	const iPoint& GetMouseMotion() const;
 	const iPoint& GetMousePosition() const;
+	const fPoint& GetMouseMotion() const;
 	const int& GetMouseWheel() const;
 
 private:
 	bool		windowEvents[WE_COUNT];
 	KeyState*	keyboard;
 	KeyState	mouse_buttons[NUM_MOUSE_BUTTONS];
-	iPoint mouse_motion;
+	fPoint mouse_motion;
 	iPoint mouse;
 	int mouseWheel = NULL;
 };
