@@ -127,7 +127,7 @@ update_status Application::Update()
 	//Delta Time calculated
 	float previousFrameTime = lastFrameMilliseconds;
 	lastFrameMilliseconds = avgTimer->EllapsedInMilliseconds();
-	float dt = lastFrameMilliseconds - previousFrameTime;
+	dt = lastFrameMilliseconds - previousFrameTime;
 	//DLOG("DT: %f milliseconds", dt);
 
 	if (ellapsedTime < this->msByFrame) {

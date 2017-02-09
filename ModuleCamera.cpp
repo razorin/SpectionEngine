@@ -177,7 +177,27 @@ void ModuleCamera::Rotate(float dt)
 
 }
 
+void ModuleCamera::Zoom(float dt, bool closer)
+{
+	float3 movement = float3::zero;
+	if (closer) {
+		DLOG("CLOSER");
+		movement += frustum.Front();
+	}
+	else {
+		DLOG("FARTHER");
+		movement -= frustum.Front();
+	}
 
+	movementSpeed = 10.0f;
+
+	if (movement.Equals(float3::zero) == false)
+	{
+		frustum.Translate(movement * movementSpeed * dt / 1000);
+		//This line below is required so viewmatrix is actualized.
+		SetPosition(frustum.Pos());
+	}
+}
 
 
 void ModuleCamera::SetPosition(const math::vec &pos)

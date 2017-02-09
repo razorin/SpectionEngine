@@ -81,50 +81,59 @@ update_status ModuleInput::PreUpdate(float dt)
 
 	while(SDL_PollEvent(&event) != 0)
 	{
-		switch(event.type)
+		switch (event.type)
 		{
-			case SDL_QUIT:
-				windowEvents[WE_QUIT] = true;
+		case SDL_QUIT:
+			windowEvents[WE_QUIT] = true;
 			break;
 
-			case SDL_WINDOWEVENT:
-				switch(event.window.event)
-				{
-					//case SDL_WINDOWEVENT_LEAVE:
-					case SDL_WINDOWEVENT_HIDDEN:
-					case SDL_WINDOWEVENT_MINIMIZED:
-					case SDL_WINDOWEVENT_FOCUS_LOST:
-					windowEvents[WE_HIDE] = true;
-					break;
+		case SDL_WINDOWEVENT:
+			switch (event.window.event)
+			{
+				//case SDL_WINDOWEVENT_LEAVE:
+			case SDL_WINDOWEVENT_HIDDEN:
+			case SDL_WINDOWEVENT_MINIMIZED:
+			case SDL_WINDOWEVENT_FOCUS_LOST:
+				windowEvents[WE_HIDE] = true;
+				break;
 
-					//case SDL_WINDOWEVENT_ENTER:
-					case SDL_WINDOWEVENT_SHOWN:
-					case SDL_WINDOWEVENT_FOCUS_GAINED:
-					case SDL_WINDOWEVENT_MAXIMIZED:
-					case SDL_WINDOWEVENT_RESTORED:
-					windowEvents[WE_SHOW] = true;
-					break;
-					case SDL_WINDOWEVENT_SIZE_CHANGED:
-						App->camera->ChangeWindowSize(event.window.data1, event.window.data2);
-						//App->camera->ChangeWindowSize(512,512);
-						
-					break;
-				}
+				//case SDL_WINDOWEVENT_ENTER:
+			case SDL_WINDOWEVENT_SHOWN:
+			case SDL_WINDOWEVENT_FOCUS_GAINED:
+			case SDL_WINDOWEVENT_MAXIMIZED:
+			case SDL_WINDOWEVENT_RESTORED:
+				windowEvents[WE_SHOW] = true;
+				break;
+			case SDL_WINDOWEVENT_SIZE_CHANGED:
+				App->camera->ChangeWindowSize(event.window.data1, event.window.data2);
+				//App->camera->ChangeWindowSize(512,512);
+
+				break;
+			}
 			break;
 
-			case SDL_MOUSEBUTTONDOWN:
-				mouse_buttons[event.button.button - 1] = KEY_DOWN;
+		case SDL_MOUSEBUTTONDOWN:
+			mouse_buttons[event.button.button - 1] = KEY_DOWN;
 			break;
 
-			case SDL_MOUSEBUTTONUP:
-				mouse_buttons[event.button.button - 1] = KEY_UP;
+		case SDL_MOUSEBUTTONUP:
+			mouse_buttons[event.button.button - 1] = KEY_UP;
 			break;
 
-			case SDL_MOUSEMOTION:
-				mouse_motion.x = event.motion.xrel / App->window->screen_size;
-				mouse_motion.y = event.motion.yrel / App->window->screen_size;
-				mouse.x = event.motion.x / App->window->screen_size;
-				mouse.y = event.motion.y / App->window->screen_size;
+		case SDL_MOUSEMOTION:
+			mouse_motion.x = event.motion.xrel / App->window->screen_size;
+			mouse_motion.y = event.motion.yrel / App->window->screen_size;
+			mouse.x = event.motion.x / App->window->screen_size;
+			mouse.y = event.motion.y / App->window->screen_size;
+			break;
+
+		case SDL_MOUSEWHEEL:
+			if (event.wheel.y < 0) {
+				App->camera->Zoom(App->dt,true);
+			}
+			else {
+				App->camera->Zoom(App->dt, false);
+			}
 			break;
 		}
 	}
