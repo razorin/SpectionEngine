@@ -94,24 +94,6 @@ bool ModuleRender::Init()
 		};
 		
 
-		// Load vertex buffer
-		glGenBuffers(1, (GLuint*) &(vertexBuffId));
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffId);
-		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in vertices array"
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 24, targetPrimitive->vertices, GL_STATIC_DRAW);
-
-		// Load index buffer
-		glGenBuffers(1, (GLuint*) &(indexBuffId));
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
-		// ---Second parameter in glBufferData must be sizeof(uint) * "number of positions in vertexIndices array"
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 36, targetPrimitive->vertexIndices, GL_STATIC_DRAW);
-
-		// Load colour buffer
-		glGenBuffers(1, (GLuint*) &(colourBuffId));
-		glBindBuffer(GL_ARRAY_BUFFER, colourBuffId);
-		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in colours array"
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 24, colours, GL_STATIC_DRAW);
-
 		// Load checkImage texture
 		GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 		for (int i = 0; i < CHECKERS_HEIGHT; i++) {
@@ -133,6 +115,25 @@ bool ModuleRender::Init()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
 			0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+		
+		// Load vertex buffer
+		glGenBuffers(1, (GLuint*) &(vertexBuffId));
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffId);
+		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in vertices array"
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 24, targetPrimitive->vertices, GL_STATIC_DRAW);
+
+		// Load index buffer
+		glGenBuffers(1, (GLuint*) &(indexBuffId));
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
+		// ---Second parameter in glBufferData must be sizeof(uint) * "number of positions in vertexIndices array"
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 36, targetPrimitive->vertexIndices, GL_STATIC_DRAW);
+
+		// Load colour buffer
+		glGenBuffers(1, (GLuint*) &(colourBuffId));
+		glBindBuffer(GL_ARRAY_BUFFER, colourBuffId);
+		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in colours array"
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 24, colours, GL_STATIC_DRAW);
+
 
 	}
 
@@ -187,7 +188,7 @@ update_status ModuleRender::Update(float dt)
 	//Draw Grid
 	glBegin(GL_LINES);
 	glLineWidth(2.0f);
-	glColor4f(5.0f, 5.0f, 5.0f, 1.0f);
+	//glColor4f(5.0f, 5.0f, 5.0f, 1.0f);
 	float gridLines = 50;
 	
 
@@ -264,12 +265,18 @@ update_status ModuleRender::Update(float dt)
 
 
 	//Bottom
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(-cubeSize, -cubeSize, -cubeSize);
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(cubeSize, -cubeSize, -cubeSize);
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(-cubeSize, -cubeSize, cubeSize);
 
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(-cubeSize, -cubeSize, cubeSize);
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(cubeSize, -cubeSize, -cubeSize);
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(cubeSize, -cubeSize, cubeSize);
 	
 	glEnd();
