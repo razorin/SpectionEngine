@@ -118,7 +118,7 @@ bool ModuleRender::Init()
 update_status ModuleRender::PreUpdate(float dt)
 {
  
-	glClearColor(0.f, 0.f, 0.f, 1.f);
+	glClearColor(0.1f, 0.2f, 0.4f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -146,8 +146,6 @@ update_status ModuleRender::Update(float dt)
 	//glDisableClientState(GL_COLOR_ARRAY);
 
 
-
-
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffId);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
@@ -157,11 +155,31 @@ update_status ModuleRender::Update(float dt)
 	glColorPointer(3, GL_FLOAT, 0, NULL);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
-	glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, NULL);
+	//Draw elements - num indexes not number of vertices. Either way the last 2 faces wont be printed!
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 
+	//Draw Grid
+	glBegin(GL_LINES);
+	glLineWidth(2.0f);
+	glColor4f(5.0f, 5.0f, 5.0f, 1.0f);
+	float gridLines = 50;
+	
+
+	for (int i = 0; i < gridLines; i++)
+	{
+		glVertex3f(-(gridLines / 2) + i, 0, -gridLines / 2);
+		glVertex3f(-(gridLines/2) + i, 0, gridLines / 2);
+	}
+	for (int i = 0; i < gridLines; i++)
+	{
+		glVertex3f(-gridLines / 2, 0, -(gridLines / 2) + i);
+		glVertex3f(gridLines / 2, 0, -(gridLines / 2) + i);
+	}
+	glEnd();
+	glLineWidth(1.0f);
 
 	return UPDATE_CONTINUE;
 }

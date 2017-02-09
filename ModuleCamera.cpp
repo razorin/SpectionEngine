@@ -24,7 +24,7 @@ bool ModuleCamera::Init()
 	horizontalFov = 30 * DEGTORAD;
 	frustum.SetPerspective(horizontalFov, verticalFov);
 
-	SetPosition(math::vec{ 5,0,0 });
+	SetPosition(math::vec{ 7,1,0 });
 	SetLookAt(math::vec{ 0,1,0 }, math::vec{ -1,0,0 });
 
 	SetPlaneDistances(0.1f, 100.0f);
@@ -39,13 +39,14 @@ bool ModuleCamera::Start()
 	return true;
 }
 
-update_status ModuleCamera::PreUpdate(float dt)
-{
-	return UPDATE_CONTINUE;
-}
-
 update_status ModuleCamera::Update(float dt)
 {
+
+	Move(dt);
+
+	Rotate(dt);
+
+
 	// Print position and orientation
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
 		DLOG("Camera position: %f, %f, %f", pos.x, pos.y, pos.z);
@@ -55,33 +56,29 @@ update_status ModuleCamera::Update(float dt)
 		DLOG("Camera FRONT vector: %f, %f, %f", frustum.Front().x, frustum.Front().y, frustum.Front().z);
 	}
 
-	float speed = 0.01f;
+	//float speed = 0.01f;
 
-	// We asume X axis -> Pitch, Y axis -> Yaw, Z axis -> Roll
-	// Camera pitch
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN) {
-		RotateCamera(X, speed*dt);
-	}
+	//// We asume X axis -> Pitch, Y axis -> Yaw, Z axis -> Roll
+	//// Camera pitch
+	//if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN) {
+	//	RotateCamera(X, speed*dt);
+	//}
 
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN) {
-		RotateCamera(X, -floor(speed*dt));
-	}
-	
-	// Camera yaw
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN) {
-		RotateCamera(Y, floor(speed*dt));
-	}
+	//if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN) {
+	//	RotateCamera(X, -floor(speed*dt));
+	//}
+	//
+	//// Camera yaw
+	//if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN) {
+	//	RotateCamera(Y, floor(speed*dt));
+	//}
 
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN) {
-		RotateCamera(Y, -floor(speed*dt));
-	}
+	//if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN) {
+	//	RotateCamera(Y, -floor(speed*dt));
+	//}
 	return UPDATE_CONTINUE;
 }
 
-update_status ModuleCamera::PostUpdate(float dt)
-{
-	return UPDATE_CONTINUE;
-}
 
 bool ModuleCamera::CleanUp()
 {
@@ -119,19 +116,64 @@ void ModuleCamera::SetPlaneDistances(float near, float far)
 	frustum.SetViewPlaneDistances(near, far);
 }
 
-float * ModuleCamera::GetMatrixProjection() const
+
+
+
+void ModuleCamera::Move(float dt)
 {
-	float4x4 projectionMatrix = frustum.ProjectionMatrix();
-	float4x4 m = projectionMatrix.Transposed();
-	return &(m[0][0]);
+	float3 movement = float3::zero;
+
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		movement -= frustum.WorldRight();
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		movement += frustum.WorldRight();
+
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+		movement += frustum.Front();
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+		movement -= frustum.Front();
+
+	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_REPEAT)
+		movement += float3::unitY;
+	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT)
+		movement -= float3::unitY;
+
+	if (movement.Equals(float3::zero) == false)
+	{
+		frustum.Translate(movement * dt / 1000);
+		//This line below is required so viewmatrix is actualized.
+		SetPosition(frustum.Pos());
+	}
 }
 
-float * ModuleCamera::GetMatrixView() const
+void ModuleCamera::Rotate(float dt)
 {
-	float4x4 viewMatrix = frustum.ViewMatrix();
-	float4x4 m = viewMatrix.Transposed();
-	return &(m[0][0]);
+	Quat rotation = Quat::identity;
+	//Negative Rotation on Y axis
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
+
+		//This quaternion aplied to a vector will rotate it X degrees around the vertical {0,1,0} axis
+		// Unity equivalent function to Quaternion.AngleAxis()...
+		rotation = Quat::RotateY(2 * (dt / 1000));
+	}
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		rotation = Quat::RotateY(-2 * (dt / 1000));
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		rotation = Quat::RotateAxisAngle(frustum.WorldRight(), (-2 * (dt / 1000)));
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		rotation = Quat::RotateAxisAngle(frustum.WorldRight(), (2 * (dt / 1000)));
+
+	if (rotation.Equals(Quat::identity) == false)
+	{
+		frustum.SetFront(rotation.Transform(frustum.Front()));
+		frustum.SetUp(rotation.Transform(frustum.Up()));
+	}
+
 }
+
+
+
+
 void ModuleCamera::SetPosition(const math::vec &pos)
 {
 	this->pos = pos;
@@ -189,4 +231,19 @@ void ModuleCamera::RotateCamera(Axis axis, float rotation)
 	case Z:
 		break;
 	}
+}
+
+
+float * ModuleCamera::GetMatrixProjection() const
+{
+	float4x4 projectionMatrix = frustum.ProjectionMatrix();
+	float4x4 m = projectionMatrix.Transposed();
+	return &(m[0][0]);
+}
+
+float * ModuleCamera::GetMatrixView() const
+{
+	float4x4 viewMatrix = frustum.ViewMatrix();
+	float4x4 m = viewMatrix.Transposed();
+	return &(m[0][0]);
 }

@@ -19,20 +19,25 @@ public:
 	~ModuleCamera();
 	bool Init();
 	bool Start();
-	update_status PreUpdate(float dt);
 	update_status Update(float dt);
-	update_status PostUpdate(float dt);
 	bool CleanUp();
+
+	//Projection Related Functions
 	void ChangeWindowSize(int width, int height);
 	void SetFOV(float verticalFov);
 	void SetAspectRatio(float aspectRatio);
 	void SetPlaneDistances(float near, float far);
-	float * GetMatrixProjection() const;
-	float * GetMatrixView() const;
+
+	//View Related Functions
+	void Move(float dt);
+	void Rotate(float dt);
 	void SetPosition(const math::vec &pos);
 	void SetOrientation(Axis axis, float rotation);
 	void SetLookAt(const math::vec &up, const math::vec &front);
 	void RotateCamera(Axis axis, float rotation);
+
+	float * GetMatrixProjection() const;
+	float * GetMatrixView() const;
 
 private:
 	Frustum frustum;
