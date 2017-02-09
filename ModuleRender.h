@@ -5,8 +5,8 @@
 #include "SDL\include\SDL_video.h"
 #include "MemLeaks.h"
 
-#define CHECKERS_HEIGHT 64
-#define CHECKERS_WIDTH 64
+#define CHECKERS_HEIGHT 128
+#define CHECKERS_WIDTH 128
 
 template <class TYPE> class Point;
 typedef Point<int> iPoint;
@@ -53,6 +53,7 @@ private:
 	uint vertexBuffId = NULL;
 	uint indexBuffId = NULL;
 	uint colourBuffId = NULL;
+	uint indexCoordBuffId = NULL;
 	SPrimitive *targetPrimitive = nullptr;
 	SCube *cube = nullptr;
 	SPlane *plane = nullptr;

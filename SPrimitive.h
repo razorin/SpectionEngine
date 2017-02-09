@@ -16,8 +16,10 @@ public:
 	SPrimitive();
 	virtual ~SPrimitive();
 public:
-	float *vertices = 0;
-	uint *vertexIndices = 0;
+	float *vertices = nullptr;
+	uint *vertexIndices = nullptr;
+	float *textureCoords = nullptr;
+	float *textureIndices = nullptr;
 	bool toDelete = false;
 };
 

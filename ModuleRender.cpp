@@ -105,7 +105,7 @@ bool ModuleRender::Init()
 				checkImage[i][j][3] = (GLubyte)255;
 			}
 		}
-		// Generate bind buffer
+		// Load texture coord buffer
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		glGenTextures(1, &ImageName);
 		glBindTexture(GL_TEXTURE_2D, ImageName);
@@ -115,6 +115,13 @@ bool ModuleRender::Init()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
 			0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		// Load texture index buffer
+		glGenBuffers(1, (GLuint*) &(indexCoordBuffId));
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexCoordBuffId);
+		// ---Second parameter in glBufferData must be sizeof(uint) * "number of positions in vertexIndices array"
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 36, targetPrimitive->vertexIndices, GL_STATIC_DRAW);
 		
 		// Load vertex buffer
 		glGenBuffers(1, (GLuint*) &(vertexBuffId));
@@ -158,32 +165,38 @@ update_status ModuleRender::PreUpdate(float dt)
 // Called every draw update
 update_status ModuleRender::Update(float dt)
 {
-	//glEnableClientState(GL_VERTEX_ARRAY);
-	//glEnableClientState(GL_COLOR_ARRAY);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
-	//glVertexPointer(3, GL_FLOAT, 0, targetPrimitive->vertices);
-	//glColorPointer(3, GL_FLOAT, 0, colours);
-	//// ---Second parameter in glDrawElements must be "number of positions in vertexIndices array"
-	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
-	//glDisableClientState(GL_VERTEX_ARRAY);
-	//glDisableClientState(GL_COLOR_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
+	glVertexPointer(3, GL_FLOAT, 0, targetPrimitive->vertices);
+	glColorPointer(3, GL_FLOAT, 0, colours);
+	// ---Second parameter in glDrawElements must be "number of positions in vertexIndices array"
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
 
 
-	//glEnableClientState(GL_VERTEX_ARRAY);
-	//glBindBuffer(GL_ARRAY_BUFFER, vertexBuffId);
-	//glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffId);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	//glEnableClientState(GL_COLOR_ARRAY);
-	//glBindBuffer(GL_ARRAY_BUFFER, colourBuffId);
-	//glColorPointer(3, GL_FLOAT, 0, NULL);
+	glEnableClientState(GL_COLOR_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, colourBuffId);
+	glColorPointer(3, GL_FLOAT, 0, NULL);
 
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
 
-	////Draw elements - num indexes not number of vertices. Either way the last 2 faces wont be printed!
-	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
+	glEnableClientState(GL_TEXTURE_2D_ARRAY);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
+	glBindTexture(GL_TEXTURE_2D, ImageName);
+	glTexCoordPointer(2, GL_RGBA, sizeof(float), targetPrimitive->textureCoords);
 
-	//glDisableClientState(GL_VERTEX_ARRAY);
-	//glDisableClientState(GL_COLOR_ARRAY);
+	//Draw elements - num indexes not number of vertices. Either way the last 2 faces wont be printed!
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
+
+	//glBindTexture(GL_TEXTURE_2D, 0);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
 
 	//Draw Grid
 	glBegin(GL_LINES);
@@ -205,7 +218,7 @@ update_status ModuleRender::Update(float dt)
 	glEnd();
 	glLineWidth(1.0f);
 
-
+	/*
 	float cubeSize = 0.5;
 	//Draw Cube
 	glBegin(GL_TRIANGLES);
@@ -280,7 +293,7 @@ update_status ModuleRender::Update(float dt)
 	glVertex3f(cubeSize, -cubeSize, cubeSize);
 	
 	glEnd();
-
+	*/
 	return UPDATE_CONTINUE;
 }
 
