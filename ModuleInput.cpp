@@ -79,8 +79,11 @@ update_status ModuleInput::PreUpdate(float dt)
 			mouse_buttons[i] = KEY_IDLE;
 	}
 
+	mouseWheel = 0;
+
 	while(SDL_PollEvent(&event) != 0)
 	{
+
 		switch (event.type)
 		{
 		case SDL_QUIT:
@@ -128,12 +131,7 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 		case SDL_MOUSEWHEEL:
-			if (event.wheel.y < 0) {
-				App->camera->Zoom(App->dt,true);
-			}
-			else {
-				App->camera->Zoom(App->dt, false);
-			}
+			mouseWheel = event.wheel.y;
 			break;
 		}
 	}
@@ -161,6 +159,11 @@ bool ModuleInput::GetWindowEvent(EventWindow ev) const
 const iPoint& ModuleInput::GetMousePosition() const
 {
 	return mouse;
+}
+
+const int & ModuleInput::GetMouseWheel() const
+{
+	return mouseWheel;
 }
 
 const iPoint& ModuleInput::GetMouseMotion() const

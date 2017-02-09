@@ -43,7 +43,7 @@ update_status ModuleCamera::Update(float dt)
 {
 
 	Move(dt);
-
+	Zoom(dt);
 	Rotate(dt);
 
 
@@ -152,22 +152,57 @@ void ModuleCamera::Move(float dt)
 	}
 }
 
+
+void ModuleCamera::Zoom(float dt)
+{
+	float3 movement = float3::zero;
+	float zoomSpeed = 10.0f;
+	int mouseWheel = App->input->GetMouseWheel();
+	
+	if (mouseWheel != 0) 
+		movement += frustum.Front() * mouseWheel * zoomSpeed * dt/1000;
+
+	if (movement.Equals(float3::zero) == false)
+	{
+		frustum.Translate(movement);
+		//This line below is required so viewmatrix is actualized.
+		SetPosition(frustum.Pos());
+	}
+}
+
+
 void ModuleCamera::Rotate(float dt)
 {
 	Quat rotation = Quat::identity;
-	//Negative Rotation on Y axis
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
 
-		//This quaternion aplied to a vector will rotate it X degrees around the vertical {0,1,0} axis
-		// Unity equivalent function to Quaternion.AngleAxis()...
-		rotation = Quat::RotateY(2 * (dt / 1000));
+	rotationSpeed = 0.5f;
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+		rotationSpeed *= 2;
+
+	float angleX = 0;
+	float angleY = 0;
+	float angleChange = rotationSpeed * (dt / 1000);
+
+	iPoint mouseMotion = App->input->GetMouseMotion();
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
+	{
+		angleX += mouseMotion.y / 2 * angleChange;
+		angleY += mouseMotion.x / 2 * angleChange;
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		angleY += angleChange;
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		rotation = Quat::RotateY(-2 * (dt / 1000));
+		angleY -= angleChange;
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		rotation = Quat::RotateAxisAngle(frustum.WorldRight(), (-2 * (dt / 1000)));
+		angleX -= angleChange;
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		rotation = Quat::RotateAxisAngle(frustum.WorldRight(), (2 * (dt / 1000)));
+		angleX += angleChange;
+
+	if (angleY != 0)
+		rotation = Quat::RotateY(angleY);
+	if (angleX != 0)
+		rotation = Quat::RotateAxisAngle(frustum.WorldRight(), (angleX));
 
 	if (rotation.Equals(Quat::identity) == false)
 	{
@@ -177,27 +212,6 @@ void ModuleCamera::Rotate(float dt)
 
 }
 
-void ModuleCamera::Zoom(float dt, bool closer)
-{
-	float3 movement = float3::zero;
-	if (closer) {
-		DLOG("CLOSER");
-		movement += frustum.Front();
-	}
-	else {
-		DLOG("FARTHER");
-		movement -= frustum.Front();
-	}
-
-	movementSpeed = 10.0f;
-
-	if (movement.Equals(float3::zero) == false)
-	{
-		frustum.Translate(movement * movementSpeed * dt / 1000);
-		//This line below is required so viewmatrix is actualized.
-		SetPosition(frustum.Pos());
-	}
-}
 
 
 void ModuleCamera::SetPosition(const math::vec &pos)

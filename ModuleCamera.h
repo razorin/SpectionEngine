@@ -30,8 +30,8 @@ public:
 
 	//View Related Functions
 	void Move(float dt);
+	void Zoom(float dt);
 	void Rotate(float dt);
-	void Zoom(float dt, bool closer);
 	void SetPosition(const math::vec &pos);
 	void SetOrientation(Axis axis, float rotation);
 	void SetLookAt(const math::vec &up, const math::vec &front);
