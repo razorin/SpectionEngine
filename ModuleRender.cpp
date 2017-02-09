@@ -92,29 +92,7 @@ bool ModuleRender::Init()
 			1, 1, 1,   1, 1, 0,   1, 0, 0,	 1, 0, 0,
 			1, 0, 1,   1, 1, 1,	  1, 1, 1,   1, 0, 1
 		};
-
-		// Load checkImage texture
-		GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
-		for (int i = 0; i < CHECKERS_HEIGHT; i++) {
-			for (int j = 0; j < CHECKERS_WIDTH; j++) {
-				int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-				checkImage[i][j][0] = (GLubyte)c;
-				checkImage[i][j][1] = (GLubyte)c;
-				checkImage[i][j][2] = (GLubyte)c;
-				checkImage[i][j][3] = (GLubyte)255;
-			}
-		}
-
-		// Generate bind buffer
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glGenTextures(1, &ImageName);
-		glBindTexture(GL_TEXTURE_2D, ImageName);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
-			0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+		
 
 		// Load vertex buffer
 		glGenBuffers(1, (GLuint*) &(vertexBuffId));
@@ -133,6 +111,29 @@ bool ModuleRender::Init()
 		glBindBuffer(GL_ARRAY_BUFFER, colourBuffId);
 		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in colours array"
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 24, colours, GL_STATIC_DRAW);
+
+		// Load checkImage texture
+		GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
+		for (int i = 0; i < CHECKERS_HEIGHT; i++) {
+			for (int j = 0; j < CHECKERS_WIDTH; j++) {
+				int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+				checkImage[i][j][0] = (GLubyte)c;
+				checkImage[i][j][1] = (GLubyte)c;
+				checkImage[i][j][2] = (GLubyte)c;
+				checkImage[i][j][3] = (GLubyte)255;
+			}
+		}
+		// Generate bind buffer
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glGenTextures(1, &ImageName);
+		glBindTexture(GL_TEXTURE_2D, ImageName);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
+			0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+
 	}
 
 	return ret;
@@ -149,8 +150,6 @@ update_status ModuleRender::PreUpdate(float dt)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glLoadMatrixf(App->camera->GetMatrixView());
-	//glFrustum(-1.0f, 1.0f, -1.0f, 1.0f, 1,5);
-
 
 	return UPDATE_CONTINUE;
 }
@@ -210,17 +209,21 @@ update_status ModuleRender::Update(float dt)
 	//Draw Cube
 	glBegin(GL_TRIANGLES);
 	//Front
-	glColor3f(1.0f, 0.0f, 0.0f);
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(-cubeSize, -cubeSize, cubeSize);
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(cubeSize, -cubeSize, cubeSize);
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(-cubeSize, cubeSize, cubeSize);
 
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(-cubeSize, cubeSize, cubeSize);
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(cubeSize, -cubeSize, cubeSize);
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(cubeSize, cubeSize, cubeSize);
 
 	//Right
-	glColor3f(0.0f, 1.0f, 0.0f);
 	glVertex3f(cubeSize, -cubeSize, cubeSize);
 	glVertex3f(cubeSize, -cubeSize, -cubeSize);
 	glVertex3f(cubeSize, cubeSize, cubeSize);
@@ -231,7 +234,6 @@ update_status ModuleRender::Update(float dt)
 	
 
 	//Left
-	glColor3f(0.0f, 1.0f, 0.0f);
 	glVertex3f(-cubeSize, -cubeSize, -cubeSize);
 	glVertex3f(-cubeSize, -cubeSize, cubeSize);
 	glVertex3f(-cubeSize, cubeSize, -cubeSize);
@@ -242,7 +244,6 @@ update_status ModuleRender::Update(float dt)
 
 
 	//Back
-	glColor3f(1.0f, 0.0f, 0.0f);
 	glVertex3f(cubeSize, -cubeSize, -cubeSize);
 	glVertex3f(-cubeSize, -cubeSize, -cubeSize);
 	glVertex3f(cubeSize, cubeSize, -cubeSize);
@@ -253,7 +254,6 @@ update_status ModuleRender::Update(float dt)
 
 
 	//Top
-	glColor3f(0.0f, 0.0f, 1.0f);
 	glVertex3f(-cubeSize, cubeSize, cubeSize);
 	glVertex3f(cubeSize, cubeSize, cubeSize);
 	glVertex3f(-cubeSize, cubeSize, -cubeSize);
@@ -264,7 +264,6 @@ update_status ModuleRender::Update(float dt)
 
 
 	//Bottom
-	glColor3f(0.0f, 0.0f, 1.0f);
 	glVertex3f(-cubeSize, -cubeSize, -cubeSize);
 	glVertex3f(cubeSize, -cubeSize, -cubeSize);
 	glVertex3f(-cubeSize, -cubeSize, cubeSize);
