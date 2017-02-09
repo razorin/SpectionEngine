@@ -71,6 +71,7 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="ModuleCamera.h" />
     <ClInclude Include="ModulePrimitives.h" />
     <ClInclude Include="SCube.h" />
     <ClInclude Include="Globals.h" />
@@ -95,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="ModuleCamera.cpp" />
     <ClCompile Include="ModulePrimitives.cpp" />
     <ClCompile Include="SCube.cpp" />
     <ClCompile Include="Log.cpp" />

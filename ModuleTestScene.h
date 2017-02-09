@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "Point.h"
+#include "MemLeaks.h"
 
 struct SDL_Texture;
 struct Frame;

@@ -18,6 +18,8 @@
       "fullscren_window": false,
       "size": 2,
       "title": "Final Fight"
-    }
+    },
+    "camera": {
+	}
     }
 }

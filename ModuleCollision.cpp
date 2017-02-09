@@ -76,6 +76,7 @@ bool ModuleCollision::CleanUp()
 		RELEASE(*it);
 
 	colliders.clear();
+	RELEASE(matrix_collision);
 
 	return true;
 }

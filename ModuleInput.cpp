@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
+#include "ModuleCamera.h"
 #include "SDL/include/SDL.h"
 
 #define MAX_KEYS 300
@@ -78,47 +79,59 @@ update_status ModuleInput::PreUpdate(float dt)
 			mouse_buttons[i] = KEY_IDLE;
 	}
 
+	mouseWheel = 0;
+
 	while(SDL_PollEvent(&event) != 0)
 	{
-		switch(event.type)
+
+		switch (event.type)
 		{
-			case SDL_QUIT:
-				windowEvents[WE_QUIT] = true;
+		case SDL_QUIT:
+			windowEvents[WE_QUIT] = true;
 			break;
 
-			case SDL_WINDOWEVENT:
-				switch(event.window.event)
-				{
-					//case SDL_WINDOWEVENT_LEAVE:
-					case SDL_WINDOWEVENT_HIDDEN:
-					case SDL_WINDOWEVENT_MINIMIZED:
-					case SDL_WINDOWEVENT_FOCUS_LOST:
-					windowEvents[WE_HIDE] = true;
-					break;
+		case SDL_WINDOWEVENT:
+			switch (event.window.event)
+			{
+				//case SDL_WINDOWEVENT_LEAVE:
+			case SDL_WINDOWEVENT_HIDDEN:
+			case SDL_WINDOWEVENT_MINIMIZED:
+			case SDL_WINDOWEVENT_FOCUS_LOST:
+				windowEvents[WE_HIDE] = true;
+				break;
 
-					//case SDL_WINDOWEVENT_ENTER:
-					case SDL_WINDOWEVENT_SHOWN:
-					case SDL_WINDOWEVENT_FOCUS_GAINED:
-					case SDL_WINDOWEVENT_MAXIMIZED:
-					case SDL_WINDOWEVENT_RESTORED:
-					windowEvents[WE_SHOW] = true;
-					break;
-				}
+				//case SDL_WINDOWEVENT_ENTER:
+			case SDL_WINDOWEVENT_SHOWN:
+			case SDL_WINDOWEVENT_FOCUS_GAINED:
+			case SDL_WINDOWEVENT_MAXIMIZED:
+			case SDL_WINDOWEVENT_RESTORED:
+				windowEvents[WE_SHOW] = true;
+				break;
+			case SDL_WINDOWEVENT_SIZE_CHANGED:
+				App->camera->ChangeWindowSize(event.window.data1, event.window.data2);
+				//App->camera->ChangeWindowSize(512,512);
+
+				break;
+			}
 			break;
 
-			case SDL_MOUSEBUTTONDOWN:
-				mouse_buttons[event.button.button - 1] = KEY_DOWN;
+		case SDL_MOUSEBUTTONDOWN:
+			mouse_buttons[event.button.button - 1] = KEY_DOWN;
 			break;
 
-			case SDL_MOUSEBUTTONUP:
-				mouse_buttons[event.button.button - 1] = KEY_UP;
+		case SDL_MOUSEBUTTONUP:
+			mouse_buttons[event.button.button - 1] = KEY_UP;
 			break;
 
-			case SDL_MOUSEMOTION:
-				mouse_motion.x = event.motion.xrel / App->window->screen_size;
-				mouse_motion.y = event.motion.yrel / App->window->screen_size;
-				mouse.x = event.motion.x / App->window->screen_size;
-				mouse.y = event.motion.y / App->window->screen_size;
+		case SDL_MOUSEMOTION:
+			mouse_motion.x = (float)event.motion.xrel / (float)App->window->screen_size;
+			mouse_motion.y = (float)event.motion.yrel / (float)App->window->screen_size;
+			mouse.x = event.motion.x / App->window->screen_size;
+			mouse.y = event.motion.y / App->window->screen_size;
+			break;
+
+		case SDL_MOUSEWHEEL:
+			mouseWheel = event.wheel.y;
 			break;
 		}
 	}
@@ -148,7 +161,12 @@ const iPoint& ModuleInput::GetMousePosition() const
 	return mouse;
 }
 
-const iPoint& ModuleInput::GetMouseMotion() const
+const fPoint& ModuleInput::GetMouseMotion() const
 {
 	return mouse_motion;
+}
+
+const int & ModuleInput::GetMouseWheel() const
+{
+	return mouseWheel;
 }

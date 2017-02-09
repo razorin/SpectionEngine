@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "SDL\include\SDL_video.h"
+#include "MemLeaks.h"
 
 template <class TYPE> class Point;
 typedef Point<int> iPoint;

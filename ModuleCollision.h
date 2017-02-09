@@ -5,6 +5,7 @@
 #include <functional>
 #include "Module.h"
 #include "Point.h"
+#include "MemLeaks.h"
 
 enum COLLIDER_TYPE {
 	NONE,
