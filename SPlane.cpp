@@ -4,7 +4,6 @@
 
 SPlane::SPlane()
 {
-	float z = -0.5f;
 	// Create plane vertex array
 	vertices = new float[27]{
 		// ----- PLANE ----- 9verts 8tris
@@ -14,15 +13,15 @@ SPlane::SPlane()
 		//   /   /   /
 		//  6---7---8
 
-		-0.5f, 0.0f, -0.5f + z,		//0
-		0.0f, 0.0f, -0.5f + z,		//1
-		0.5f, 0.0f, -0.5f + z,		//2
-		-0.5f,0.0f, 0.0f + z,		//3
-		0.0f, 0.0f, 0.0f + z,		//4
-		0.5f, 0.0f, 0.0f + z,		//5
-		-0.5f, 0.0f, 0.5f + z,		//6
-		0.0f,0.0f, 0.5f + z,		//7
-		0.5f,0.0f, 0.5f + z			//8
+		-0.5f, 0.0f, -0.5f,		//0
+		0.0f, 0.0f, -0.5f,		//1
+		0.5f, 0.0f, -0.5f,		//2
+		-0.5f,0.0f, 0.0f,		//3
+		0.0f, 0.0f, 0.0f,		//4
+		0.5f, 0.0f, 0.0f,		//5
+		-0.5f, 0.0f, 0.5f,		//6
+		0.0f,0.0f, 0.5f,		//7
+		0.5f,0.0f, 0.5f			//8
 	};
 	// Create plane indices array
 	vertexIndices = new uint[24]{

@@ -4,7 +4,6 @@
 
 SCylinder::SCylinder()
 {
-	float z = -0.4;
 	// Create cylinder vertex array
 	vertices = new float[36]{
 		// ----- CYLINDER ----- 12verts 20tris
@@ -20,18 +19,18 @@ SCylinder::SCylinder()
 		//     \|   |/
 		//     10---9
 		
-		-0.5f*cos(60.0f), 1.0f, -0.5f*sin(60.0f) + z,		//0
-		0.5f*cos(60.0f), 1.0f, -0.5f*sin(60.0f) + z,		//1
-		0.5f, 1.0f, 0.0f + z,						//2
-		0.5f*cos(60.0f), 1.0f, 0.5f*sin(60.0f) + z,		//3
-		-0.5f*cos(60.0f), 1.0f, 0.5f*sin(60.0f) + z,		//4
-		-0.5f, 1.0f, 0.0f + z,						//5
-		-0.5f*cos(60.0f), -1.0f, -0.5f*sin(60.0f) + z,	//6
-		0.5f*cos(60.0f), -1.0f, -0.5f*sin(60.0f) + z,		//7
-		0.5f, -1.0f, 0.0f + z,						//8
-		0.5f*cos(60.0f), -1.0f, 0.5f*sin(60.0f) + z,		//9
-		-0.5f*cos(60.0f), -1.0f, 0.5f*sin(60.0f) + z,		//10
-		-0.5f, -1.0f, 0.0f + z,						//11
+		-0.5f*cos(60.0f), 1.0f, -0.5f*sin(60.0f),		//0
+		0.5f*cos(60.0f), 1.0f, -0.5f*sin(60.0f),		//1
+		0.5f, 1.0f, 0.0f,								//2
+		0.5f*cos(60.0f), 1.0f, 0.5f*sin(60.0f),			//3
+		-0.5f*cos(60.0f), 1.0f, 0.5f*sin(60.0f),		//4
+		-0.5f, 1.0f, 0.0f,								//5
+		-0.5f*cos(60.0f), -1.0f, -0.5f*sin(60.0f),		//6
+		0.5f*cos(60.0f), -1.0f, -0.5f*sin(60.0f),		//7
+		0.5f, -1.0f, 0.0f,								//8
+		0.5f*cos(60.0f), -1.0f, 0.5f*sin(60.0f),		//9
+		-0.5f*cos(60.0f), -1.0f, 0.5f*sin(60.0f),		//10
+		-0.5f, -1.0f, 0.0f								//11
 		
 	};
 	// Create cylinder indices array
