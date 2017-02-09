@@ -118,7 +118,7 @@ bool ModuleRender::Init()
 update_status ModuleRender::PreUpdate(float dt)
 {
  
-	glClearColor(0.1f, 0.2f, 0.4f, 1.f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -146,21 +146,21 @@ update_status ModuleRender::Update(float dt)
 	//glDisableClientState(GL_COLOR_ARRAY);
 
 
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffId);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	//glEnableClientState(GL_VERTEX_ARRAY);
+	//glBindBuffer(GL_ARRAY_BUFFER, vertexBuffId);
+	//glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	glEnableClientState(GL_COLOR_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, colourBuffId);
-	glColorPointer(3, GL_FLOAT, 0, NULL);
+	//glEnableClientState(GL_COLOR_ARRAY);
+	//glBindBuffer(GL_ARRAY_BUFFER, colourBuffId);
+	//glColorPointer(3, GL_FLOAT, 0, NULL);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
 
-	//Draw elements - num indexes not number of vertices. Either way the last 2 faces wont be printed!
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
+	////Draw elements - num indexes not number of vertices. Either way the last 2 faces wont be printed!
+	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
 
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_COLOR_ARRAY);
+	//glDisableClientState(GL_VERTEX_ARRAY);
+	//glDisableClientState(GL_COLOR_ARRAY);
 
 	//Draw Grid
 	glBegin(GL_LINES);
@@ -181,6 +181,76 @@ update_status ModuleRender::Update(float dt)
 	}
 	glEnd();
 	glLineWidth(1.0f);
+
+
+	float cubeSize = 0.5;
+	//Draw Cube
+	glBegin(GL_TRIANGLES);
+	//Front
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex3f(-cubeSize, -cubeSize, cubeSize);
+	glVertex3f(cubeSize, -cubeSize, cubeSize);
+	glVertex3f(-cubeSize, cubeSize, cubeSize);
+
+	glVertex3f(-cubeSize, cubeSize, cubeSize);
+	glVertex3f(cubeSize, -cubeSize, cubeSize);
+	glVertex3f(cubeSize, cubeSize, cubeSize);
+
+	//Right
+	glColor3f(0.0f, 1.0f, 0.0f);
+	glVertex3f(cubeSize, -cubeSize, cubeSize);
+	glVertex3f(cubeSize, -cubeSize, -cubeSize);
+	glVertex3f(cubeSize, cubeSize, cubeSize);
+
+	glVertex3f(cubeSize, cubeSize, cubeSize);
+	glVertex3f(cubeSize, -cubeSize, -cubeSize);
+	glVertex3f(cubeSize, cubeSize, -cubeSize);
+	
+
+	//Left
+	glColor3f(0.0f, 1.0f, 0.0f);
+	glVertex3f(-cubeSize, -cubeSize, -cubeSize);
+	glVertex3f(-cubeSize, -cubeSize, cubeSize);
+	glVertex3f(-cubeSize, cubeSize, -cubeSize);
+
+	glVertex3f(-cubeSize, cubeSize, -cubeSize);
+	glVertex3f(-cubeSize, -cubeSize, cubeSize);
+	glVertex3f(-cubeSize, cubeSize, cubeSize);
+
+
+	//Back
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex3f(cubeSize, -cubeSize, -cubeSize);
+	glVertex3f(-cubeSize, -cubeSize, -cubeSize);
+	glVertex3f(cubeSize, cubeSize, -cubeSize);
+
+	glVertex3f(cubeSize, cubeSize, -cubeSize);
+	glVertex3f(-cubeSize, -cubeSize, -cubeSize);
+	glVertex3f(-cubeSize, cubeSize, -cubeSize);
+
+
+	//Top
+	glColor3f(0.0f, 0.0f, 1.0f);
+	glVertex3f(-cubeSize, cubeSize, cubeSize);
+	glVertex3f(cubeSize, cubeSize, cubeSize);
+	glVertex3f(-cubeSize, cubeSize, -cubeSize);
+
+	glVertex3f(-cubeSize, cubeSize, -cubeSize);
+	glVertex3f(cubeSize, cubeSize, cubeSize);
+	glVertex3f(cubeSize, cubeSize, -cubeSize);
+
+
+	//Bottom
+	glColor3f(0.0f, 0.0f, 1.0f);
+	glVertex3f(-cubeSize, -cubeSize, -cubeSize);
+	glVertex3f(cubeSize, -cubeSize, -cubeSize);
+	glVertex3f(-cubeSize, -cubeSize, cubeSize);
+
+	glVertex3f(-cubeSize, -cubeSize, cubeSize);
+	glVertex3f(cubeSize, -cubeSize, -cubeSize);
+	glVertex3f(cubeSize, -cubeSize, cubeSize);
+	
+	glEnd();
 
 	return UPDATE_CONTINUE;
 }

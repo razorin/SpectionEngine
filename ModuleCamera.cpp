@@ -24,8 +24,8 @@ bool ModuleCamera::Init()
 	horizontalFov = 30 * DEGTORAD;
 	frustum.SetPerspective(horizontalFov, verticalFov);
 
-	SetPosition(math::vec{ 7,1,0 });
-	SetLookAt(math::vec{ 0,1,0 }, math::vec{ -1,0,0 });
+	SetPosition(math::vec{ 0,1,7 });
+	SetLookAt(math::vec{ 0,1,0 }, math::vec{ 0,0,-1 });
 
 	SetPlaneDistances(0.1f, 100.0f);
 
