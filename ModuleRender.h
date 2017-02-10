@@ -5,9 +5,6 @@
 #include "SDL\include\SDL_video.h"
 #include "MemLeaks.h"
 
-#define CHECKERS_HEIGHT 128
-#define CHECKERS_WIDTH 128
-
 template <class TYPE> class Point;
 typedef Point<int> iPoint;
 
@@ -34,6 +31,9 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	void DrawGrid();
+	void DrawDirectCube();
+
 	bool Blit(SDL_Texture* texture, iPoint &position, Frame* section, bool flip = false, float speed = 1.0f);
 	bool StaticBlit(SDL_Texture* texture, const iPoint &position, const SDL_Rect &section);
 
@@ -49,17 +49,6 @@ public:
 	bool vsync = false;
 
 	SDL_GLContext context;
-private:
-	uint vertexBuffId = NULL;
-	uint indexBuffId = NULL;
-	uint colourBuffId = NULL;
-	uint indexCoordBuffId = NULL;
-	SPrimitive *targetPrimitive = nullptr;
-	SCube *cube = nullptr;
-	SPlane *plane = nullptr;
-	SCylinder *cylinder = nullptr;
-	float *colours = nullptr;
-	GLuint ImageName;
 };
 
 #endif // __MODULERENDER_H__

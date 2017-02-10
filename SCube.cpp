@@ -1,10 +1,14 @@
 #include "SCube.h"
+#include "Glew/include/GL/glew.h"
+
 
 SCube::SCube()
 {
+	float min = -0.5f;
+	float max = 0.5f;
 
-	// Create cube vertex array
-	this->vertices = new float[24]{
+	numVertices = 8;
+	vertices = new float[numVertices * 3]{
 		// ----- CUBE ----- 8verts 12tris
 		//    6-------7
 		//   /|      /|
@@ -14,41 +18,70 @@ SCube::SCube()
 		//  |/      |/
 		//  0-------1
 
-		-0.5f, -0.5f,  0.5f,		//0
-		 0.5f, -0.5f,  0.5f,		//1
-		-0.5f,  0.5f,  0.5f,		//2
-		 0.5f,  0.5f,  0.5f,		//3
-		-0.5f, -0.5f, -0.5f,		//4
-		 0.5f, -0.5f, -0.5f,		//5
-		-0.5f,  0.5f, -0.5f,		//6
-		 0.5f,  0.5f, -0.5f			//7		
-	};
-	// Create cube indices array
-	this->vertexIndices = new uint[36]{
-		0,1,2,		2,1,3, //Front
-		1,5,3,		3,5,7, //Right
-		4,0,6,		6,0,2, //Left
-		5,4,7,		7,4,6, //Back
-		2,3,6,		6,3,7, //Top
-		4,5,0,		0,5,1 //Bottom
-	};
-	// Create cube texture coordinates
-	this->textureCoords = new float[8]{
-		0,0,	//0
-		0,1,	//1
-		1,0,	//2
-		1,1		//3
+		min, min, max,
+		max, min, max,
+		min, max, max,
+		max, max, max,
+		min, min, min,
+		max, min, min,
+		min, max, min,
+		max, max, min
 	};
 
-	// Create cube texture indices
-	this->textureIndices = new float[36]{
-		0,2,1,		1,2,3, //Front
-		0,2,1,		1,2,3, //Right
-		0,2,1,		1,2,3, //Left
-		0,2,1,		1,2,3, //Back
-		0,2,1,		1,2,3, //Top
-		0,2,1,		1,2,3 //Bottom
+	numIndices = 36;
+	indices = new uint[36]{
+		0,1,2,		2,1,3,  //front
+		1,5,3,		3,5,7,  //right
+		4,0,6,		6,0,2,  //left
+		5,4,7,		7,4,6,  //back
+		2,3,6,		6,3,7,  //top
+		4,5,0,		0,5,1   //bottom
 	};
+	
+	//colors = new float[numVertices * 3]{
+	//	1, 1, 0,   1, 1, 0,   1, 0, 0,	 1, 0, 0,
+	//	1, 1, 0,   1, 1, 0,	  1, 0, 0,   1, 0, 0
+	//};
+
+
+
+	// Load checkImage texture
+	GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
+	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
+		for (int j = 0; j < CHECKERS_WIDTH; j++) {
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkImage[i][j][0] = (GLubyte)c;
+			checkImage[i][j][1] = (GLubyte)c;
+			checkImage[i][j][2] = (GLubyte)c;
+			checkImage[i][j][3] = (GLubyte)255;
+		}
+	}
+	// Load texture coord buffer
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &ImageName);
+	glBindTexture(GL_TEXTURE_2D, ImageName);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+
+	textureCoords = new float[numVertices * 2]{
+		0,0,
+		0,1,
+		1,0,
+		1,1,
+		1,0,
+		1,1,
+		0,0,
+		0,1
+	};
+
+
+	SPrimitive::InitializeBuffers();
 }
 
 

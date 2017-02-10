@@ -9,6 +9,7 @@
 #include "ModuleCollision.h"
 #include "ModuleParticles.h"
 #include "ModuleCamera.h"
+#include "ModuleTestScene.h"
 #include "Timer.h"
 #include "PreciseTimer.h"
 #include "Parson.h"
@@ -41,6 +42,10 @@ Application::Application()
 	modules.push_back(collision = new ModuleCollision());
 	modules.push_back(particles = new ModuleParticles());
 	modules.push_back(fade = new ModuleFadeToBlack());
+
+	//Game Modules
+	modules.push_back(testScene = new ModuleTestScene(true));
+
 
 	float2 mathGeoLib_test{ 1,2 };
 

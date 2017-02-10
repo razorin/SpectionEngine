@@ -35,7 +35,7 @@ SCylinder::SCylinder()
 		
 	};
 	// Create cylinder indices array
-	vertexIndices = new uint[60]{
+	indices = new uint[60]{
 		// Top face
 		0,5,4,
 		0,4,3,
