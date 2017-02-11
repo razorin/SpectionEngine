@@ -84,10 +84,9 @@ SDL_Texture* const ModuleTextures::Load(const char* path)
 }
 
 // Load new texture from file path using DevIL
-GLuint ModuleTextures::LoadTexture(char imageName[100], bool alpha)
+void ModuleTextures::LoadTexture(GLuint *texture, char imageName[100], bool alpha)
 {
-	GLuint texture;
-	//carga imagen en memoria
+	//Loads image to memory
 	ILuint idTexture;
 	ilGenImages(1, &idTexture);
 	ilBindImage(idTexture);
@@ -107,9 +106,9 @@ GLuint ModuleTextures::LoadTexture(char imageName[100], bool alpha)
 		ilCopyPixels(0, 0, 0, width, height, 1, IL_RGBA, IL_UNSIGNED_BYTE, pixmap);
 	}
 	ilDeleteImage(idTexture);
-	ilBindImage(texture);
+	ilBindImage(*texture);
 
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE_2D, *texture);
 
 	if (!alpha) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -124,8 +123,6 @@ GLuint ModuleTextures::LoadTexture(char imageName[100], bool alpha)
 	delete pixmap;
 
 	//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE); 
-
-	return texture;
 }
 
 // Free texture from memory

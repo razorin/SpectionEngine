@@ -17,7 +17,7 @@ public:
 	bool CleanUp();
 
 	SDL_Texture* const Load(const char* path);
-	GLuint LoadTexture(char imageName[100], bool alpha);
+	void LoadTexture(GLuint *texture, char imageName[100], bool alpha);
 	void Unload(SDL_Texture* texture);
 
 private:
