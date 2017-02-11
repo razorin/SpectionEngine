@@ -6,6 +6,10 @@
 
 #include "SDL_image/include/SDL_image.h"
 #pragma comment( lib, "SDL_image/libx86/SDL2_image.lib" )
+//DevIL
+#include "DevIL\include\IL\il.h"
+#include "DevIL\include\IL\ilu.h"
+#include "DevIL\include\IL\ilut.h"
 
 using namespace std;
 
@@ -75,6 +79,51 @@ SDL_Texture* const ModuleTextures::Load(const char* path)
 
 		SDL_FreeSurface(surface);
 	}
+
+	return texture;
+}
+
+// Load new texture from file path using DevIL
+GLuint ModuleTextures::LoadTexture(char imageName[100], bool alpha)
+{
+	GLuint texture;
+	//carga imagen en memoria
+	ILuint idTexture;
+	ilGenImages(1, &idTexture);
+	ilBindImage(idTexture);
+	unsigned char *pixmap;
+
+	iluLoadImage((ILstring)imageName);
+
+	int width = ilGetInteger(IL_IMAGE_WIDTH);
+	int height = ilGetInteger(IL_IMAGE_HEIGHT);
+
+	if (!alpha) {
+		pixmap = new unsigned char[width * height * 3];
+		ilCopyPixels(0, 0, 0, width, height, 1, IL_RGB, IL_UNSIGNED_BYTE, pixmap);
+	}
+	else {
+		pixmap = new unsigned char[width * height * 4];
+		ilCopyPixels(0, 0, 0, width, height, 1, IL_RGBA, IL_UNSIGNED_BYTE, pixmap);
+	}
+	ilDeleteImage(idTexture);
+	ilBindImage(texture);
+
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	if (!alpha) {
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixmap);
+	}
+	else {
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixmap);
+	}
+	delete pixmap;
+
+	//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE); 
 
 	return texture;
 }
