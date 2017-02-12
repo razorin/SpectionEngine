@@ -1,5 +1,7 @@
 #include "SCube.h"
 #include "Glew/include/GL/glew.h"
+#include "Application.h"
+#include "ModuleTextures.h"
 
 
 SCube::SCube()
@@ -56,6 +58,9 @@ SCube::SCube()
 			checkImage[i][j][3] = (GLubyte)255;
 		}
 	}
+	DLOG("HOLA!!");
+	//GLuint textureHandle = App->textures->LoadTexture("Lenna.png", true);
+
 	// Load texture coord buffer
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glGenTextures(1, &ImageName);
@@ -66,6 +71,8 @@ SCube::SCube()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
 		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
+	//	0, GL_RGBA, GL_UNSIGNED_BYTE, &textureHandle);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 
