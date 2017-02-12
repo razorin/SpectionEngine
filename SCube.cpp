@@ -9,16 +9,16 @@ SCube::SCube()
 	float min = -0.5f;
 	float max = 0.5f;
 
-	numVertices = 8;
+	numVertices = 12;
 	vertices = new float[numVertices * 3]{
 		// ----- CUBE ----- 8verts 12tris
-		//    6-------7
-		//   /|      /|
-		//  2-------3 |
-		//  | |     | |
-		//  | |4----|-|5
-		//  |/      |/
-		//  0-------1
+		//    6-------7			   10-------11		
+		//   /|      /|            /|      /|
+		//  2-------3 |			  8-------9 |
+		//  | |     | |			  | |     | |	
+		//  | |4----|-|5          | |4----|-|5
+		//  |/      |/            |/      |/
+		//  0-------1             0-------1
 
 		min, min, max,
 		max, min, max,
@@ -27,14 +27,20 @@ SCube::SCube()
 		min, min, min,
 		max, min, min,
 		min, max, min,
-		max, max, min
+		max, max, min,
+
+		//Extra vertices, we are repeating topface vertices (2,3,6,7)
+		min, max, max,
+		max, max, max,
+		min, max, min,
+		max, max, min,
 	};
 
 	numIndices = 36;
 	indices = new uint[36]{
 		0,1,2,		2,1,3,  //front
-		1,5,3,		3,5,7,  //right
-		4,0,6,		6,0,2,  //left
+		1,5,9,		9,5,11,  //right
+		4,0,10,		10,0,8,  //left
 		5,4,7,		7,4,6,  //back
 		2,3,6,		6,3,7,  //top
 		4,5,0,		0,5,1   //bottom
@@ -81,10 +87,14 @@ SCube::SCube()
 		0,1,
 		1,0,
 		1,1,
-		1,0,
+		0,1,
 		1,1,
 		0,0,
-		0,1
+		1,0,
+		0,1,
+		0,0,
+		1,1,
+		1,0,
 	};
 
 
