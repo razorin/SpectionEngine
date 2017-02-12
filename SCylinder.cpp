@@ -19,27 +19,27 @@ SCylinder::SCylinder()
 		//     \|   |/
 		//     10---9
 		
-		-0.5f*cos(60.0f), 1.0f, -0.5f*sin(60.0f),		//0
-		0.5f*cos(60.0f), 1.0f, -0.5f*sin(60.0f),		//1
-		0.5f, 1.0f, 0.0f,								//2
-		0.5f*cos(60.0f), 1.0f, 0.5f*sin(60.0f),			//3
-		-0.5f*cos(60.0f), 1.0f, 0.5f*sin(60.0f),		//4
-		-0.5f, 1.0f, 0.0f,								//5
-		-0.5f*cos(60.0f), -1.0f, -0.5f*sin(60.0f),		//6
-		0.5f*cos(60.0f), -1.0f, -0.5f*sin(60.0f),		//7
-		0.5f, -1.0f, 0.0f,								//8
-		0.5f*cos(60.0f), -1.0f, 0.5f*sin(60.0f),		//9
-		-0.5f*cos(60.0f), -1.0f, 0.5f*sin(60.0f),		//10
-		-0.5f, -1.0f, 0.0f								//11
+		-0.5f*cos(60.0f * DEGTORAD), 1.0f, -0.5f*sin(60.0f * DEGTORAD),			//0
+		0.5f*cos(60.0f * DEGTORAD), 1.0f, -0.5f*sin(60.0f * DEGTORAD),			//1
+		0.5f, 1.0f, 0.0f,														//2
+		0.5f*cos(60.0f * DEGTORAD), 1.0f, 0.5f*sin(60.0f * DEGTORAD),			//3
+		-0.5f*cos(60.0f * DEGTORAD), 1.0f, 0.5f*sin(60.0f * DEGTORAD),			//4
+		-0.5f, 1.0f, 0.0f,														//5
+		-0.5f*cos(60.0f * DEGTORAD), -1.0f, -0.5f*sin(60.0f * DEGTORAD),		//6
+		0.5f*cos(60.0f * DEGTORAD), -1.0f, -0.5f*sin(60.0f * DEGTORAD),			//7
+		0.5f, -1.0f, 0.0f,														//8
+		0.5f*cos(60.0f * DEGTORAD), -1.0f, 0.5f*sin(60.0f * DEGTORAD),			//9
+		-0.5f*cos(60.0f * DEGTORAD), -1.0f, 0.5f*sin(60.0f * DEGTORAD),			//10
+		-0.5f, -1.0f, 0.0f														//11
 		
 	};
 	// Create cylinder indices array
 	vertexIndices = new uint[60]{
 		// Top face
+		0,2,1,
 		0,5,4,
 		0,4,3,
 		0,3,2,
-		0,2,1,
 		// Bottom face
 		6,7,8,
 		6,8,9,

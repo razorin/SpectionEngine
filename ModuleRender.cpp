@@ -86,7 +86,7 @@ bool ModuleRender::Init()
 		cylinder = new SCylinder();
 
 		// Set primitive to print
-		targetPrimitive = cube;
+		targetPrimitive = cylinder;
 		
 		colours = new float[24]{
 			1, 1, 1,   1, 1, 0,   1, 0, 0,	 1, 0, 0,
@@ -97,19 +97,19 @@ bool ModuleRender::Init()
 		glGenBuffers(1, (GLuint*) &(vertexBuffId));
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffId);
 		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in vertices array"
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 24, targetPrimitive->vertices, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 36, targetPrimitive->vertices, GL_STATIC_DRAW);
 
 		// Load index buffer
 		glGenBuffers(1, (GLuint*) &(indexBuffId));
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
 		// ---Second parameter in glBufferData must be sizeof(uint) * "number of positions in vertexIndices array"
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 36, targetPrimitive->vertexIndices, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 60, targetPrimitive->vertexIndices, GL_STATIC_DRAW);
 
 		// Load colour buffer
 		glGenBuffers(1, (GLuint*) &(colourBuffId));
 		glBindBuffer(GL_ARRAY_BUFFER, colourBuffId);
 		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in colours array"
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 24, colours, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 36, colours, GL_STATIC_DRAW);
 	}
 
 	return ret;
@@ -157,7 +157,7 @@ update_status ModuleRender::Update(float dt)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
 
 	//Draw elements - num indexes not number of vertices. Either way the last 2 faces wont be printed!
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
+	glDrawElements(GL_TRIANGLES, 60, GL_UNSIGNED_INT, NULL);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
