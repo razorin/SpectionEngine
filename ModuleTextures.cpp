@@ -90,47 +90,6 @@ SDL_Texture* const ModuleTextures::Load(const char* path)
 // Load new texture from file path using DevIL
 GLuint ModuleTextures::LoadTexture(const char* imageName, bool alpha)
 {
-	/*//Loads image to memory
-	ILuint idTexture;
-	ilGenImages(1, &idTexture);
-	ilBindImage(idTexture);
-	unsigned char *pixmap;
-
-	DLOG(imageName);
-
-	//iluLoadImage((ILstring)imageName);
-	//ilLoadImage(imageName);
-
-	int width = ilGetInteger(IL_IMAGE_WIDTH);
-	int height = ilGetInteger(IL_IMAGE_HEIGHT);
-
-	if (!alpha) {
-		pixmap = new unsigned char[width * height * 3];
-		ilCopyPixels(0, 0, 0, width, height, 1, IL_RGB, IL_UNSIGNED_BYTE, pixmap);
-	}
-	else {
-		pixmap = new unsigned char[width * height * 4];
-		ilCopyPixels(0, 0, 0, width, height, 1, IL_RGBA, IL_UNSIGNED_BYTE, pixmap);
-	}
-	ilDeleteImage(idTexture);
-	ilBindImage(*texture);
-
-	glBindTexture(GL_TEXTURE_2D, *texture);
-
-	if (!alpha) {
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixmap);
-	}
-	else {
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixmap);
-	}
-	delete pixmap;
-
-	//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE); 
-*/
 	ILuint imageID;				// Create an image ID as a ULuint
 
 	GLuint textureID;			// Create a texture ID as a GLuint
@@ -143,11 +102,13 @@ GLuint ModuleTextures::LoadTexture(const char* imageName, bool alpha)
 
 	ilBindImage(imageID); 			// Bind the image
 	DLOG("%s\n",imageName);	
+	
+	ilInit(); 
 
 	success = ilLoadImage((ILconst_string)imageName); 	// Load the image file
 
-											// If we managed to load the image, then we can start to do things with it...
-	if (success)
+											
+	if (success) // The image is loaded successfully
 	{
 		// If the image is flipped (i.e. upside-down and mirrored, flip it the right way up!)
 		ILinfo ImageInfo;
@@ -195,18 +156,18 @@ GLuint ModuleTextures::LoadTexture(const char* imageName, bool alpha)
 			GL_UNSIGNED_BYTE,		// Image data type
 			ilGetData());			// The actual image data itself
 	}
-	else // If we failed to open the image file in the first place...
+	else // If we failed to open the image file
 	{
 		error = ilGetError();
 		std::cout << "Image load failed - IL reports error: " << error << " - " << iluErrorString(error) << std::endl;
 		exit(-1);
 	}
 
-	ilDeleteImages(1, &imageID); // Because we have already copied image data into texture data we can release memory used by image.
+	ilDeleteImages(1, &imageID); // Release memory used by image.
 
 	std::cout << "Texture creation successful." << std::endl;
 
-	return textureID; // Return the GLuint to the texture so you can use it!
+	return textureID; // Return the GLuint to the texture
 }
 
 // Free texture from memory

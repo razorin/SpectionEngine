@@ -64,9 +64,9 @@ SCube::SCube()
 			checkImage[i][j][3] = (GLubyte)255;
 		}
 	}
-	DLOG("HOLA!!");
-	//GLuint textureHandle = App->textures->LoadTexture("Lenna.png", true);
 
+	ImageName = App->textures->LoadTexture("Lenna.png", true);
+	/*
 	// Load texture coord buffer
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glGenTextures(1, &ImageName);
@@ -75,26 +75,26 @@ SCube::SCube()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
-		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
 	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
-	//	0, GL_RGBA, GL_UNSIGNED_BYTE, &textureHandle);
+	//	0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, &textureHandle);
 	glBindTexture(GL_TEXTURE_2D, 0);
-
+	*/
 
 	textureCoords = new float[numVertices * 2]{
 		0,0,
-		0,1,
 		1,0,
+		0,1,
 		1,1,
 		0,1,
 		1,1,
 		0,0,
 		1,0,
-		0,1,
+		1,0,
 		0,0,
 		1,1,
-		1,0,
+		0,1,
 	};
 
 
