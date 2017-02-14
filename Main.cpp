@@ -8,33 +8,26 @@
 #ifdef _MSC_VER
 #	pragma comment (lib, "opengl32.lib")
 #	pragma comment (lib, "glu32.lib")
+#	pragma comment (lib, "assimp/lib/assimp-vc140-mt.lib")
+#	pragma comment( lib, "DevIL/lib/x86/Release/DevIL.lib" )
+#	pragma comment( lib, "DevIL/lib/x86/Release/ILU.lib" )
+#	pragma comment( lib, "DevIL/lib/x86/Release/ILUT.lib" )
 #	ifdef _WIN64
 #		ifdef _DEBUG
 #			pragma comment(lib, "MathGeoLib/libx64/Debug/MathGeoLib.lib")
 #			pragma comment(lib, "Glew/lib/Release/Win32/glew32.lib")
-#			pragma comment( lib, "DevIL/lib/x86/Release/DevIL.lib" )
-#			pragma comment( lib, "DevIL/lib/x86/Release/ILU.lib" )
-#			pragma comment( lib, "DevIL/lib/x86/Release/ILUT.lib" )
+
 #		else // RELEASE
 #			pragma comment(lib, "MathGeoLib/libx64/Release/MathGeoLib.lib")
 #			pragma comment(lib, "Glew/lib/Release/Win32/glew32.lib")
-#			pragma comment( lib, "DevIL/lib/x86/Release/DevIL.lib" )
-#			pragma comment( lib, "DevIL/lib/x86/Release/ILU.lib" )
-#			pragma comment( lib, "DevIL/lib/x86/Release/ILUT.lib" )
 #		endif // _DEBUG
 #	else // WIN32
 #		ifdef _DEBUG
 #			pragma comment(lib, "MathGeoLib/libx86/Debug/MathGeoLib.lib")
 #			pragma comment(lib, "Glew/lib/Release/Win32/glew32.lib")
-#			pragma comment( lib, "DevIL/lib/x86/Release/DevIL.lib" )
-#			pragma comment( lib, "DevIL/lib/x86/Release/ILU.lib" )
-#			pragma comment( lib, "DevIL/lib/x86/Release/ILUT.lib" )
 #		else // RELEASE
 #			pragma comment(lib, "MathGeoLib/libx86/Release/MathGeoLib.lib")
 #			pragma comment(lib, "Glew/lib/Release/Win32/glew32.lib")
-#			pragma comment( lib, "DevIL/lib/x86/Release/DevIL.lib" )
-#			pragma comment( lib, "DevIL/lib/x86/Release/ILU.lib" )
-#			pragma comment( lib, "DevIL/lib/x86/Release/ILUT.lib" )
 #		endif // _DEBUG
 #	endif // _WIN64
 #endif // _MSC_VER

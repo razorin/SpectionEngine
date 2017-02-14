@@ -4,7 +4,10 @@
 #include "ModuleRender.h"
 #include "ModuleTextures.h"
 #include "Animation.h"
+#include "Model.h"
 #include "SCube.h"
+#include "SCylinder.h"
+#include "SPlane.h"
 
 ModuleTestScene::ModuleTestScene(const JSON_Value *json, bool active) : Module(json, active) 
 {
@@ -21,6 +24,8 @@ ModuleTestScene::~ModuleTestScene()
 bool ModuleTestScene::Start() {
 
 	primitives.push_back(cube = new SCube());
+	model = new Model();
+	model->Load("Models/Batman/Batman.obj");
 	return true;
 }
 
@@ -45,6 +50,7 @@ void ModuleTestScene::Draw()
 	{
 		(*it)->Draw();
 	}
+	model->Draw();
 }
 
 bool ModuleTestScene::CleanUp() {
@@ -53,5 +59,6 @@ bool ModuleTestScene::CleanUp() {
 	{
 		RELEASE(*it);
 	}
+	RELEASE(model);
 	return true;
 }

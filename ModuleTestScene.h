@@ -9,6 +9,7 @@
 class SPlane;
 class SCube;
 class SCylinder;
+class Model;
 
 
 class ModuleTestScene : public Module {
@@ -30,6 +31,7 @@ public:
 	SCube *cube = nullptr;
 	SPlane *plane = nullptr;
 	SCylinder *cylinder = nullptr;
+	Model *model = nullptr;
 
 private:
 	std::list<SPrimitive*> primitives;
