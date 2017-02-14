@@ -91,6 +91,9 @@
     <ClInclude Include="ModuleCamera.h">
       <Filter>Core Modules</Filter>
     </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Geometric primitive</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -155,6 +158,9 @@
     </ClCompile>
     <ClCompile Include="ModulePrimitives.cpp">
       <Filter>Core Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Geometric primitive</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
