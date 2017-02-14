@@ -4,8 +4,9 @@
 
 SCylinder::SCylinder()
 {
+	numVertices = 12;
 	// Create cylinder vertex array
-	vertices = new float[36]{
+	vertices = new float[numVertices * 3]{
 		// ----- CYLINDER ----- 12verts 20tris
 		//      0---1
 		//     /|   |\
@@ -31,8 +32,10 @@ SCylinder::SCylinder()
 		0.5f*cos(60.0f * DEGTORAD), -1.0f, 0.5f*sin(60.0f * DEGTORAD),			//9
 		-0.5f*cos(60.0f * DEGTORAD), -1.0f, 0.5f*sin(60.0f * DEGTORAD),			//10
 		-0.5f, -1.0f, 0.0f														//11
-		
+
 	};
+
+	numIndices = 60;
 	// Create cylinder indices array
 	indices = new uint[60]{
 		// Top face
@@ -59,6 +62,8 @@ SCylinder::SCylinder()
 		0,6,11,
 		0,11,5
 	};
+
+	SPrimitive::InitializeBuffers();
 }
 
 

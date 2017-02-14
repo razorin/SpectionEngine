@@ -4,8 +4,10 @@
 #include "ModuleRender.h"
 #include "ModuleTextures.h"
 #include "Animation.h"
-#include "SCube.h"
 #include "Model.h"
+#include "SCube.h"
+#include "SCylinder.h"
+#include "SPlane.h"
 
 ModuleTestScene::ModuleTestScene(const JSON_Value *json, bool active) : Module(json, active) 
 {
