@@ -15,10 +15,29 @@ class SPrimitive
 public:
 	SPrimitive();
 	virtual ~SPrimitive();
+
+	virtual void InitializeBuffers();
+	virtual void Draw() const;
+
 public:
-	float *vertices = 0;
-	uint *vertexIndices = 0;
+	uint vbo_vertices = 0;
+	uint vbo_indices = 0;
+	uint vbo_colors = 0;
+	uint vbo_normals = 0;
+	uint vbo_textures = 0;
+
+	uint numVertices = 0;
+	uint numIndices = 0;
+
+	uint *indices = nullptr;
+	float *vertices = nullptr;
+	float *colors = nullptr;
+	float* normals = nullptr;
+	float *textureCoords = nullptr;
 	bool toDelete = false;
+
+	uint ImageName;
+
 };
 
 

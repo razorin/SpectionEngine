@@ -5,6 +5,7 @@
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
 #include "ModuleCollision.h"
+#include "ModuleTestScene.h"
 #include "Animation.h"
 #include "Parson.h"
 #include "SPrimitive.h"
@@ -76,40 +77,6 @@ bool ModuleRender::Init()
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_TEXTURE_2D);
-
-		// We are on GLMode view so we can setup the viewport
-		//glViewport(0, 0, App->window->screen_width * App->window->screen_size, App->window->screen_height * App->window->screen_size);
-
-		// Create primitives
-		cube = new SCube();
-		plane = new SPlane();
-		cylinder = new SCylinder();
-
-		// Set primitive to print
-		targetPrimitive = cylinder;
-		
-		colours = new float[24]{
-			1, 1, 1,   1, 1, 0,   1, 0, 0,	 1, 0, 0,
-			1, 0, 1,   1, 1, 1,	  1, 1, 1,   1, 0, 1
-		};
-
-		// Load vertex buffer
-		glGenBuffers(1, (GLuint*) &(vertexBuffId));
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffId);
-		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in vertices array"
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 36, targetPrimitive->vertices, GL_STATIC_DRAW);
-
-		// Load index buffer
-		glGenBuffers(1, (GLuint*) &(indexBuffId));
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
-		// ---Second parameter in glBufferData must be sizeof(uint) * "number of positions in vertexIndices array"
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 60, targetPrimitive->vertexIndices, GL_STATIC_DRAW);
-
-		// Load colour buffer
-		glGenBuffers(1, (GLuint*) &(colourBuffId));
-		glBindBuffer(GL_ARRAY_BUFFER, colourBuffId);
-		// ---Second parameter in glBufferData must be sizeof(float) * "number of positions in colours array"
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 36, colours, GL_STATIC_DRAW);
 	}
 
 	return ret;
@@ -117,8 +84,7 @@ bool ModuleRender::Init()
 
 update_status ModuleRender::PreUpdate(float dt)
 {
- 
-	glClearColor(0.1f, 0.2f, 0.4f, 1.f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -126,8 +92,6 @@ update_status ModuleRender::PreUpdate(float dt)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glLoadMatrixf(App->camera->GetMatrixView());
-	//glFrustum(-1.0f, 1.0f, -1.0f, 1.0f, 1,5);
-
 
 	return UPDATE_CONTINUE;
 }
@@ -135,92 +99,10 @@ update_status ModuleRender::PreUpdate(float dt)
 // Called every draw update
 update_status ModuleRender::Update(float dt)
 {
-	//glEnableClientState(GL_VERTEX_ARRAY);
-	//glEnableClientState(GL_COLOR_ARRAY);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
-	//glVertexPointer(3, GL_FLOAT, 0, targetPrimitive->vertices);
-	//glColorPointer(3, GL_FLOAT, 0, colours);
-	//// ---Second parameter in glDrawElements must be "number of positions in vertexIndices array"
-	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
-	//glDisableClientState(GL_VERTEX_ARRAY);
-	//glDisableClientState(GL_COLOR_ARRAY);
+	App->testScene->Draw();
 
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffId);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-	glEnableClientState(GL_COLOR_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, colourBuffId);
-	glColorPointer(3, GL_FLOAT, 0, NULL);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffId);
-
-	//Draw elements - num indexes not number of vertices. Either way the last 2 faces wont be printed!
-	glDrawElements(GL_TRIANGLES, 60, GL_UNSIGNED_INT, NULL);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_COLOR_ARRAY);
-
-	//Draw Gyzmo
-	glBegin(GL_LINES);
-	glLineWidth(5.0f);
-	glColor4f(5.0f, 0.0f, 0.0f, 1.0f); // Red
-	//Line
-	glVertex3f(0, 0, 0);
-	glVertex3f(1, 0, 0);
-	//Letter
-	glVertex3f(1.2f, 0.1f, 0.1f);
-	glVertex3f(1.2f, -0.1f, -0.1f);
-	glVertex3f(1.2f, 0.1f, -0.1f);
-	glVertex3f(1.2f, -0.1f, 0.1f);
-
-	glColor4f(0.0f, 5.0f, 0.0f, 1.0f); // Green
-	//Line
-	glVertex3f(0, 0, 0);
-	glVertex3f(0, 1, 0);
-	//Letter
-	glVertex3f(0.2f, 1.2f, 0);
-	glVertex3f(0, 1.2f, 0);
-	glVertex3f(0, 1.2f, 0);
-	glVertex3f(-0.1f, 1.2f, -0.1f);
-	glVertex3f(0, 1.2f, 0);
-	glVertex3f(-0.1f, 1.2f, 0.1f);
-
-	glColor4f(0.0f, 0.0f, 5.0f, 1.0f); // Blue
-	//Line
-	glVertex3f(0, 0, 0);
-	glVertex3f(0, 0, 1);
-	//Letter
-	glVertex3f(0.1f, 0.1f, 1.2f);
-	glVertex3f(-0.1f, 0.1f, 1.2f);
-	glVertex3f(-0.1f, 0.1f, 1.2f);
-	glVertex3f(0.1f, -0.1f, 1.2f);
-	glVertex3f(0.1f, -0.1f, 1.2f);
-	glVertex3f(-0.1f, -0.1f, 1.2f);
-
-	glEnd();
-	glLineWidth(1.0f);
-
-	//Draw Grid
-	glBegin(GL_LINES);
-	glLineWidth(2.0f);
-	glColor4f(5.0f, 5.0f, 5.0f, 1.0f);
-	float gridLines = 50;
-	
-
-	for (int i = 0; i < gridLines; i++)
-	{
-		glVertex3f(-(gridLines / 2) + i, 0, -gridLines / 2);
-		glVertex3f(-(gridLines/2) + i, 0, gridLines / 2);
-	}
-	for (int i = 0; i < gridLines; i++)
-	{
-		glVertex3f(-gridLines / 2, 0, -(gridLines / 2) + i);
-		glVertex3f(gridLines / 2, 0, -(gridLines / 2) + i);
-	}
-	glEnd();
-	glLineWidth(1.0f);
+	DrawGrid();
+	//DrawDirectCube();
 
 	return UPDATE_CONTINUE;
 }
@@ -228,7 +110,6 @@ update_status ModuleRender::Update(float dt)
 update_status ModuleRender::PostUpdate(float dt)
 {
 	//SDL_RenderPresent(renderer);
-
 
 	//Swap Buffer (OpenGL)
 	SDL_GL_SwapWindow(App->window->window);
@@ -247,11 +128,99 @@ bool ModuleRender::CleanUp()
 	{
 		SDL_DestroyRenderer(renderer);
 	}
-	RELEASE(cube);
-	RELEASE(plane);
-	RELEASE(cylinder);
-	RELEASE(colours);
+
 	return true;
+}
+
+void ModuleRender::DrawGrid()
+{
+	//Draw Grid
+	glBegin(GL_LINES);
+	glLineWidth(2.0f);
+	//glColor4f(5.0f, 5.0f, 5.0f, 1.0f);
+	float gridLines = 50;
+
+
+	for (int i = 0; i < gridLines; i++)
+	{
+		glVertex3f(-(gridLines / 2) + i, 0, -gridLines / 2);
+		glVertex3f(-(gridLines / 2) + i, 0, gridLines / 2);
+	}
+	for (int i = 0; i < gridLines; i++)
+	{
+		glVertex3f(-gridLines / 2, 0, -(gridLines / 2) + i);
+		glVertex3f(gridLines / 2, 0, -(gridLines / 2) + i);
+	}
+	glEnd();
+	glLineWidth(1.0f);
+}
+
+void ModuleRender::DrawDirectCube()
+{
+	
+	float cubeSize = 0.5;
+	//Draw Cube
+	glBegin(GL_TRIANGLES);
+	//Front
+	glVertex3f(-cubeSize, -cubeSize, cubeSize);
+	glVertex3f(cubeSize, -cubeSize, cubeSize);
+	glVertex3f(-cubeSize, cubeSize, cubeSize);
+
+	glVertex3f(-cubeSize, cubeSize, cubeSize);
+	glVertex3f(cubeSize, -cubeSize, cubeSize);
+	glVertex3f(cubeSize, cubeSize, cubeSize);
+
+	//Right
+	glVertex3f(cubeSize, -cubeSize, cubeSize);
+	glVertex3f(cubeSize, -cubeSize, -cubeSize);
+	glVertex3f(cubeSize, cubeSize, cubeSize);
+
+	glVertex3f(cubeSize, cubeSize, cubeSize);
+	glVertex3f(cubeSize, -cubeSize, -cubeSize);
+	glVertex3f(cubeSize, cubeSize, -cubeSize);
+
+
+	//Left
+	glVertex3f(-cubeSize, -cubeSize, -cubeSize);
+	glVertex3f(-cubeSize, -cubeSize, cubeSize);
+	glVertex3f(-cubeSize, cubeSize, -cubeSize);
+
+	glVertex3f(-cubeSize, cubeSize, -cubeSize);
+	glVertex3f(-cubeSize, -cubeSize, cubeSize);
+	glVertex3f(-cubeSize, cubeSize, cubeSize);
+
+
+	//Back
+	glVertex3f(cubeSize, -cubeSize, -cubeSize);
+	glVertex3f(-cubeSize, -cubeSize, -cubeSize);
+	glVertex3f(cubeSize, cubeSize, -cubeSize);
+
+	glVertex3f(cubeSize, cubeSize, -cubeSize);
+	glVertex3f(-cubeSize, -cubeSize, -cubeSize);
+	glVertex3f(-cubeSize, cubeSize, -cubeSize);
+
+
+	//Top
+	glVertex3f(-cubeSize, cubeSize, cubeSize);
+	glVertex3f(cubeSize, cubeSize, cubeSize);
+	glVertex3f(-cubeSize, cubeSize, -cubeSize);
+
+	glVertex3f(-cubeSize, cubeSize, -cubeSize);
+	glVertex3f(cubeSize, cubeSize, cubeSize);
+	glVertex3f(cubeSize, cubeSize, -cubeSize);
+
+
+	//Bottom
+	glVertex3f(-cubeSize, -cubeSize, -cubeSize);
+	glVertex3f(cubeSize, -cubeSize, -cubeSize);
+	glVertex3f(-cubeSize, -cubeSize, cubeSize);
+
+	glVertex3f(-cubeSize, -cubeSize, cubeSize);
+	glVertex3f(cubeSize, -cubeSize, -cubeSize);
+	glVertex3f(cubeSize, -cubeSize, cubeSize);
+
+	glEnd();
+	
 }
 
 // Blit to screen

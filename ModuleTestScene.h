@@ -1,12 +1,14 @@
 #ifndef ModuleTestScene_H
 #define ModuleTestScene_H
 
+#include <list>
 #include "Module.h"
-#include "Point.h"
+#include "SPrimitive.h"
 #include "MemLeaks.h"
 
-struct SDL_Texture;
-struct Frame;
+class SPlane;
+class SCube;
+class SCylinder;
 
 
 class ModuleTestScene : public Module {
@@ -20,12 +22,18 @@ public:
 	update_status Update(float dt = 0);
 	update_status PostUpdate();
 
+	void Draw();
+
 	bool CleanUp();
 
 public:
-	SDL_Texture* graphics;
-	Frame *frame = nullptr;
-	iPoint position;
+	SCube *cube = nullptr;
+	SPlane *plane = nullptr;
+	SCylinder *cylinder = nullptr;
+
+private:
+	std::list<SPrimitive*> primitives;
+
 };
 
 #endif // !ModuleTestScene_H

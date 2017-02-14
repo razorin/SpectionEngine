@@ -31,6 +31,9 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	void DrawGrid();
+	void DrawDirectCube();
+
 	bool Blit(SDL_Texture* texture, iPoint &position, Frame* section, bool flip = false, float speed = 1.0f);
 	bool StaticBlit(SDL_Texture* texture, const iPoint &position, const SDL_Rect &section);
 
@@ -46,15 +49,6 @@ public:
 	bool vsync = false;
 
 	SDL_GLContext context;
-private:
-	uint vertexBuffId = NULL;
-	uint indexBuffId = NULL;
-	uint colourBuffId = NULL;
-	SPrimitive *targetPrimitive = nullptr;
-	SCube *cube = nullptr;
-	SPlane *plane = nullptr;
-	SCylinder *cylinder = nullptr;
-	float *colours = nullptr;
 };
 
 #endif // __MODULERENDER_H__

@@ -24,7 +24,7 @@ SPlane::SPlane()
 		0.5f,0.0f, 0.5f			//8
 	};
 	// Create plane indices array
-	vertexIndices = new uint[24]{
+	indices = new uint[24]{
 		0,3,4,
 		0,4,1,
 		1,4,5,

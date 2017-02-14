@@ -20,12 +20,12 @@ ModuleCamera::~ModuleCamera()
 bool ModuleCamera::Init()
 {
 	aspectRatio = App->window->screen_width / App->window->screen_height;
-	verticalFov = 30 * DEGTORAD;
-	horizontalFov = 30 * DEGTORAD;
+	verticalFov = 60 * DEGTORAD;
+	horizontalFov = 60 * DEGTORAD;
 	frustum.SetPerspective(horizontalFov, verticalFov);
 
-	SetPosition(math::vec{ 7,1,0 });
-	SetLookAt(math::vec{ 0,1,0 }, math::vec{ -1,0,0 });
+	SetPosition(math::vec{ 0,1,7 });
+	SetLookAt(math::vec{ 0,1,0 }, math::vec{ 0,0,-1 });
 
 	SetPlaneDistances(0.1f, 100.0f);
 
@@ -141,7 +141,7 @@ void ModuleCamera::Move(float dt)
 	movementSpeed = 2.0f;
 
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-		movement *= 2;
+		movement *= 3;
 
 
 	if (movement.Equals(float3::zero) == false)
@@ -175,9 +175,9 @@ void ModuleCamera::Rotate(float dt)
 {
 	Quat rotation = Quat::identity;
 
-	rotationSpeed = 0.5f;
+	rotationSpeed = 1.0f;
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-		rotationSpeed *= 2;
+		rotationSpeed *= 3;
 
 	float angleX = 0;
 	float angleY = 0;
@@ -186,10 +186,10 @@ void ModuleCamera::Rotate(float dt)
 	fPoint mouseMotion = App->input->GetMouseMotion();
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
 	{
-		angleX += (mouseMotion.y / 2) * angleChange;
-		angleY += (mouseMotion.x / 2) * angleChange;
-		DLOG("MousemotionY %f", mouseMotion.y);
-		DLOG("MousemotionX %f", mouseMotion.x);
+		angleX += (mouseMotion.y / 4) * angleChange;
+		angleY += (mouseMotion.x / 4) * angleChange;
+		//DLOG("MousemotionY %f", mouseMotion.y);
+		//DLOG("MousemotionX %f", mouseMotion.x);
 
 	}
 
@@ -203,12 +203,14 @@ void ModuleCamera::Rotate(float dt)
 		angleX += angleChange;
 
 	if (angleY != 0)
-		rotation = Quat::RotateY(angleY);
-	if (angleX != 0)
-		rotation = Quat::RotateAxisAngle(frustum.WorldRight(), (angleX));
-
-	if (rotation.Equals(Quat::identity) == false)
 	{
+		rotation = Quat::RotateY(angleY);
+		frustum.SetFront(rotation.Transform(frustum.Front()));
+		frustum.SetUp(rotation.Transform(frustum.Up()));
+	}
+	if (angleX != 0)
+	{
+		rotation = Quat::RotateAxisAngle(frustum.WorldRight(), (angleX));
 		frustum.SetFront(rotation.Transform(frustum.Front()));
 		frustum.SetUp(rotation.Transform(frustum.Up()));
 	}
