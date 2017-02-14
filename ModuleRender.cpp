@@ -102,6 +102,7 @@ update_status ModuleRender::Update(float dt)
 	App->testScene->Draw();
 
 	DrawGrid();
+	DrawGizmo();
 	//DrawDirectCube();
 
 	return UPDATE_CONTINUE;
@@ -153,6 +154,50 @@ void ModuleRender::DrawGrid()
 	}
 	glEnd();
 	glLineWidth(1.0f);
+}
+
+void ModuleRender::DrawGizmo()
+{
+	//Draw Gyzmo
+	glBegin(GL_LINES);
+	glLineWidth(5.0f);
+	glColor4f(5.0f, 0.0f, 0.0f, 1.0f); // Red
+	//Line
+	glVertex3f(0, 0, 0);
+	glVertex3f(1, 0, 0);
+	//Letter
+	glVertex3f(1.2f, 0.1f, 0.1f);
+	glVertex3f(1.2f, -0.1f, -0.1f);
+	glVertex3f(1.2f, 0.1f, -0.1f);
+	glVertex3f(1.2f, -0.1f, 0.1f);
+
+	glColor4f(0.0f, 5.0f, 0.0f, 1.0f); // Green
+	//Line
+	glVertex3f(0, 0, 0);
+	glVertex3f(0, 1, 0);
+	//Letter
+	glVertex3f(0.2f, 1.2f, 0);
+	glVertex3f(0, 1.2f, 0);
+	glVertex3f(0, 1.2f, 0);
+	glVertex3f(-0.1f, 1.2f, -0.1f);
+	glVertex3f(0, 1.2f, 0);
+	glVertex3f(-0.1f, 1.2f, 0.1f);
+
+	glColor4f(0.0f, 0.0f, 5.0f, 1.0f); // Blue
+	//Line
+	glVertex3f(0, 0, 0);
+	glVertex3f(0, 0, 1);
+	//Letter
+	glVertex3f(0.1f, 0.1f, 1.2f);
+	glVertex3f(-0.1f, 0.1f, 1.2f);
+	glVertex3f(-0.1f, 0.1f, 1.2f);
+	glVertex3f(0.1f, -0.1f, 1.2f);
+	glVertex3f(0.1f, -0.1f, 1.2f);
+	glVertex3f(-0.1f, -0.1f, 1.2f);
+
+	glEnd();
+	glLineWidth(1.0f);
+	glColor4f(255.0f, 255.0f, 255.0f, 1.0f);
 }
 
 void ModuleRender::DrawDirectCube()

@@ -32,6 +32,7 @@ public:
 	bool CleanUp();
 
 	void DrawGrid();
+	void DrawGizmo();
 	void DrawDirectCube();
 
 	bool Blit(SDL_Texture* texture, iPoint &position, Frame* section, bool flip = false, float speed = 1.0f);

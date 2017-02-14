@@ -85,21 +85,12 @@
     <ClInclude Include="SCylinder.h">
       <Filter>Geometric primitive</Filter>
     </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="ModulePrimitives.h" />
-    <ClInclude Include="ModuleCamera.h" />
-=======
     <ClInclude Include="ModulePrimitives.h">
       <Filter>Core Modules</Filter>
     </ClInclude>
     <ClInclude Include="ModuleCamera.h">
-    <ClInclude Include="ModuleCamera.h">
       <Filter>Core Modules</Filter>
     </ClInclude>
-    <ClInclude Include="ModulePrimitives.h">
-      <Filter>Core Modules</Filter>
-    </ClInclude>
->>>>>>> 14c5b78a70df027e8a8642e54df66b718ff37f5f
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -159,11 +150,11 @@
     <ClCompile Include="SCylinder.cpp">
       <Filter>Geometric primitive</Filter>
     </ClCompile>
-    <ClCompile Include="ModulePrimitives.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
     <ClCompile Include="ModuleCamera.cpp">
-      <Filter>Main</Filter>
+      <Filter>Core Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModulePrimitives.cpp">
+      <Filter>Core Modules</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
