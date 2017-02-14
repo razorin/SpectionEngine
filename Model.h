@@ -10,9 +10,12 @@ public:
 	Model();
 	~Model();
 
-	void Load(const char* file);
+	void Load(const char* path, const char* file);
 	void Clear();
 	void Draw();
+
+private:
+	const char *path;
 };
 
 #endif /* _MODEL_H_ */

@@ -23,9 +23,9 @@ ModuleTestScene::~ModuleTestScene()
 
 bool ModuleTestScene::Start() {
 
-	primitives.push_back(cube = new SCube());
+	//primitives.push_back(cube = new SCube());
 	model = new Model();
-	model->Load("Models/Batman/Batman.obj");
+	model->Load("Models/Batman/","Batman.obj");
 	return true;
 }
 
