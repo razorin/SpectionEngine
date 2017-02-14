@@ -1,9 +1,7 @@
 #ifndef _MODEL_H_
 #define _MODEL_H_
 
-#include "assimp/cimport.h"
-#include "assimp/scene.h"
-#include "assimp/postprocess.h"
+class aiScene;
 
 class Model
 {
