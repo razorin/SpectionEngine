@@ -38,7 +38,7 @@ void SPrimitive::InitializeBuffers()
 	{
 		glGenBuffers(1, (GLuint*) &(vbo_textures));
 		glBindBuffer(GL_ARRAY_BUFFER, vbo_textures);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float)* numVertices * 3, textureCoords, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)* numVertices * 2, textureCoords, GL_STATIC_DRAW);
 	}
 }
 
@@ -60,15 +60,17 @@ void SPrimitive::Draw() const
 		glBindTexture(GL_TEXTURE_2D, ImageName);
 
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindBuffer(GL_TEXTURE_BUFFER, vbo_textures);
-		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo_textures);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 	}
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_indices);
 	glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, NULL);
 
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
