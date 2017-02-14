@@ -43,6 +43,9 @@ public:
 
 private:
 	void GetHWAndDriverCapabilities();
+	float *positionLight = nullptr;
+	float *diffuseLight = nullptr;
+
 
 public:
 	SDL_Renderer* renderer = nullptr;

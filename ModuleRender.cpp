@@ -74,9 +74,14 @@ bool ModuleRender::Init()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
+		glEnable(GL_LIGHT0);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_TEXTURE_2D);
+		glFrontFace(GL_CCW), glCullFace(GL_BACK);
+
+		positionLight = new float[1.f, 1.f, 1.f, 1.f];
+		diffuseLight = new float[0.25f, 1.f, 1.f, 1.f];
 	}
 
 	return ret;
@@ -99,10 +104,12 @@ update_status ModuleRender::PreUpdate(float dt)
 // Called every draw update
 update_status ModuleRender::Update(float dt)
 {
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+	glLightfv(GL_LIGHT0, GL_POSITION, positionLight);
 	App->testScene->Draw();
-
 	DrawGrid();
 	DrawGizmo();
+	
 	//DrawDirectCube();
 
 	return UPDATE_CONTINUE;
@@ -123,6 +130,7 @@ bool ModuleRender::CleanUp()
 	DLOG("Destroying renderer");
 
 	SDL_GL_DeleteContext(context);
+	RELEASE(positionLight);
 
 	//Destroy window
 	if (renderer != nullptr)
