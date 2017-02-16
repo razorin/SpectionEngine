@@ -73,12 +73,13 @@ bool ModuleRender::Init()
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE);
 		glEnable(GL_LIGHT0);
+		//glEnable(GL_CULL_FACE);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_TEXTURE_2D);
-		glFrontFace(GL_CCW), glCullFace(GL_BACK);
+		glFrontFace(GL_CCW);
+		glCullFace(GL_BACK);
 
 		positionLight = new float[1.f, 1.f, 1.f, 1.f];
 		diffuseLight = new float[0.25f, 1.f, 1.f, 1.f];
