@@ -1,5 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleGUI.h"
 #include "ModuleRender.h"
 #include "ModuleCamera.h"
 #include "ModuleInput.h"
@@ -32,6 +33,7 @@ ModuleRender::~ModuleRender()
 // Called before render is available
 bool ModuleRender::Init()
 {
+	App->gui->AddLog("Creating Renderer context");
 	DLOG("Creating Renderer context");
 	bool ret = true;
 
