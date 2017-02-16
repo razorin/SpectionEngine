@@ -2,6 +2,7 @@
 #define __MODULEGUI_H__
 
 #include "Module.h"
+#include<list>
 
 struct ImGuiTextBuffer;
 
@@ -19,11 +20,17 @@ public:
 	bool CleanUp();
 	void AddLog(const char* fmt, ...);
 	void Draw(const char* title, bool* p_opened = NULL);
+	void AddFpsLog(float fps, float ms);
 	void Clear();
 
 public:
 	bool ScrollToBottom;
 	ImGuiTextBuffer* consoleBuffer = nullptr;
+ 
+	int numFps = 0;
+	std::list<float> fps_log;
+	int numMs = 0;
+	std::list<float> ms_log;
 };
 
 #endif // __MODULEGUI_H__
