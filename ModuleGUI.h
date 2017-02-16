@@ -28,9 +28,9 @@ public:
 	ImGuiTextBuffer* consoleBuffer = nullptr;
  
 	int numFps = 0;
-	std::list<float> fps_log;
+	std::list<float> fpsLog;
 	int numMs = 0;
-	std::list<float> ms_log;
+	std::list<float> msLog;
 };
 
 #endif // __MODULEGUI_H__

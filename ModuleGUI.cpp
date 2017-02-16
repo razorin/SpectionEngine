@@ -110,23 +110,23 @@ void ModuleGUI::Draw(const char* title, bool* p_opened)
 
 void ModuleGUI::AddFpsLog(float fps, float ms) {
 	ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
-	if (fps_log.size == 100) {
+	if (fpsLog.size() == 100) {
 		//shift values to the left
 		
 		//Add last values
-		fps_log.push_back(fps);
-		ms_log.push_back(ms);
+		fpsLog.push_back(fps);
+		msLog.push_back(ms);
 	}
 	else {
-		fps_log.push_back(fps);
-		ms_log.push_back(ms);
+		fpsLog.push_back(fps);
+		msLog.push_back(ms);
 		numFps++;
 		numMs++;
 	}
 	//Draw
 	/*char title[25];
-	sprintf_s(title, 25, "Framerate %.1f", fps_log[numFps-1]);
-	ImGui::PlotHistogram("##framerate",&fps_log[0],numFps,0,title,0.0f,100.0f, ImVec2(310, 100));
+	sprintf_s(title, 25, "Framerate %.1f", fpsLog[numFps-1]);
+	ImGui::PlotHistogram("##framerate",&fpsLog[0],numFps,0,title,0.0f,100.0f, ImVec2(310, 100));
 	sprintf_s(title, 25, "Milliseconds %.1f", ms_log[numMs - 1]);
 	ImGui::PlotHistogram("##milliseconds", &ms_log[0], numMs, 0, title, 0.0f, 40.0f, ImVec2(310, 100));
 	ImGui::End();*/
