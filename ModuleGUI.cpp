@@ -1,4 +1,5 @@
 #include "ModuleGUI.h"
+#include "Utils.h"
 #include "Application.h"
 #include "ModuleWindow.h"
 
@@ -36,23 +37,21 @@ update_status ModuleGUI::PreUpdate(float dt)
 
 update_status ModuleGUI::Update(float dt)
 {
-	/*
-	ImGui::Text("Hello, world!");
-
-	if (ImGui::Button("Button Name")) {
-
+	ImGui::SetNextWindowSize(ImVec2(400, 200), ImGuiSetCond_FirstUseEver);
+	ImGui::Begin("Help Menu");
+	if (ImGui::Button("Open Google")) {
+		utils::RequestBrowser("www.google.com");
 	}
-
+	ImGui::End();
+	/*
 	ImGui::SetNextWindowSize(ImVec2(400, 200), ImGuiSetCond_FirstUseEver);
 	ImGui::Begin("Console", NULL);
 	consoleBuffer->append("hi\n");
 	ImGui::TextUnformatted(consoleBuffer->begin());
-	ImGui::End();*/
-
+	ImGui::End();
+	*/
 
 	Draw("Console");
-
-	
 
 	return UPDATE_CONTINUE;
 }

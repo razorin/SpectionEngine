@@ -121,6 +121,9 @@
     <ClInclude Include="ModuleGUI.h">
       <Filter>Core Modules</Filter>
     </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">

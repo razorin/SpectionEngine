@@ -1,5 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleGUI.h"
 #include "ModuleWindow.h"
 #include "SDL/include/SDL.h"
 #include "Parson.h"
@@ -25,6 +26,7 @@ ModuleWindow::~ModuleWindow()
 // Called before render is available
 bool ModuleWindow::Init()
 {
+	App->gui->AddLog("Init SDL window & surface");
 	DLOG("Init SDL window & surface");
 	bool ret = true;
 

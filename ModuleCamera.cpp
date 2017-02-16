@@ -1,6 +1,7 @@
 #include "ModuleCamera.h"
 #include "SDL/include/SDL.h"
 #include "Application.h"
+#include "ModuleGUI.h"
 #include "ModuleWindow.h"
 #include <math.h>
 #include "Application.h"
@@ -49,33 +50,16 @@ update_status ModuleCamera::Update(float dt)
 
 	// Print position and orientation
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
+		App->gui->AddLog("Camera position: %f, %f, %f", pos.x, pos.y, pos.z);
 		DLOG("Camera position: %f, %f, %f", pos.x, pos.y, pos.z);
 	}
 	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN) {
+		App->gui->AddLog("Camera UP vector: %f, %f, %f", frustum.Up().x, frustum.Up().y, frustum.Up().z);
 		DLOG("Camera UP vector: %f, %f, %f", frustum.Up().x, frustum.Up().y, frustum.Up().z);
+		App->gui->AddLog("Camera FRONT vector: %f, %f, %f", frustum.Front().x, frustum.Front().y, frustum.Front().z);
 		DLOG("Camera FRONT vector: %f, %f, %f", frustum.Front().x, frustum.Front().y, frustum.Front().z);
 	}
 
-	//float speed = 0.01f;
-
-	//// We asume X axis -> Pitch, Y axis -> Yaw, Z axis -> Roll
-	//// Camera pitch
-	//if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN) {
-	//	RotateCamera(X, speed*dt);
-	//}
-
-	//if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN) {
-	//	RotateCamera(X, -floor(speed*dt));
-	//}
-	//
-	//// Camera yaw
-	//if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN) {
-	//	RotateCamera(Y, floor(speed*dt));
-	//}
-
-	//if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN) {
-	//	RotateCamera(Y, -floor(speed*dt));
-	//}
 	return UPDATE_CONTINUE;
 }
 
@@ -115,9 +99,6 @@ void ModuleCamera::SetPlaneDistances(float near, float far)
 	this->far = far;
 	frustum.SetViewPlaneDistances(near, far);
 }
-
-
-
 
 void ModuleCamera::Move(float dt)
 {
@@ -244,40 +225,6 @@ void ModuleCamera::SetLookAt(const math::vec & up, const math::vec & front)
 	frustum.SetUp(up);
 	frustum.SetFront(front);
 }
-
-void ModuleCamera::RotateCamera(Axis axis, float rotation)
-{
-	Quat quat;
-	math::vec u;
-	float s;
-	math::vec vprime;
-
-	switch (axis) {
-	case X:
-		DLOG("Rotating camera on X axis %f", rotation);
-		
-		quat = { frustum.WorldRight(), rotation };
-
-		// Extract the vector part of the quaternion
-		u = { quat.x, quat.y, quat.z };
-
-		// Extract the scalar part of the quaternion
-		s = quat.w;
-
-		// Do the math
-		vprime = 2.0f * math::Dot(u, frustum.WorldRight()) * u
-			+ (s*s - math::Dot(u, u)) * frustum.WorldRight()
-			+ 2.0f * s * math::Cross(u, frustum.WorldRight());
-		
-		frustum.SetFront(vprime);
-		break;
-	case Y:
-		break;
-	case Z:
-		break;
-	}
-}
-
 
 float * ModuleCamera::GetMatrixProjection() const
 {
