@@ -37,12 +37,30 @@ update_status ModuleGUI::PreUpdate(float dt)
 
 update_status ModuleGUI::Update(float dt)
 {
+	/*
 	ImGui::SetNextWindowSize(ImVec2(400, 200), ImGuiSetCond_FirstUseEver);
 	ImGui::Begin("Help Menu");
 	if (ImGui::Button("Open Google")) {
 		utils::RequestBrowser("www.google.com");
 	}
 	ImGui::End();
+	*/
+	ImGui::SetNextWindowSize(ImVec2(400, 200), ImGuiSetCond_FirstUseEver);
+	ImGui::Begin("Main Menu");
+	if (ImGui::BeginMenu("Help")) {
+		if (ImGui::MenuItem("Documentation")) {
+			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/wiki");
+		}
+		if (ImGui::MenuItem("Download Latest")) {
+			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/releases");
+		}
+		if (ImGui::MenuItem("Report a bug")) {
+			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/releases");
+		}
+		ImGui::EndMenu();
+	}
+	ImGui::End();
+	
 	/*
 	ImGui::SetNextWindowSize(ImVec2(400, 200), ImGuiSetCond_FirstUseEver);
 	ImGui::Begin("Console", NULL);
