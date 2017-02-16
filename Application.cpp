@@ -5,6 +5,7 @@
 #include "ModuleTextures.h"
 #include "ModuleInput.h"
 #include "ModuleAudio.h"
+#include "ModuleGUI.h"
 #include "ModuleFadeToBlack.h"
 #include "ModuleCollision.h"
 #include "ModuleParticles.h"
@@ -37,6 +38,7 @@ Application::Application()
 	modules.push_back(renderer = new ModuleRender(json_object_dotget_object(root, "config.renderer")));
 	modules.push_back(textures = new ModuleTextures());
 	modules.push_back(audio = new ModuleAudio());
+	modules.push_back(gui = new ModuleGUI(json_object_dotget_object(root, "config.renderer")));
 
 	// Modules to draw on top of game logic
 	modules.push_back(collision = new ModuleCollision());

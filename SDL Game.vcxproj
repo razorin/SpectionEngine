@@ -71,8 +71,16 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="IMGUI\imconfig.h" />
+    <ClInclude Include="IMGUI\imgui.h" />
+    <ClInclude Include="IMGUI\imgui_impl_sdl_gl3.h" />
+    <ClInclude Include="IMGUI\imgui_internal.h" />
+    <ClInclude Include="IMGUI\stb_rect_pack.h" />
+    <ClInclude Include="IMGUI\stb_textedit.h" />
+    <ClInclude Include="IMGUI\stb_truetype.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModuleCamera.h" />
+    <ClInclude Include="ModuleGUI.h" />
     <ClInclude Include="ModulePrimitives.h" />
     <ClInclude Include="SCube.h" />
     <ClInclude Include="Globals.h" />
@@ -97,8 +105,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="IMGUI\imgui.cpp" />
+    <ClCompile Include="IMGUI\imgui_demo.cpp" />
+    <ClCompile Include="IMGUI\imgui_draw.cpp" />
+    <ClCompile Include="IMGUI\imgui_impl_sdl_gl3.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModuleCamera.cpp" />
+    <ClCompile Include="ModuleGUI.cpp" />
     <ClCompile Include="ModulePrimitives.cpp" />
     <ClCompile Include="SCube.cpp" />
     <ClCompile Include="Log.cpp" />

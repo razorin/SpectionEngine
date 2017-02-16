@@ -11,6 +11,7 @@ class ModuleCamera;
 class ModuleTextures;
 class ModuleInput;
 class ModuleAudio;
+class ModuleGUI;
 class ModuleFadeToBlack;
 class ModuleCollision;
 class ModuleParticles;
@@ -39,6 +40,7 @@ public:
 	ModuleTextures* textures;
 	ModuleInput* input;
 	ModuleAudio* audio;
+	ModuleGUI* gui;
 	ModuleFadeToBlack* fade;
 	ModuleCollision* collision;
 	ModuleParticles* particles;
