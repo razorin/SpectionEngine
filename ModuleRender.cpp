@@ -15,6 +15,8 @@
 #include "SDL/include/SDL.h"
 #include <math.h>
 #include "MathGeoLib/include/MathGeoLib.h"
+#include "IMGUI\imgui.h"
+#include "IMGUI\imgui_impl_sdl_gl3.h"
 
 
 ModuleRender::ModuleRender(const JSON_Object *json) : Module(json)
@@ -118,6 +120,8 @@ update_status ModuleRender::Update(float dt)
 update_status ModuleRender::PostUpdate(float dt)
 {
 	//SDL_RenderPresent(renderer);
+
+	ImGui::Render();
 
 	//Swap Buffer (OpenGL)
 	SDL_GL_SwapWindow(App->window->window);

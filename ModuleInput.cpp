@@ -4,6 +4,8 @@
 #include "ModuleWindow.h"
 #include "ModuleCamera.h"
 #include "SDL/include/SDL.h"
+#include "IMGUI\imgui.h"
+#include "IMGUI\imgui_impl_sdl_gl3.h"
 
 #define MAX_KEYS 300
 
@@ -45,6 +47,8 @@ bool ModuleInput::Start()
 // Called each loop iteration
 update_status ModuleInput::PreUpdate(float dt)
 {
+	ImGui_ImplSdlGL3_NewFrame(App->window->window);
+
 	static SDL_Event event;
 
 	mouse_motion = {0, 0};
@@ -135,6 +139,7 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 		}
 	}
+	ImGui_ImplSdlGL3_ProcessEvent(&event);
 
 	if(GetWindowEvent(EventWindow::WE_QUIT) == true || GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		return UPDATE_STOP;

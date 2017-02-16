@@ -38,7 +38,6 @@ Application::Application()
 	modules.push_back(renderer = new ModuleRender(json_object_dotget_object(root, "config.renderer")));
 	modules.push_back(textures = new ModuleTextures());
 	modules.push_back(audio = new ModuleAudio());
-	modules.push_back(gui = new ModuleGUI(json_object_dotget_object(root, "config.renderer")));
 
 	// Modules to draw on top of game logic
 	modules.push_back(collision = new ModuleCollision());
@@ -48,6 +47,8 @@ Application::Application()
 	//Game Modules
 	modules.push_back(testScene = new ModuleTestScene(true));
 
+	// UI
+	modules.push_back(gui = new ModuleGUI());
 
 	float2 mathGeoLib_test{ 1,2 };
 
