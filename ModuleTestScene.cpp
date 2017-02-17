@@ -23,7 +23,7 @@ ModuleTestScene::~ModuleTestScene()
 
 bool ModuleTestScene::Start() {
 
-	//primitives.push_back(cube = new SCube());
+	primitives.push_back(cube = new SCube());
 	model = new Model();
 	model->Load("Models/Batman/","Batman.obj");
 	return true;
@@ -50,7 +50,9 @@ void ModuleTestScene::Draw()
 	{
 		(*it)->Draw();
 	}
-	model->Draw();
+
+	if (model != nullptr)
+		model->Draw();
 }
 
 bool ModuleTestScene::CleanUp() {
@@ -60,5 +62,6 @@ bool ModuleTestScene::CleanUp() {
 		RELEASE(*it);
 	}
 	RELEASE(model);
+
 	return true;
 }

@@ -73,16 +73,20 @@ bool ModuleRender::Init()
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_LIGHT0);
 		//glEnable(GL_CULL_FACE);
+		glEnable(GL_LIGHT0);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_TEXTURE_2D);
 		glFrontFace(GL_CCW);
 		glCullFace(GL_BACK);
 
-		positionLight = new float[1.f, 1.f, 1.f, 1.f];
-		diffuseLight = new float[0.25f, 1.f, 1.f, 1.f];
+
+		positionLight = new float[4]{ 1.f, 1.f, 1.f, 1.f };
+		diffuseLight = new float[4]{ 1.f, 1.f, 1.f, 1.f };
+
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+		glLightfv(GL_LIGHT0, GL_POSITION, positionLight);
 	}
 
 	return ret;
@@ -99,17 +103,17 @@ update_status ModuleRender::PreUpdate(float dt)
 	glLoadIdentity();
 	glLoadMatrixf(App->camera->GetMatrixView());
 
+
 	return UPDATE_CONTINUE;
 }
 
 // Called every draw update
 update_status ModuleRender::Update(float dt)
 {
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
-	glLightfv(GL_LIGHT0, GL_POSITION, positionLight);
+	
 	App->testScene->Draw();
 	DrawGrid();
-	DrawGizmo();
+	//DrawGizmo();
 	
 	//DrawDirectCube();
 
@@ -147,7 +151,7 @@ void ModuleRender::DrawGrid()
 	//Draw Grid
 	glBegin(GL_LINES);
 	glLineWidth(2.0f);
-	//glColor4f(5.0f, 5.0f, 5.0f, 1.0f);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	float gridLines = 50;
 
 
@@ -170,7 +174,7 @@ void ModuleRender::DrawGizmo()
 	//Draw Gyzmo
 	glBegin(GL_LINES);
 	glLineWidth(5.0f);
-	glColor4f(5.0f, 0.0f, 0.0f, 1.0f); // Red
+	glColor4f(1.0f, 0.0f, 0.0f, 1.0f); // Red
 	//Line
 	glVertex3f(0, 0, 0);
 	glVertex3f(1, 0, 0);
@@ -180,7 +184,7 @@ void ModuleRender::DrawGizmo()
 	glVertex3f(1.2f, 0.1f, -0.1f);
 	glVertex3f(1.2f, -0.1f, 0.1f);
 
-	glColor4f(0.0f, 5.0f, 0.0f, 1.0f); // Green
+	glColor4f(0.0f, 1.0f, 0.0f, 1.0f); // Green
 	//Line
 	glVertex3f(0, 0, 0);
 	glVertex3f(0, 1, 0);
@@ -192,7 +196,7 @@ void ModuleRender::DrawGizmo()
 	glVertex3f(0, 1.2f, 0);
 	glVertex3f(-0.1f, 1.2f, 0.1f);
 
-	glColor4f(0.0f, 0.0f, 5.0f, 1.0f); // Blue
+	glColor4f(0.0f, 0.0f, 1.0f, 1.0f); // Blue
 	//Line
 	glVertex3f(0, 0, 0);
 	glVertex3f(0, 0, 1);
@@ -206,7 +210,7 @@ void ModuleRender::DrawGizmo()
 
 	glEnd();
 	glLineWidth(1.0f);
-	glColor4f(255.0f, 255.0f, 255.0f, 1.0f);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void ModuleRender::DrawDirectCube()

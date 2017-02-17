@@ -38,24 +38,19 @@ void Model::Clear() {
 }
 
 void Model::Draw() {
-	glBegin(GL_TRIANGLES);
-		for (int i = 0; i < scene->mNumMeshes; ++i) {
-			int normalIndex = 0;
-			for (int j = 0; j < scene->mMeshes[i]->mNumVertices; ++j) {
-				aiVector3D vertexPosition = scene->mMeshes[i]->mVertices[j];
-				glVertex3f(vertexPosition.x, vertexPosition.y, vertexPosition.z);
-				if (j % 3 == 0) {
-					aiVector3D normalVector = scene->mMeshes[i]->mNormals[normalIndex];
-					glNormal3f(normalVector.x, normalVector.y, normalVector.z);
-					++normalIndex;
-				}
-				if (j < 8) {
-					aiVector3D *textureCoords = scene->mMeshes[i]->mTextureCoords[j];
-					if (textureCoords != NULL) {
-						glTexCoord2f(textureCoords->x, textureCoords->y);
-					}
-				}
-			}
+
+	for (int i = 0; i < scene->mNumMeshes; ++i) 
+	{
+		glBegin(GL_TRIANGLES);
+		aiMesh* mesh = scene->mMeshes[i];
+		for (int j = 0; j < mesh->mNumVertices; ++j) 
+		{
+			aiVector3D normal = mesh->mNormals[j];
+			glNormal3f(normal.x, normal.y, normal.z);
+			aiVector3D vertex = mesh->mVertices[j];
+			glVertex3f(vertex.x, vertex.y, vertex.z);
+
 		}
-	glEnd();
+		glEnd();
+	}
 }
