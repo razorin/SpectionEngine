@@ -19,6 +19,7 @@ public:
 
 	void ChangeTitle(const char* title);
 	void SetFullscreen(bool fullscreen);
+	void SetResizable(bool resizable);
 
 public:
 	//The window we'll be rendering to

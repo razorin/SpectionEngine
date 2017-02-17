@@ -25,11 +25,12 @@ struct AppConsole {
 		ScrollToBottom = true;
 	}
 
-	void Draw(const char* title, bool* p_opened = NULL)
+	bool Draw()
 	{
+		bool open = true;
 		ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Appearing);
 		ImGui::SetNextWindowPos(ImVec2(0, (float)(App->window->screen_height * App->window->screen_size * 3 / 4)), ImGuiSetCond_Appearing);
-		ImGui::Begin(title, p_opened);
+		ImGui::Begin("Console", &open);
 		if (ImGui::Button("Clear")) Clear();
 		ImGui::Separator();
 		ImGui::BeginChild("Scrolling");
@@ -39,6 +40,7 @@ struct AppConsole {
 		ScrollToBottom = false;
 		ImGui::EndChild();
 		ImGui::End();
+		return open;
 	}
 };
 
@@ -70,7 +72,9 @@ public:
 
 private:
 	bool fullscreen = false;
+	bool resizable = false;
 	bool showPreferences = false;
+	bool showConsole = true;
 };
 
 #endif // __MODULEGUI_H__

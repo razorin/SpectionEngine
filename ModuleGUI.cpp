@@ -39,8 +39,6 @@ update_status ModuleGUI::Update(float dt)
 {
 	DrawMainMenuBar();
 
-	console.Draw("Console");
-
 	return UPDATE_CONTINUE;
 }
 
@@ -92,6 +90,7 @@ bool ModuleGUI::DrawMainMenuBar() {
 		}
 		if (ImGui::BeginMenu("Window"))
 		{
+			if (ImGui::MenuItem("Console")) { showConsole = true; }
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Help"))
@@ -157,6 +156,10 @@ bool ModuleGUI::DrawMainMenuBar() {
 		showPreferences = DrawPreferencesMenu();
 	}
 
+	if (showConsole) {
+		showConsole = console.Draw();
+	}
+
 	return ret;
 }
 
@@ -167,6 +170,10 @@ bool ModuleGUI::DrawPreferencesMenu() {
 	ImGui::Begin("Preferences", &open);
 	if (ImGui::Checkbox("Fullscreen", &fullscreen)) {
 		App->window->SetFullscreen(fullscreen);
+	}
+	ImGui::SameLine();
+	if (ImGui::Checkbox("Resizable", &resizable)) {
+		App->window->SetResizable(resizable);
 	}
 	ImGui::End();
 	return open;
