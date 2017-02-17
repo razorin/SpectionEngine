@@ -165,8 +165,8 @@ bool ModuleGUI::DrawMainMenuBar() {
 
 bool ModuleGUI::DrawPreferencesMenu() {
 	bool open = true;
-	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 3), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Appearing);
-	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 3), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Appearing);
+	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 3), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
+	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 3), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
 	ImGui::Begin("Preferences", &open);
 	if (ImGui::Checkbox("Fullscreen", &fullscreen)) {
 		App->window->SetFullscreen(fullscreen);
@@ -175,6 +175,18 @@ bool ModuleGUI::DrawPreferencesMenu() {
 	if (ImGui::Checkbox("Resizable", &resizable)) {
 		App->window->SetResizable(resizable);
 	}
+	ImGui::Separator();
+	ImGui::Text("Resolution");
+	ImVec2 resolutionButtonSize = ImVec2(100, 24);
+	if (ImGui::Button("800 x 600", resolutionButtonSize)) {};
+	ImGui::SameLine();
+	if (ImGui::Button("1024 x 768", resolutionButtonSize)) {};
+	if (ImGui::Button("1280 x 720", resolutionButtonSize)) {};
+	ImGui::SameLine();
+	if (ImGui::Button("1600 x 900", resolutionButtonSize)) {};
+	if (ImGui::Button("1920 x 1080", resolutionButtonSize)) {};
+	ImGui::SameLine();
+	if (ImGui::Button("2560 x 1440", resolutionButtonSize)) {};
 	ImGui::End();
 	return open;
 }

@@ -36,9 +36,6 @@ public:
 	bool fullscreen_window = false;
 	int screen_size = 0;
 	const char *title;
-
-	
-
 };
 
 #endif // __MODULEWINDOW_H__

@@ -28,8 +28,8 @@ struct AppConsole {
 	bool Draw()
 	{
 		bool open = true;
-		ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Appearing);
-		ImGui::SetNextWindowPos(ImVec2(0, (float)(App->window->screen_height * App->window->screen_size * 3 / 4)), ImGuiSetCond_Appearing);
+		ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
+		ImGui::SetNextWindowPos(ImVec2(0, (float)(App->window->screen_height * App->window->screen_size * 3 / 4)), ImGuiSetCond_Once);
 		ImGui::Begin("Console", &open);
 		if (ImGui::Button("Clear")) Clear();
 		ImGui::Separator();
