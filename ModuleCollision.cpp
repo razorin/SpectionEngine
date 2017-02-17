@@ -71,7 +71,7 @@ void ModuleCollision::DebugDraw()
 // Called before quitting
 bool ModuleCollision::CleanUp()
 {
-	App->gui->AddLog("Freeing all colliders");
+	App->gui->console.AddLog("Freeing all colliders");
 	DLOG("Freeing all colliders");
 
 	for (list<Collider*>::iterator it = colliders.begin(); it != colliders.end(); ++it)

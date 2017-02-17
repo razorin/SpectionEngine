@@ -26,7 +26,7 @@ ModuleWindow::~ModuleWindow()
 // Called before render is available
 bool ModuleWindow::Init()
 {
-	App->gui->AddLog("Init SDL window & surface");
+	App->gui->console.AddLog("Init SDL window & surface");
 	DLOG("Init SDL window & surface");
 	bool ret = true;
 

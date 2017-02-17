@@ -31,7 +31,7 @@ ModuleTextures::~ModuleTextures()
 // Called before render is available
 bool ModuleTextures::Init()
 {
-	App->gui->AddLog("Init Image library");
+	App->gui->console.AddLog("Init Image library");
 	DLOG("Init Image library");
 	bool ret = true;
 
@@ -41,7 +41,7 @@ bool ModuleTextures::Init()
 
 	if((init & flags) != flags)
 	{
-		App->gui->AddLog("Could not initialize Image lib. IMG_Init: %s", IMG_GetError());
+		App->gui->console.AddLog("Could not initialize Image lib. IMG_Init: %s", IMG_GetError());
 		DLOG("Could not initialize Image lib. IMG_Init: %s", IMG_GetError());
 		ret = false;
 	}
@@ -52,7 +52,7 @@ bool ModuleTextures::Init()
 // Called before quitting
 bool ModuleTextures::CleanUp()
 {
-	App->gui->AddLog("Freeing textures and Image library");
+	App->gui->console.AddLog("Freeing textures and Image library");
 	DLOG("Freeing textures and Image library");
 
 	for(list<SDL_Texture*>::iterator it = textures.begin(); it != textures.end(); ++it)

@@ -50,13 +50,13 @@ update_status ModuleCamera::Update(float dt)
 
 	// Print position and orientation
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
-		App->gui->AddLog("Camera position: %f, %f, %f", pos.x, pos.y, pos.z);
+		App->gui->console.AddLog("Camera position: %f, %f, %f", pos.x, pos.y, pos.z);
 		DLOG("Camera position: %f, %f, %f", pos.x, pos.y, pos.z);
 	}
 	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN) {
-		App->gui->AddLog("Camera UP vector: %f, %f, %f", frustum.Up().x, frustum.Up().y, frustum.Up().z);
+		App->gui->console.AddLog("Camera UP vector: %f, %f, %f", frustum.Up().x, frustum.Up().y, frustum.Up().z);
 		DLOG("Camera UP vector: %f, %f, %f", frustum.Up().x, frustum.Up().y, frustum.Up().z);
-		App->gui->AddLog("Camera FRONT vector: %f, %f, %f", frustum.Front().x, frustum.Front().y, frustum.Front().z);
+		App->gui->console.AddLog("Camera FRONT vector: %f, %f, %f", frustum.Front().x, frustum.Front().y, frustum.Front().z);
 		DLOG("Camera FRONT vector: %f, %f, %f", frustum.Front().x, frustum.Front().y, frustum.Front().z);
 	}
 

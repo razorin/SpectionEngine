@@ -33,7 +33,7 @@ ModuleRender::~ModuleRender()
 // Called before render is available
 bool ModuleRender::Init()
 {
-	App->gui->AddLog("Creating Renderer context");
+	App->gui->console.AddLog("Creating Renderer context");
 	DLOG("Creating Renderer context");
 	bool ret = true;
 
@@ -49,7 +49,7 @@ bool ModuleRender::Init()
 	context = SDL_GL_CreateContext(App->window->window);
 	if (context == NULL)
 	{
-		App->gui->AddLog("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
+		App->gui->console.AddLog("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
 		DLOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
@@ -59,14 +59,14 @@ bool ModuleRender::Init()
 	//Checking errors
 	if (err != GLEW_OK)
 	{
-		App->gui->AddLog("Error on glewInit: %s", glewGetErrorString(err));
+		App->gui->console.AddLog("Error on glewInit: %s", glewGetErrorString(err));
 		DLOG("Error on glewInit: %s", glewGetErrorString(err));
 		ret = false;
 	}
 	else
 	{
 		// Should be 2.0
-		App->gui->AddLog("Using Glew %s", glewGetString(GLEW_VERSION));
+		App->gui->console.AddLog("Using Glew %s", glewGetString(GLEW_VERSION));
 		DLOG("Using Glew %s", glewGetString(GLEW_VERSION));
 	}
 
@@ -136,7 +136,7 @@ update_status ModuleRender::PostUpdate(float dt)
 // Called before quitting
 bool ModuleRender::CleanUp()
 {
-	App->gui->AddLog("Destroying renderer");
+	App->gui->console.AddLog("Destroying renderer");
 	DLOG("Destroying renderer");
 
 	SDL_GL_DeleteContext(context);
@@ -309,7 +309,7 @@ bool ModuleRender::Blit(SDL_Texture* texture, iPoint &position, Frame* frame, bo
 	if (!flip) {
 		if (SDL_RenderCopy(renderer, texture, &frame->section, &rect) != 0)
 		{
-			App->gui->AddLog("Destroying renderer");
+			App->gui->console.AddLog("Destroying renderer");
 			DLOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 			ret = false;
 		}

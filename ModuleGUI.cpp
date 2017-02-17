@@ -16,7 +16,6 @@
 
 ModuleGUI::ModuleGUI(const JSON_Object *json) : Module(json)
 {
-	consoleBuffer = new ImGuiTextBuffer();
 }
 
 
@@ -46,9 +45,14 @@ update_status ModuleGUI::Update(float dt)
 	}
 	ImGui::End();
 	*/
-	ImGui::SetNextWindowSize(ImVec2(400, 200), ImGuiSetCond_FirstUseEver);
+
 	ImGui::Begin("Main Menu");
+	ImGui::SetWindowSize(ImVec2(400, 200), ImGuiSetCond_FirstUseEver);
+	//ImGui::SetWindowPos(ImVec2(50, 200), ImGuiSetCond_FirstUseEver);
 	if (ImGui::BeginMenu("Help")) {
+		if (ImGui::MenuItem("Code")) {
+			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/");
+		}
 		if (ImGui::MenuItem("Documentation")) {
 			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/wiki");
 		}
@@ -61,16 +65,8 @@ update_status ModuleGUI::Update(float dt)
 		ImGui::EndMenu();
 	}
 	ImGui::End();
-	
-	/*
-	ImGui::SetNextWindowSize(ImVec2(400, 200), ImGuiSetCond_FirstUseEver);
-	ImGui::Begin("Console", NULL);
-	consoleBuffer->append("hi\n");
-	ImGui::TextUnformatted(consoleBuffer->begin());
-	ImGui::End();
-	*/
 
-	Draw("Console");
+	console.Draw("Console");
 
 	return UPDATE_CONTINUE;
 }
@@ -81,31 +77,9 @@ update_status ModuleGUI::PostUpdate(float dt)
 }
 
 bool ModuleGUI::CleanUp() {
-	Clear();
 	ImGui_ImplSdlGL3_Shutdown();
 
 	return true;
-}
-
-void ModuleGUI::AddLog(const char* fmt, ...) IM_PRINTFARGS(2)
-{
-	va_list args;
-	va_start(args, fmt);
-	consoleBuffer->appendv(fmt, args);
-	consoleBuffer->append("\n");
-	va_end(args);
-	ScrollToBottom = true;
-}
-
-void ModuleGUI::Draw(const char* title, bool* p_opened)
-{
-	ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
-	ImGui::Begin(title, p_opened);
-	ImGui::TextUnformatted(consoleBuffer->begin());
-	if (ScrollToBottom)
-		ImGui::SetScrollHere(1.0f);
-	ScrollToBottom = false;
-	ImGui::End();
 }
 
 void ModuleGUI::AddFpsLog(float fps, float ms) {
@@ -130,9 +104,4 @@ void ModuleGUI::AddFpsLog(float fps, float ms) {
 	sprintf_s(title, 25, "Milliseconds %.1f", ms_log[numMs - 1]);
 	ImGui::PlotHistogram("##milliseconds", &ms_log[0], numMs, 0, title, 0.0f, 40.0f, ImVec2(310, 100));
 	ImGui::End();*/
-}
-
-void ModuleGUI::Clear()
-{
-	consoleBuffer->clear();
 }

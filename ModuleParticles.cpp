@@ -19,7 +19,7 @@ ModuleParticles::~ModuleParticles()
 // Load assets
 bool ModuleParticles::Start()
 {
-	App->gui->AddLog("Loading particles");
+	App->gui->console.AddLog("Loading particles");
 	DLOG("Loading particles");
 	
 	/*graphics = App->textures->Load("rtype/particles.png");
@@ -76,7 +76,7 @@ bool ModuleParticles::Start()
 // Unload assets
 bool ModuleParticles::CleanUp()
 {
-	App->gui->AddLog("Unloading particles");
+	App->gui->console.AddLog("Unloading particles");
 	DLOG("Unloading particles");
 	App->textures->Unload(graphics);
 
