@@ -37,19 +37,13 @@ update_status ModuleGUI::PreUpdate(float dt)
 
 update_status ModuleGUI::Update(float dt)
 {
-	/*
-	ImGui::SetNextWindowSize(ImVec2(400, 200), ImGuiSetCond_FirstUseEver);
-	ImGui::Begin("Help Menu");
-	if (ImGui::Button("Open Google")) {
-		utils::RequestBrowser("www.google.com");
-	}
-	ImGui::End();
-	*/
-
+	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 3), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Appearing);
+	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_Appearing);
 	ImGui::Begin("Main Menu");
-	ImGui::SetWindowSize(ImVec2(400, 200), ImGuiSetCond_FirstUseEver);
-	//ImGui::SetWindowPos(ImVec2(50, 200), ImGuiSetCond_FirstUseEver);
 	if (ImGui::BeginMenu("Help")) {
+		if (ImGui::MenuItem("Website")) {
+			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/");
+		}
 		if (ImGui::MenuItem("Code")) {
 			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/");
 		}
@@ -60,7 +54,43 @@ update_status ModuleGUI::Update(float dt)
 			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/releases");
 		}
 		if (ImGui::MenuItem("Report a bug")) {
-			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/releases");
+			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/issues");
+		}
+		ImGui::EndMenu();
+	}
+	if (ImGui::BeginMenu("About")) {
+		if (ImGui::MenuItem("Spection Engine")) {
+			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/");
+		}
+		ImGui::Text("Description of the Engine");
+		ImGui::Text("Authors:");
+		if (ImGui::MenuItem("- Roberto Azorin")) {
+			utils::RequestBrowser("https://github.com/razorin/");
+		}
+		if (ImGui::MenuItem("- Sergi Ledesma")) {
+			utils::RequestBrowser("https://github.com/SergiLedesma");
+		}
+		if (ImGui::MenuItem("- Pau Mamano")) {
+			utils::RequestBrowser("https://github.com/kamtxatka");
+		}
+		if (ImGui::MenuItem("- Manuel Mendez")) {
+			utils::RequestBrowser("https://github.com/troyanlp");
+		}
+		ImGui::Text("Libraries used:");
+		if (ImGui::MenuItem("- Glew 2.0.0")) {
+			utils::RequestBrowser("http://glew.sourceforge.net/");
+		}
+		if (ImGui::MenuItem("- DevIL 1.8.0")) {
+			utils::RequestBrowser("http://openil.sourceforge.net/");
+		}
+		if (ImGui::MenuItem("- Assimp 3.3.1")) {
+			utils::RequestBrowser("http://www.assimp.org/");
+		}
+		if (ImGui::MenuItem("- ImGui")) {
+			utils::RequestBrowser("https://github.com/ocornut/imgui");
+		}
+		if (ImGui::MenuItem("MIT License")) {
+			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/blob/master/LICENSE");
 		}
 		ImGui::EndMenu();
 	}
