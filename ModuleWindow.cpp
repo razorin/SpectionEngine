@@ -91,3 +91,6 @@ bool ModuleWindow::CleanUp()
 	return true;
 }
 
+void ModuleWindow::SetFullscreen(bool fullscreen) {
+	this->fullscreen = fullscreen;
+}

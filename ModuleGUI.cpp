@@ -1,3 +1,4 @@
+#include "Globals.h"
 #include "ModuleGUI.h"
 #include "Utils.h"
 #include "Application.h"
@@ -24,7 +25,6 @@ ModuleGUI::~ModuleGUI()
 }
 
 bool ModuleGUI::Init() {
-	//gl3winit();
 	ImGui_ImplSdlGL3_Init(App->window->window);
 	
 	return true;
@@ -37,64 +37,7 @@ update_status ModuleGUI::PreUpdate(float dt)
 
 update_status ModuleGUI::Update(float dt)
 {
-	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 3), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Appearing);
-	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_Appearing);
-	ImGui::Begin("Main Menu");
-	if (ImGui::BeginMenu("Help")) {
-		if (ImGui::MenuItem("Website")) {
-			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/");
-		}
-		if (ImGui::MenuItem("Code")) {
-			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/");
-		}
-		if (ImGui::MenuItem("Documentation")) {
-			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/wiki");
-		}
-		if (ImGui::MenuItem("Download Latest")) {
-			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/releases");
-		}
-		if (ImGui::MenuItem("Report a bug")) {
-			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/issues");
-		}
-		ImGui::EndMenu();
-	}
-	if (ImGui::BeginMenu("About")) {
-		if (ImGui::MenuItem("Spection Engine")) {
-			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/");
-		}
-		ImGui::Text("Description of the Engine");
-		ImGui::Text("Authors:");
-		if (ImGui::MenuItem("- Roberto Azorin")) {
-			utils::RequestBrowser("https://github.com/razorin/");
-		}
-		if (ImGui::MenuItem("- Sergi Ledesma")) {
-			utils::RequestBrowser("https://github.com/SergiLedesma");
-		}
-		if (ImGui::MenuItem("- Pau Mamano")) {
-			utils::RequestBrowser("https://github.com/kamtxatka");
-		}
-		if (ImGui::MenuItem("- Manuel Mendez")) {
-			utils::RequestBrowser("https://github.com/troyanlp");
-		}
-		ImGui::Text("Libraries used:");
-		if (ImGui::MenuItem("- Glew 2.0.0")) {
-			utils::RequestBrowser("http://glew.sourceforge.net/");
-		}
-		if (ImGui::MenuItem("- DevIL 1.8.0")) {
-			utils::RequestBrowser("http://openil.sourceforge.net/");
-		}
-		if (ImGui::MenuItem("- Assimp 3.3.1")) {
-			utils::RequestBrowser("http://www.assimp.org/");
-		}
-		if (ImGui::MenuItem("- ImGui")) {
-			utils::RequestBrowser("https://github.com/ocornut/imgui");
-		}
-		if (ImGui::MenuItem("MIT License")) {
-			utils::RequestBrowser("https://github.com/razorin/SpectionEngine/blob/master/LICENSE");
-		}
-		ImGui::EndMenu();
-	}
-	ImGui::End();
+	DrawMainMenuBar();
 
 	console.Draw("Console");
 
@@ -110,6 +53,123 @@ bool ModuleGUI::CleanUp() {
 	ImGui_ImplSdlGL3_Shutdown();
 
 	return true;
+}
+
+bool ModuleGUI::DrawMainMenuBar() {
+	bool ret = false;
+
+	if (ImGui::BeginMainMenuBar())
+	{
+		ret = true;
+
+		if (ImGui::BeginMenu("File"))
+		{
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Edit"))
+		{
+			if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
+			if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
+			ImGui::Separator();
+			if (ImGui::MenuItem("Cut", "CTRL+X")) {}
+			if (ImGui::MenuItem("Copy", "CTRL+C")) {}
+			if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+			ImGui::Separator();
+			if (ImGui::MenuItem("Preferences")) { showPreferences = true; }
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Assets"))
+		{
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("GameObject"))
+		{
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Component"))
+		{
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Window"))
+		{
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Help"))
+		{
+			if (ImGui::MenuItem("Website")) {
+				utils::RequestBrowser("https://github.com/razorin/SpectionEngine/");
+			}
+			if (ImGui::MenuItem("Code")) {
+				utils::RequestBrowser("https://github.com/razorin/SpectionEngine/");
+			}
+			if (ImGui::MenuItem("Documentation")) {
+				utils::RequestBrowser("https://github.com/razorin/SpectionEngine/wiki");
+			}
+			if (ImGui::MenuItem("Download Latest")) {
+				utils::RequestBrowser("https://github.com/razorin/SpectionEngine/releases");
+			}
+			if (ImGui::MenuItem("Report a bug")) {
+				utils::RequestBrowser("https://github.com/razorin/SpectionEngine/issues");
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("About"))
+		{
+			if (ImGui::MenuItem("Spection Engine")) {
+				utils::RequestBrowser("https://github.com/razorin/SpectionEngine/");
+			}
+			ImGui::Text("Description of the Engine");
+			ImGui::Text("Authors:");
+			if (ImGui::MenuItem("- Roberto Azorin")) {
+				utils::RequestBrowser("https://github.com/razorin/");
+			}
+			if (ImGui::MenuItem("- Sergi Ledesma")) {
+				utils::RequestBrowser("https://github.com/SergiLedesma");
+			}
+			if (ImGui::MenuItem("- Pau Mamano")) {
+				utils::RequestBrowser("https://github.com/kamtxatka");
+			}
+			if (ImGui::MenuItem("- Manuel Mendez")) {
+				utils::RequestBrowser("https://github.com/troyanlp");
+			}
+			ImGui::Text("Libraries used:");
+			if (ImGui::MenuItem("- Glew 2.0.0")) {
+				utils::RequestBrowser("http://glew.sourceforge.net/");
+			}
+			if (ImGui::MenuItem("- DevIL 1.8.0")) {
+				utils::RequestBrowser("http://openil.sourceforge.net/");
+			}
+			if (ImGui::MenuItem("- Assimp 3.3.1")) {
+				utils::RequestBrowser("http://www.assimp.org/");
+			}
+			if (ImGui::MenuItem("- ImGui")) {
+				utils::RequestBrowser("https://github.com/ocornut/imgui");
+			}
+			if (ImGui::MenuItem("MIT License")) {
+				utils::RequestBrowser("https://github.com/razorin/SpectionEngine/blob/master/LICENSE");
+			}
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
+	}
+
+	if (showPreferences) {
+		showPreferences = DrawPreferencesMenu();
+	}
+
+	return ret;
+}
+
+bool ModuleGUI::DrawPreferencesMenu() {
+	bool open = true;
+	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 3), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Appearing);
+	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 3), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Appearing);
+	ImGui::Begin("Preferences", &open);
+	if (ImGui::Checkbox("Fullscreen", &fullscreen)) {
+		App->window->SetFullscreen(fullscreen);
+	}
+	ImGui::End();
+	return open;
 }
 
 void ModuleGUI::AddFpsLog(float fps, float ms) {

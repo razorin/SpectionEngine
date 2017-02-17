@@ -12,17 +12,13 @@ class ModuleWindow : public Module
 public:
 
 	ModuleWindow(const JSON_Object *json = nullptr);
-
-	// Destructor
 	virtual ~ModuleWindow();
 
-	// Called before quitting
 	bool Init();
-
-	// Called before quitting
 	bool CleanUp();
 
 	void ChangeTitle(const char* title);
+	void SetFullscreen(bool fullscreen);
 
 public:
 	//The window we'll be rendering to

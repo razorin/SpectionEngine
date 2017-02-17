@@ -55,7 +55,8 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 	void AddLog(const char* fmt, ...);
-	void Draw(const char* title, bool* p_opened = NULL);
+	bool DrawMainMenuBar();
+	bool DrawPreferencesMenu();
 	void AddFpsLog(float fps, float ms);
 	
 
@@ -66,6 +67,10 @@ public:
 	std::list<float> fpsLog;
 	int numMs = 0;
 	std::list<float> msLog;
+
+private:
+	bool fullscreen = false;
+	bool showPreferences = false;
 };
 
 #endif // __MODULEGUI_H__
