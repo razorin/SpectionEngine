@@ -7,6 +7,7 @@
 struct SDL_Window;
 struct SDL_Surface;
 
+// DO NOT CHANGE THE ORDER
 enum DisplayMode {
 	FULLSCREEN,
 	BORDERLESS,

@@ -74,7 +74,7 @@ private:
 	bool resizable = false;
 	bool showPreferences = false;
 	bool showConsole = true;
-	bool showDisplayOptions = false;
+	int currentDisplayMode = 1;
 };
 
 #endif // __MODULEGUI_H__

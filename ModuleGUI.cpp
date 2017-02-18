@@ -168,32 +168,12 @@ bool ModuleGUI::DrawPreferencesMenu() {
 	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
 	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
 	ImGui::Begin("Preferences", &open);
-	if (ImGui::Button("Show Display Options |V|")) {
-		if (showDisplayOptions) {
-			showDisplayOptions = false;
-		}
-		else {
-			showDisplayOptions = true;
-		}
-	};
-	ImGui::SameLine();
-	if (ImGui::Checkbox("Resizable Window", &resizable)) {
-		App->window->SetResizable(resizable);
+	
+	const char* items[] = { "Fullscreen", "Borderless", "Fullscreen Windowed" };
+	if (ImGui::Combo("Display", &currentDisplayMode, items, IM_ARRAYSIZE(items))) {
+		App->window->SetDisplayMode(static_cast<DisplayMode>(currentDisplayMode));
 	}
-	if (showDisplayOptions) {
-		if (ImGui::MenuItem("Fullscreen")) {
-			App->window->SetDisplayMode(FULLSCREEN);
-			showDisplayOptions = false;
-		}
-		if (ImGui::MenuItem("Borderless")) {
-			App->window->SetDisplayMode(BORDERLESS);
-			showDisplayOptions = false;
-		}
-		if (ImGui::MenuItem("Fullscreen Windowed")) {
-			App->window->SetDisplayMode(FULLSCREENWINDOWED);
-			showDisplayOptions = false;
-		}
-	}
+
 	/*
 	ImGui::Separator();
 	ImGui::Text("Resolution");
