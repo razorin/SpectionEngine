@@ -88,6 +88,7 @@ void ModuleCamera::ChangeWindowSize(int width, int height)
 	App->window->screen_height = height;
 	aspectRatio = (float)width / (float)height;
 	SetAspectRatio(aspectRatio);
+	glViewport(0, 0, width, height);
 
 	//verticalFov = 2 * atan(tan(horizontalFov * 0.5) * 1 / aspectRatio);
 	//horizontalFov = 2 * atan(tan(verticalFov * 0.5) * aspectRatio);

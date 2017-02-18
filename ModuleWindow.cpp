@@ -3,6 +3,7 @@
 #include "ModuleGUI.h"
 #include "ModuleWindow.h"
 #include "SDL/include/SDL.h"
+#include "SDL\include\SDL_video.h"
 #include "Parson.h"
 
 ModuleWindow::ModuleWindow(const JSON_Object *json) : Module(json)
@@ -96,8 +97,20 @@ bool ModuleWindow::CleanUp()
 
 void ModuleWindow::SetFullscreen(bool fullscreen) {
 	this->fullscreen = fullscreen;
-}
+	if (fullscreen) {
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+	}
+	else {
+		SDL_SetWindowFullscreen(window, NULL);
+	}
+}							  
 
 void ModuleWindow::SetResizable(bool resizable) {
 	this->resizable = resizable;
+	if (resizable) {
+		//SDL_SetWindowResizable(window, true); //------------------- IN SDL 2.0.5
+	}
+	else {
+		//SDL_SetWindowResizable(window, false); //------------------- IN SDL 2.0.5
+	}
 }
