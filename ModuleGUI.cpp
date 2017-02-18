@@ -173,7 +173,9 @@ bool ModuleGUI::DrawPreferencesMenu() {
 	if (ImGui::Combo("Display", &currentDisplayMode, items, IM_ARRAYSIZE(items))) {
 		App->window->SetDisplayMode(static_cast<DisplayMode>(currentDisplayMode));
 	}
-
+	if (ImGui::SliderInt("Brightness", &brightness, minBrightness, maxBrightness)) {
+		App->window->SetBrightness(brightness);
+	}
 	/*
 	ImGui::Separator();
 	ImGui::Text("Resolution");

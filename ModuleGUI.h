@@ -75,6 +75,9 @@ private:
 	bool showPreferences = false;
 	bool showConsole = true;
 	int currentDisplayMode = 1;
+	int brightness = 1000;
+	int minBrightness = 0;
+	int maxBrightness = 1000;
 };
 
 #endif // __MODULEGUI_H__

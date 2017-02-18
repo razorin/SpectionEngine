@@ -87,7 +87,7 @@ void ModuleWindow::ChangeTitle(const char* title)
 bool ModuleWindow::CleanUp()
 {
 	DLOG("Destroying SDL window and quitting all SDL systems");
-
+	SDL_SetWindowBrightness(window, 1.0f);
 	//Destroy window
 	if (window != nullptr)
 	{
@@ -130,5 +130,18 @@ void ModuleWindow::SetDisplayMode(DisplayMode value) {
 			App->gui->console.AddLog("Error on switching to fullscreen windowed: %s", SDL_GetError());
 		}
 		break;
+	}
+}
+
+void ModuleWindow::SetBrightness(int value) {
+	float brightness = (float)value / 1000.0f;
+	if (brightness <= 0.228f) {
+		brightness = 0.228f;
+	}
+	if (SDL_SetWindowBrightness(window, brightness) != 0) {
+		App->gui->console.AddLog("Error on changing window brightness: %s", SDL_GetError());
+	}
+	if (brightness = 1.0f) {
+		int a = 0;
 	}
 }

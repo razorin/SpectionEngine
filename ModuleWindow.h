@@ -27,6 +27,7 @@ public:
 	void ChangeTitle(const char* title);
 	void SetResizable(bool value);
 	void SetDisplayMode(DisplayMode value);
+	void SetBrightness(int value);
 
 public:
 	//The window we'll be rendering to
