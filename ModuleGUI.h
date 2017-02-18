@@ -71,10 +71,10 @@ public:
 	std::list<float> msLog;
 
 private:
-	bool fullscreen = false;
 	bool resizable = false;
 	bool showPreferences = false;
 	bool showConsole = true;
+	bool showDisplayOptions = false;
 };
 
 #endif // __MODULEGUI_H__

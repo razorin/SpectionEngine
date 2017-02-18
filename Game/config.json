@@ -15,7 +15,7 @@
       "fullscreen": false,
       "borderless": false,
       "resizable": true,
-      "fullscren_window": false,
+      "fullscreenWindowed": false,
       "size": 2,
       "title": "Spection Engine"
     },

@@ -116,7 +116,6 @@ update_status ModuleInput::PreUpdate(float dt)
 				break;
 			case SDL_WINDOWEVENT_SIZE_CHANGED:
 				App->camera->ChangeWindowSize(event.window.data1, event.window.data2);
-				//App->camera->ChangeWindowSize(512,512);
 
 				break;
 			}

@@ -165,16 +165,36 @@ bool ModuleGUI::DrawMainMenuBar() {
 
 bool ModuleGUI::DrawPreferencesMenu() {
 	bool open = true;
-	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 3), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
-	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 3), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
+	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
+	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
 	ImGui::Begin("Preferences", &open);
-	if (ImGui::Checkbox("Fullscreen", &fullscreen)) {
-		App->window->SetFullscreen(fullscreen);
-	}
+	if (ImGui::Button("Show Display Options |V|")) {
+		if (showDisplayOptions) {
+			showDisplayOptions = false;
+		}
+		else {
+			showDisplayOptions = true;
+		}
+	};
 	ImGui::SameLine();
-	if (ImGui::Checkbox("Resizable", &resizable)) {
+	if (ImGui::Checkbox("Resizable Window", &resizable)) {
 		App->window->SetResizable(resizable);
 	}
+	if (showDisplayOptions) {
+		if (ImGui::MenuItem("Fullscreen")) {
+			App->window->SetDisplayMode(FULLSCREEN);
+			showDisplayOptions = false;
+		}
+		if (ImGui::MenuItem("Borderless")) {
+			App->window->SetDisplayMode(BORDERLESS);
+			showDisplayOptions = false;
+		}
+		if (ImGui::MenuItem("Fullscreen Windowed")) {
+			App->window->SetDisplayMode(FULLSCREENWINDOWED);
+			showDisplayOptions = false;
+		}
+	}
+	/*
 	ImGui::Separator();
 	ImGui::Text("Resolution");
 	ImVec2 resolutionButtonSize = ImVec2(100, 24);
@@ -187,6 +207,7 @@ bool ModuleGUI::DrawPreferencesMenu() {
 	if (ImGui::Button("1920 x 1080", resolutionButtonSize)) {};
 	ImGui::SameLine();
 	if (ImGui::Button("2560 x 1440", resolutionButtonSize)) {};
+	*/
 	ImGui::End();
 	return open;
 }

@@ -7,6 +7,12 @@
 struct SDL_Window;
 struct SDL_Surface;
 
+enum DisplayMode {
+	FULLSCREEN,
+	BORDERLESS,
+	FULLSCREENWINDOWED
+};
+
 class ModuleWindow : public Module
 {
 public:
@@ -18,8 +24,8 @@ public:
 	bool CleanUp();
 
 	void ChangeTitle(const char* title);
-	void SetFullscreen(bool fullscreen);
-	void SetResizable(bool resizable);
+	void SetResizable(bool value);
+	void SetDisplayMode(DisplayMode value);
 
 public:
 	//The window we'll be rendering to
@@ -33,7 +39,7 @@ public:
 	bool fullscreen = false;
 	bool borderless = false;
 	bool resizable = false;
-	bool fullscreen_window = false;
+	bool fullscreenWindowed = false;
 	int screen_size = 0;
 	const char *title;
 };
