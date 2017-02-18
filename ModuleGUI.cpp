@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include "Application.h"
 #include "ModuleWindow.h"
+#include "SDL\include\SDL_version.h"
 #include<list>
 
 //IMGUI Includes
@@ -26,7 +27,7 @@ ModuleGUI::~ModuleGUI()
 
 bool ModuleGUI::Init() {
 	ImGui_ImplSdlGL3_Init(App->window->window);
-	
+
 	return true;
 }
 
@@ -62,6 +63,7 @@ bool ModuleGUI::DrawMainMenuBar() {
 
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::MenuItem("Hardware Information")) { showHWInfo = true; }
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Edit"))
@@ -152,6 +154,10 @@ bool ModuleGUI::DrawMainMenuBar() {
 		ImGui::EndMainMenuBar();
 	}
 
+	if (showHWInfo) {
+		showHWInfo = DrawHWInfoMenu();
+	}
+
 	if (showPreferences) {
 		showPreferences = DrawPreferencesMenu();
 	}
@@ -161,6 +167,30 @@ bool ModuleGUI::DrawMainMenuBar() {
 	}
 
 	return ret;
+}
+
+bool ModuleGUI::DrawHWInfoMenu() {
+	bool open = true;
+	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 3), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
+	ImGui::SetNextWindowPos(ImVec2((float)(0), (float)(App->window->screen_height * App->window->screen_size / 2)), ImGuiSetCond_Once);
+	ImGui::Begin("Hardware Info", &open);
+	ImGui::Text("SDL Version:");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.0f, 1.0f), "%d.%d.%d", App->sdlVersion.major, App->sdlVersion.minor, App->sdlVersion.patch);
+	ImGui::Separator();
+	ImGui::Text("CPUs:");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.0f, 1.0f), "%d (Cache: %dkb)", App->CPUCount, App->CPUCache);
+	ImGui::Text("System RAM:");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.0f, 1.0f), "%.2fGb", App->systemRAM);
+	ImGui::Separator();
+	ImGui::Text("Current Platform:");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.0f, 1.0f), "%s", App->currentPlatform);
+	
+	ImGui::End();
+	return open;
 }
 
 bool ModuleGUI::DrawPreferencesMenu() {

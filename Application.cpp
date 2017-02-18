@@ -107,6 +107,11 @@ bool Application::Init()
 
 	window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
 
+	SDL_VERSION(&sdlVersion);
+	CPUCount = SDL_GetCPUCount();
+	CPUCache = SDL_GetCPUCacheLineSize();
+	systemRAM = (float)SDL_GetSystemRAM() * 8 / 1024;
+	currentPlatform = SDL_GetPlatform();
 	// Start the first scene --
 	return ret;
 }

@@ -4,6 +4,7 @@
 #include<list>
 #include "Globals.h"
 #include "Module.h"
+#include "SDL\include\SDL_version.h"
 
 class ModuleRender;
 class ModuleWindow;
@@ -55,6 +56,13 @@ public:
 	int frameCountGlobal = 0;
 	int frameCountPerSecond = 0;
 	float lastFrameMilliseconds = 0;
+
+	// HW info
+	SDL_version sdlVersion;
+	int CPUCount;
+	int CPUCache;
+	float systemRAM;
+	const char *currentPlatform;
 
 private:
 	float msByFrame = 0;

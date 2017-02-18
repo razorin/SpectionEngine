@@ -58,6 +58,7 @@ public:
 	bool CleanUp();
 	void AddLog(const char* fmt, ...);
 	bool DrawMainMenuBar();
+	bool DrawHWInfoMenu();
 	bool DrawPreferencesMenu();
 	void AddFpsLog(float fps, float ms);
 	
@@ -72,6 +73,7 @@ public:
 
 private:
 	bool resizable = false;
+	bool showHWInfo = false;
 	bool showPreferences = false;
 	bool showConsole = true;
 	int currentDisplayMode = 1;
