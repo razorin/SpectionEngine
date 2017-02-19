@@ -75,7 +75,6 @@ bool ModuleParticles::Start()
 bool ModuleParticles::CleanUp()
 {
 	DLOG("Unloading particles");
-	App->textures->Unload(graphics);
 
 	for (list<Particle*>::iterator it = active.begin(); it != active.end(); ++it)
 		RELEASE(*it);

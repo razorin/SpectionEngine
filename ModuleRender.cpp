@@ -81,9 +81,8 @@ bool ModuleRender::Init()
 		glFrontFace(GL_CCW);
 		glCullFace(GL_BACK);
 
-
 		positionLight = new float[4]{ 1.f, 1.f, 1.f, 1.f };
-		diffuseLight = new float[4]{ 1.f, 1.f, 1.f, 1.f };
+		diffuseLight = new float[4]{ 1.f, .8f, .8f, 1.f };
 
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
 		glLightfv(GL_LIGHT0, GL_POSITION, positionLight);

@@ -16,12 +16,10 @@ public:
 	bool Init();
 	bool CleanUp();
 
-	SDL_Texture* const Load(const char* path);
 	GLuint LoadTexture(const char* imageName, bool alpha);
-	void Unload(SDL_Texture* texture);
 
-private:
-	std::list<SDL_Texture*> textures;
+	uint LoadTexture(const char* imagePath);
+
 };
 
 #endif // __MODULETEXTURES_H__

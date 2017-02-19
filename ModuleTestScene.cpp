@@ -61,7 +61,12 @@ bool ModuleTestScene::CleanUp() {
 	{
 		RELEASE(*it);
 	}
-	RELEASE(model);
+
+	if (model != nullptr)
+	{
+		model->Clear();
+		RELEASE(model);
+	}
 
 	return true;
 }

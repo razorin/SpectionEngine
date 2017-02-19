@@ -1,6 +1,8 @@
 #ifndef _MODEL_H_
 #define _MODEL_H_
 
+#include <list>
+
 class aiScene;
 
 class Model
@@ -14,8 +16,10 @@ public:
 	void Clear();
 	void Draw();
 
-private:
-	const char *path;
+public:
+	//Reference to all textureVBO
+	uint* imageNames;
+
 };
 
 #endif /* _MODEL_H_ */
