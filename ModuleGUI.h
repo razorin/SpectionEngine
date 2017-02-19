@@ -67,9 +67,9 @@ public:
 	AppConsole console;
 
 	int numFps = 0;
-	std::list<float> fpsLog;
+	float *fpsLog = nullptr;
 	int numMs = 0;
-	std::list<float> msLog;
+	float *msLog = nullptr;
 
 private:
 	bool resizable = false;

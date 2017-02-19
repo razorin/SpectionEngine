@@ -28,6 +28,9 @@ ModuleGUI::~ModuleGUI()
 bool ModuleGUI::Init() {
 	ImGui_ImplSdlGL3_Init(App->window->window);
 
+	fpsLog = new float();
+	msLog = new float();
+
 	return true;
 }
 
@@ -50,6 +53,8 @@ update_status ModuleGUI::PostUpdate(float dt)
 
 bool ModuleGUI::CleanUp() {
 	ImGui_ImplSdlGL3_Shutdown();
+	//RELEASE(fpsLog);
+	//RELEASE(msLog);
 
 	return true;
 }
@@ -225,25 +230,32 @@ bool ModuleGUI::DrawPreferencesMenu() {
 }
 
 void ModuleGUI::AddFpsLog(float fps, float ms) {
-	ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
-	if (fpsLog.size() == 100) {
+	//ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
+	if (numFps == 99) {
 		//shift values to the left
-		
+		for (int j = 0; j <= numFps - 1; j++) {
+			fpsLog[j] = fpsLog[j + 1];
+			msLog[j] = msLog[j + 1];
+		}
 		//Add last values
-		fpsLog.push_back(fps);
-		msLog.push_back(ms);
+		fpsLog[numFps] = fps;
+		msLog[numMs] = ms;
 	}
 	else {
-		fpsLog.push_back(fps);
-		msLog.push_back(ms);
-		numFps++;
-		numMs++;
+		fpsLog[numFps] = fps;
+		DLOG("fpsLog[%d] = %f", numFps, fpsLog[numFps]);
+		msLog[numMs] = ms;
+		++numFps;
+		++numMs;
 	}
+	//ImGui::PlotHistogram(const char* label, const float* values, int values_count, int values_offset, const char* overlay_text, float scale_min, float scale_max, ImVec2 graph_size, int stride)
+	//ImGui::PlotHistogram("##framerate", &fpsLog, numFps, 0, "Framerate", 0.0f, 100.0f, ImVec2(310, 100),1);
+	//ImGui::End();
 	//Draw
 	/*char title[25];
 	sprintf_s(title, 25, "Framerate %.1f", fpsLog[numFps-1]);
 	ImGui::PlotHistogram("##framerate",&fpsLog[0],numFps,0,title,0.0f,100.0f, ImVec2(310, 100));
-	sprintf_s(title, 25, "Milliseconds %.1f", ms_log[numMs - 1]);
-	ImGui::PlotHistogram("##milliseconds", &ms_log[0], numMs, 0, title, 0.0f, 40.0f, ImVec2(310, 100));
+	sprintf_s(title, 25, "Milliseconds %.1f", msLog[numMs - 1]);
+	ImGui::PlotHistogram("##milliseconds", &msLog[0], numMs, 0, title, 0.0f, 40.0f, ImVec2(310, 100));
 	ImGui::End();*/
 }
