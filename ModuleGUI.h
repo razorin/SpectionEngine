@@ -60,16 +60,12 @@ public:
 	bool DrawMainMenuBar();
 	bool DrawHWInfoMenu();
 	bool DrawPreferencesMenu();
+	bool DrawAppInfo();
 	void AddFpsLog(float fps, float ms);
 	
 
 public:
 	AppConsole console;
-
-	int numFps = 0;
-	float *fpsLog = nullptr;
-	int numMs = 0;
-	float *msLog = nullptr;
 
 private:
 	bool resizable = false;
@@ -80,6 +76,11 @@ private:
 	int brightness = 1000;
 	int minBrightness = 0;
 	int maxBrightness = 1000;
+
+	int numFps = 0;
+	float fpsLog[100];
+	int numMs = 0;
+	float msLog[100];
 };
 
 #endif // __MODULEGUI_H__

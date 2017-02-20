@@ -131,7 +131,7 @@ update_status Application::Update()
 	}
 	else if (fpsTimer->EllapsedInMilliseconds() >= 1000) {
 		//DLOG("Current FPS: %d", frameCountPerSecond);
-		//gui->AddFpsLog(frameCountPerSecond, 5.0f);
+		gui->AddFpsLog(frameCountPerSecond, 5.0f);
 		frameCountPerSecond = 0;
 		fpsTimer->Restart();
 	}
