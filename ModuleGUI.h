@@ -56,7 +56,6 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
-	void AddLog(const char* fmt, ...);
 	bool DrawMainMenuBar();
 	bool DrawHWInfoMenu();
 	bool DrawPreferencesMenu();
@@ -67,6 +66,8 @@ public:
 
 public:
 	AppConsole console;
+
+	bool uiInput = false;
 
 private:
 	bool resizable = false;

@@ -42,11 +42,11 @@ bool ModuleCamera::Start()
 
 update_status ModuleCamera::Update(float dt)
 {
-
-	Move(dt);
-	Zoom(dt);
-	Rotate(dt);
-
+	if (!App->gui->uiInput) {
+		Move(dt);
+		Zoom(dt);
+		Rotate(dt);
+	}
 
 	// Print position and orientation
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {

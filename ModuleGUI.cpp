@@ -42,6 +42,8 @@ update_status ModuleGUI::PreUpdate(float dt)
 update_status ModuleGUI::Update(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
+	ImGuiIO& io = ImGui::GetIO();
+	uiInput = io.WantCaptureMouse;
 
 	if (!DrawMainMenuBar()) {
 		ret = UPDATE_STOP;
@@ -91,13 +93,13 @@ bool ModuleGUI::DrawMainMenuBar() {
 		}
 		if (ImGui::BeginMenu("Edit"))
 		{
-			if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
-			if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
-			ImGui::Separator();
-			if (ImGui::MenuItem("Cut", "CTRL+X")) {}
-			if (ImGui::MenuItem("Copy", "CTRL+C")) {}
-			if (ImGui::MenuItem("Paste", "CTRL+V")) {}
-			ImGui::Separator();
+			//if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
+			//if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
+			//ImGui::Separator();
+			//if (ImGui::MenuItem("Cut", "CTRL+X")) {}
+			//if (ImGui::MenuItem("Copy", "CTRL+C")) {}
+			//if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+			//ImGui::Separator();
 			if (ImGui::MenuItem("Preferences")) { showPreferences = true; }
 			ImGui::EndMenu();
 		}
