@@ -64,7 +64,7 @@ Application::Application()
 	//DLOG("Read performance timer after App constructor: %f microseconds", performanceTimer->Ellapsed());
 	//DLOG("Read performance timer after App constructor: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
 	
-	window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
+	//window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
 }
 
 Application::~Application()
@@ -92,7 +92,7 @@ bool Application::Init()
 	//DLOG("Read performance timer after Init: %f microseconds", performanceTimer->Ellapsed());
 	//DLOG("Read performance timer after Init: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
 
-	window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
+	//window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
 
 	performanceTimer->Restart();
 
@@ -105,14 +105,14 @@ bool Application::Init()
 	//DLOG("Read performance timer after Start: %f microseconds", performanceTimer->Ellapsed());
 	//DLOG("Read performance timer after Start: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
 
-	window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
+	//window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
 
+	// Gather hardware settings
 	SDL_VERSION(&sdlVersion);
 	CPUCount = SDL_GetCPUCount();
 	CPUCache = SDL_GetCPUCacheLineSize();
 	systemRAM = (float)SDL_GetSystemRAM() * 8 / 1024;
 	currentPlatform = SDL_GetPlatform();
-	// Start the first scene --
 	return ret;
 }
 
@@ -129,7 +129,7 @@ update_status Application::Update()
 	if (fpsTimer->state != TIMER_STATE::TIMER_STARTED) {
 		fpsTimer->Start();
 	}
-	else if (fpsTimer->EllapsedInMilliseconds() >= 100) {
+	else if (fpsTimer->EllapsedInMilliseconds() >= 1000) {
 		//DLOG("Current FPS: %d", frameCountPerSecond);
 		gui->AddFpsLog(frameCountPerSecond);
 		frameCountPerSecond = 0;

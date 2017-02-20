@@ -41,9 +41,28 @@ update_status ModuleGUI::PreUpdate(float dt)
 
 update_status ModuleGUI::Update(float dt)
 {
-	DrawMainMenuBar();
+	update_status ret = UPDATE_CONTINUE;
 
-	return UPDATE_CONTINUE;
+	if (!DrawMainMenuBar()) {
+		ret = UPDATE_STOP;
+	}
+
+	if (showHWInfo) {
+		showHWInfo = DrawHWInfoMenu();
+	}
+
+	if (showAppInfo) {
+		showAppInfo = DrawAppInfo();
+	}
+
+	if (showPreferences) {
+		showPreferences = DrawPreferencesMenu();
+	}
+
+	if (showConsole) {
+		showConsole = console.Draw();
+	}
+	return ret;
 }
 
 update_status ModuleGUI::PostUpdate(float dt)
@@ -53,23 +72,21 @@ update_status ModuleGUI::PostUpdate(float dt)
 
 bool ModuleGUI::CleanUp() {
 	ImGui_ImplSdlGL3_Shutdown();
-	//RELEASE(fpsLog);
-	//RELEASE(msLog);
 
 	return true;
 }
 
 bool ModuleGUI::DrawMainMenuBar() {
 	bool ret = false;
-
 	if (ImGui::BeginMainMenuBar())
 	{
 		ret = true;
-
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::MenuItem("Hardware Information")) { showHWInfo = true; }
 			if (ImGui::MenuItem("Application Information")) { showAppInfo = true; }
+			ImGui::Separator();
+			if (ImGui::MenuItem("Exit")) { ret = false; }
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Edit"))
@@ -159,23 +176,6 @@ bool ModuleGUI::DrawMainMenuBar() {
 		}
 		ImGui::EndMainMenuBar();
 	}
-
-	if (showHWInfo) {
-		showHWInfo = DrawHWInfoMenu();
-	}
-
-	if (showAppInfo) {
-		showAppInfo = DrawAppInfo();
-	}
-
-	if (showPreferences) {
-		showPreferences = DrawPreferencesMenu();
-	}
-
-	if (showConsole) {
-		showConsole = console.Draw();
-	}
-
 	return ret;
 }
 
@@ -235,56 +235,46 @@ bool ModuleGUI::DrawPreferencesMenu() {
 
 bool ModuleGUI::DrawAppInfo() {
 	bool open = true;
-	float menuWidth = (float)(App->window->screen_width * App->window->screen_size / 3);
-	float menuHeight = (float)(App->window->screen_height * App->window->screen_size / 3);
+	float menuWidth = (float)(App->window->screen_width * App->window->screen_size * 2 / 5);
+	float menuHeight = NULL;
 	ImGui::SetNextWindowSize(ImVec2(menuWidth, menuHeight), ImGuiSetCond_Once);
 	float menuPosX = (float)(App->window->screen_width * App->window->screen_size - menuWidth);
-	float menuPosY = (float)(App->window->screen_height * App->window->screen_size / 4);
+	float menuPosY = (float)(19);
 	ImGui::SetNextWindowPos(ImVec2(menuPosX, menuPosY), ImGuiSetCond_Once);
 	ImGui::Begin("Application Information", &open);
-	ImGui::Text("TEST TEXT");
+	ImGui::Text("Application Name: %s", App->window->title);
 	char title[25];
 	sprintf_s(title, 25, "Framerate %.1f", fpsLog[numFps-1]);
-	ImGui::PlotHistogram("##framerate",&fpsLog[0],numFps,0,title,0.0f,100.0f, ImVec2(310, 100));
+	ImGui::PlotHistogram("##framerate",&fpsLog[0],numFps,0,title,0.0f,100.0f, ImVec2(menuWidth - 30, 100));
 	sprintf_s(title, 25, "Milliseconds %.1f", msLog[numMs - 1]);
-	ImGui::PlotHistogram("##milliseconds", &msLog[0], numMs, 0, title, 0.0f, 40.0f, ImVec2(310, 100));
+	ImGui::PlotHistogram("##milliseconds", &msLog[0], numMs, 0, title, 0.0f, 40.0f, ImVec2(menuWidth - 30, 100));
 	ImGui::End();
 	return open;
 }
 
 void ModuleGUI::AddFpsLog(float fps) {
 	if (numFps == 100) {
-		//shift values to the left
-		/*DLOG("Antes del shift");
-		for (int j = 0; j < numFps; j++) {
-		DLOG("fpsLog[%d] = %f", j, fpsLog[j]);
-		}*/
+		// Shift values to the left
 		for (int j = 0; j < numFps - 1; j++) {
 			fpsLog[j] = fpsLog[j + 1];
 		}
-		//Add last values
+		// Add last values
 		fpsLog[numFps - 1] = fps;
-		/*DLOG("Despues del shift");
-		for (int j = 0; j < numFps; j++) {
-		DLOG("fpsLog[%d] = %f", j, fpsLog[j]);
-		}*/
 	}
 	else {
 		fpsLog[numFps] = fps;
-		console.AddLog("fpsLog[%d] = %f", numFps, fpsLog[numFps]);
 		++numFps;
 	}
 
 }
 
 void ModuleGUI::AddMsLog(float ms) {
-	//DLOG("Los Ms este frame son: %f",ms);
 	if (numMs == 100) {
-		//shift values to the left
+		// Shift values to the left
 		for (int j = 0; j < numMs - 1; j++) {
 			msLog[j] = msLog[j + 1];
 		}
-		//Add last value
+		// Add last value
 		msLog[numMs - 1] = ms;
 	}
 	else {
