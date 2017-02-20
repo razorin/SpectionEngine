@@ -70,6 +70,7 @@ public:
 private:
 	bool resizable = false;
 	bool showHWInfo = false;
+	bool showAppInfo = false;
 	bool showPreferences = false;
 	bool showConsole = true;
 	int currentDisplayMode = 1;

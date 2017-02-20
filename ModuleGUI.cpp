@@ -69,6 +69,7 @@ bool ModuleGUI::DrawMainMenuBar() {
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::MenuItem("Hardware Information")) { showHWInfo = true; }
+			if (ImGui::MenuItem("Application Information")) { showAppInfo = true; }
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Edit"))
@@ -163,6 +164,10 @@ bool ModuleGUI::DrawMainMenuBar() {
 		showHWInfo = DrawHWInfoMenu();
 	}
 
+	if (showAppInfo) {
+		showAppInfo = DrawAppInfo();
+	}
+
 	if (showPreferences) {
 		showPreferences = DrawPreferencesMenu();
 	}
@@ -193,7 +198,6 @@ bool ModuleGUI::DrawHWInfoMenu() {
 	ImGui::Text("Current Platform:");
 	ImGui::SameLine();
 	ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.0f, 1.0f), "%s", App->currentPlatform);
-	
 	ImGui::End();
 	return open;
 }
@@ -230,20 +234,22 @@ bool ModuleGUI::DrawPreferencesMenu() {
 }
 
 bool ModuleGUI::DrawAppInfo() {
-	//ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_Once);
-	//ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
-	//ImGui::Begin("Application Info");
-	//ImGui::PlotHistogram(const char* label, const float* values, int values_count, int values_offset, const char* overlay_text, float scale_min, float scale_max, ImVec2 graph_size, int stride)
-	//ImGui::PlotHistogram("##framerate", &fpsLog, numFps, 0, "Framerate", 0.0f, 100.0f, ImVec2(310, 100),1);
-	//ImGui::End();
-	//Draw
-	/*char title[25];
-	sprintf_s(title, 25, "Framerate %.1f", fpsLog[numFps-1]);
+	bool open = true;
+	float menuWidth = (float)(App->window->screen_width * App->window->screen_size / 3);
+	float menuHeight = (float)(App->window->screen_height * App->window->screen_size / 3);
+	ImGui::SetNextWindowSize(ImVec2(menuWidth, menuHeight), ImGuiSetCond_Once);
+	float menuPosX = (float)(App->window->screen_width * App->window->screen_size - menuWidth);
+	float menuPosY = (float)(App->window->screen_height * App->window->screen_size / 4);
+	ImGui::SetNextWindowPos(ImVec2(menuPosX, menuPosY), ImGuiSetCond_Once);
+	ImGui::Begin("Application Information", &open);
+	ImGui::Text("TEST TEXT");
+	char title[25];
+	//sprintf_s(title, 25, "Framerate %.1f", fpsLog[numFps-1]);
 	ImGui::PlotHistogram("##framerate",&fpsLog[0],numFps,0,title,0.0f,100.0f, ImVec2(310, 100));
-	sprintf_s(title, 25, "Milliseconds %.1f", msLog[numMs - 1]);
+	//sprintf_s(title, 25, "Milliseconds %.1f", msLog[numMs - 1]);
 	ImGui::PlotHistogram("##milliseconds", &msLog[0], numMs, 0, title, 0.0f, 40.0f, ImVec2(310, 100));
-	ImGui::End();*/
-	return true;
+	ImGui::End();
+	return open;
 }
 
 void ModuleGUI::AddFpsLog(float fps, float ms) {
