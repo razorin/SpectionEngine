@@ -61,7 +61,8 @@ public:
 	bool DrawHWInfoMenu();
 	bool DrawPreferencesMenu();
 	bool DrawAppInfo();
-	void AddFpsLog(float fps, float ms);
+	void AddFpsLog(float fps);
+	void AddMsLog(float ms);
 	
 
 public:

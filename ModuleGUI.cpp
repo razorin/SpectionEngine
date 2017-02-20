@@ -244,30 +244,51 @@ bool ModuleGUI::DrawAppInfo() {
 	ImGui::Begin("Application Information", &open);
 	ImGui::Text("TEST TEXT");
 	char title[25];
-	//sprintf_s(title, 25, "Framerate %.1f", fpsLog[numFps-1]);
+	sprintf_s(title, 25, "Framerate %.1f", fpsLog[numFps-1]);
 	ImGui::PlotHistogram("##framerate",&fpsLog[0],numFps,0,title,0.0f,100.0f, ImVec2(310, 100));
-	//sprintf_s(title, 25, "Milliseconds %.1f", msLog[numMs - 1]);
+	sprintf_s(title, 25, "Milliseconds %.1f", msLog[numMs - 1]);
 	ImGui::PlotHistogram("##milliseconds", &msLog[0], numMs, 0, title, 0.0f, 40.0f, ImVec2(310, 100));
 	ImGui::End();
 	return open;
 }
 
-void ModuleGUI::AddFpsLog(float fps, float ms) {
-	if (numFps == 99) {
+void ModuleGUI::AddFpsLog(float fps) {
+	if (numFps == 100) {
 		//shift values to the left
-		for (int j = 0; j <= numFps - 1; j++) {
+		/*DLOG("Antes del shift");
+		for (int j = 0; j < numFps; j++) {
+		DLOG("fpsLog[%d] = %f", j, fpsLog[j]);
+		}*/
+		for (int j = 0; j < numFps - 1; j++) {
 			fpsLog[j] = fpsLog[j + 1];
-			msLog[j] = msLog[j + 1];
 		}
 		//Add last values
-		fpsLog[numFps] = fps;
-		msLog[numMs] = ms;
+		fpsLog[numFps - 1] = fps;
+		/*DLOG("Despues del shift");
+		for (int j = 0; j < numFps; j++) {
+		DLOG("fpsLog[%d] = %f", j, fpsLog[j]);
+		}*/
 	}
 	else {
 		fpsLog[numFps] = fps;
 		console.AddLog("fpsLog[%d] = %f", numFps, fpsLog[numFps]);
-		msLog[numMs] = ms;
 		++numFps;
+	}
+
+}
+
+void ModuleGUI::AddMsLog(float ms) {
+	//DLOG("Los Ms este frame son: %f",ms);
+	if (numMs == 100) {
+		//shift values to the left
+		for (int j = 0; j < numMs - 1; j++) {
+			msLog[j] = msLog[j + 1];
+		}
+		//Add last value
+		msLog[numMs - 1] = ms;
+	}
+	else {
+		msLog[numMs] = ms;
 		++numMs;
 	}
 }

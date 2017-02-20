@@ -129,9 +129,9 @@ update_status Application::Update()
 	if (fpsTimer->state != TIMER_STATE::TIMER_STARTED) {
 		fpsTimer->Start();
 	}
-	else if (fpsTimer->EllapsedInMilliseconds() >= 1000) {
+	else if (fpsTimer->EllapsedInMilliseconds() >= 100) {
 		//DLOG("Current FPS: %d", frameCountPerSecond);
-		gui->AddFpsLog(frameCountPerSecond, 5.0f);
+		gui->AddFpsLog(frameCountPerSecond);
 		frameCountPerSecond = 0;
 		fpsTimer->Restart();
 	}
@@ -145,6 +145,7 @@ update_status Application::Update()
 	//DLOG("DT: %f milliseconds", dt);
 
 	if (ellapsedTime < this->msByFrame) {
+		gui->AddMsLog(msByFrame);
 		float beforeDelay = updateTimer->EllapsedInMilliseconds();
 		SDL_Delay(msByFrame - ellapsedTime);
 		float afterDelay = updateTimer->EllapsedInMilliseconds();
