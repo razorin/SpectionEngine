@@ -45,4 +45,4 @@ Debug/vc140.idb
 *.suo
 SDL Game.opensdf
 
-*.ini
+Game/*.ini
