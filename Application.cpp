@@ -5,6 +5,7 @@
 #include "ModuleTextures.h"
 #include "ModuleInput.h"
 #include "ModuleAudio.h"
+#include "ModuleGUI.h"
 #include "ModuleFadeToBlack.h"
 #include "ModuleCollision.h"
 #include "ModuleParticles.h"
@@ -34,6 +35,7 @@ Application::Application()
 	modules.push_back(camera = new ModuleCamera(json_object_dotget_object(root, "config.camera")));
 	modules.push_back(window = new ModuleWindow(json_object_dotget_object(root, "config.window")));
 
+	modules.push_back(gui = new ModuleGUI());
 	modules.push_back(renderer = new ModuleRender(json_object_dotget_object(root, "config.renderer")));
 	modules.push_back(textures = new ModuleTextures());
 	modules.push_back(audio = new ModuleAudio());
@@ -46,6 +48,7 @@ Application::Application()
 	//Game Modules
 	modules.push_back(testScene = new ModuleTestScene(true));
 
+	// UI
 
 	float2 mathGeoLib_test{ 1,2 };
 
@@ -61,7 +64,7 @@ Application::Application()
 	//DLOG("Read performance timer after App constructor: %f microseconds", performanceTimer->Ellapsed());
 	//DLOG("Read performance timer after App constructor: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
 	
-	window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
+	//window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
 }
 
 Application::~Application()
@@ -89,7 +92,7 @@ bool Application::Init()
 	//DLOG("Read performance timer after Init: %f microseconds", performanceTimer->Ellapsed());
 	//DLOG("Read performance timer after Init: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
 
-	window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
+	//window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
 
 	performanceTimer->Restart();
 
@@ -102,9 +105,14 @@ bool Application::Init()
 	//DLOG("Read performance timer after Start: %f microseconds", performanceTimer->Ellapsed());
 	//DLOG("Read performance timer after Start: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
 
-	window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
+	//window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
 
-	// Start the first scene --
+	// Gather hardware settings
+	SDL_VERSION(&sdlVersion);
+	CPUCount = SDL_GetCPUCount();
+	CPUCache = SDL_GetCPUCacheLineSize();
+	systemRAM = (float)SDL_GetSystemRAM() * 8 / 1024;
+	currentPlatform = SDL_GetPlatform();
 	return ret;
 }
 
@@ -123,6 +131,7 @@ update_status Application::Update()
 	}
 	else if (fpsTimer->EllapsedInMilliseconds() >= 1000) {
 		//DLOG("Current FPS: %d", frameCountPerSecond);
+		gui->AddFpsLog(frameCountPerSecond);
 		frameCountPerSecond = 0;
 		fpsTimer->Restart();
 	}
@@ -136,6 +145,7 @@ update_status Application::Update()
 	//DLOG("DT: %f milliseconds", dt);
 
 	if (ellapsedTime < this->msByFrame) {
+		gui->AddMsLog(msByFrame);
 		float beforeDelay = updateTimer->EllapsedInMilliseconds();
 		SDL_Delay(msByFrame - ellapsedTime);
 		float afterDelay = updateTimer->EllapsedInMilliseconds();

@@ -1,7 +1,7 @@
 {
 	"config": {
 		"app": {
-      "title": "Final Fight",
+      "title": "Spection Engine",
       "fps_cap": 60
 		},
 		"renderer": {
@@ -14,10 +14,10 @@
       },
       "fullscreen": false,
       "borderless": false,
-      "resizable": false,
-      "fullscren_window": false,
+      "resizable": true,
+      "fullscreenWindowed": false,
       "size": 2,
-      "title": "Final Fight"
+      "title": "Spection Engine"
     },
     "camera": {
 	}

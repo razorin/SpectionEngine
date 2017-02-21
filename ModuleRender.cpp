@@ -1,5 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleGUI.h"
 #include "ModuleRender.h"
 #include "ModuleCamera.h"
 #include "ModuleInput.h"
@@ -15,6 +16,8 @@
 #include "SDL/include/SDL.h"
 #include <math.h>
 #include "MathGeoLib/include/MathGeoLib.h"
+#include "IMGUI\imgui.h"
+#include "IMGUI\imgui_impl_sdl_gl3.h"
 
 
 ModuleRender::ModuleRender(const JSON_Object *json) : Module(json)
@@ -30,6 +33,7 @@ ModuleRender::~ModuleRender()
 // Called before render is available
 bool ModuleRender::Init()
 {
+	App->gui->console.AddLog("Creating Renderer context");
 	DLOG("Creating Renderer context");
 	bool ret = true;
 
@@ -45,6 +49,7 @@ bool ModuleRender::Init()
 	context = SDL_GL_CreateContext(App->window->window);
 	if (context == NULL)
 	{
+		App->gui->console.AddLog("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
 		DLOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
@@ -54,12 +59,14 @@ bool ModuleRender::Init()
 	//Checking errors
 	if (err != GLEW_OK)
 	{
+		App->gui->console.AddLog("Error on glewInit: %s", glewGetErrorString(err));
 		DLOG("Error on glewInit: %s", glewGetErrorString(err));
 		ret = false;
 	}
 	else
 	{
 		// Should be 2.0
+		App->gui->console.AddLog("Using Glew %s", glewGetString(GLEW_VERSION));
 		DLOG("Using Glew %s", glewGetString(GLEW_VERSION));
 	}
 
@@ -123,6 +130,8 @@ update_status ModuleRender::PostUpdate(float dt)
 {
 	//SDL_RenderPresent(renderer);
 
+	ImGui::Render();
+
 	//Swap Buffer (OpenGL)
 	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
@@ -131,6 +140,7 @@ update_status ModuleRender::PostUpdate(float dt)
 // Called before quitting
 bool ModuleRender::CleanUp()
 {
+	App->gui->console.AddLog("Destroying renderer");
 	DLOG("Destroying renderer");
 
 	SDL_GL_DeleteContext(context);
@@ -303,6 +313,7 @@ bool ModuleRender::Blit(SDL_Texture* texture, iPoint &position, Frame* frame, bo
 	if (!flip) {
 		if (SDL_RenderCopy(renderer, texture, &frame->section, &rect) != 0)
 		{
+			App->gui->console.AddLog("Destroying renderer");
 			DLOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 			ret = false;
 		}

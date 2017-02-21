@@ -1,5 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleGUI.h"
 #include "ModuleCollision.h"
 #include "ModuleInput.h"
 #include "ModuleRender.h"
@@ -70,6 +71,7 @@ void ModuleCollision::DebugDraw()
 // Called before quitting
 bool ModuleCollision::CleanUp()
 {
+	App->gui->console.AddLog("Freeing all colliders");
 	DLOG("Freeing all colliders");
 
 	for (list<Collider*>::iterator it = colliders.begin(); it != colliders.end(); ++it)

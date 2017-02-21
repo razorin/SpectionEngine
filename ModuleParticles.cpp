@@ -1,6 +1,7 @@
 #include <math.h>
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleGUI.h"
 #include "ModuleParticles.h"
 #include "ModuleRender.h"
 #include "ModuleTextures.h"
@@ -18,6 +19,7 @@ ModuleParticles::~ModuleParticles()
 // Load assets
 bool ModuleParticles::Start()
 {
+	App->gui->console.AddLog("Loading particles");
 	DLOG("Loading particles");
 	
 	/*graphics = App->textures->Load("rtype/particles.png");
@@ -74,6 +76,7 @@ bool ModuleParticles::Start()
 // Unload assets
 bool ModuleParticles::CleanUp()
 {
+	App->gui->console.AddLog("Unloading particles");
 	DLOG("Unloading particles");
 
 	for (list<Particle*>::iterator it = active.begin(); it != active.end(); ++it)

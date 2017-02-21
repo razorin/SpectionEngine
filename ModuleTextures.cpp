@@ -2,6 +2,7 @@
 #include <fstream>
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleGUI.h"
 #include "ModuleTextures.h"
 #include "ModuleRender.h"
 #include "SDL/include/SDL.h"
@@ -30,11 +31,23 @@ ModuleTextures::~ModuleTextures()
 // Called before render is available
 bool ModuleTextures::Init()
 {
+	App->gui->console.AddLog("Init Image library");
 	DLOG("Init Image library");
 	bool ret = true;
 
 	ilInit();
 	ilutRenderer(ILUT_OPENGL);
+
+	// load support for the PNG image format
+	int flags = IMG_INIT_PNG;
+	int init = IMG_Init(flags);
+
+	if((init & flags) != flags)
+	{
+		App->gui->console.AddLog("Could not initialize Image lib. IMG_Init: %s", IMG_GetError());
+		DLOG("Could not initialize Image lib. IMG_Init: %s", IMG_GetError());
+		ret = false;
+	}
 
 	return ret;
 }

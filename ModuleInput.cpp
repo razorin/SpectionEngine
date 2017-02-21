@@ -1,9 +1,12 @@
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleGUI.h"
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
 #include "ModuleCamera.h"
 #include "SDL/include/SDL.h"
+#include "IMGUI\imgui.h"
+#include "IMGUI\imgui_impl_sdl_gl3.h"
 
 #define MAX_KEYS 300
 
@@ -23,12 +26,14 @@ ModuleInput::~ModuleInput()
 // Called before render is available
 bool ModuleInput::Init()
 {
+	App->gui->console.AddLog("Init SDL input event system");
 	DLOG("Init SDL input event system");
 	bool ret = true;
 	SDL_Init(0);
 
 	if(SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
+		App->gui->console.AddLog("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		DLOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
@@ -45,6 +50,8 @@ bool ModuleInput::Start()
 // Called each loop iteration
 update_status ModuleInput::PreUpdate(float dt)
 {
+	ImGui_ImplSdlGL3_NewFrame(App->window->window);
+
 	static SDL_Event event;
 
 	mouse_motion = {0, 0};
@@ -109,7 +116,6 @@ update_status ModuleInput::PreUpdate(float dt)
 				break;
 			case SDL_WINDOWEVENT_SIZE_CHANGED:
 				App->camera->ChangeWindowSize(event.window.data1, event.window.data2);
-				//App->camera->ChangeWindowSize(512,512);
 
 				break;
 			}
@@ -135,6 +141,7 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 		}
 	}
+	ImGui_ImplSdlGL3_ProcessEvent(&event);
 
 	if(GetWindowEvent(EventWindow::WE_QUIT) == true || GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		return UPDATE_STOP;
@@ -145,6 +152,7 @@ update_status ModuleInput::PreUpdate(float dt)
 // Called before quitting
 bool ModuleInput::CleanUp()
 {
+	App->gui->console.AddLog("Quitting SDL event subsystem");
 	DLOG("Quitting SDL event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;

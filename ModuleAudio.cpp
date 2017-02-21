@@ -1,5 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleGUI.h"
 #include "ModuleAudio.h"
 #include "SDL/include/SDL.h"
 
@@ -18,12 +19,14 @@ ModuleAudio::~ModuleAudio()
 // Called before render is available
 bool ModuleAudio::Init()
 {
+	App->gui->console.AddLog("Loading Audio Mixer");
 	DLOG("Loading Audio Mixer");
 	bool ret = true;
 	SDL_Init(0);
 
 	if(SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 	{
+		App->gui->console.AddLog("SDL_INIT_AUDIO could not initialize! SDL_Error: %s\n", SDL_GetError());
 		DLOG("SDL_INIT_AUDIO could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
@@ -34,6 +37,7 @@ bool ModuleAudio::Init()
 
 	if((init & flags) != flags)
 	{
+		App->gui->console.AddLog("Could not initialize Mixer lib. Mix_Init: %s", Mix_GetError());
 		DLOG("Could not initialize Mixer lib. Mix_Init: %s", Mix_GetError());
 		ret = false;
 	}
@@ -41,6 +45,7 @@ bool ModuleAudio::Init()
 	//Initialize SDL_mixer
 	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
+		App->gui->console.AddLog("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
 		DLOG("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
 		ret = false;
 	}
@@ -51,6 +56,7 @@ bool ModuleAudio::Init()
 // Called before quitting
 bool ModuleAudio::CleanUp()
 {
+	App->gui->console.AddLog("Freeing sound FX, closing Mixer and Audio subsystem");
 	DLOG("Freeing sound FX, closing Mixer and Audio subsystem");
 
 	if(music != nullptr)
@@ -92,6 +98,7 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time)
 
 	if(music == nullptr)
 	{
+		App->gui->console.AddLog("Cannot load music %s. Mix_GetError(): %s\n", path, Mix_GetError());
 		DLOG("Cannot load music %s. Mix_GetError(): %s\n", path, Mix_GetError());
 		ret = false;
 	}
@@ -101,6 +108,7 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time)
 		{
 			if(Mix_FadeInMusic(music, -1, (int) (fade_time * 1000.0f)) < 0)
 			{
+				App->gui->console.AddLog("Cannot fade in music %s. Mix_GetError(): %s", path, Mix_GetError());
 				DLOG("Cannot fade in music %s. Mix_GetError(): %s", path, Mix_GetError());
 				ret = false;
 			}
@@ -109,12 +117,14 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time)
 		{
 			if(Mix_PlayMusic(music, -1) < 0)
 			{
+				App->gui->console.AddLog("Cannot play in music %s. Mix_GetError(): %s", path, Mix_GetError());
 				DLOG("Cannot play in music %s. Mix_GetError(): %s", path, Mix_GetError());
 				ret = false;
 			}
 		}
 	}
 
+	App->gui->console.AddLog("Successfully playing %s", path);
 	DLOG("Successfully playing %s", path);
 	return ret;
 }
@@ -127,6 +137,7 @@ unsigned int ModuleAudio::LoadFx(const char* path)
 
 	if(chunk == nullptr)
 	{
+		App->gui->console.AddLog("Cannot load wav %s. Mix_GetError(): %s", path, Mix_GetError());
 		DLOG("Cannot load wav %s. Mix_GetError(): %s", path, Mix_GetError());
 	}
 	else

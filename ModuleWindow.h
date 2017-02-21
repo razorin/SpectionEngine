@@ -7,22 +7,27 @@
 struct SDL_Window;
 struct SDL_Surface;
 
+// DO NOT CHANGE THE ORDER
+enum DisplayMode {
+	FULLSCREEN,
+	BORDERLESS,
+	FULLSCREENWINDOWED
+};
+
 class ModuleWindow : public Module
 {
 public:
 
 	ModuleWindow(const JSON_Object *json = nullptr);
-
-	// Destructor
 	virtual ~ModuleWindow();
 
-	// Called before quitting
 	bool Init();
-
-	// Called before quitting
 	bool CleanUp();
 
 	void ChangeTitle(const char* title);
+	void SetResizable(bool value);
+	void SetDisplayMode(DisplayMode value);
+	void SetBrightness(int value);
 
 public:
 	//The window we'll be rendering to
@@ -36,12 +41,9 @@ public:
 	bool fullscreen = false;
 	bool borderless = false;
 	bool resizable = false;
-	bool fullscreen_window = false;
+	bool fullscreenWindowed = false;
 	int screen_size = 0;
 	const char *title;
-
-	
-
 };
 
 #endif // __MODULEWINDOW_H__
