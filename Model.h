@@ -4,6 +4,7 @@
 #include <list>
 
 class aiScene;
+class Mesh;
 
 class Model
 {
@@ -19,6 +20,8 @@ public:
 public:
 	//Reference to all textureVBO
 	uint* imageNames;
+	Mesh* meshes;
+	int numMeshes;
 
 };
 

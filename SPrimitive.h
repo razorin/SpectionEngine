@@ -35,6 +35,7 @@ public:
 	float* normals = nullptr;
 	float *textureCoords = nullptr;
 	bool toDelete = false;
+	
 
 	uint ImageName;
 

@@ -1,9 +1,13 @@
 #include "Application.h"
 #include "Model.h"
 #include "ModuleTextures.h"
+#include "Mesh.h"
+#include "Globals.h"
+#include "assimp\vector3.h"
 #include "assimp/cimport.h"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
+#include "assimp\anim.h"
 #include "Glew\include\GL\glew.h"
 
 using namespace std;
@@ -32,6 +36,7 @@ void Model::Load(const char* path, const char* file)
 	else 
 	{
 		imageNames = new uint[scene->mNumMaterials];
+		//LOAD EN EL SCENE
 		for (int i = 0; i < scene->mNumMaterials; i++)
 		{
 			const aiMaterial* material = scene->mMaterials[i];
@@ -47,6 +52,38 @@ void Model::Load(const char* path, const char* file)
 				imageNames[i] = App->textures->LoadTexture(texturePath.c_str(), true);
 			}
 		}
+
+		//LOADING ONTO THE MESH LIST
+		meshes = new Mesh[scene->mNumMeshes];
+		numMeshes = scene->mNumMeshes;
+		for (int i = 0; i < scene->mNumMeshes; ++i)
+		{
+			aiMesh* mesh = scene->mMeshes[i];
+			
+			meshes[i].vertex = mesh->mVertices;
+			meshes[i].normals = mesh->mNormals;
+			meshes[i].uvs = mesh->mNormals;
+			meshes[i].numFaces = mesh->mNumFaces;
+			meshes[i].materialIndex = mesh->mMaterialIndex;
+			//uint materialIndex = mesh->mMaterialIndex;
+
+			meshes[i].faces = new Face[meshes[i].numFaces];
+			for (int j = 0; j < meshes[i].numFaces; j++)
+			{
+				aiFace face = mesh->mFaces[j];
+				//meshes[i].faces[j].numIndex = 3;
+				//meshes[i].faces[j].index = uint(3);
+				for (int k = 0; k < 3; k++)
+				{
+					//aiVector3D vertex = mesh->mVertices[face.mIndices[k]];
+					meshes[i].faces[j].index[k] = face.mIndices[k];
+					//aiVector3D uv = mesh->mTextureCoords[0][face.mIndices[k]];
+					//aiVector3D normal = mesh->HasNormals() ? mesh->mNormals[face.mIndices[k]] : aiVector3D(1.0f, 1.0f, 1.0f);
+				}
+
+			}
+		}
+		//uint materialIndex = 5;
 	}
 }
 
@@ -78,12 +115,14 @@ void Model::Draw() {
 		int numFaces = mesh->mNumFaces;
 		uint materialIndex = mesh->mMaterialIndex;
 
+
 		glBindTexture(GL_TEXTURE_2D, imageNames[materialIndex]);
 		glBegin(GL_TRIANGLES);
 
 		for (int j = 0; j < numFaces; j++)
 		{
 			aiFace face = mesh->mFaces[j];
+			
 			for (int k = 0; k < 3; k++)
 			{
 				aiVector3D vertex = mesh->mVertices[face.mIndices[k]];
