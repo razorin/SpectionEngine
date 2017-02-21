@@ -49,41 +49,51 @@ void Model::Load(const char* path, const char* file)
 				string textureFile = path.data;
 				string texturePath = folderPath + textureFile;
 				
-				imageNames[i] = App->textures->LoadTexture(texturePath.c_str(), true);
+				imageNames[i] = App->textures->LoadTexture(texturePath.c_str());
 			}
 		}
 
-		//LOADING ONTO THE MESH LIST
+		////LOADING ONTO THE MESH LIST
 		meshes = new Mesh[scene->mNumMeshes];
-		numMeshes = scene->mNumMeshes;
-		for (int i = 0; i < scene->mNumMeshes; ++i)
-		{
-			aiMesh* mesh = scene->mMeshes[i];
-			
-			meshes[i].vertex = mesh->mVertices;
-			meshes[i].normals = mesh->mNormals;
-			meshes[i].uvs = mesh->mNormals;
-			meshes[i].numFaces = mesh->mNumFaces;
-			meshes[i].materialIndex = mesh->mMaterialIndex;
-			//uint materialIndex = mesh->mMaterialIndex;
+		//numMeshes = scene->mnummeshes;
+		//for (int i = 0; i < scene->mnummeshes; ++i)
+		//{
+		//	aimesh* mesh = scene->mmeshes[i];
+		//	
+		//	meshes[i].numvertex = mesh->mnumvertices;
+		//	/*for (int j = 0; j < meshes[i].numvertex; j++) {
 
-			meshes[i].faces = new Face[meshes[i].numFaces];
-			for (int j = 0; j < meshes[i].numFaces; j++)
-			{
-				aiFace face = mesh->mFaces[j];
-				//meshes[i].faces[j].numIndex = 3;
-				//meshes[i].faces[j].index = uint(3);
-				for (int k = 0; k < 3; k++)
-				{
-					//aiVector3D vertex = mesh->mVertices[face.mIndices[k]];
-					meshes[i].faces[j].index[k] = face.mIndices[k];
-					//aiVector3D uv = mesh->mTextureCoords[0][face.mIndices[k]];
-					//aiVector3D normal = mesh->HasNormals() ? mesh->mNormals[face.mIndices[k]] : aiVector3D(1.0f, 1.0f, 1.0f);
-				}
+		//	}*/
+		//	meshes[i].vertices = mesh->mvertices;
+		//	meshes[i].normals = mesh->mnormals;
+		//	//meshes[i].uvs = mesh->mtexturecoords;
+		//	meshes[i].numfaces = mesh->mnumfaces;
+		//	meshes[i].materialindex = mesh->mmaterialindex;
+		//	//uint materialindex = mesh->mmaterialindex;
+		//	int l = 0;
 
-			}
-		}
-		//uint materialIndex = 5;
+		//	meshes[i].faces = new face[meshes[i].numfaces];
+		//	for (int j = 0; j < meshes[i].numfaces; j++)
+		//	{
+		//		aiface face = mesh->mfaces[j];
+		//		//meshes[i].faces[j].numindex = 3;
+		//		meshes[i].faces[j].index = new unsigned int[mesh->mfaces[j].mnumindices];
+
+		//		for (int k = 0; k < 3; k++)
+		//		{
+		//			//aivector3d vertex = mesh->mvertices[face.mindices[k]];
+		//			meshes[i].faces[j].index[k] = face.mindices[k];
+		//			meshes[i].index[l] = face.mindices[k];
+		//			l++;
+		//			meshes[i].numindex++;
+		//			//aivector3d uv = mesh->mtexturecoords[0][face.mindices[k]];
+		//			//aivector3d normal = mesh->hasnormals() ? mesh->mnormals[face.mindices[k]] : aivector3d(1.0f, 1.0f, 1.0f);
+		//		}
+
+		//	}
+		//}
+		//uint materialindex = 5;
+		//dlog("%f -> %f -> %f",meshes[1].vertex[1].x, meshes[1].vertex[1].y, meshes[1].vertex[1].z);
 	}
 }
 
