@@ -54,6 +54,7 @@ private:
 
 	math::vec pos = { 0,0,0 };
 
+	bool mouseBlocked = false;
 };
 
 #endif // !MODULE_CAMERA_H

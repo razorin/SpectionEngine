@@ -42,11 +42,11 @@ bool ModuleCamera::Start()
 
 update_status ModuleCamera::Update(float dt)
 {
-	if (!App->gui->uiInput) {
-		Move(dt);
-		Zoom(dt);
-		Rotate(dt);
-	}
+	mouseBlocked = App->gui->uiInput;
+
+	Move(dt);
+	Zoom(dt);
+	Rotate(dt);
 
 	// Print position and orientation
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
@@ -141,8 +141,9 @@ void ModuleCamera::Zoom(float dt)
 	float zoomSpeed = 10.0f;
 	int mouseWheel = App->input->GetMouseWheel();
 	
-	if (mouseWheel != 0) 
-		movement += frustum.Front() * mouseWheel * zoomSpeed * dt/1000;
+	if (mouseWheel != 0 && mouseBlocked == false) {
+		movement += frustum.Front() * mouseWheel * zoomSpeed * dt / 1000;
+	}
 
 	if (movement.Equals(float3::zero) == false)
 	{
@@ -166,7 +167,7 @@ void ModuleCamera::Rotate(float dt)
 	float angleChange = rotationSpeed * (dt / 1000);
 
 	fPoint mouseMotion = App->input->GetMouseMotion();
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && mouseBlocked == false)
 	{
 		angleX += (mouseMotion.y / 4) * angleChange;
 		angleY += (mouseMotion.x / 4) * angleChange;
