@@ -23,12 +23,12 @@ public:
 	uint numIndices = 0;
 
 	uint *indices = nullptr;
+	uint ImageName;
 	float *vertices = nullptr;
 	float *colors = nullptr;
 	float* normals = nullptr;
 	float *textureCoords = nullptr;
 
-	uint ImageName;
 };
 
 #endif /* _MESH_H_ */
