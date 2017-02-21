@@ -27,10 +27,6 @@ ModuleGUI::~ModuleGUI()
 
 bool ModuleGUI::Init() {
 	ImGui_ImplSdlGL3_Init(App->window->window);
-
-	//fpsLog = new float();
-	//msLog = new float();
-
 	return true;
 }
 
@@ -59,6 +55,10 @@ update_status ModuleGUI::Update(float dt)
 
 	if (showPreferences) {
 		showPreferences = DrawPreferencesMenu();
+	}
+
+	if (showLights) {
+		showLights = DrawLightsMenu();
 	}
 
 	if (showConsole) {
@@ -109,6 +109,7 @@ bool ModuleGUI::DrawMainMenuBar() {
 		}
 		if (ImGui::BeginMenu("GameObject"))
 		{
+			if (ImGui::MenuItem("Lights")) { showLights = true; }
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Component"))
@@ -231,6 +232,24 @@ bool ModuleGUI::DrawPreferencesMenu() {
 	ImGui::SameLine();
 	if (ImGui::Button("2560 x 1440", resolutionButtonSize)) {};
 	*/
+	ImGui::End();
+	return open;
+}
+
+bool ModuleGUI::DrawLightsMenu() {
+	bool open = true;
+	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
+	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
+	ImGui::Begin("Lights", &open);
+	if (ImGui::SliderFloat("Position X", &lightPos.x, minLightPosition, maxLightPosition)) {
+		// Change light X position
+	}
+	if (ImGui::SliderFloat("Position Y", &lightPos.y, minLightPosition, maxLightPosition)) {
+		// Change light Y position
+	}
+	if (ImGui::SliderFloat("Position Z", &lightPos.z, minLightPosition, maxLightPosition)) {
+		// Change light Z position
+	}
 	ImGui::End();
 	return open;
 }

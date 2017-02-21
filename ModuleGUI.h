@@ -5,6 +5,7 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "IMGUI\imgui.h"
+#include "Point.h"
 #include<list>
 
 struct ImGuiTextBuffer;
@@ -14,7 +15,7 @@ struct AppConsole {
 	bool ScrollToBottom;
 
 	void Clear() { consoleBuffer.clear(); }
-	
+
 	void AddLog(const char* fmt, ...) IM_PRINTFARGS(2)
 	{
 		va_list args;
@@ -50,7 +51,7 @@ class ModuleGUI :
 public:
 	ModuleGUI(const JSON_Object *json = nullptr);
 	~ModuleGUI();
-	
+
 	bool Init();
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
@@ -59,10 +60,11 @@ public:
 	bool DrawMainMenuBar();
 	bool DrawHWInfoMenu();
 	bool DrawPreferencesMenu();
+	bool DrawLightsMenu();
 	bool DrawAppInfo();
 	void AddFpsLog(float fps);
 	void AddMsLog(float ms);
-	
+
 
 public:
 	AppConsole console;
@@ -74,6 +76,7 @@ private:
 	bool showHWInfo = false;
 	bool showAppInfo = false;
 	bool showPreferences = false;
+	bool showLights = true;
 	bool showConsole = true;
 	int currentDisplayMode = 1;
 	int brightness = 1000;
@@ -84,6 +87,11 @@ private:
 	float fpsLog[100];
 	int numMs = 0;
 	float msLog[100];
+
+	//Light
+	fPoint lightPos = { 0, 0, 0 };
+	int minLightPosition = -100;
+	int maxLightPosition = 100;
 };
 
 #endif // __MODULEGUI_H__
