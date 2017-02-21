@@ -44,6 +44,9 @@ public:
 	float movementSpeed = NULL;
 	float rotationSpeed = NULL;
 
+	bool invertHorizontalCamera = false;
+	bool invertVerticalCamera = false;
+
 private:
 	Frustum frustum;
 	float aspectRatio = 1.78;
@@ -53,7 +56,6 @@ private:
 	float far = 0;
 
 	math::vec pos = { 0,0,0 };
-
 };
 
 #endif // !MODULE_CAMERA_H

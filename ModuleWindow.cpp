@@ -9,9 +9,8 @@
 
 ModuleWindow::ModuleWindow(const JSON_Object *json) : Module(json)
 {
-
 	screen_width = (int)json_object_dotget_number(json, "resolution.width");
-	screen_height = (int)json_object_dotget_number(json, "resolution.height");;
+	screen_height = (int)json_object_dotget_number(json, "resolution.height");
 	fullscreen = json_object_dotget_boolean(json, "fullscreen");
 	borderless = (bool)json_object_dotget_boolean(json, "borderless");
 	resizable = json_object_dotget_boolean(json, "resizable");

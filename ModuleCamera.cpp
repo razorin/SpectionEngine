@@ -2,15 +2,17 @@
 #include "SDL/include/SDL.h"
 #include "Application.h"
 #include "ModuleGUI.h"
-#include "ModuleWindow.h"
-#include <math.h>
-#include "Application.h"
 #include "ModuleInput.h"
+#include "ModuleWindow.h"
+#include "Parson.h"
+#include <math.h>
 
 
 ModuleCamera::ModuleCamera(const JSON_Object *json) : Module(json)
 {
 	frustum = Frustum();
+	invertHorizontalCamera = (bool)json_object_dotget_boolean(json, "invertHorizontalCamera");
+	invertVerticalCamera = (bool)json_object_dotget_boolean(json, "invertVerticalCamera");
 }
 
 
@@ -89,9 +91,6 @@ void ModuleCamera::ChangeWindowSize(int width, int height)
 	aspectRatio = (float)width / (float)height;
 	SetAspectRatio(aspectRatio);
 	glViewport(0, 0, width, height);
-
-	//verticalFov = 2 * atan(tan(horizontalFov * 0.5) * 1 / aspectRatio);
-	//horizontalFov = 2 * atan(tan(verticalFov * 0.5) * aspectRatio);
 }
 
 void ModuleCamera::SetPlaneDistances(float near, float far)
@@ -168,11 +167,18 @@ void ModuleCamera::Rotate(float dt)
 	fPoint mouseMotion = App->input->GetMouseMotion();
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
 	{
-		angleX += (mouseMotion.y / 4) * angleChange;
-		angleY += (mouseMotion.x / 4) * angleChange;
-		//DLOG("MousemotionY %f", mouseMotion.y);
-		//DLOG("MousemotionX %f", mouseMotion.x);
-
+		if (invertHorizontalCamera) {
+			angleX += (mouseMotion.y / 4) * angleChange;
+		}
+		else {
+			angleX -= (mouseMotion.y / 4) * angleChange;
+		}
+		if (invertVerticalCamera) {
+			angleY += (mouseMotion.x / 4) * angleChange;
+		}
+		else {
+			angleY -= (mouseMotion.x / 4) * angleChange;
+		}
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
@@ -180,9 +186,9 @@ void ModuleCamera::Rotate(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		angleY -= angleChange;
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		angleX -= angleChange;
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 		angleX += angleChange;
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		angleX -= angleChange;
 
 	if (angleY != 0)
 	{
