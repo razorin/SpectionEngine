@@ -62,6 +62,10 @@ update_status ModuleGUI::Update(float dt)
 		showLights = DrawLightsMenu();
 	}
 
+	if (showInspector) {
+		showInspector = DrawInspectorMenu();
+	}
+
 	if (showConsole) {
 		showConsole = console.Draw();
 	}
@@ -119,6 +123,8 @@ bool ModuleGUI::DrawMainMenuBar() {
 		}
 		if (ImGui::BeginMenu("Window"))
 		{
+			if (ImGui::MenuItem("Inspector")) { showInspector = true; }
+			ImGui::Separator();
 			if (ImGui::MenuItem("Console")) { showConsole = true; }
 			ImGui::EndMenu();
 		}
@@ -273,6 +279,30 @@ bool ModuleGUI::DrawAppInfo() {
 	ImGui::PlotHistogram("##framerate",&fpsLog[0],numFps,0,title,0.0f,100.0f, ImVec2(menuWidth - 30, 100));
 	sprintf_s(title, 25, "Milliseconds %.1f", msLog[numMs - 1]);
 	ImGui::PlotHistogram("##milliseconds", &msLog[0], numMs, 0, title, 0.0f, 40.0f, ImVec2(menuWidth - 30, 100));
+	ImGui::End();
+	return open;
+}
+
+bool ModuleGUI::DrawInspectorMenu() {
+	bool open = true;
+	float menuWidth = (float)(App->window->screen_width * App->window->screen_size * 2 / 5);
+	float menuHeight = (float)(App->window->screen_height * App->window->screen_size * 5 / 6);;
+	ImGui::SetNextWindowSize(ImVec2(menuWidth, menuHeight), ImGuiSetCond_Once);
+	float menuPosX = (float)(App->window->screen_width * App->window->screen_size - menuWidth);
+	float menuPosY = (float)(19);
+	ImGui::SetNextWindowPos(ImVec2(menuPosX, menuPosY), ImGuiSetCond_Once);
+	ImGui::Begin("Inspector", &open);
+	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		ImGui::InputFloat3("Position", position);
+		ImGui::InputFloat3("Rotation", rotation);
+		ImGui::InputFloat3("Scale", scale);
+	}
+	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		ImGui::ColorEdit4("Color", matColor);
+	}
+	ImGui::Text("\n\n\nAll the components...");
 	ImGui::End();
 	return open;
 }

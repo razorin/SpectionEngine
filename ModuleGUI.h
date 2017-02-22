@@ -62,6 +62,7 @@ public:
 	bool DrawPreferencesMenu();
 	bool DrawLightsMenu();
 	bool DrawAppInfo();
+	bool DrawInspectorMenu();
 	void AddFpsLog(float fps);
 	void AddMsLog(float ms);
 
@@ -76,7 +77,8 @@ private:
 	bool showHWInfo = false;
 	bool showAppInfo = false;
 	bool showPreferences = false;
-	bool showLights = true;
+	bool showLights = false;
+	bool showInspector = false;
 	bool showConsole = true;
 	int currentDisplayMode = 1;
 	int brightness = 1000;
@@ -92,6 +94,12 @@ private:
 	fPoint lightPos = { 0, 0, 0 };
 	int minLightPosition = -100;
 	int maxLightPosition = 100;
+
+	//Inspector
+	float matColor[4] = { 1.0f,1.0f,1.0f,1.0f };
+	float position[3] = { 0.0f, 0.0f, 0.0f };
+	float rotation[3] = { 0.0f, 0.0f, 0.0f };
+	float scale[3] = { 0.0f, 0.0f, 0.0f };
 };
 
 #endif // __MODULEGUI_H__
