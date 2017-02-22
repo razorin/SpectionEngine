@@ -60,6 +60,7 @@ public:
 	bool DrawMainMenuBar();
 	bool DrawHWInfoMenu();
 	bool DrawPreferencesMenu();
+	bool DrawInstantiatorMenu(float size, fPoint position);
 	bool DrawLightsMenu();
 	bool DrawAppInfo();
 	bool DrawInspectorMenu();
@@ -74,12 +75,23 @@ public:
 
 private:
 	bool resizable = false;
+
+	//Menus
+	//File
 	bool showHWInfo = false;
 	bool showAppInfo = false;
+	//Edit
 	bool showPreferences = false;
+	//Assets
+	//GameObject
+	bool showInstantiator = false;
 	bool showLights = false;
+	//Component
+	//Window
 	bool showInspector = false;
 	bool showConsole = true;
+	//EndMenus
+
 	int currentDisplayMode = 1;
 	int brightness = 1000;
 	int minBrightness = 0;
@@ -89,6 +101,10 @@ private:
 	float fpsLog[100];
 	int numMs = 0;
 	float msLog[100];
+
+	//Primitive
+	fPoint primitivePos = { 0, 0, 0 };
+	float primitiveScale;
 
 	//Light
 	fPoint lightPos = { 0, 0, 0 };

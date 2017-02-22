@@ -5,6 +5,7 @@
 #include "ModuleWindow.h"
 #include "ModuleCamera.h"
 #include "SDL\include\SDL_version.h"
+#include "Point.h"
 #include<list>
 
 //IMGUI Includes
@@ -56,6 +57,10 @@ update_status ModuleGUI::Update(float dt)
 
 	if (showPreferences) {
 		showPreferences = DrawPreferencesMenu();
+	}
+	
+	if (showInstantiator) {
+		showInstantiator = DrawInstantiatorMenu(0.0f, { 0.0f,0.0f,0.0f });
 	}
 
 	if (showLights) {
@@ -114,6 +119,7 @@ bool ModuleGUI::DrawMainMenuBar() {
 		}
 		if (ImGui::BeginMenu("GameObject"))
 		{
+			if (ImGui::MenuItem("Cube")) { showInstantiator = true; }
 			if (ImGui::MenuItem("Lights")) { showLights = true; }
 			ImGui::EndMenu();
 		}
@@ -217,7 +223,7 @@ bool ModuleGUI::DrawPreferencesMenu() {
 	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
 	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
 	ImGui::Begin("Preferences", &open);
-	
+
 	const char* items[] = { "Fullscreen", "Borderless", "Fullscreen Windowed" };
 	if (ImGui::Combo("Display", &currentDisplayMode, items, IM_ARRAYSIZE(items))) {
 		App->window->SetDisplayMode(static_cast<DisplayMode>(currentDisplayMode));
@@ -242,6 +248,15 @@ bool ModuleGUI::DrawPreferencesMenu() {
 	ImGui::SameLine();
 	if (ImGui::Button("2560 x 1440", resolutionButtonSize)) {};
 	*/
+	ImGui::End();
+	return open;
+}
+
+bool ModuleGUI::DrawInstantiatorMenu(float size, fPoint position) {
+	bool open = true;
+	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
+	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
+	ImGui::Begin("Primitive", &open);
 	ImGui::End();
 	return open;
 }
@@ -275,8 +290,8 @@ bool ModuleGUI::DrawAppInfo() {
 	ImGui::Begin("Application Information", &open);
 	ImGui::Text("Application Name: %s", App->window->title);
 	char title[25];
-	sprintf_s(title, 25, "Framerate %.1f", fpsLog[numFps-1]);
-	ImGui::PlotHistogram("##framerate",&fpsLog[0],numFps,0,title,0.0f,100.0f, ImVec2(menuWidth - 30, 100));
+	sprintf_s(title, 25, "Framerate %.1f", fpsLog[numFps - 1]);
+	ImGui::PlotHistogram("##framerate", &fpsLog[0], numFps, 0, title, 0.0f, 100.0f, ImVec2(menuWidth - 30, 100));
 	sprintf_s(title, 25, "Milliseconds %.1f", msLog[numMs - 1]);
 	ImGui::PlotHistogram("##milliseconds", &msLog[0], numMs, 0, title, 0.0f, 40.0f, ImVec2(menuWidth - 30, 100));
 	ImGui::End();
@@ -285,7 +300,7 @@ bool ModuleGUI::DrawAppInfo() {
 
 bool ModuleGUI::DrawInspectorMenu() {
 	bool open = true;
-	float menuWidth = (float)(App->window->screen_width * App->window->screen_size * 2 / 5);
+	float menuWidth = (float)(App->window->screen_width * App->window->screen_size * 3 / 5);
 	float menuHeight = (float)(App->window->screen_height * App->window->screen_size * 5 / 6);;
 	ImGui::SetNextWindowSize(ImVec2(menuWidth, menuHeight), ImGuiSetCond_Once);
 	float menuPosX = (float)(App->window->screen_width * App->window->screen_size - menuWidth);
@@ -295,8 +310,33 @@ bool ModuleGUI::DrawInspectorMenu() {
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::InputFloat3("Position", position);
+		ImGui::SameLine();
+		if (ImGui::Button("Clear")) {
+			for (int i = 0; i < 3; ++i) {
+				position[i] = 0.0f;
+			}
+		}
 		ImGui::InputFloat3("Rotation", rotation);
+		ImGui::SameLine();
+		if (ImGui::Button("Clear")) {
+			for (int i = 0; i < 3; ++i) {
+				rotation[i] = 0.0f;
+			}
+		}
 		ImGui::InputFloat3("Scale", scale);
+		ImGui::SameLine();
+		if (ImGui::Button("Clear")) {
+			for (int i = 0; i < 3; ++i) {
+				scale[i] = 0.0f;
+			}
+		}
+	}
+	if (ImGui::Button("Clear Transform")) {
+		for (int i = 0; i < 3; ++i) {
+			position[i] = 0.0f;
+			rotation[i] = 0.0f;
+			scale[i] = 0.0f;
+		}
 	}
 	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen))
 	{
