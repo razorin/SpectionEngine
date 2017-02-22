@@ -10,7 +10,7 @@ Mesh::Mesh()
 
 Mesh::~Mesh()
 {
-	RELEASE(this->textureCoords);
+	//RELEASE(this->textureCoords);
 	RELEASE(this->normals);
 	RELEASE(this->colors);
 	RELEASE(this->indices);
@@ -27,6 +27,13 @@ void Mesh::InitializeBuffers()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_indices);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)* numIndices, indices, GL_STATIC_DRAW);
 
+	if (normals != nullptr)
+	{
+		glGenBuffers(1, (GLuint*)&(vbo_normals));
+		glBindBuffer(GL_ARRAY_BUFFER, vbo_normals);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * numVertices * 3, normals, GL_STATIC_DRAW);
+	}
+
 	if (colors != nullptr)
 	{
 		glGenBuffers(1, (GLuint*) &(vbo_colors));
@@ -36,10 +43,24 @@ void Mesh::InitializeBuffers()
 
 	if (textureCoords != nullptr)
 	{
-		glGenBuffers(1, (GLuint*) &(vbo_textures));
+		glGenBuffers(1, (GLuint*)&(vbo_textures));
 		glBindBuffer(GL_ARRAY_BUFFER, vbo_textures);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float)* numVertices * 2, textureCoords, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)* numVertices * 3, textureCoords, GL_STATIC_DRAW);
 	}
+
+	//Multiple textures
+	/*if (textureCoords != nullptr) {
+		for (int i = 0; i < 8; i++) {
+			if (textureCoords[i] != nullptr)
+			{
+				DLOG("textureCoords: %f   %f", textureCoords[0][0], textureCoords[0][1]);
+				glGenBuffers(1, (GLuint*)&(vbo_textures));
+				glBindBuffer(GL_ARRAY_BUFFER, vbo_textures);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float)* numVertices * 2, textureCoords[i], GL_STATIC_DRAW);
+			}
+		}
+	}*/
+	
 }
 
 void Mesh::Draw() const
@@ -47,6 +68,15 @@ void Mesh::Draw() const
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	
+	
+
+	if (normals != nullptr)
+	{
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo_normals);
+		glNormalPointer(GL_FLOAT, sizeof(float)*3, 0);
+	}
 
 	if (colors != nullptr)
 	{
@@ -58,10 +88,9 @@ void Mesh::Draw() const
 	if (textureCoords != nullptr)
 	{
 		glBindTexture(GL_TEXTURE_2D, ImageName);
-
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo_textures);
-		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 	}
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_indices);

@@ -21,6 +21,7 @@ public:
 
 	uint numVertices = 0;
 	uint numIndices = 0;
+	uint numTextures = 0;
 
 	uint *indices = nullptr;
 	uint ImageName;
@@ -28,6 +29,7 @@ public:
 	float *colors = nullptr;
 	float* normals = nullptr;
 	float *textureCoords = nullptr;
+	//float **textureCoords = nullptr;
 
 };
 

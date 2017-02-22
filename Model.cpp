@@ -55,17 +55,38 @@ void Model::Load(const char* path, const char* file)
 
 		meshes = new Mesh[scene->mNumMeshes];
 		numMeshes = scene->mNumMeshes;
+		
 		for (int i = 0; i < scene->mNumMeshes; ++i)
 		{
 			aiMesh* aiMesh = scene->mMeshes[i];
-			
+
 			uint numVertices = aiMesh->mNumVertices;
 			meshes[i].numVertices = numVertices;
 
 			meshes[i].vertices = new float[numVertices * 3];
 			memcpy(meshes[i].vertices, aiMesh->mVertices, sizeof(float) * 3 * numVertices);
 
-
+			meshes[i].normals = new float[numVertices * 3];
+			memcpy(meshes[i].normals, aiMesh->mNormals, sizeof(float) * 3 * numVertices);
+			
+			//Just one texture
+			meshes[i].textureCoords = new float[3];
+			memcpy(meshes[i].textureCoords, aiMesh->mTextureCoords, sizeof(float) * 3);
+			
+			//With more than one texture
+			/*meshes[i].textureCoords = new float*[8];
+			for (int j = 0; j < 8; j++) {
+				if (aiMesh->mTextureCoords[j] != NULL) {
+					meshes[i].textureCoords[j] = new float[2];
+					memcpy(meshes[i].textureCoords[j], aiMesh->mTextureCoords[j], sizeof(float) * 2);
+					meshes[i].numTextures++;
+				}
+				else {
+					meshes[i].textureCoords[j] = nullptr;
+				}
+				
+			}*/
+			
 
 			//meshes[i].vertices = mesh->mvertices;
 			//meshes[i].normals = mesh->mnormals;
@@ -85,8 +106,6 @@ void Model::Load(const char* path, const char* file)
 				assert(aiFace.mNumIndices == 3);
 				
 				memcpy(&meshes[i].indices[j*3], aiFace.mIndices, sizeof(uint) * 3);
-
-
 
 				//meshes[i].faces[j].index = new unsigned int[aiMesh->mfaces[j].mnumindices];
 
