@@ -44,6 +44,9 @@ public:
 	float movementSpeed = NULL;
 	float rotationSpeed = NULL;
 
+	bool invertHorizontalCamera = false;
+	bool invertVerticalCamera = false;
+
 private:
 	Frustum frustum;
 	float aspectRatio = 1.78;

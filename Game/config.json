@@ -1,25 +1,27 @@
 {
 	"config": {
 		"app": {
-      "title": "Spection Engine",
-      "fps_cap": 60
+		  "title": "Spection Engine",
+		  "fps_cap": 60
 		},
 		"renderer": {
 			"vsync": false
 		},
-    "window": {
-	  "resolution": {
-        "width": 360,
-        "height": 360
-      },
-      "fullscreen": false,
-      "borderless": false,
-      "resizable": true,
-      "fullscreenWindowed": false,
-      "size": 2,
-      "title": "Spection Engine"
-    },
-    "camera": {
-	}
+		"window": {
+			"resolution": {
+				"width": 360,
+				"height": 360
+			},
+			"fullscreen": false,
+			"borderless": false,
+			"resizable": true,
+			"fullscreenWindowed": false,
+			"size": 2,
+			"title": "Spection Engine"
+		},
+		"camera": {
+			"invertHorizontalCamera": false,
+			"invertVerticalCamera": false
+		}
     }
 }
