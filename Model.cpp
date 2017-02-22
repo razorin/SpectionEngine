@@ -15,7 +15,7 @@ using namespace std;
 
 Model::Model()
 {
-	
+	DLOG("New Model");
 }
 
 
@@ -73,8 +73,17 @@ void Model::Load(const char* path, const char* file)
 			memcpy(meshes[i].normals, aiMesh->mNormals, sizeof(float) * 3 * numVertices);
 			
 			//Just one texture
-			meshes[i].textureCoords = new float[numVertices * 3];
-			memcpy(meshes[i].textureCoords, aiMesh->mTextureCoords[0], sizeof(float) * 3 * numVertices);
+			//meshes[i].textureCoords = new float[numVertices * 3];
+			//memcpy(meshes[i].textureCoords, aiMesh->mTextureCoords[0], sizeof(float) * 3 * numVertices);
+
+			//More than one texture
+			//DLOG("El numero de texturas de esta mesh es: %d", aiMesh->GetNumUVChannels());
+			meshes[i].numTextures = aiMesh->GetNumUVChannels();
+			meshes[i].textureCoords = new float*[meshes[i].numTextures];
+			for (int j = 0; j < meshes[i].numTextures; j++) {
+				meshes[i].textureCoords[j] = new float[numVertices * 3];
+				memcpy(meshes[i].textureCoords[j], aiMesh->mTextureCoords[j], sizeof(float) * 3 * numVertices);
+			}
 
 			meshes[i].imageName = imageNames[aiMesh->mMaterialIndex];
 			
@@ -85,7 +94,7 @@ void Model::Load(const char* path, const char* file)
 			for (int j = 0; j < numFaces; j++)
 			{
 				aiFace aiFace = aiMesh->mFaces[j];
-				assert(aiFace.mNumIndices == 3);
+				//assert(aiFace.mNumIndices == 3);
 				memcpy(&meshes[i].indices[j*3], aiFace.mIndices, sizeof(uint) * 3);
 			}
 			

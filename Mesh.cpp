@@ -11,11 +11,18 @@ Mesh::Mesh()
 
 Mesh::~Mesh()
 {
-	RELEASE(this->textureCoords);
+	
 	RELEASE(this->normals);
 	RELEASE(this->colors);
 	RELEASE(this->indices);
 	RELEASE(this->vertices);
+	//RELEASE(this->textures);
+	for (int i = 0; i < numTextures; i++) {
+		RELEASE_ARRAY(this->textureCoords[i]);
+	}
+	RELEASE_ARRAY(this->textureCoords);
+	RELEASE(vboTextures);
+	//RELEASE(imageName);
 }
 
 void Mesh::InitializeBuffers()
@@ -44,9 +51,15 @@ void Mesh::InitializeBuffers()
 
 	if (textureCoords != nullptr)
 	{
-		glGenBuffers(1, (GLuint*)&(vboTextures));
+		vboTextures = new uint[numTextures];
+		for (int i = 0; i < numTextures; i++) {
+			glGenBuffers(1, (GLuint*)&(vboTextures[i]));
+			glBindBuffer(GL_ARRAY_BUFFER, vboTextures[i]);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float)* numVertices * 3, textureCoords[i], GL_STATIC_DRAW);
+		}
+		/*glGenBuffers(1, (GLuint*)&(vboTextures));
 		glBindBuffer(GL_ARRAY_BUFFER, vboTextures);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float)* numVertices * 3, textureCoords, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)* numVertices * 3, textureCoords[0], GL_STATIC_DRAW);*/
 	}
 
 	//Multiple textures
@@ -88,10 +101,18 @@ void Mesh::Draw() const
 
 	if (textureCoords != nullptr)
 	{
-		glBindTexture(GL_TEXTURE_2D, imageName);
+		for (int i = 0; i < numTextures; i++) {
+			glBindTexture(GL_TEXTURE_2D, imageName);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glBindBuffer(GL_ARRAY_BUFFER, vboTextures[i]);
+			//Deberia estar fuera
+			//glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+		}
+		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+		/*glBindTexture(GL_TEXTURE_2D, imageName);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, vboTextures);
-		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+		glTexCoordPointer(3, GL_FLOAT, 0, NULL);*/
 	}
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndices);
