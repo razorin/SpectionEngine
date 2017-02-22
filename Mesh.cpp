@@ -2,6 +2,7 @@
 #include "assimp\vector3.h"
 #include "Glew/include/GL/glew.h"
 
+
 // Mesh
 Mesh::Mesh()
 {
@@ -10,7 +11,7 @@ Mesh::Mesh()
 
 Mesh::~Mesh()
 {
-	//RELEASE(this->textureCoords);
+	RELEASE(this->textureCoords);
 	RELEASE(this->normals);
 	RELEASE(this->colors);
 	RELEASE(this->indices);

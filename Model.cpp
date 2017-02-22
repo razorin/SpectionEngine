@@ -10,6 +10,7 @@
 #include "assimp\anim.h"
 #include "Glew\include\GL\glew.h"
 
+
 using namespace std;
 
 Model::Model()
@@ -20,6 +21,8 @@ Model::Model()
 
 Model::~Model()
 {
+	
+	
 }
 
 void Model::Load(const char* path, const char* file) 
@@ -95,6 +98,8 @@ void Model::Load(const char* path, const char* file)
 
 void Model::Clear() 
 {
+	RELEASE(imageNames);
+	RELEASE_ARRAY(meshes);
 }
 
 void Model::Draw() 

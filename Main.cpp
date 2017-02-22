@@ -109,7 +109,7 @@ int main(int argc, char ** argv)
 		}
 	}
 
-	RELEASE( App);
+	RELEASE(App);
 	DLOG("Bye :)\n");
 	return main_return;
 }
