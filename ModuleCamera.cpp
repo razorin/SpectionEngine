@@ -11,8 +11,8 @@
 ModuleCamera::ModuleCamera(const JSON_Object *json) : Module(json)
 {
 	frustum = Frustum();
-	invertHorizontalCamera = (bool)json_object_dotget_boolean(json, "invertHorizontalCamera");
-	invertVerticalCamera = (bool)json_object_dotget_boolean(json, "invertVerticalCamera");
+	invertXAxis = (bool)json_object_dotget_boolean(json, "invertHorizontalCamera");
+	invertYAxis = (bool)json_object_dotget_boolean(json, "invertVerticalCamera");
 }
 
 
@@ -95,8 +95,8 @@ void ModuleCamera::ChangeWindowSize(int width, int height)
 
 void ModuleCamera::SetPlaneDistances(float near, float far)
 {
-	this->near = near;
-	this->far = far;
+	this->nearPlane = near;
+	this->farPlane = far;
 	frustum.SetViewPlaneDistances(near, far);
 }
 
@@ -168,13 +168,13 @@ void ModuleCamera::Rotate(float dt)
 	fPoint mouseMotion = App->input->GetMouseMotion();
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && mouseBlocked == false)
 	{
-		if (invertHorizontalCamera) {
+		if (invertYAxis) {
 			angleX += (mouseMotion.y / 4) * angleChange;
 		}
 		else {
 			angleX -= (mouseMotion.y / 4) * angleChange;
 		}
-		if (invertVerticalCamera) {
+		if (invertXAxis) {
 			angleY += (mouseMotion.x / 4) * angleChange;
 		}
 		else {

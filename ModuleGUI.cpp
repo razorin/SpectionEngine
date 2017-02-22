@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include "Application.h"
 #include "ModuleWindow.h"
+#include "ModuleCamera.h"
 #include "SDL\include\SDL_version.h"
 #include<list>
 
@@ -218,6 +219,9 @@ bool ModuleGUI::DrawPreferencesMenu() {
 	if (ImGui::SliderInt("Brightness", &brightness, minBrightness, maxBrightness)) {
 		App->window->SetBrightness(brightness);
 	}
+	if (ImGui::Checkbox("Invert X-Axis", &App->camera->invertXAxis)) {}
+	ImGui::SameLine();
+	if (ImGui::Checkbox("Invert Y-Axis", &App->camera->invertYAxis)) {}
 	/*
 	ImGui::Separator();
 	ImGui::Text("Resolution");

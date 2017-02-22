@@ -44,16 +44,16 @@ public:
 	float movementSpeed = NULL;
 	float rotationSpeed = NULL;
 
-	bool invertHorizontalCamera = false;
-	bool invertVerticalCamera = false;
+	bool invertXAxis = false;
+	bool invertYAxis = false;
 
 private:
 	Frustum frustum;
 	float aspectRatio = 1.78;
 	float verticalFov = 30;
 	float horizontalFov = 30;
-	float near = 0;
-	float far = 0;
+	float nearPlane = 0;
+	float farPlane = 0;
 
 	math::vec pos = { 0,0,0 };
 
