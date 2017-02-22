@@ -3,31 +3,34 @@
 
 #include <list>
 #include "Globals.h"
-#include "assimp\vector3.h"
-
-//class aiVector3D;
-
-struct Face
-{
-	uint index[3];
-	int numIndex = 3;
-};
 
 class Mesh
 {
 public:
 	Mesh();
 	~Mesh();
+
+	void InitializeBuffers();
+	void Draw() const;
 public:
-	aiVector3D* vertex;
-	int numVertex;
-	aiVector3D* uvs;
-	int numUvs;
-	aiVector3D* normals;
-	int numNormals;
-	Face* faces;
-	int numFaces;
-	uint materialIndex;
+	uint vboVertices = 0;
+	uint vboIndices = 0;
+	uint vboColors = 0;
+	uint vboNormals = 0;
+	uint *vboTextures = nullptr;
+
+	uint numVertices = 0;
+	uint numIndices = 0;
+	uint numTextures = 0;
+
+	uint *indices = nullptr;
+	uint imageName;
+	float *vertices = nullptr;
+	float *colors = nullptr;
+	float* normals = nullptr;
+	//float *textureCoords = nullptr;
+	float **textureCoords = nullptr;
+
 };
 
 #endif /* _MESH_H_ */

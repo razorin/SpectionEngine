@@ -41,9 +41,9 @@ Application::Application()
 	modules.push_back(audio = new ModuleAudio());
 
 	// Modules to draw on top of game logic
-	modules.push_back(collision = new ModuleCollision());
-	modules.push_back(particles = new ModuleParticles());
-	modules.push_back(fade = new ModuleFadeToBlack());
+	//modules.push_back(collision = new ModuleCollision());
+	//modules.push_back(particles = new ModuleParticles());
+	//modules.push_back(fade = new ModuleFadeToBlack());
 
 	//Game Modules
 	modules.push_back(testScene = new ModuleTestScene(true));

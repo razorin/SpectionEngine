@@ -145,6 +145,7 @@ bool ModuleRender::CleanUp()
 
 	SDL_GL_DeleteContext(context);
 	RELEASE(positionLight);
+	RELEASE(diffuseLight);
 
 	//Destroy window
 	if (renderer != nullptr)

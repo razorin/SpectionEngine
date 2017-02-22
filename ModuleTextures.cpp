@@ -15,7 +15,6 @@
 #include "DevIL\include\IL\ilut.h"
 
 
-
 using namespace std;
 
 ModuleTextures::ModuleTextures(const JSON_Object *json) : Module(json)
