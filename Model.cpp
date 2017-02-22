@@ -35,11 +35,12 @@ void Model::Load(const char* path, const char* file)
 	}
 	else 
 	{
+		//We get all textures and put it on imageNames
 		imageNames = new uint[scene->mNumMaterials];
 		for (int i = 0; i < scene->mNumMaterials; i++)
 		{
 			const aiMaterial* material = scene->mMaterials[i];
-			int a = 5;
+			// Just one texture
 			int texIndex = 0;
 			aiString path;
 			int texturesPerMaterial = material->GetTextureCount(aiTextureType_DIFFUSE);
@@ -47,12 +48,11 @@ void Model::Load(const char* path, const char* file)
 			{
 				string textureFile = path.data;
 				string texturePath = folderPath + textureFile;
-				
 				imageNames[i] = App->textures->LoadTexture(texturePath.c_str());
 			}
 		}
 
-
+		// we get all meshes info and put it on an Mesh array
 		meshes = new Mesh[scene->mNumMeshes];
 		numMeshes = scene->mNumMeshes;
 		
@@ -70,61 +70,26 @@ void Model::Load(const char* path, const char* file)
 			memcpy(meshes[i].normals, aiMesh->mNormals, sizeof(float) * 3 * numVertices);
 			
 			//Just one texture
-			meshes[i].textureCoords = new float[3];
-			memcpy(meshes[i].textureCoords, aiMesh->mTextureCoords, sizeof(float) * 3);
-			
-			//With more than one texture
-			/*meshes[i].textureCoords = new float*[8];
-			for (int j = 0; j < 8; j++) {
-				if (aiMesh->mTextureCoords[j] != NULL) {
-					meshes[i].textureCoords[j] = new float[2];
-					memcpy(meshes[i].textureCoords[j], aiMesh->mTextureCoords[j], sizeof(float) * 2);
-					meshes[i].numTextures++;
-				}
-				else {
-					meshes[i].textureCoords[j] = nullptr;
-				}
-				
-			}*/
-			
+			meshes[i].textureCoords = new float[numVertices * 3];
+			memcpy(meshes[i].textureCoords, aiMesh->mTextureCoords[0], sizeof(float) * 3 * numVertices);
 
-			//meshes[i].vertices = mesh->mvertices;
-			//meshes[i].normals = mesh->mnormals;
-			//meshes[i].uvs = mesh->mtexturecoords;
-			//meshes[i].numfaces = mesh->mnumfaces;
-			int l = 0;
-
+			meshes[i].imageName = imageNames[aiMesh->mMaterialIndex];
+			
 			uint numFaces = aiMesh->mNumFaces;
 
 			meshes[i].numIndices = numFaces * 3;
 			meshes[i].indices = new uint[numFaces * 3];
-			//meshes[i].faces = new face[meshes[i].numfaces];
 			for (int j = 0; j < numFaces; j++)
 			{
 				aiFace aiFace = aiMesh->mFaces[j];
-
 				assert(aiFace.mNumIndices == 3);
-				
 				memcpy(&meshes[i].indices[j*3], aiFace.mIndices, sizeof(uint) * 3);
-
-				//meshes[i].faces[j].index = new unsigned int[aiMesh->mfaces[j].mnumindices];
-
-				//for (int k = 0; k < 3; k++)
-				//{
-				//	//aivector3d vertex = mesh->mvertices[face.mindices[k]];
-				//	meshes[i].faces[j].index[k] = face.mindices[k];
-				//	meshes[i].index[l] = face.mindices[k];
-				//	l++;
-				//	meshes[i].numindex++;
-				//	//aivector3d uv = mesh->mtexturecoords[0][face.mindices[k]];
-				//	//aivector3d normal = mesh->hasnormals() ? mesh->mnormals[face.mindices[k]] : aivector3d(1.0f, 1.0f, 1.0f);
-				//}
-
 			}
+			
+			
+			//After all info is on our mesh we can initialize VBOs
 			meshes[i].InitializeBuffers();
 		}
-		//uint materialindex = 5;
-		//dlog("%f -> %f -> %f",meshes[1].vertex[1].x, meshes[1].vertex[1].y, meshes[1].vertex[1].z);
 	}
 }
 
@@ -132,24 +97,8 @@ void Model::Clear()
 {
 }
 
-void Model::Draw() {
-
-	//for (int i = 0; i < scene->mNumMeshes; ++i) 
-	//{
-	//	glBegin(GL_TRIANGLES);
-	//	aiMesh* mesh = scene->mMeshes[i];
-	//	for (int j = 0; j < mesh->mNumVertices; ++j) 
-	//	{
-	//		aiVector3D normal = mesh->mNormals[j];
-	//		glNormal3f(normal.x, normal.y, normal.z);
-	//		aiVector3D vertex = mesh->mVertices[j];
-	//		glVertex3f(vertex.x, vertex.y, vertex.z);
-	//		//mesh->mTextureCoords[0][mesh->mFaces[j].mIndices[j]]
-
-	//	}
-	//	glEnd();
-	//}
-
+void Model::Draw() 
+{
 	//for (int i = 0; i < scene->mNumMeshes; ++i)
 	//{
 	//	aiMesh* mesh = scene->mMeshes[i];
@@ -178,7 +127,6 @@ void Model::Draw() {
 	//	glEnd();
 	//	glBindTexture(GL_TEXTURE_2D, 0);
 	//}
-
 
 	for (int i = 0; i < numMeshes; ++i)
 	{

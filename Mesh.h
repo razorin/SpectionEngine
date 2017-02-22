@@ -13,18 +13,18 @@ public:
 	void InitializeBuffers();
 	void Draw() const;
 public:
-	uint vbo_vertices = 0;
-	uint vbo_indices = 0;
-	uint vbo_colors = 0;
-	uint vbo_normals = 0;
-	uint vbo_textures = 0;
+	uint vboVertices = 0;
+	uint vboIndices = 0;
+	uint vboColors = 0;
+	uint vboNormals = 0;
+	uint vboTextures = 0;
 
 	uint numVertices = 0;
 	uint numIndices = 0;
 	uint numTextures = 0;
 
 	uint *indices = nullptr;
-	uint ImageName;
+	uint imageName;
 	float *vertices = nullptr;
 	float *colors = nullptr;
 	float* normals = nullptr;
