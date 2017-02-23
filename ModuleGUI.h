@@ -76,7 +76,7 @@ private:
 	bool showHWInfo = false;
 	bool showAppInfo = false;
 	bool showPreferences = false;
-	bool showLights = true;
+	bool showLights = false;
 	bool showConsole = true;
 	int currentDisplayMode = 1;
 	int brightness = 1000;
@@ -89,9 +89,10 @@ private:
 	float msLog[100];
 
 	//Light
-	fPoint lightPos = { 0, 0, 0 };
 	int minLightPosition = -100;
 	int maxLightPosition = 100;
+	int minLightColor = 0.0f;
+	int maxLightColor = 1.0f;
 };
 
 #endif // __MODULEGUI_H__

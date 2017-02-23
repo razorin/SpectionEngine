@@ -20,6 +20,9 @@
     <Filter Include="IMGUI">
       <UniqueIdentifier>{690a2244-6854-409c-91a5-d55cc6b6c3cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lights">
+      <UniqueIdentifier>{d2b50b00-9d3a-4cd6-8390-bbfe1a3e649f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleRender.h">
@@ -71,7 +74,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="PreciseTimer.h">
-		<Filter>Utils</Filter>
+      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="ModuleTestScene.h">
       <Filter>Game Modules</Filter>
@@ -99,7 +102,7 @@
     </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Geometric primitive</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="IMGUI\imconfig.h">
       <Filter>IMGUI</Filter>
     </ClInclude>
@@ -126,6 +129,9 @@
     </ClInclude>
     <ClInclude Include="Utils.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Lights</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -212,6 +218,9 @@
     </ClCompile>
     <ClCompile Include="ModuleGUI.cpp">
       <Filter>Core Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Lights</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

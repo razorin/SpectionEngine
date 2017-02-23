@@ -3,7 +3,9 @@
 #include "Utils.h"
 #include "Application.h"
 #include "ModuleWindow.h"
+#include "ModuleRender.h"
 #include "ModuleCamera.h"
+#include "Light.h"
 #include "SDL\include\SDL_version.h"
 #include<list>
 
@@ -245,15 +247,15 @@ bool ModuleGUI::DrawLightsMenu() {
 	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
 	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
 	ImGui::Begin("Lights", &open);
-	if (ImGui::SliderFloat("Position X", &lightPos.x, minLightPosition, maxLightPosition)) {
-		// Change light X position
-	}
-	if (ImGui::SliderFloat("Position Y", &lightPos.y, minLightPosition, maxLightPosition)) {
-		// Change light Y position
-	}
-	if (ImGui::SliderFloat("Position Z", &lightPos.z, minLightPosition, maxLightPosition)) {
-		// Change light Z position
-	}
+	
+	if (ImGui::SliderFloat("Position X", &App->renderer->light->position[0], minLightPosition, maxLightPosition)) {}
+	if (ImGui::SliderFloat("Position Y", &App->renderer->light->position[1], minLightPosition, maxLightPosition)) {}
+	if (ImGui::SliderFloat("Position Z", &App->renderer->light->position[2], minLightPosition, maxLightPosition)) {}
+	ImGui::Separator();
+	if (ImGui::SliderFloat("Diffuse R", &App->renderer->light->diffuse[0], minLightColor, maxLightColor)) {}
+	if (ImGui::SliderFloat("Diffuse G", &App->renderer->light->diffuse[1], minLightColor, maxLightColor)) {}
+	if (ImGui::SliderFloat("Diffuse B", &App->renderer->light->diffuse[2], minLightColor, maxLightColor)) {}
+	
 	ImGui::End();
 	return open;
 }
