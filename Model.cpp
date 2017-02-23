@@ -30,7 +30,7 @@ void Model::Load(const char* path, const char* file)
 	string folderPath = string(path);
 	string filePath = path + string(file);
 
-	scene = aiImportFile(filePath.c_str(), aiProcess_PreTransformVertices);
+	scene = aiImportFile(filePath.c_str(), aiProcess_PreTransformVertices | aiProcess_Triangulate);
 
 	if (!scene) 
 	{

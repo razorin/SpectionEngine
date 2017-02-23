@@ -32,6 +32,7 @@ public:
 	SPlane *plane = nullptr;
 	SCylinder *cylinder = nullptr;
 	Model *model = nullptr;
+	Model *model2 = nullptr;
 
 private:
 	std::list<SPrimitive*> primitives;

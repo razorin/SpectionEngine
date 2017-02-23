@@ -27,6 +27,8 @@ bool ModuleTestScene::Start() {
 	primitives.push_back(cube = new SCube());
 	model = new Model();
 	model->Load("Models/Batman/","Batman.obj");
+	model2 = new Model();
+	model2->Load("Models/Magnetto/", "magnetto2.fbx");
 	return true;
 }
 
@@ -54,6 +56,9 @@ void ModuleTestScene::Draw()
 
 	if (model != nullptr)
 		model->Draw();
+
+	if (model2 != nullptr)
+		model2->Draw();
 }
 
 bool ModuleTestScene::CleanUp() {
@@ -67,6 +72,12 @@ bool ModuleTestScene::CleanUp() {
 	{
 		model->Clear();
 		RELEASE(model);
+	}
+
+	if (model2 != nullptr)
+	{
+		model2->Clear();
+		RELEASE(model2);
 	}
 
 	return true;
