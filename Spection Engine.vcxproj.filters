@@ -133,6 +133,9 @@
     <ClInclude Include="Light.h">
       <Filter>Lights</Filter>
     </ClInclude>
+    <ClInclude Include="LightsManager.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -220,6 +223,9 @@
       <Filter>Core Modules</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="LightsManager.cpp">
       <Filter>Lights</Filter>
     </ClCompile>
   </ItemGroup>

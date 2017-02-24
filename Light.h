@@ -1,5 +1,6 @@
 #ifndef __LIGHT_H__
 #define __LIGHT_H__
+
 #include "MathGeoLib\include\Math\float4.h"
 #include "Point.h"
 

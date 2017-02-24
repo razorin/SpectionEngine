@@ -21,6 +21,8 @@ class ModuleTestScene;
 class Timer;
 class PreciseTimer;
 
+class LightsManager;
+
 class Application
 {
 public:
@@ -63,6 +65,8 @@ public:
 	int CPUCache;
 	float systemRAM;
 	const char *currentPlatform;
+
+	LightsManager *lightsManager;
 
 private:
 	float msByFrame = 0;

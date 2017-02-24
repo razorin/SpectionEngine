@@ -13,6 +13,7 @@
 #include "ModuleTestScene.h"
 #include "Timer.h"
 #include "PreciseTimer.h"
+#include "LightsManager.h"
 #include "Parson.h"
 #include "MathGeoLib\include\MathGeoLib.h"
 #include <assert.h>
@@ -28,6 +29,7 @@ Application::Application()
 	performanceTimer = new PreciseTimer();
 	performanceTimer->Start();
 	fpsTimer = new PreciseTimer();
+
 	configuration = json_parse_file("config.json");
 	JSON_Object *root = json_value_get_object(configuration);
 	// Order matters: they will init/start/pre/update/post in this order
@@ -48,7 +50,7 @@ Application::Application()
 	//Game Modules
 	modules.push_back(testScene = new ModuleTestScene(true));
 
-	// UI
+	lightsManager = new LightsManager();
 
 	float2 mathGeoLib_test{ 1,2 };
 
@@ -79,6 +81,8 @@ Application::~Application()
 	RELEASE(updateTimer);
 	RELEASE(performanceTimer);
 	RELEASE(fpsTimer);
+
+	RELEASE(lightsManager);
 }
 
 bool Application::Init()
@@ -183,6 +187,8 @@ bool Application::CleanUp()
 	for(list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rend() && ret; ++it)
 		if((*it)->IsEnabled() == true) 
 			ret = (*it)->CleanUp();
+
+	lightsManager->CleanUp();
 
 	//DLOG("Read performance timer after CleanUp: %f microseconds", performanceTimer->Ellapsed());
 	//DLOG("Read performance timer after CleanUp: %f milliseconds", performanceTimer->EllapsedInMilliseconds());

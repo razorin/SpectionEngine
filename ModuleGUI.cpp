@@ -5,6 +5,7 @@
 #include "ModuleWindow.h"
 #include "ModuleRender.h"
 #include "ModuleCamera.h"
+#include "LightsManager.h"
 #include "Light.h"
 #include "SDL\include\SDL_version.h"
 #include<list>
@@ -213,7 +214,6 @@ bool ModuleGUI::DrawPreferencesMenu() {
 	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
 	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
 	ImGui::Begin("Preferences", &open);
-	
 	const char* items[] = { "Fullscreen", "Borderless", "Fullscreen Windowed" };
 	if (ImGui::Combo("Display", &currentDisplayMode, items, IM_ARRAYSIZE(items))) {
 		App->window->SetDisplayMode(static_cast<DisplayMode>(currentDisplayMode));
@@ -224,20 +224,6 @@ bool ModuleGUI::DrawPreferencesMenu() {
 	if (ImGui::Checkbox("Invert X-Axis", &App->camera->invertXAxis)) {}
 	ImGui::SameLine();
 	if (ImGui::Checkbox("Invert Y-Axis", &App->camera->invertYAxis)) {}
-	/*
-	ImGui::Separator();
-	ImGui::Text("Resolution");
-	ImVec2 resolutionButtonSize = ImVec2(100, 24);
-	if (ImGui::Button("800 x 600", resolutionButtonSize)) {};
-	ImGui::SameLine();
-	if (ImGui::Button("1024 x 768", resolutionButtonSize)) {};
-	if (ImGui::Button("1280 x 720", resolutionButtonSize)) {};
-	ImGui::SameLine();
-	if (ImGui::Button("1600 x 900", resolutionButtonSize)) {};
-	if (ImGui::Button("1920 x 1080", resolutionButtonSize)) {};
-	ImGui::SameLine();
-	if (ImGui::Button("2560 x 1440", resolutionButtonSize)) {};
-	*/
 	ImGui::End();
 	return open;
 }
@@ -247,7 +233,25 @@ bool ModuleGUI::DrawLightsMenu() {
 	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
 	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
 	ImGui::Begin("Lights", &open);
-	
+	std::list<Light*> currentLights = App->lightsManager->GetLights();
+	for (std::list<Light*>::iterator it = currentLights.begin(); it != currentLights.end(); ++it)
+	{
+		auto itPosition = std::distance(currentLights.begin(), it);
+		std::string tempString = "Light" + std::to_string(itPosition);
+		const char * headerLabel = tempString.c_str();
+		if (ImGui::CollapsingHeader(headerLabel))
+		{
+			if (ImGui::SliderFloat("Position X", &(*it)->position[0], minLightPosition, maxLightPosition)) {}
+			if (ImGui::SliderFloat("Position Y", &(*it)->position[1], minLightPosition, maxLightPosition)) {}
+			if (ImGui::SliderFloat("Position Z", &(*it)->position[2], minLightPosition, maxLightPosition)) {}
+			ImGui::Separator();
+			if (ImGui::SliderFloat("Diffuse R", &(*it)->diffuse[0], minLightColor, maxLightColor)) {}
+			if (ImGui::SliderFloat("Diffuse G", &(*it)->diffuse[1], minLightColor, maxLightColor)) {}
+			if (ImGui::SliderFloat("Diffuse B", &(*it)->diffuse[2], minLightColor, maxLightColor)) {}
+		}
+		
+	}
+	/*
 	if (ImGui::SliderFloat("Position X", &App->renderer->light->position[0], minLightPosition, maxLightPosition)) {}
 	if (ImGui::SliderFloat("Position Y", &App->renderer->light->position[1], minLightPosition, maxLightPosition)) {}
 	if (ImGui::SliderFloat("Position Z", &App->renderer->light->position[2], minLightPosition, maxLightPosition)) {}
@@ -255,7 +259,7 @@ bool ModuleGUI::DrawLightsMenu() {
 	if (ImGui::SliderFloat("Diffuse R", &App->renderer->light->diffuse[0], minLightColor, maxLightColor)) {}
 	if (ImGui::SliderFloat("Diffuse G", &App->renderer->light->diffuse[1], minLightColor, maxLightColor)) {}
 	if (ImGui::SliderFloat("Diffuse B", &App->renderer->light->diffuse[2], minLightColor, maxLightColor)) {}
-	
+	*/
 	ImGui::End();
 	return open;
 }

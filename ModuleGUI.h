@@ -89,10 +89,10 @@ private:
 	float msLog[100];
 
 	//Light
-	int minLightPosition = -100;
-	int maxLightPosition = 100;
-	int minLightColor = 0.0f;
-	int maxLightColor = 1.0f;
+	float minLightPosition = -100;
+	float maxLightPosition = 100;
+	float minLightColor = 0.0f;
+	float maxLightColor = 1.0f;
 };
 
 #endif // __MODULEGUI_H__

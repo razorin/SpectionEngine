@@ -53,8 +53,6 @@ public:
 	bool vsync = false;
 
 	SDL_GLContext context;
-
-	Light* light;
 };
 
 #endif // __MODULERENDER_H__

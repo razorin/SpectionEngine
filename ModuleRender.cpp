@@ -13,6 +13,7 @@
 #include "SCube.h"
 #include "SPlane.h"
 #include "SCylinder.h"
+#include "LightsManager.h"
 #include "Light.h"
 #include "SDL/include/SDL.h"
 #include <math.h>
@@ -89,9 +90,8 @@ bool ModuleRender::Init()
 		glFrontFace(GL_CCW);
 		glCullFace(GL_BACK);
 	}
-	
-	light = new Light(LT_POINT_LIGHT, { 0.0f, 1.0f, 1.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 0.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
-	//light = new Light(LT_POINT_LIGHT, { 0.0f, 1.0f, 1.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 0.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, -1.0f, 0.0f });
+	App->lightsManager->AddLight(LT_POINT_LIGHT, { 0.0f, 1.0f, 1.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 0.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+	App->lightsManager->AddLight(LT_SPOTLIGHT_LIGHT, { 0.0f, 1.0f, 1.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 0.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, -1.0f, 0.0f });
 
 	return ret;
 }
@@ -118,7 +118,7 @@ update_status ModuleRender::Update(float dt)
 	DrawGrid();
 	DrawGizmo();
 
-	light->Draw();
+	App->lightsManager->Draw();
 
 	//DrawDirectCube();
 
@@ -141,8 +141,6 @@ bool ModuleRender::CleanUp()
 {
 	App->gui->console.AddLog("Destroying renderer");
 	DLOG("Destroying renderer");
-
-	RELEASE(light);
 
 	SDL_GL_DeleteContext(context);
 
