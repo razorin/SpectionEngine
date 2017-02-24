@@ -90,8 +90,8 @@ bool ModuleRender::Init()
 		glFrontFace(GL_CCW);
 		glCullFace(GL_BACK);
 	}
-	App->lightsManager->AddLight(LT_DIRECTIONAL_LIGHT, { 1.0f, 0.0f, 0.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 0.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
-	App->lightsManager->AddLight(LT_POINT_LIGHT, { 0.0f, 1.0f, 1.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 0.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+	App->lightsManager->AddLight(LT_DIRECTIONAL_LIGHT, { 1.0f, 0.0f, 0.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 0.0f, 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+	App->lightsManager->AddLight(LT_POINT_LIGHT, { 0.0f, 1.0f, 0.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 1.0f, 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 	App->lightsManager->AddLight(LT_SPOTLIGHT_LIGHT, { 0.0f, 1.0f, 0.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 0.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, -1.0f, 0.0f });
 
 	return ret;

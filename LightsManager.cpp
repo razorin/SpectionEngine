@@ -1,5 +1,7 @@
 #include "LightsManager.h"
 #include "Globals.h"
+#include "Application.h"
+#include "ModuleGUI.h"
 #include "Glew/include/GL/glew.h"
 
 
@@ -32,7 +34,7 @@ bool LightsManager::CleanUp() {
 bool LightsManager::AddLight(LightType type, fPoint position, float4 ambient, float4 diffuse, float4 specular,
 	float constantAttenuation, float linearAttenuation, float quadraticAttenuation) {
 
-	if (lights.size() < 8) {
+	if (lights.size() < MAXLIGHTS) {
 		lights.push_back(new Light(type, position, ambient, diffuse, specular, constantAttenuation, linearAttenuation, quadraticAttenuation));
 	}
 
@@ -43,7 +45,7 @@ bool LightsManager::AddLight(LightType type, fPoint position, float4 ambient, fl
 	fPoint direction, float exponent, float cutoff, float constantAttenuation,
 	float linearAttenuation, float quadraticAttenuation) {
 
-	if (lights.size() < 8) {
+	if (lights.size() < MAXLIGHTS) {
 		lights.push_back(new Light(type, position, ambient, diffuse, specular, direction, exponent, cutoff, constantAttenuation, linearAttenuation, quadraticAttenuation));
 	}
 
@@ -59,6 +61,7 @@ void LightsManager::Draw() {
 	{
 		auto itPosition = std::distance(lights.begin(), it);
 		GLenum lightNumber = lightsMap.find(itPosition)->second;
+		//App->gui->console.AddLog("Drawing light %d", (*it)->type);
 		glLightfv(lightNumber, GL_POSITION, (*it)->position);
 		glLightfv(lightNumber, GL_AMBIENT, (*it)->ambient);
 		glLightfv(lightNumber, GL_DIFFUSE, (*it)->diffuse);

@@ -242,11 +242,20 @@ bool ModuleGUI::DrawLightsMenu() {
 		if (ImGui::CollapsingHeader(headerLabel))
 		{
 			ImGui::Text("Light Type %d", (*it)->type);
-			ImGui::InputFloat3("Position", (*it)->position);
-			ImGui::Separator();
-			ImGui::ColorEdit3("Diffuse", (*it)->diffuse);
+			std::string position = "Position " + std::to_string(itPosition);
+			std::string diffuse = "Diffuse " + std::to_string(itPosition);
+			std::string ambient = "Ambient " + std::to_string(itPosition);
+			std::string specular = "Specular " + std::to_string(itPosition);
+			ImGui::InputFloat3(position.c_str(), (*it)->position);
+			ImGui::ColorEdit3(diffuse.c_str(), (*it)->diffuse);
+			ImGui::ColorEdit3(ambient.c_str(), (*it)->ambient);
+			ImGui::ColorEdit3(specular.c_str(), (*it)->specular);
 		}
 	}
+	if (currentLights->size() < MAXLIGHTS) {
+		if (ImGui::Button("New Light")) { App->lightsManager->AddLight(LT_DIRECTIONAL_LIGHT, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }); }
+	}
+	
 	ImGui::End();
 	return open;
 }
