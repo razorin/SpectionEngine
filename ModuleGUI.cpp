@@ -233,10 +233,10 @@ bool ModuleGUI::DrawLightsMenu() {
 	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 2)), ImGuiSetCond_Once);
 	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
 	ImGui::Begin("Lights", &open);
-	std::list<Light*> currentLights = App->lightsManager->GetLights();
-	for (std::list<Light*>::iterator it = currentLights.begin(); it != currentLights.end(); ++it)
+	std::list<Light*>* currentLights = App->lightsManager->GetLights();
+	for (std::list<Light*>::iterator it = currentLights->begin(); it != currentLights->end(); ++it)
 	{
-		auto itPosition = std::distance(currentLights.begin(), it);
+		auto itPosition = std::distance(currentLights->begin(), it);
 		std::string tempString = "Light" + std::to_string(itPosition);
 		const char * headerLabel = tempString.c_str();
 		if (ImGui::CollapsingHeader(headerLabel))
@@ -246,7 +246,6 @@ bool ModuleGUI::DrawLightsMenu() {
 			ImGui::Separator();
 			ImGui::ColorEdit3("Diffuse", (*it)->diffuse);
 		}
-		
 	}
 	ImGui::End();
 	return open;

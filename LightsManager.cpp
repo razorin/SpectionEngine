@@ -75,6 +75,6 @@ void LightsManager::Draw() {
 	}
 }
 
-std::list<Light*> LightsManager::GetLights() {
-	return lights;
+std::list<Light*>* LightsManager::GetLights() {
+	return &lights;
 }
