@@ -87,12 +87,6 @@ private:
 	float fpsLog[100];
 	int numMs = 0;
 	float msLog[100];
-
-	//Light
-	float minLightPosition = -100;
-	float maxLightPosition = 100;
-	float minLightColor = 0.0f;
-	float maxLightColor = 1.0f;
 };
 
 #endif // __MODULEGUI_H__

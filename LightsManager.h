@@ -2,8 +2,9 @@
 #define __LIGHTSMANAGER_H__
 
 #include "Light.h"
-#include<list>
-
+#include <list>
+#include <map>
+#include "Glew/include/GL/glew.h"
 
 class LightsManager
 {
@@ -21,6 +22,7 @@ public:
 
 private:
 	std::list<Light*> lights;
+	std::map<int, GLenum> lightsMap;
 };
 
 #endif // __LIGHTSMANAGER_H__

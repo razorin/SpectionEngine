@@ -230,7 +230,7 @@ bool ModuleGUI::DrawPreferencesMenu() {
 
 bool ModuleGUI::DrawLightsMenu() {
 	bool open = true;
-	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
+	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 2)), ImGuiSetCond_Once);
 	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
 	ImGui::Begin("Lights", &open);
 	std::list<Light*> currentLights = App->lightsManager->GetLights();
@@ -241,25 +241,13 @@ bool ModuleGUI::DrawLightsMenu() {
 		const char * headerLabel = tempString.c_str();
 		if (ImGui::CollapsingHeader(headerLabel))
 		{
-			if (ImGui::SliderFloat("Position X", &(*it)->position[0], minLightPosition, maxLightPosition)) {}
-			if (ImGui::SliderFloat("Position Y", &(*it)->position[1], minLightPosition, maxLightPosition)) {}
-			if (ImGui::SliderFloat("Position Z", &(*it)->position[2], minLightPosition, maxLightPosition)) {}
+			ImGui::Text("Light Type %d", (*it)->type);
+			ImGui::InputFloat3("Position", (*it)->position);
 			ImGui::Separator();
-			if (ImGui::SliderFloat("Diffuse R", &(*it)->diffuse[0], minLightColor, maxLightColor)) {}
-			if (ImGui::SliderFloat("Diffuse G", &(*it)->diffuse[1], minLightColor, maxLightColor)) {}
-			if (ImGui::SliderFloat("Diffuse B", &(*it)->diffuse[2], minLightColor, maxLightColor)) {}
+			ImGui::ColorEdit3("Diffuse", (*it)->diffuse);
 		}
 		
 	}
-	/*
-	if (ImGui::SliderFloat("Position X", &App->renderer->light->position[0], minLightPosition, maxLightPosition)) {}
-	if (ImGui::SliderFloat("Position Y", &App->renderer->light->position[1], minLightPosition, maxLightPosition)) {}
-	if (ImGui::SliderFloat("Position Z", &App->renderer->light->position[2], minLightPosition, maxLightPosition)) {}
-	ImGui::Separator();
-	if (ImGui::SliderFloat("Diffuse R", &App->renderer->light->diffuse[0], minLightColor, maxLightColor)) {}
-	if (ImGui::SliderFloat("Diffuse G", &App->renderer->light->diffuse[1], minLightColor, maxLightColor)) {}
-	if (ImGui::SliderFloat("Diffuse B", &App->renderer->light->diffuse[2], minLightColor, maxLightColor)) {}
-	*/
 	ImGui::End();
 	return open;
 }
