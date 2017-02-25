@@ -230,6 +230,7 @@ bool ModuleGUI::DrawPreferencesMenu() {
 
 bool ModuleGUI::DrawLightsMenu() {
 	bool open = true;
+	const char* items[] = { "DIRECTIONAL LIGHT", "POINT LIGHT", "SPOTLIGHT", "AMBIENTLIGHT" };
 	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 2)), ImGuiSetCond_Once);
 	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
 	ImGui::Begin("Lights", &open);
@@ -241,11 +242,17 @@ bool ModuleGUI::DrawLightsMenu() {
 		const char * headerLabel = tempString.c_str();
 		if (ImGui::CollapsingHeader(headerLabel))
 		{
+			int newType = (*it)->type;
 			ImGui::Text("Light Type %d", (*it)->type);
+			std::string typeName = "Type " + std::to_string(itPosition);
 			std::string position = "Position " + std::to_string(itPosition);
 			std::string diffuse = "Diffuse " + std::to_string(itPosition);
 			std::string ambient = "Ambient " + std::to_string(itPosition);
 			std::string specular = "Specular " + std::to_string(itPosition);
+			if (ImGui::Combo(typeName.c_str(), &newType, items, IM_ARRAYSIZE(items))) {
+				if (newType != LT_SPOTLIGHT_LIGHT)
+				(*it)->type = static_cast<LightType>(newType);
+			}
 			ImGui::InputFloat3(position.c_str(), (*it)->position);
 			ImGui::ColorEdit3(diffuse.c_str(), (*it)->diffuse);
 			ImGui::ColorEdit3(ambient.c_str(), (*it)->ambient);
