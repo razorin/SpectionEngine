@@ -6,8 +6,6 @@
 #include "Animation.h"
 #include "Model.h"
 #include "SCube.h"
-#include "SCylinder.h"
-#include "SPlane.h"
 
 
 ModuleTestScene::ModuleTestScene(const JSON_Value *json, bool active) : Module(json, active) 
@@ -25,10 +23,18 @@ ModuleTestScene::~ModuleTestScene()
 bool ModuleTestScene::Start() {
 
 	primitives.push_back(cube = new SCube());
-	model = new Model();
-	model->Load("Models/Batman/","Batman.obj");
-	model2 = new Model();
-	model2->Load("Models/Magnetto/", "magnetto2.fbx");
+
+	importedLevel = new Level();
+	importedLevel->Load("Models/street/", "Street.obj");
+
+	int a = 0;
+
+	//model = new Model();
+	//model->Load("Models/Batman/","Batman.obj");
+	//model2->Load("Models/Magnetto/", "magnetto2.fbx");
+	//model2 = new Model();
+
+
 	return true;
 }
 

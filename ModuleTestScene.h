@@ -5,6 +5,7 @@
 #include "Module.h"
 #include "SPrimitive.h"
 #include "MemLeaks.h"
+#include "Level.h"
 
 class SPlane;
 class SCube;
@@ -33,6 +34,7 @@ public:
 	SCylinder *cylinder = nullptr;
 	Model *model = nullptr;
 	Model *model2 = nullptr;
+	Level* importedLevel = nullptr;
 
 private:
 	std::list<SPrimitive*> primitives;

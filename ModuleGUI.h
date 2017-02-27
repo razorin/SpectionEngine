@@ -76,8 +76,8 @@ private:
 	bool showHWInfo = false;
 	bool showAppInfo = false;
 	bool showPreferences = false;
-	bool showLights = true;
-	bool showConsole = true;
+	bool showLights = false;
+	bool showConsole = false;
 	int currentDisplayMode = 1;
 	int brightness = 1000;
 	int minBrightness = 0;

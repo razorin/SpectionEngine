@@ -14,6 +14,9 @@ struct Node {
 	std::vector<unsigned> meshes;
 	Node* parent = nullptr;
 	std::vector<Node*> childs;
+
+	Node() {};
+	~Node();
 };
 
 struct Material {
@@ -32,6 +35,7 @@ public:
 	~Level();
 
 	void Load(const char* path, const char* file);
+	void RecursiveNodeRead(Node* node, Node* parent, int pos);
 	void Draw();
 	void Clear();
 
