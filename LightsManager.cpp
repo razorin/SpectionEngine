@@ -68,7 +68,9 @@ void LightsManager::Draw() {
 		glLightf(lightNumber, GL_QUADRATIC_ATTENUATION, (*it)->quadraticAttenuation);
 
 		if ((*it)->type == LT_SPOTLIGHT_LIGHT) {
-			glLightfv(lightNumber, GL_SPOT_DIRECTION, (*it)->direction);
+			if ((*it)->direction != nullptr) {
+				glLightfv(lightNumber, GL_SPOT_DIRECTION, (*it)->direction);
+			}
 			glLightf(lightNumber, GL_SPOT_EXPONENT, (*it)->exponent);
 			glLightf(lightNumber, GL_SPOT_CUTOFF, (*it)->cutoff);
 		}
@@ -95,6 +97,9 @@ std::list<Light*>* LightsManager::GetLights() {
 
 bool LightsManager::EnableLight(ptrdiff_t position) {
 	GLenum lightNumber = lightsMap.find(position)->second;
+	if (lights.size() == 1) {
+		glEnable(GL_LIGHTING);
+	}
 	glEnable(lightNumber);
 	return true;
 }
@@ -102,5 +107,8 @@ bool LightsManager::EnableLight(ptrdiff_t position) {
 bool LightsManager::DisableLight(ptrdiff_t position) {
 	GLenum lightNumber = lightsMap.find(position)->second;
 	glDisable(lightNumber);
+	if (lights.size() == 1) {
+		glDisable(GL_LIGHTING);
+	}
 	return true;
 }

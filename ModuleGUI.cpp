@@ -252,14 +252,22 @@ bool ModuleGUI::DrawLightsMenu() {
 			std::string diffuse = "Diffuse " + std::to_string(itPosition);
 			std::string ambient = "Ambient " + std::to_string(itPosition);
 			std::string specular = "Specular " + std::to_string(itPosition);
+			std::string direction = "Direction " + std::to_string(itPosition);
 			if (ImGui::Combo(typeName.c_str(), &newType, items, IM_ARRAYSIZE(items))) {
-				if (newType != LT_SPOTLIGHT_LIGHT)
 				(*it)->type = static_cast<LightType>(newType);
 			}
-			ImGui::InputFloat3(position.c_str(), (*it)->position);
+			if ((*it)->type == LT_DIRECTIONAL_LIGHT) {
+				ImGui::InputFloat3(direction.c_str(), (*it)->position);
+			}
+			else {
+				ImGui::InputFloat3(position.c_str(), (*it)->position);
+			}
 			ImGui::ColorEdit3(diffuse.c_str(), (*it)->diffuse);
 			ImGui::ColorEdit3(ambient.c_str(), (*it)->ambient);
 			ImGui::ColorEdit3(specular.c_str(), (*it)->specular);
+			if ((*it)->type == LT_SPOTLIGHT_LIGHT) {
+				ImGui::InputFloat3(direction.c_str(), (*it)->direction);
+			}
 			std::string remove = "Remove Light " + std::to_string(itPosition);
 			if (ImGui::Button(remove.c_str())) {
 				hasBeenRemoved = true;
@@ -273,7 +281,7 @@ bool ModuleGUI::DrawLightsMenu() {
 		}
 	}
 	if (currentLights->size() < MAXLIGHTS) {
-		if (ImGui::Button("New Light")) { App->lightsManager->AddLight(LT_DIRECTIONAL_LIGHT, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }); }
+		if (ImGui::Button("New Light")) { App->lightsManager->AddLight(LT_POINT_LIGHT, { 0.0f, 5.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }); }
 	}
 	
 	ImGui::End();

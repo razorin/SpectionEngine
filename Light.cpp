@@ -44,19 +44,3 @@ Light::~Light()
 	RELEASE(specular);
 	RELEASE(direction);	
 }
-
-void Light::Draw() {
-	glLightfv(GL_LIGHT0, GL_POSITION, position);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
-	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, constantAttenuation);
-	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, linearAttenuation);
-	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, quadraticAttenuation);
-
-	if (type == LT_SPOTLIGHT_LIGHT) {
-		glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, direction);
-		glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, exponent);
-		glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, cutoff);
-	}
-}
