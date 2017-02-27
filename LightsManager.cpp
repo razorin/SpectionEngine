@@ -36,6 +36,7 @@ bool LightsManager::AddLight(LightType type, fPoint position, float4 ambient, fl
 
 	if (lights.size() < MAXLIGHTS) {
 		lights.push_back(new Light(type, position, ambient, diffuse, specular, constantAttenuation, linearAttenuation, quadraticAttenuation));
+		EnableLight(lights.size() - 1);
 	}
 
 	return true;
@@ -47,13 +48,10 @@ bool LightsManager::AddLight(LightType type, fPoint position, float4 ambient, fl
 
 	if (lights.size() < MAXLIGHTS) {
 		lights.push_back(new Light(type, position, ambient, diffuse, specular, direction, exponent, cutoff, constantAttenuation, linearAttenuation, quadraticAttenuation));
+		EnableLight(lights.size() - 1);
 	}
 
 	return true;
-}
-
-void LightsManager::RemoveLight(Light *light) {
-	lights.remove(light);
 }
 
 void LightsManager::Draw() {
@@ -61,7 +59,6 @@ void LightsManager::Draw() {
 	{
 		auto itPosition = std::distance(lights.begin(), it);
 		GLenum lightNumber = lightsMap.find(itPosition)->second;
-		//App->gui->console.AddLog("Drawing light %d", (*it)->type);
 		glLightfv(lightNumber, GL_POSITION, (*it)->position);
 		glLightfv(lightNumber, GL_AMBIENT, (*it)->ambient);
 		glLightfv(lightNumber, GL_DIFFUSE, (*it)->diffuse);
@@ -80,4 +77,16 @@ void LightsManager::Draw() {
 
 std::list<Light*>* LightsManager::GetLights() {
 	return &lights;
+}
+
+bool LightsManager::EnableLight(ptrdiff_t position) {
+	GLenum lightNumber = lightsMap.find(position)->second;
+	glEnable(lightNumber);
+	return true;
+}
+
+bool LightsManager::DisableLight(ptrdiff_t position) {
+	GLenum lightNumber = lightsMap.find(position)->second;
+	glDisable(lightNumber);
+	return true;
 }

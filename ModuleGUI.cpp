@@ -235,11 +235,12 @@ bool ModuleGUI::DrawLightsMenu() {
 	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
 	ImGui::Begin("Lights", &open);
 	std::list<Light*>* currentLights = App->lightsManager->GetLights();
-	for (std::list<Light*>::iterator it = currentLights->begin(); it != currentLights->end(); ++it)
+	for (std::list<Light*>::iterator it = currentLights->begin(); it != currentLights->end(); )
 	{
 		auto itPosition = std::distance(currentLights->begin(), it);
 		std::string tempString = "Light" + std::to_string(itPosition);
 		const char * headerLabel = tempString.c_str();
+		bool hasBeenRemoved = false;
 		if (ImGui::CollapsingHeader(headerLabel))
 		{
 			int newType = (*it)->type;
@@ -257,6 +258,16 @@ bool ModuleGUI::DrawLightsMenu() {
 			ImGui::ColorEdit3(diffuse.c_str(), (*it)->diffuse);
 			ImGui::ColorEdit3(ambient.c_str(), (*it)->ambient);
 			ImGui::ColorEdit3(specular.c_str(), (*it)->specular);
+			std::string remove = "Remove Light " + std::to_string(itPosition);
+			if (ImGui::Button(remove.c_str())) {
+				hasBeenRemoved = true;
+				App->lightsManager->DisableLight(itPosition);
+				RELEASE(*it);
+				it = currentLights->erase(it);
+			}
+		}
+		if (!hasBeenRemoved) {
+			++it;
 		}
 	}
 	if (currentLights->size() < MAXLIGHTS) {
