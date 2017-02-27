@@ -72,6 +72,20 @@ void LightsManager::Draw() {
 			glLightf(lightNumber, GL_SPOT_EXPONENT, (*it)->exponent);
 			glLightf(lightNumber, GL_SPOT_CUTOFF, (*it)->cutoff);
 		}
+
+		// Draw light gizmo
+		glBegin(GL_LINES);
+		glLineWidth(5.0f);
+		glColor4f(1.0f, 1.0f, 0.0f, 1.0f); // Yellow
+		glVertex3f((*it)->position[0] + 0.1f, (*it)->position[1], (*it)->position[2]);
+		glVertex3f((*it)->position[0] - 0.1f, (*it)->position[1], (*it)->position[2]);
+		glVertex3f((*it)->position[0], (*it)->position[1] + 0.1f, (*it)->position[2]);
+		glVertex3f((*it)->position[0], (*it)->position[1] - 0.1f, (*it)->position[2]);
+		glVertex3f((*it)->position[0], (*it)->position[1], (*it)->position[2] + 0.1f);
+		glVertex3f((*it)->position[0], (*it)->position[1], (*it)->position[2] - 0.1f);
+		glEnd();
+		glLineWidth(1.0f);
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 }
 

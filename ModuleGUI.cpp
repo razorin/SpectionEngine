@@ -45,28 +45,30 @@ update_status ModuleGUI::Update(float dt)
 	ImGuiIO& io = ImGui::GetIO();
 	uiInput = io.WantCaptureMouse;
 
-	if (!DrawMainMenuBar()) {
-		ret = UPDATE_STOP;
-	}
+	if (showGUI) {
+		if (!DrawMainMenuBar()) {
+			ret = UPDATE_STOP;
+		}
 
-	if (showHWInfo) {
-		showHWInfo = DrawHWInfoMenu();
-	}
+		if (showHWInfo) {
+			showHWInfo = DrawHWInfoMenu();
+		}
 
-	if (showAppInfo) {
-		showAppInfo = DrawAppInfo();
-	}
+		if (showAppInfo) {
+			showAppInfo = DrawAppInfo();
+		}
 
-	if (showPreferences) {
-		showPreferences = DrawPreferencesMenu();
-	}
+		if (showPreferences) {
+			showPreferences = DrawPreferencesMenu();
+		}
 
-	if (showLights) {
-		showLights = DrawLightsMenu();
-	}
+		if (showLights) {
+			showLights = DrawLightsMenu();
+		}
 
-	if (showConsole) {
-		showConsole = console.Draw();
+		if (showConsole) {
+			showConsole = console.Draw();
+		}
 	}
 	return ret;
 }

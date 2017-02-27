@@ -72,7 +72,7 @@ public:
 	bool uiInput = false;
 
 private:
-	bool resizable = false;
+	bool showGUI = true;
 	bool showHWInfo = false;
 	bool showAppInfo = false;
 	bool showPreferences = false;
