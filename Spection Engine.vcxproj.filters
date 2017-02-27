@@ -71,7 +71,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="PreciseTimer.h">
-		<Filter>Utils</Filter>
+      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="ModuleTestScene.h">
       <Filter>Game Modules</Filter>
@@ -99,7 +99,7 @@
     </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Geometric primitive</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="IMGUI\imconfig.h">
       <Filter>IMGUI</Filter>
     </ClInclude>
@@ -126,6 +126,9 @@
     </ClInclude>
     <ClInclude Include="Utils.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>Geometric primitive</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -212,6 +215,9 @@
     </ClCompile>
     <ClCompile Include="ModuleGUI.cpp">
       <Filter>Core Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>Geometric primitive</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
