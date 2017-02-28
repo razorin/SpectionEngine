@@ -136,6 +136,9 @@
     <ClInclude Include="LightsManager.h">
       <Filter>Lights</Filter>
     </ClInclude>
+    <ClInclude Include="Material.h" >
+	  <Filter>Geometric primitive</Filter>
+	</ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -227,6 +230,9 @@
     </ClCompile>
     <ClCompile Include="LightsManager.cpp">
       <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Geometric primitive</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
