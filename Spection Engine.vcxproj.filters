@@ -136,6 +136,8 @@
     <ClInclude Include="LightsManager.h">
       <Filter>Lights</Filter>
     </ClInclude>
+    <ClInclude Include="Material.h" />
+	</ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -227,6 +229,9 @@
     </ClCompile>
     <ClCompile Include="LightsManager.cpp">
       <Filter>Lights</Filter>
+	</ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Main</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
