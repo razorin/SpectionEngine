@@ -6,6 +6,7 @@
 #include "Animation.h"
 #include "Model.h"
 #include "SCube.h"
+#include "MemLeaks.h"
 
 
 ModuleTestScene::ModuleTestScene(const JSON_Value *json, bool active) : Module(json, active) 
@@ -25,7 +26,7 @@ bool ModuleTestScene::Start() {
 	primitives.push_back(cube = new SCube());
 
 	importedLevel = new Level();
-	importedLevel->Load2("Models/street/", "Street.obj");
+	importedLevel->Load("Models/street/", "Street.obj");
 
 	int a = 0;
 
@@ -84,6 +85,12 @@ bool ModuleTestScene::CleanUp() {
 	{
 		model2->Clear();
 		RELEASE(model2);
+	}
+
+	if (importedLevel != nullptr)
+	{
+		importedLevel->Clear();
+		RELEASE(importedLevel);
 	}
 
 	return true;

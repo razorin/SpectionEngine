@@ -6,6 +6,8 @@
 #include "assimp\vector3.h"
 #include "assimp/scene.h"
 #include "Mesh.h"
+#include "MemLeaks.h"
+
 
 struct Node {
 	std::string name;
@@ -35,12 +37,10 @@ public:
 	~Level();
 
 	void Load(const char* path, const char* file);
-	void Load2(const char* path, const char* file);
-
-	void RecursiveNodeRead(aiNode* node, Node* parent);
-	void RecursiveNodeRead2(Node* node, aiNode& aiNode, Node* parentNode);
+	void RecursiveNodeRead(Node* node, aiNode& aiNode, Node* parentNode);
 	const void PrintNodeInfo();
 	void Draw();
+	void RecursiveNodeRelease(Node* node);
 	void Clear();
 
 	unsigned GetNumMeshes() const { return meshes.size(); }

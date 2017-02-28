@@ -13,7 +13,6 @@ Level::Level()
 {
 }
 
-
 Level::~Level()
 {
 }
@@ -28,88 +27,16 @@ void Level::Load(const char * path, const char * file)
 		aiProcess_JoinIdenticalVertices |
 		aiProcess_SortByPType);
 
-
-	aiNode* rootNode = scene->mRootNode;
 	root = new Node();
-	root->name = rootNode->mName.data;
-	//Load position and rotation
-	rootNode->mTransformation.DecomposeNoScaling(root->rotation, root->position);
-	//Load meshes
-	for (int i = 0; i < rootNode->mNumMeshes; i++)
-	{
-		//carga de meshes
-		root->meshes.push_back(rootNode->mMeshes[i]);
-	}
+	aiNode* rootNode = scene->mRootNode;
 
-	uint numChilds = rootNode->mNumChildren;
-	if (numChilds > 0)
-	{
-		for (int i = 0; i < numChilds; i++)
-		{
-			aiNode* childNode = rootNode->mChildren[i];
-
-			RecursiveNodeRead(childNode, root);
-		}
-	}
+	RecursiveNodeRead(root, *rootNode, nullptr);
+	//PrintNodeInfo();
 
 	aiReleaseImport(scene);
 }
 
-void Level::RecursiveNodeRead(aiNode* node, Node* parent)
-{
-	Node* child = new Node();
-	child->name = node->mName.data;
-	node->mTransformation.DecomposeNoScaling(child->rotation, child->position);
-	child->parent = parent;
-
-	for (int i = 0; i < node->mNumMeshes; i++)
-	{
-		//carga de meshes
-		child->meshes.push_back(node->mMeshes[i]);
-	}
-
-	if (node->mNumChildren == 0) {
-		root->childs.push_back(child);
-	}
-	else {
-		for (int i = 0; i < node->mNumMeshes; i++) {
-			RecursiveNodeRead(node->mChildren[i], child);
-		}
-		root->childs.push_back(child);
-	}
-}
-
-
-void Level::Load2(const char * path, const char * file)
-{
-	string folderPath = string(path);
-	string filePath = path + string(file);
-	const aiScene* scene = aiImportFile(filePath.c_str(),
-		aiProcess_CalcTangentSpace |
-		aiProcess_Triangulate |
-		aiProcess_JoinIdenticalVertices |
-		aiProcess_SortByPType);
-
-	root = new Node();
-	aiNode* rootNode = scene->mRootNode;
-
-
-	//DLOG("%s", rootNode->mName.data);
-
-	//for (int i = 0; i < rootNode->mNumChildren; i++)
-	//{
-	//	DLOG("%s is child of %s", rootNode->mChildren[i]->mName.data, rootNode->mName.data);
-	//}
-
-
-	RecursiveNodeRead2(root, *rootNode, nullptr);
-
-	PrintNodeInfo();
-
-}
-
-
-void Level::RecursiveNodeRead2(Node* node, aiNode& assimpNode, Node* parentNode)
+void Level::RecursiveNodeRead(Node* node, aiNode& assimpNode, Node* parentNode)
 {
 	node->name = assimpNode.mName.data;
 	assimpNode.mTransformation.DecomposeNoScaling(node->rotation, node->position);
@@ -124,27 +51,20 @@ void Level::RecursiveNodeRead2(Node* node, aiNode& assimpNode, Node* parentNode)
 	{
 		Node* childNode = new Node();
 		aiNode* aiChildNode = assimpNode.mChildren[i];
-		RecursiveNodeRead2(childNode, *aiChildNode, node);
+		RecursiveNodeRead(childNode, *aiChildNode, node);
 		node->childs.push_back(childNode);
 	}
 }
 
 const void Level::PrintNodeInfo()
 {
-	//DLOG("%s", root->name.c_str());
+	DLOG("%s", root->name.c_str());
 
-	//for (int i = 0; i < root->childs.size(); i++)
-	//{
-	//	if (i != 4 && i != 5)
-	//	{
-	//		DLOG("%s is child of %s", root->childs[i]->name, root->name);
-	//	}
-	//}
+	for (int i = 0; i < root->childs.size(); i++)
+	{
+		DLOG("%s is child of %s", root->childs[i]->name.c_str(), root->name.c_str());
+	}
 }
-
-
-
-
 
 
 void Level::Draw()
@@ -152,8 +72,18 @@ void Level::Draw()
 
 }
 
+void Level::RecursiveNodeRelease(Node * node)
+{
+	for (int i = 0; i < node->childs.size(); i++)
+	{
+		RecursiveNodeRelease(node->childs[i]);
+	}
+	delete node;
+}
+
 void Level::Clear()
 {
+	RecursiveNodeRelease(root);
 }
 
 Node * Level::FindNode(const char * name)
@@ -167,9 +97,4 @@ void Level::LinkNode(Node * node, Node * destination)
 
 Node::~Node()
 {
-	DLOG("destructor de node");
-	for (int i = 0; i < childs.size(); i++) {
-		RELEASE(childs[i]);
-	}
-	RELEASE(parent);
 }
