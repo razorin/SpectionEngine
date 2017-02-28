@@ -1,6 +1,8 @@
 #include "Level.h"
 #include "Mesh.h"
 #include "Globals.h"
+#include "Application.h"
+#include "ModuleTextures.h"
 #include "assimp\vector3.h"
 #include "assimp/cimport.h"
 #include "assimp/scene.h"
@@ -30,10 +32,94 @@ void Level::Load(const char * path, const char * file)
 	root = new Node();
 	aiNode* rootNode = scene->mRootNode;
 
+
+	//DLOG("%s", rootNode->mName.data);
+
+	//for (int i = 0; i < rootNode->mNumChildren; i++)
+	//{
+	//	DLOG("%s is child of %s", rootNode->mChildren[i]->mName.data, rootNode->mName.data);
+	//}
+
+	//Load nodes
 	RecursiveNodeRead(root, *rootNode, nullptr);
-	//PrintNodeInfo();
+
+	//Create all the meshes
+	for (int i = 0; i < root->childs.size(); i++) {
+		for (int j = 0; j < root->childs[i]->meshes.size(); j++) {
+			/*
+
+			//We get all textures and put it on imageNames
+			imageNames = new uint[scene->mNumMaterials];
+			for (int i = 0; i < scene->mNumMaterials; i++)
+			{
+				const aiMaterial* material = scene->mMaterials[i];
+				// Just one texture
+				int texIndex = 0;
+				aiString path;
+				int texturesPerMaterial = material->GetTextureCount(aiTextureType_DIFFUSE);
+				if (material->GetTexture(aiTextureType_DIFFUSE, texIndex, &path) == AI_SUCCESS)
+				{
+					string textureFile = path.data;
+					string texturePath = folderPath + textureFile;
+					imageNames[i] = App->textures->LoadTexture(texturePath.c_str());
+				}
+			}
+
+			
+
+			// we get all meshes info and put it on an Mesh array
+			Mesh* mesh = new Mesh();
+			aiMesh* aiMesh = scene->mMeshes[root->childs[i]->meshes[j]];
+
+			uint numVertices = aiMesh->mNumVertices;
+			mesh->numVertices = numVertices;
+
+			mesh->vertices = new float[numVertices * 3];
+			memcpy(mesh->vertices, aiMesh->mVertices, sizeof(float) * 3 * numVertices);
+
+			mesh->normals = new float[numVertices * 3];
+			memcpy(mesh->normals, aiMesh->mNormals, sizeof(float) * 3 * numVertices);
+
+			//More than one texture
+			mesh->numTextures = aiMesh->GetNumUVChannels();
+			mesh->textureCoords = new float*[mesh->numTextures];
+			for (int j = 0; j < mesh->numTextures; j++) {
+				mesh->textureCoords[j] = new float[numVertices * 3];
+				memcpy(mesh->textureCoords[j], aiMesh->mTextureCoords[j], sizeof(float) * 3 * numVertices);
+			}
+
+			mesh->imageName = imageNames[aiMesh->mMaterialIndex];
+
+			uint numFaces = aiMesh->mNumFaces;
+
+			mesh->numIndices = numFaces * 3;
+			mesh->indices = new uint[numFaces * 3];
+			for (int j = 0; j < numFaces; j++)
+			{
+				aiFace aiFace = aiMesh->mFaces[j];
+				//assert(aiFace.mNumIndices == 3);
+				memcpy(&mesh->indices[j * 3], aiFace.mIndices, sizeof(uint) * 3);
+			}
+
+
+			//After all info is on our mesh we can initialize VBOs
+			mesh->InitializeBuffers();
+
+			//Add Mesh
+			meshes.push_back(*mesh);
+
+			*/
+		}
+	}
+
+	DLOG("El numero de meshes es: %d", meshes.size());
+
+	//Create all the materials
+
+	PrintNodeInfo();
 
 	aiReleaseImport(scene);
+
 }
 
 void Level::RecursiveNodeRead(Node* node, aiNode& assimpNode, Node* parentNode)
@@ -84,6 +170,8 @@ void Level::RecursiveNodeRelease(Node * node)
 void Level::Clear()
 {
 	RecursiveNodeRelease(root);
+	
+//	if(imageNames != nullptr) RELEASE(imageNames);
 }
 
 Node * Level::FindNode(const char * name)

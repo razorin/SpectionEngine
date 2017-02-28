@@ -57,6 +57,7 @@ public:
 
 public:
 	Node* root = nullptr;
+	uint* imageNames;
 	std::vector<Mesh> meshes;
 	std::vector<Material> materials;
 };

@@ -28,8 +28,6 @@ bool ModuleTestScene::Start() {
 	importedLevel = new Level();
 	importedLevel->Load("Models/street/", "Street.obj");
 
-	int a = 0;
-
 	//model = new Model();
 	//model->Load("Models/Batman/","Batman.obj");
 	//model2->Load("Models/Magnetto/", "magnetto2.fbx");
