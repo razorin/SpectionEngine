@@ -48,33 +48,35 @@ void Level::Load(const char * path, const char * file)
 		{
 			aiNode* childNode = rootNode->mChildren[i];
 
-			Node* child = new Node();
-			child->name = childNode->mName.data;
-			childNode->mTransformation.DecomposeNoScaling(child->rotation, child->position);
-
-			for (int j = 0; j < rootNode->mNumMeshes; j++)
-			{
-				child->meshes.push_back(childNode->mMeshes[j]);
-			}
-
-			child->parent = root;
-			root->childs.push_back(child);
-
-			//child of child
+			RecursiveNodeRead(childNode, root);
 		}
 	}
-
-
-
-
 
 	aiReleaseImport(scene);
 }
 
-void Level::RecursiveNodeRead(Node* node, Node* parent, int pos)
+void Level::RecursiveNodeRead(aiNode* node, Node* parent)
 {
+	Node* child = new Node();
+	child->name = node->mName.data;
+	node->mTransformation.DecomposeNoScaling(child->rotation, child->position);
+	child->parent = parent;
 
+	for (int i = 0; i < node->mNumMeshes; i++)
+	{
+		//carga de meshes
+		child->meshes.push_back(node->mMeshes[i]);
+	}
 
+	if (node->mNumChildren == 0) {
+		root->childs.push_back(child);
+	}
+	else {
+		for (int i = 0; i < node->mNumMeshes; i++) {
+			RecursiveNodeRead(node->mChildren[i], child);
+		}
+		root->childs.push_back(child);
+	}
 }
 
 
