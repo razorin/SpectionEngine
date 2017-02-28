@@ -35,7 +35,11 @@ public:
 	~Level();
 
 	void Load(const char* path, const char* file);
+	void Load2(const char* path, const char* file);
+
 	void RecursiveNodeRead(aiNode* node, Node* parent);
+	void RecursiveNodeRead2(Node* node, aiNode& aiNode, Node* parentNode);
+	const void PrintNodeInfo();
 	void Draw();
 	void Clear();
 

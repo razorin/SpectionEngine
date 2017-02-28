@@ -25,7 +25,7 @@ bool ModuleTestScene::Start() {
 	primitives.push_back(cube = new SCube());
 
 	importedLevel = new Level();
-	importedLevel->Load("Models/street/", "Street.obj");
+	importedLevel->Load2("Models/street/", "Street.obj");
 
 	int a = 0;
 
