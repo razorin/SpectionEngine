@@ -29,7 +29,7 @@ bool ModuleTestScene::Start() {
 	importedLevel->Load("Models/street/", "Street.obj");
 
 	//model = new Model();
-	//model->Load("Models/Batman/","Batman.obj");
+	//model->Load("models/batman/","batman.obj");
 	//model2->Load("Models/Magnetto/", "magnetto2.fbx");
 	//model2 = new Model();
 
@@ -64,6 +64,11 @@ void ModuleTestScene::Draw()
 
 	if (model2 != nullptr)
 		model2->Draw();
+
+	if (importedLevel != nullptr)
+	{
+		importedLevel->Draw();
+	}
 }
 
 bool ModuleTestScene::CleanUp() {

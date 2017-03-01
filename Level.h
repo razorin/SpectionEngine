@@ -46,7 +46,7 @@ public:
 	unsigned GetNumMeshes() const { return meshes.size(); }
 	unsigned GetNumMaterials() const { return materials.size(); }
 
-	Mesh& GetMesh(unsigned index) { return meshes[index]; }
+	Mesh& GetMesh(unsigned index) { return *meshes[index]; }
 	//const Mesh& GetMesh(unsigned index) { return meshes[index]; }
 
 	Node* GetRootNode() { return root; }
@@ -57,9 +57,10 @@ public:
 
 public:
 	Node* root = nullptr;
+	std::vector<Mesh*> meshes;
+	std::vector<Material*> materials;
+
 	uint* imageNames;
-	std::vector<Mesh> meshes;
-	std::vector<Material> materials;
 };
 
 #endif /* _LEVEL_H_ */
