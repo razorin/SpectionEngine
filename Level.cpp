@@ -160,6 +160,7 @@ void Level::RecursiveNodeRelease(Node * node)
 void Level::Clear()
 {
 	RecursiveNodeRelease(root);
+	//delete root;
 }
 
 Node * Level::FindNode(const char * name)
@@ -174,7 +175,19 @@ Node * Level::FindNode(const char * name)
 
 void Level::LinkNode(Node * node, Node * parent)
 {
+	//Find position of the node in the parents child list
+	int pos = -1;
+	for (int i = 0; i < node->parent->childs.size(); i++) {
+		if (node->parent->childs[i]->name.compare(node->parent->name) == 0) {
+			pos = i;
+		}
+	}
+	//Remove from the old parents child list
+	node->parent->childs.erase(node->parent->childs.begin + pos);
+	//Assign new parent
 	node->parent = parent;
+	//Add to the new parents child list
+	parent->childs.push_back(node);
 }
 
 Node::~Node()
