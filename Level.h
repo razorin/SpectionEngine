@@ -53,7 +53,7 @@ public:
 	//const Node* GetRootNode() { return root; }
 
 	Node* FindNode(const char* name);
-	void LinkNode(Node* node, Node* destination);
+	void LinkNode(Node* node, Node* parent);
 
 public:
 	Node* root = nullptr;

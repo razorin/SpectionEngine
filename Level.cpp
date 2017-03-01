@@ -164,11 +164,17 @@ void Level::Clear()
 
 Node * Level::FindNode(const char * name)
 {
+	for (int i = 0; i < root->childs.size(); i++) {
+		if (root->childs[i]->name.compare(name) == 0) {
+			return root->childs[i];
+		}
+	}
 	return nullptr;
 }
 
-void Level::LinkNode(Node * node, Node * destination)
+void Level::LinkNode(Node * node, Node * parent)
 {
+	node->parent = parent;
 }
 
 Node::~Node()
