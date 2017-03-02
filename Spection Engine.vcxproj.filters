@@ -71,7 +71,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
-      <Filter>Utils</Filter>
+	  <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="PreciseTimer.h">
       <Filter>Utils</Filter>
@@ -139,6 +139,9 @@
     <ClInclude Include="Material.h" >
 	  <Filter>Geometric primitive</Filter>
 	</ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>Geometric primitive</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -232,6 +235,9 @@
       <Filter>Lights</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
+		<Filter>Geometric primitive</Filter>
+	</ClCompile>
+    <ClCompile Include="Level.cpp">
       <Filter>Geometric primitive</Filter>
     </ClCompile>
   </ItemGroup>

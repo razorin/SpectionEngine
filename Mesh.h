@@ -17,7 +17,8 @@ public:
 	uint vboIndices = 0;
 	uint vboColors = 0;
 	uint vboNormals = 0;
-	uint *vboTextures = nullptr;
+	uint vboTextures = 0;
+	//uint *vboTextures = nullptr;
 
 	uint numVertices = 0;
 	uint numIndices = 0;
@@ -29,7 +30,7 @@ public:
 	float *colors = nullptr;
 	float* normals = nullptr;
 	//float *textureCoords = nullptr;
-	float **textureCoords = nullptr;
+	float *textureCoords = nullptr;
 
 };
 
