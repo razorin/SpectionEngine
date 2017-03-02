@@ -23,6 +23,9 @@
     <Filter Include="Lights">
       <UniqueIdentifier>{d2b50b00-9d3a-4cd6-8390-bbfe1a3e649f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject">
+      <UniqueIdentifier>{de3dde35-3be0-4919-a5bb-3e9f0c1ac449}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleRender.h">
@@ -71,7 +74,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
-	  <Filter>Utils</Filter>
+      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="PreciseTimer.h">
       <Filter>Utils</Filter>
@@ -136,12 +139,14 @@
     <ClInclude Include="LightsManager.h">
       <Filter>Lights</Filter>
     </ClInclude>
-    <ClInclude Include="Material.h" >
-	  <Filter>Geometric primitive</Filter>
-	</ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Geometric primitive</Filter>
+    </ClInclude>
     <ClInclude Include="Level.h">
       <Filter>Geometric primitive</Filter>
     </ClInclude>
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Component.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -235,10 +240,16 @@
       <Filter>Lights</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
-		<Filter>Geometric primitive</Filter>
-	</ClCompile>
+      <Filter>Geometric primitive</Filter>
+    </ClCompile>
     <ClCompile Include="Level.cpp">
       <Filter>Geometric primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Main</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
