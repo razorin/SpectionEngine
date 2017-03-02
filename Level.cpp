@@ -163,6 +163,12 @@ void Level::RecursiveNodeRelease(Node * node)
 void Level::Clear()
 {
 	RecursiveNodeRelease(root);
+
+	RELEASE(imageNames);
+	for (int i = 0; i < meshes.size(); i++)
+	{
+		RELEASE(meshes[i]);
+	}
 	//delete root;
 }
 

@@ -26,17 +26,17 @@ bool ModuleTestScene::Start() {
 	primitives.push_back(cube = new SCube());
 
 	importedLevel = new Level();
-	//importedLevel->Load("Models/street/", "Street.obj");
-	importedLevel->Load("Models/street/", "Street environment_V01.fbx");
+	importedLevel->Load("Models/street/", "Street.obj");
+	//importedLevel->Load("Models/street/", "Street environment_V01.fbx");
 	//Test FindNode function
-	Node* node = importedLevel->FindNode("g City_building_004");
-	if (node == nullptr) {
-		DLOG("Node not found");
-	}
-	else
-	{
-		DLOG("The name of the node is: %s", node->name.c_str());
-	}
+	//Node* node = importedLevel->FindNode("g City_building_004");
+	//if (node == nullptr) {
+	//	DLOG("Node not found");
+	//}
+	//else
+	//{
+	//	DLOG("The name of the node is: %s", node->name.c_str());
+	//}
 	//model = new Model();
 	//model->Load("models/batman/","batman.obj");
 	//model2->Load("Models/Magnetto/", "magnetto2.fbx");
