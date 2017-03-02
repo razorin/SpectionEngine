@@ -36,7 +36,7 @@ void Level::Load(const char * path, const char * file)
 	root = new Node();
 	aiNode* rootNode = scene->mRootNode;
 	RecursiveNodeRead(root, *rootNode, nullptr);
-	PrintNodeInfo();
+	PrintNodeInfo(*root);
 
 
 	//Load textures
@@ -119,36 +119,51 @@ void Level::RecursiveNodeRead(Node* node, aiNode& assimpNode, Node* parentNode)
 	}
 }
 
-const void Level::PrintNodeInfo()
+const void Level::PrintNodeInfo(Node & node)
 {
-	DLOG("%s", root->name.c_str());
-	DLOG("x: %f,  y: %f,  z: %f", root->position.x, root->position.y, root->position.z);
+	if (node.parent != nullptr)	{
+		DLOG("%s is child of %s", node.name.c_str(), node.parent->name.c_str());
+	}
+	else {
+		DLOG("%s", node.name.c_str());
+	}
 
-	for (int i = 0; i < root->childs.size(); i++)
+	//DLOG("x: %f,  y: %f,  z: %f", node.position.x, node.position.y, node.position.z);
+
+	for (int i = 0; i < node.childs.size(); i++)
 	{
-		DLOG("%s is child of %s", root->childs[i]->name.c_str(), root->name.c_str());
-		DLOG("x: %f,  y: %f,  z: %f", root->childs[i]->position.x, root->childs[i]->position.y, root->childs[i]->position.z);
-
+		PrintNodeInfo(*node.childs[i]);
 	}
 }
+
+//const void Level::PrintNodeInfo()
+//{
+//	DLOG("%s", root->name.c_str());
+//	DLOG("x: %f,  y: %f,  z: %f", root->position.x, root->position.y, root->position.z);
+//
+//	for (int i = 0; i < root->childs.size(); i++)
+//	{
+//		DLOG("%s is child of %s", root->childs[i]->name.c_str(), root->name.c_str());
+//		DLOG("x: %f,  y: %f,  z: %f", root->childs[i]->position.x, root->childs[i]->position.y, root->childs[i]->position.z);
+//
+//	}
+//}
 
 
 void Level::Draw()
 {
-	glMatrixMode(GL_MODELVIEW);
+	//glPushMatrix();
 
-	glPushMatrix();
+	////glTranslatef(0, 0, 0);
+	////glRotatef(45.0, 0.0, 1.0, 0.0);
+	////glScalef(1, 1, 2);
 
-	//glTranslatef(0, 0, 0);
-	//glRotatef(45.0, 0.0, 1.0, 0.0);
-	//glScalef(1, 1, 2);
-
-
-	for (int i = 0; i < root->childs.size(); i++)
-	{
-		meshes[i]->Draw();
-	}
-	glPopMatrix();
+	//
+	///*for (int i = 0; i < root->childs.size(); i++)
+	//{
+	//	meshes[i]->Draw();
+	//}*/
+	//glPopMatrix();
 }
 
 void Level::RecursiveNodeRelease(Node * node)
@@ -163,13 +178,11 @@ void Level::RecursiveNodeRelease(Node * node)
 void Level::Clear()
 {
 	RecursiveNodeRelease(root);
-
 	RELEASE(imageNames);
 	for (int i = 0; i < meshes.size(); i++)
 	{
 		RELEASE(meshes[i]);
 	}
-	//delete root;
 }
 
 Node * Level::FindNode(const char * name)

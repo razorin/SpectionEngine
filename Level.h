@@ -39,7 +39,7 @@ public:
 
 	void Load(const char* path, const char* file);
 	void RecursiveNodeRead(Node* node, aiNode& aiNode, Node* parentNode);
-	const void PrintNodeInfo();
+	const void PrintNodeInfo(Node& node);
 	void Draw();
 	void RecursiveNodeRelease(Node* node);
 	void Clear();
