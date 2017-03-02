@@ -26,7 +26,8 @@ bool ModuleTestScene::Start() {
 	primitives.push_back(cube = new SCube());
 
 	importedLevel = new Level();
-	importedLevel->Load("Models/street/", "Street.obj");
+	//importedLevel->Load("Models/street/", "Street.obj");
+	importedLevel->Load("Models/street/", "Street environment_V01.fbx");
 	//Test FindNode function
 	Node* node = importedLevel->FindNode("g City_building_004");
 	if (node == nullptr) {

@@ -13,6 +13,7 @@ struct Node {
 	std::string name;
 	aiVector3D position = aiVector3D(0,0,0);
 	aiQuaternion rotation = aiQuaternion(1,0,0,0);
+	aiVector3D scale = aiVector3D(1, 1, 1);
 	std::vector<unsigned> meshes;
 	Node* parent = nullptr;
 	std::vector<Node*> childs;

@@ -102,7 +102,7 @@ void Level::Load(const char * path, const char * file)
 void Level::RecursiveNodeRead(Node* node, aiNode& assimpNode, Node* parentNode)
 {
 	node->name = assimpNode.mName.data;
-	assimpNode.mTransformation.DecomposeNoScaling(node->rotation, node->position);
+	assimpNode.mTransformation.Decompose(node->scale, node->rotation, node->position);
 	for (int i = 0; i < assimpNode.mNumMeshes; i++)
 	{
 		node->meshes.push_back(assimpNode.mMeshes[i]);
@@ -122,10 +122,13 @@ void Level::RecursiveNodeRead(Node* node, aiNode& assimpNode, Node* parentNode)
 const void Level::PrintNodeInfo()
 {
 	DLOG("%s", root->name.c_str());
+	DLOG("x: %f,  y: %f,  z: %f", root->position.x, root->position.y, root->position.z);
 
 	for (int i = 0; i < root->childs.size(); i++)
 	{
 		DLOG("%s is child of %s", root->childs[i]->name.c_str(), root->name.c_str());
+		DLOG("x: %f,  y: %f,  z: %f", root->childs[i]->position.x, root->childs[i]->position.y, root->childs[i]->position.z);
+
 	}
 }
 
@@ -135,10 +138,10 @@ void Level::Draw()
 	glMatrixMode(GL_MODELVIEW);
 
 	glPushMatrix();
-	glTranslatef(0, 0, 0);
-	glRotatef(45.0, 0.0, 1.0, 0.0);
 
-	//draw your object
+	//glTranslatef(0, 0, 0);
+	//glRotatef(45.0, 0.0, 1.0, 0.0);
+	//glScalef(1, 1, 2);
 
 
 	for (int i = 0; i < root->childs.size(); i++)
@@ -183,7 +186,7 @@ void Level::LinkNode(Node * node, Node * parent)
 		}
 	}
 	//Remove from the old parents child list
-	node->parent->childs.erase(node->parent->childs.begin + pos);
+	node->parent->childs.erase(node->parent->childs.begin() + pos);
 	//Assign new parent
 	node->parent = parent;
 	//Add to the new parents child list
