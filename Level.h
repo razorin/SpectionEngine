@@ -7,13 +7,18 @@
 #include "assimp/scene.h"
 #include "Mesh.h"
 #include "MemLeaks.h"
+#include "MathGeoLib\include\MathGeoLib.h"
 
 
 struct Node {
 	std::string name;
-	aiVector3D position = aiVector3D(0,0,0);
-	aiQuaternion rotation = aiQuaternion(1,0,0,0);
-	aiVector3D scale = aiVector3D(1, 1, 1);
+	float3 position = float3::zero;
+	Quat rotation = Quat::identity;
+	float3 scale = float3::one;
+	float4x4 globalTransform = float4x4::identity;
+	//aiVector3D position = aiVector3D(0,0,0);
+	//aiQuaternion rotation = aiQuaternion(1,0,0,0);
+	//aiVector3D scale = aiVector3D(1, 1, 1);
 	std::vector<unsigned> meshes;
 	Node* parent = nullptr;
 	std::vector<Node*> childs;
@@ -39,8 +44,9 @@ public:
 
 	void Load(const char* path, const char* file);
 	void RecursiveNodeRead(Node* node, aiNode& aiNode, Node* parentNode);
+	void RecursiveCalcTransforms(Node* node);
 	const void PrintNodeInfo(Node& node);
-	void Draw();
+	void Draw(Node* node);
 	void RecursiveNodeRelease(Node* node);
 	void Clear();
 

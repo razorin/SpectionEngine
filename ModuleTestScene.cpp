@@ -25,9 +25,12 @@ bool ModuleTestScene::Start() {
 
 	primitives.push_back(cube = new SCube());
 
-	importedLevel = new Level();
-	//importedLevel->Load("Models/street/", "Street.obj");
-	importedLevel->Load("Models/street/", "Street environment_V01.fbx");
+	//model = new Model();
+	//model->Load("models/batman/","batman.obj");
+
+	//model2 = new Model();
+	//model2->Load("Models/Magnetto/", "magnetto2.fbx");
+	
 	//Test FindNode function
 	//Node* node = importedLevel->FindNode("g City_building_004");
 	//if (node == nullptr) {
@@ -37,11 +40,16 @@ bool ModuleTestScene::Start() {
 	//{
 	//	DLOG("The name of the node is: %s", node->name.c_str());
 	//}
-	//model = new Model();
-	//model->Load("models/batman/","batman.obj");
-	//model2->Load("Models/Magnetto/", "magnetto2.fbx");
-	//model2 = new Model();
 
+
+	importedLevel = new Level();
+	//importedLevel->Load("Models/street/", "Street.obj");
+	importedLevel->Load("Models/street/", "Street environment_V01.fbx");
+
+	//This is a little hack to se the scene in the correct rotation (Node Dummy001 is rotated -90 in X axis)
+	float angleRad = -90 * DEGTORAD;
+	importedLevel->root->rotation = importedLevel->root->rotation.RotateX(angleRad);
+	importedLevel->RecursiveCalcTransforms(importedLevel->root);
 
 	return true;
 }
@@ -74,9 +82,11 @@ void ModuleTestScene::Draw()
 	if (model2 != nullptr)
 		model2->Draw();
 
+
+
 	if (importedLevel != nullptr)
 	{
-		importedLevel->Draw();
+		importedLevel->Draw(importedLevel->root);
 	}
 }
 

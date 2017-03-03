@@ -36,6 +36,7 @@ void Level::Load(const char * path, const char * file)
 	root = new Node();
 	aiNode* rootNode = scene->mRootNode;
 	RecursiveNodeRead(root, *rootNode, nullptr);
+	RecursiveCalcTransforms(root);
 	PrintNodeInfo(*root);
 
 
@@ -102,7 +103,17 @@ void Level::Load(const char * path, const char * file)
 void Level::RecursiveNodeRead(Node* node, aiNode& assimpNode, Node* parentNode)
 {
 	node->name = assimpNode.mName.data;
-	assimpNode.mTransformation.Decompose(node->scale, node->rotation, node->position);
+
+	aiVector3D aiPos;
+	aiQuaternion aiRot;
+	aiVector3D aiScale;
+	assimpNode.mTransformation.Decompose(aiScale, aiRot, aiPos);
+	node->position = float3 (aiPos.x, aiPos.y, aiPos.z);
+	node->rotation = Quat (aiRot.x, aiRot.y, aiRot.z, aiRot.w);
+	node->scale = float3(aiScale.x, aiScale.y, aiScale.z);
+
+	//assimpNode.mTransformation.Decompose(node->scale, node->rotation, node->position);
+
 	for (int i = 0; i < assimpNode.mNumMeshes; i++)
 	{
 		node->meshes.push_back(assimpNode.mMeshes[i]);
@@ -116,6 +127,24 @@ void Level::RecursiveNodeRead(Node* node, aiNode& assimpNode, Node* parentNode)
 		aiNode* aiChildNode = assimpNode.mChildren[i];
 		RecursiveNodeRead(childNode, *aiChildNode, node);
 		node->childs.push_back(childNode);
+	}
+}
+
+void Level::RecursiveCalcTransforms(Node * node)
+{
+	float4x4 transform = float4x4::FromTRS(node->position, node->rotation, node->scale);
+	if (node->parent != nullptr)
+	{
+		node->globalTransform = node->parent->globalTransform * transform;
+	}
+	else
+	{
+		node->globalTransform = transform;
+	}
+
+	for (int i = 0; i < node->childs.size(); i++)
+	{
+		RecursiveCalcTransforms(node->childs[i]);
 	}
 }
 
@@ -150,20 +179,28 @@ const void Level::PrintNodeInfo(Node & node)
 //}
 
 
-void Level::Draw()
+void Level::Draw(Node* node)
 {
-	//glPushMatrix();
+	glPushMatrix();
+	glMultMatrixf(node->globalTransform.Transposed().ptr());
 
-	////glTranslatef(0, 0, 0);
-	////glRotatef(45.0, 0.0, 1.0, 0.0);
-	////glScalef(1, 1, 2);
+	//Position
+	//glTranslatef(node.position.x, node.position.y, node.position.z);
 
-	//
-	///*for (int i = 0; i < root->childs.size(); i++)
-	//{
-	//	meshes[i]->Draw();
-	//}*/
-	//glPopMatrix();
+	//Last we scale it
+	//glScalef(node.scale.x, node.scale.y, node.scale.z);
+
+	for (int i = 0; i < node->meshes.size(); i++)
+	{
+		meshes[node->meshes[i]]->Draw();
+	}
+
+	for (int i = 0; i < node->childs.size(); i++)
+	{
+		Draw(node->childs[i]);
+	}
+
+	glPopMatrix();
 }
 
 void Level::RecursiveNodeRelease(Node * node)
