@@ -115,6 +115,8 @@ private:
 	int minLightPosition = -100;
 	int maxLightPosition = 100;
 
+	ImGuiTreeNodeFlags treeNodeFlags;
+
 	//Inspector
 	float matColor[4] = { 1.0f,1.0f,1.0f,1.0f };
 	float position[3] = { 0.0f, 0.0f, 0.0f };

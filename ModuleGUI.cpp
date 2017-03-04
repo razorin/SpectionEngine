@@ -248,8 +248,11 @@ bool ModuleGUI::DrawGOHierarchyMenu() {
 	bool open = true;
 	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
 	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
+	treeNodeFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 	ImGui::Begin("GameObjects Hierarchy", &open);
-	if (ImGui::TreeNode(App->testScene->importedLevel->root->name.c_str()))
+	bool treeNode = ImGui::TreeNodeEx(App->testScene->importedLevel->root->name.c_str(), treeNodeFlags);
+	if (ImGui::IsItemClicked()) { console.AddLog("%s Selected", App->testScene->importedLevel->root->name.c_str()); }
+	if (treeNode)
 	{
 		for (int i = 0; i < App->testScene->importedLevel->root->childs.size(); i++)
 		{
@@ -263,8 +266,10 @@ bool ModuleGUI::DrawGOHierarchyMenu() {
 
 const void ModuleGUI::RecursiveTreePrint(Node & node)
 {
-	if (node.parent != nullptr) {
-		if (ImGui::TreeNode(node.name.c_str())) {
+	if (!node.name.empty()) {
+		bool treeNode = ImGui::TreeNodeEx(node.name.c_str(), treeNodeFlags);
+		if (ImGui::IsItemClicked()) { console.AddLog("%s Selected", node.name.c_str()); }
+		if (treeNode) {
 			for (int i = 0; i < node.childs.size(); i++)
 			{
 				RecursiveTreePrint(*node.childs[i]);
