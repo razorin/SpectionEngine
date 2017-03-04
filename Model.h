@@ -5,6 +5,7 @@
 
 class aiScene;
 class Mesh;
+class Material;
 
 class Model
 {
@@ -19,9 +20,11 @@ public:
 
 public:
 	//Reference to all textureVBO
-	uint* imageNames;
-	Mesh* meshes;
-	int numMeshes;
+	uint* imageNames = nullptr;
+	Mesh* meshes = nullptr;
+	Material *materials = nullptr;
+	int numMaterials = 0;
+	int numMeshes = 0;
 
 };
 

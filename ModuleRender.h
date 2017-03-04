@@ -19,6 +19,8 @@ class SCube;
 class SPlane;
 class SCylinder;
 
+class Light;
+
 class ModuleRender : public Module
 {
 public:
@@ -43,8 +45,6 @@ public:
 
 private:
 	void GetHWAndDriverCapabilities();
-	float *positionLight = nullptr;
-	float *diffuseLight = nullptr;
 
 
 public:

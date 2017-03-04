@@ -20,6 +20,9 @@
     <Filter Include="IMGUI">
       <UniqueIdentifier>{690a2244-6854-409c-91a5-d55cc6b6c3cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lights">
+      <UniqueIdentifier>{d2b50b00-9d3a-4cd6-8390-bbfe1a3e649f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleRender.h">
@@ -68,7 +71,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
-      <Filter>Utils</Filter>
+	  <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="PreciseTimer.h">
       <Filter>Utils</Filter>
@@ -127,6 +130,15 @@
     <ClInclude Include="Utils.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="LightsManager.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h" >
+	  <Filter>Geometric primitive</Filter>
+	</ClInclude>
     <ClInclude Include="Level.h">
       <Filter>Geometric primitive</Filter>
     </ClInclude>
@@ -216,6 +228,15 @@
     <ClCompile Include="ModuleGUI.cpp">
       <Filter>Core Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="LightsManager.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+		<Filter>Geometric primitive</Filter>
+	</ClCompile>
     <ClCompile Include="Level.cpp">
       <Filter>Geometric primitive</Filter>
     </ClCompile>

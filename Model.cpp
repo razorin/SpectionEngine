@@ -9,7 +9,7 @@
 #include "assimp/postprocess.h"
 #include "assimp\anim.h"
 #include "Glew\include\GL\glew.h"
-
+#include "Material.h"
 
 using namespace std;
 
@@ -40,9 +40,23 @@ void Model::Load(const char* path, const char* file)
 	{
 		//We get all textures and put it on imageNames
 		imageNames = new uint[scene->mNumMaterials];
+		materials = new Material[scene->mNumMaterials];
+		numMaterials = scene->mNumMaterials;
 		for (int i = 0; i < scene->mNumMaterials; i++)
 		{
+			float shiness_strength = 0.0f;
 			const aiMaterial* material = scene->mMaterials[i];
+			material->Get(AI_MATKEY_COLOR_DIFFUSE, materials[i].diffuse);
+			material->Get(AI_MATKEY_COLOR_SPECULAR, materials[i].specular);
+			material->Get(AI_MATKEY_COLOR_AMBIENT, materials[i].ambient);
+			material->Get(AI_MATKEY_COLOR_EMISSIVE, materials[i].emissive);
+			material->Get(AI_MATKEY_COLOR_TRANSPARENT, materials[i].transparent);
+			material->Get(AI_MATKEY_SHININESS, materials[i].shininess);
+
+			material->Get(AI_MATKEY_SHININESS_STRENGTH, shiness_strength);
+
+			materials[i].specular = materials[i].specular * shiness_strength;
+			materials[i].shininess *= 128.0f;
 			// Just one texture
 			int texIndex = 0;
 			aiString path;
@@ -148,5 +162,14 @@ void Model::Draw()
 	for (int i = 0; i < numMeshes; ++i)
 	{
 		meshes[i].Draw();
+	}
+	for (int i = 0; i < numMaterials; ++i) {
+		glMaterialfv(GL_FRONT, GL_AMBIENT, (float*)&materials[i].ambient);
+
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, (float*)&materials[i].diffuse);
+
+		glMaterialfv(GL_FRONT, GL_SPECULAR, (float*)&materials[i].specular);
+
+		glMaterialf(GL_FRONT, GL_SHININESS, materials[i].shininess);
 	}
 }

@@ -3,8 +3,12 @@
 #include "Utils.h"
 #include "Application.h"
 #include "ModuleWindow.h"
+#include "ModuleRender.h"
 #include "ModuleCamera.h"
+#include "LightsManager.h"
+#include "Light.h"
 #include "SDL\include\SDL_version.h"
+#include "Point.h"
 #include<list>
 
 //IMGUI Includes
@@ -42,28 +46,38 @@ update_status ModuleGUI::Update(float dt)
 	ImGuiIO& io = ImGui::GetIO();
 	uiInput = io.WantCaptureMouse;
 
-	if (!DrawMainMenuBar()) {
-		ret = UPDATE_STOP;
-	}
+	if (showGUI) {
+		if (!DrawMainMenuBar()) {
+			ret = UPDATE_STOP;
+		}
 
-	if (showHWInfo) {
-		showHWInfo = DrawHWInfoMenu();
-	}
+		if (showHWInfo) {
+			showHWInfo = DrawHWInfoMenu();
+		}
 
-	if (showAppInfo) {
-		showAppInfo = DrawAppInfo();
-	}
+		if (showAppInfo) {
+			showAppInfo = DrawAppInfo();
+		}
 
-	if (showPreferences) {
-		showPreferences = DrawPreferencesMenu();
-	}
+		if (showPreferences) {
+			showPreferences = DrawPreferencesMenu();
+		}
 
-	if (showLights) {
-		showLights = DrawLightsMenu();
-	}
+		if (showInstantiator) {
+			showInstantiator = DrawInstantiatorMenu(0.0f, { 0.0f,0.0f,0.0f });
+		}
 
-	if (showConsole) {
-		showConsole = console.Draw();
+		if (showLights) {
+			showLights = DrawLightsMenu();
+		}
+
+		if (showInspector) {
+			showInspector = DrawInspectorMenu();
+		}
+
+		if (showConsole) {
+			showConsole = console.Draw();
+		}
 	}
 	return ret;
 }
@@ -110,6 +124,7 @@ bool ModuleGUI::DrawMainMenuBar() {
 		}
 		if (ImGui::BeginMenu("GameObject"))
 		{
+			if (ImGui::MenuItem("Cube")) { showInstantiator = true; }
 			if (ImGui::MenuItem("Lights")) { showLights = true; }
 			ImGui::EndMenu();
 		}
@@ -119,6 +134,8 @@ bool ModuleGUI::DrawMainMenuBar() {
 		}
 		if (ImGui::BeginMenu("Window"))
 		{
+			if (ImGui::MenuItem("Inspector")) { showInspector = true; }
+			ImGui::Separator();
 			if (ImGui::MenuItem("Console")) { showConsole = true; }
 			ImGui::EndMenu();
 		}
@@ -211,7 +228,6 @@ bool ModuleGUI::DrawPreferencesMenu() {
 	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
 	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
 	ImGui::Begin("Preferences", &open);
-	
 	const char* items[] = { "Fullscreen", "Borderless", "Fullscreen Windowed" };
 	if (ImGui::Combo("Display", &currentDisplayMode, items, IM_ARRAYSIZE(items))) {
 		App->window->SetDisplayMode(static_cast<DisplayMode>(currentDisplayMode));
@@ -222,38 +238,90 @@ bool ModuleGUI::DrawPreferencesMenu() {
 	if (ImGui::Checkbox("Invert X-Axis", &App->camera->invertXAxis)) {}
 	ImGui::SameLine();
 	if (ImGui::Checkbox("Invert Y-Axis", &App->camera->invertYAxis)) {}
-	/*
-	ImGui::Separator();
-	ImGui::Text("Resolution");
-	ImVec2 resolutionButtonSize = ImVec2(100, 24);
-	if (ImGui::Button("800 x 600", resolutionButtonSize)) {};
-	ImGui::SameLine();
-	if (ImGui::Button("1024 x 768", resolutionButtonSize)) {};
-	if (ImGui::Button("1280 x 720", resolutionButtonSize)) {};
-	ImGui::SameLine();
-	if (ImGui::Button("1600 x 900", resolutionButtonSize)) {};
-	if (ImGui::Button("1920 x 1080", resolutionButtonSize)) {};
-	ImGui::SameLine();
-	if (ImGui::Button("2560 x 1440", resolutionButtonSize)) {};
-	*/
+	ImGui::End();
+	return open;
+}
+
+bool ModuleGUI::DrawInstantiatorMenu(float size, fPoint position) {
+	bool open = true;
+	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
+	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
+	ImGui::Begin("Primitive", &open);
+	ImGui::Text("Not done yet");
 	ImGui::End();
 	return open;
 }
 
 bool ModuleGUI::DrawLightsMenu() {
 	bool open = true;
-	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
+	const char* items[] = { "DIRECTIONAL LIGHT", "POINT LIGHT", "SPOTLIGHT", "AMBIENTLIGHT" };
+	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 2)), ImGuiSetCond_Once);
 	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
 	ImGui::Begin("Lights", &open);
-	if (ImGui::SliderFloat("Position X", &lightPos.x, minLightPosition, maxLightPosition)) {
-		// Change light X position
+	std::list<Light*>* currentLights = App->lightsManager->GetLights();
+	for (std::list<Light*>::iterator it = currentLights->begin(); it != currentLights->end(); )
+	{
+		auto itPosition = std::distance(currentLights->begin(), it);
+		std::string tempString = "Light" + std::to_string(itPosition);
+		const char * headerLabel = tempString.c_str();
+		bool hasBeenRemoved = false;
+		if (ImGui::CollapsingHeader(headerLabel))
+		{
+			int newType = (*it)->type;
+			ImGui::Text("Light Type %d", (*it)->type);
+			// Generic strings
+			std::string typeName = "Type " + std::to_string(itPosition);
+			std::string position = "Position " + std::to_string(itPosition);
+			std::string diffuse = "Diffuse " + std::to_string(itPosition);
+			std::string ambient = "Ambient " + std::to_string(itPosition);
+			std::string specular = "Specular " + std::to_string(itPosition);
+			std::string direction = "Direction " + std::to_string(itPosition);
+			// Extra strings
+			std::string exponent = "Exponent " + std::to_string(itPosition);
+			std::string cutoff = "Cutoff " + std::to_string(itPosition);
+			std::string constantAttenuation = "Constant Attenuation " + std::to_string(itPosition);
+			std::string linearAttenuation = "Linear Attenuation " + std::to_string(itPosition);
+			std::string quadraticAttenuation = "Quadratic Attenuation " + std::to_string(itPosition);
+			if (ImGui::Combo(typeName.c_str(), &newType, items, IM_ARRAYSIZE(items))) {
+				(*it)->type = static_cast<LightType>(newType);
+			}
+			if ((*it)->type == LT_DIRECTIONAL_LIGHT) {
+				ImGui::InputFloat3(direction.c_str(), (*it)->position);
+			}
+			else {
+				ImGui::InputFloat3(position.c_str(), (*it)->position);
+			}
+			ImGui::ColorEdit3(diffuse.c_str(), (*it)->diffuse);
+			ImGui::ColorEdit3(ambient.c_str(), (*it)->ambient);
+			ImGui::ColorEdit3(specular.c_str(), (*it)->specular);
+			if ((*it)->type == LT_SPOTLIGHT_LIGHT) {
+				ImGui::InputFloat3(direction.c_str(), (*it)->direction);
+				ImGui::InputFloat(exponent.c_str(), &(*it)->exponent);
+				ImGui::InputFloat(cutoff.c_str(), &(*it)->cutoff);
+			}
+			if (ImGui::TreeNode("More options"))
+			{
+				ImGui::InputFloat(constantAttenuation.c_str(), &(*it)->constantAttenuation);
+				ImGui::InputFloat(linearAttenuation.c_str(), &(*it)->linearAttenuation);
+				ImGui::InputFloat(quadraticAttenuation.c_str(), &(*it)->quadraticAttenuation);
+				ImGui::TreePop();
+			}
+			std::string remove = "Remove Light " + std::to_string(itPosition);
+			if (ImGui::Button(remove.c_str())) {
+				hasBeenRemoved = true;
+				App->lightsManager->DisableLight(itPosition);
+				RELEASE(*it);
+				it = currentLights->erase(it);
+			}
+		}
+		if (!hasBeenRemoved) {
+			++it;
+		}
 	}
-	if (ImGui::SliderFloat("Position Y", &lightPos.y, minLightPosition, maxLightPosition)) {
-		// Change light Y position
+	if (currentLights->size() < MAXLIGHTS) {
+		if (ImGui::Button("New Light")) { App->lightsManager->AddLight(LT_POINT_LIGHT, { 0.0f, 5.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }); }
 	}
-	if (ImGui::SliderFloat("Position Z", &lightPos.z, minLightPosition, maxLightPosition)) {
-		// Change light Z position
-	}
+	
 	ImGui::End();
 	return open;
 }
@@ -269,10 +337,59 @@ bool ModuleGUI::DrawAppInfo() {
 	ImGui::Begin("Application Information", &open);
 	ImGui::Text("Application Name: %s", App->window->title);
 	char title[25];
-	sprintf_s(title, 25, "Framerate %.1f", fpsLog[numFps-1]);
-	ImGui::PlotHistogram("##framerate",&fpsLog[0],numFps,0,title,0.0f,100.0f, ImVec2(menuWidth - 30, 100));
+	sprintf_s(title, 25, "Framerate %.1f", fpsLog[numFps - 1]);
+	ImGui::PlotHistogram("##framerate", &fpsLog[0], numFps, 0, title, 0.0f, 100.0f, ImVec2(menuWidth - 30, 100));
 	sprintf_s(title, 25, "Milliseconds %.1f", msLog[numMs - 1]);
 	ImGui::PlotHistogram("##milliseconds", &msLog[0], numMs, 0, title, 0.0f, 40.0f, ImVec2(menuWidth - 30, 100));
+	ImGui::End();
+	return open;
+}
+
+bool ModuleGUI::DrawInspectorMenu() {
+	bool open = true;
+	float menuWidth = (float)(App->window->screen_width * App->window->screen_size * 3 / 5);
+	float menuHeight = (float)(App->window->screen_height * App->window->screen_size * 5 / 6);;
+	ImGui::SetNextWindowSize(ImVec2(menuWidth, menuHeight), ImGuiSetCond_Once);
+	float menuPosX = (float)(App->window->screen_width * App->window->screen_size - menuWidth);
+	float menuPosY = (float)(19);
+	ImGui::SetNextWindowPos(ImVec2(menuPosX, menuPosY), ImGuiSetCond_Once);
+	ImGui::Begin("Inspector", &open);
+	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		ImGui::InputFloat3("Position", position);
+		ImGui::SameLine();
+		if (ImGui::Button("Clear")) {
+			for (int i = 0; i < 3; ++i) {
+				position[i] = 0.0f;
+			}
+		}
+		ImGui::InputFloat3("Rotation", rotation);
+		ImGui::SameLine();
+		if (ImGui::Button("Clear")) {
+			for (int i = 0; i < 3; ++i) {
+				rotation[i] = 0.0f;
+			}
+		}
+		ImGui::InputFloat3("Scale", scale);
+		ImGui::SameLine();
+		if (ImGui::Button("Clear")) {
+			for (int i = 0; i < 3; ++i) {
+				scale[i] = 0.0f;
+			}
+		}
+	}
+	if (ImGui::Button("Clear Transform")) {
+		for (int i = 0; i < 3; ++i) {
+			position[i] = 0.0f;
+			rotation[i] = 0.0f;
+			scale[i] = 0.0f;
+		}
+	}
+	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		ImGui::ColorEdit4("Color", matColor);
+	}
+	ImGui::Text("\n\n\nAll the components...");
 	ImGui::End();
 	return open;
 }

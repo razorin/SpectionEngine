@@ -15,6 +15,7 @@ void log(const char file[], int line, const char* format, ...);
 #define HALF_PI 1.57079632679489661923f
 #define QUARTER_PI 0.78539816339744830961f
 
+#define MAXLIGHTS 8
 
 #define MIN( a, b ) ( ((a) < (b)) ? (a) : (b) )
 #define MAX( a, b ) ( ((a) > (b)) ? (a) : (b) )

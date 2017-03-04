@@ -47,4 +47,8 @@ SDL Game.opensdf
 
 Game/*.ini
 Spection Engine.opensdf
+<<<<<<< HEAD
+*.db
+=======
 /*.db
+>>>>>>> feature/Scene-Graph

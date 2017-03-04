@@ -13,6 +13,8 @@
 #include "SCube.h"
 #include "SPlane.h"
 #include "SCylinder.h"
+#include "LightsManager.h"
+#include "Light.h"
 #include "SDL/include/SDL.h"
 #include <math.h>
 #include "MathGeoLib/include/MathGeoLib.h"
@@ -81,19 +83,16 @@ bool ModuleRender::Init()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
 		//glEnable(GL_CULL_FACE);
-		glEnable(GL_LIGHT0);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_TEXTURE_2D);
 		glFrontFace(GL_CCW);
 		glCullFace(GL_BACK);
-
-		positionLight = new float[4]{ 1.f, 1.f, 1.f, 1.f };
-		diffuseLight = new float[4]{ 1.f, .8f, .8f, 1.f };
-
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
-		glLightfv(GL_LIGHT0, GL_POSITION, positionLight);
 	}
+
+	App->lightsManager->AddLight(LT_DIRECTIONAL_LIGHT, { 1.0f, 0.0f, 0.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+	App->lightsManager->AddLight(LT_POINT_LIGHT, { 0.0f, 1.0f, 0.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 1.0f, 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+	App->lightsManager->AddLight(LT_SPOTLIGHT_LIGHT, { 0.0f, 1.0f, 0.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, -1.0f, 0.0f });
 
 	return ret;
 }
@@ -109,18 +108,19 @@ update_status ModuleRender::PreUpdate(float dt)
 	glLoadIdentity();
 	glLoadMatrixf(App->camera->GetMatrixView());
 
-
 	return UPDATE_CONTINUE;
 }
 
 // Called every draw update
 update_status ModuleRender::Update(float dt)
 {
-	
+
 	App->testScene->Draw();
 	DrawGrid();
-	//DrawGizmo();
-	
+	DrawGizmo();
+
+	App->lightsManager->Draw();
+
 	//DrawDirectCube();
 
 	return UPDATE_CONTINUE;
@@ -144,8 +144,6 @@ bool ModuleRender::CleanUp()
 	DLOG("Destroying renderer");
 
 	SDL_GL_DeleteContext(context);
-	RELEASE(positionLight);
-	RELEASE(diffuseLight);
 
 	//Destroy window
 	if (renderer != nullptr)
@@ -225,7 +223,7 @@ void ModuleRender::DrawGizmo()
 
 void ModuleRender::DrawDirectCube()
 {
-	
+
 	float cubeSize = 0.5;
 	//Draw Cube
 	glBegin(GL_TRIANGLES);
@@ -288,7 +286,7 @@ void ModuleRender::DrawDirectCube()
 	glVertex3f(cubeSize, -cubeSize, cubeSize);
 
 	glEnd();
-	
+
 }
 
 // Blit to screen
