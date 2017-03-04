@@ -43,7 +43,7 @@ bool ModuleTestScene::Start() {
 
 
 	importedLevel = new Level();
-	importedLevel->Load("Models/street/", "Street.obj");
+	//importedLevel->Load("Models/street/", "Street.obj");
 	importedLevel->Load("Models/street/", "Street environment_V01.fbx");
 
 	//This is a little hack to se the scene in the correct rotation (Node Dummy001 is rotated -90 in X axis)

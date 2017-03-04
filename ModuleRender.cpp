@@ -84,15 +84,22 @@ bool ModuleRender::Init()
 		glEnable(GL_DEPTH_TEST);
 		//glEnable(GL_CULL_FACE);
 		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHT0);
 		glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_TEXTURE_2D);
 		glFrontFace(GL_CCW);
 		glCullFace(GL_BACK);
 	}
 
-	App->lightsManager->AddLight(LT_DIRECTIONAL_LIGHT, { 1.0f, 0.0f, 0.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
-	App->lightsManager->AddLight(LT_POINT_LIGHT, { 0.0f, 1.0f, 0.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 1.0f, 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
-	App->lightsManager->AddLight(LT_SPOTLIGHT_LIGHT, { 0.0f, 1.0f, 0.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, -1.0f, 0.0f });
+	positionLight = new float[4]{ 1.f, 1.f, 1.f, 1.f };
+	diffuseLight = new float[4]{ 1.f, .8f, .8f, 1.f };
+
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+	glLightfv(GL_LIGHT0, GL_POSITION, positionLight);
+
+	//App->lightsManager->AddLight(LT_DIRECTIONAL_LIGHT, { 1.0f, 0.0f, 0.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+	//App->lightsManager->AddLight(LT_POINT_LIGHT, { 0.0f, 1.0f, 0.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 1.0f, 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+	//App->lightsManager->AddLight(LT_SPOTLIGHT_LIGHT, { 0.0f, 1.0f, 0.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, -1.0f, 0.0f });
 
 	return ret;
 }
