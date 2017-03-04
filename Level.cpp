@@ -224,12 +224,23 @@ void Level::Clear()
 
 Node * Level::FindNode(const char * name)
 {
-	for (int i = 0; i < root->childs.size(); i++) {
+	Node * node = nullptr;
+	for (int i = 0; i < root->childs.size() && node == nullptr; i++) {
+		if (root->childs[i]->childs.size() > 0) {
+			node = FindNode(name);
+		}
 		if (root->childs[i]->name.compare(name) == 0) {
 			return root->childs[i];
 		}
 	}
-	return nullptr;
+
+	if (node != nullptr) {
+		return node;
+	}
+	else {
+		return nullptr;
+	}
+
 }
 
 void Level::LinkNode(Node * node, Node * parent)

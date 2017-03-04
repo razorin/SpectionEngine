@@ -51,6 +51,9 @@ bool ModuleTestScene::Start() {
 	importedLevel->root->rotation = importedLevel->root->rotation.RotateX(angleRad);
 	importedLevel->RecursiveCalcTransforms(importedLevel->root);
 
+	//This is a test to try the LinkNode and FindNode methods
+	//importedLevel->LinkNode(importedLevel->FindNode("Line002"), importedLevel->FindNode("Sky001"));
+
 	return true;
 }
 
