@@ -119,7 +119,7 @@ void ModuleCamera::Move(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT)
 		movement -= float3::unitY;
 
-	movementSpeed = 2.0f;
+	movementSpeed = 5.0f;
 
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		movement *= 3;
@@ -137,7 +137,7 @@ void ModuleCamera::Move(float dt)
 void ModuleCamera::Zoom(float dt)
 {
 	float3 movement = float3::zero;
-	float zoomSpeed = 10.0f;
+	float zoomSpeed = 20.0f;
 	int mouseWheel = App->input->GetMouseWheel();
 	
 	if (mouseWheel != 0 && mouseBlocked == false) {
@@ -157,7 +157,7 @@ void ModuleCamera::Rotate(float dt)
 {
 	Quat rotation = Quat::identity;
 
-	rotationSpeed = 1.0f;
+	rotationSpeed = 2.0f;
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		rotationSpeed *= 3;
 

@@ -25,9 +25,24 @@ bool ModuleTestScene::Start() {
 
 	primitives.push_back(cube = new SCube());
 
+	//model = new Model();
+	//model->Load("models/batman/","batman.obj");
+
+	//model2 = new Model();
+	//model2->Load("Models/Magnetto/", "magnetto2.fbx");
+	
+	
+
+
 	importedLevel = new Level();
-	importedLevel->Load("Models/street/", "Street.obj");
-	//importedLevel->Load("Models/street/", "Street environment_V01.fbx");
+	//importedLevel->Load("Models/street/", "Street.obj");
+	importedLevel->Load("Models/street/", "Street environment_V01.fbx");
+
+	//This is a little hack to se the scene in the correct rotation (Node Dummy001 is rotated -90 in X axis)
+	float angleRad = 90 * DEGTORAD;
+	//importedLevel->root->rotation = Quat::RotateX(angleRad);
+	//importedLevel->RecursiveCalcTransforms(importedLevel->root);
+
 	//Test FindNode function
 	//Node* node = importedLevel->FindNode("g City_building_004");
 	//if (node == nullptr) {
@@ -37,10 +52,16 @@ bool ModuleTestScene::Start() {
 	//{
 	//	DLOG("The name of the node is: %s", node->name.c_str());
 	//}
-	//model = new Model();
-	//model->Load("models/batman/","batman.obj");
-	//model2->Load("Models/Magnetto/", "magnetto2.fbx");
-	//model2 = new Model();
+
+
+	//This is a test to try the LinkNode and FindNode methods
+	importedLevel->LinkNode(importedLevel->FindNode("City_building_014"), importedLevel->FindNode("City_building_001"));
+
+	//importedLevel->FindNode("City_building_001")->rotation = Quat::RotateX(angleRad/2);
+	//importedLevel->FindNode("g City_building_001")->position.y += 5;
+	//importedLevel->RecursiveCalcTransforms(importedLevel->root);
+	//importedLevel->FindNode("g City_building_014");
+	//importedLevel->FindNode("g City_building_001");
 
 
 	return true;
@@ -74,9 +95,11 @@ void ModuleTestScene::Draw()
 	if (model2 != nullptr)
 		model2->Draw();
 
+
+
 	if (importedLevel != nullptr)
 	{
-		importedLevel->Draw();
+		importedLevel->Draw(importedLevel->root);
 	}
 }
 

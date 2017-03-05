@@ -36,7 +36,8 @@ void Level::Load(const char * path, const char * file)
 	root = new Node();
 	aiNode* rootNode = scene->mRootNode;
 	RecursiveNodeRead(root, *rootNode, nullptr);
-	PrintNodeInfo();
+	RecursiveCalcTransforms(root);
+	PrintNodeInfo(*root);
 
 
 	//Load textures
@@ -102,7 +103,15 @@ void Level::Load(const char * path, const char * file)
 void Level::RecursiveNodeRead(Node* node, aiNode& assimpNode, Node* parentNode)
 {
 	node->name = assimpNode.mName.data;
-	assimpNode.mTransformation.Decompose(node->scale, node->rotation, node->position);
+
+	aiVector3D aiPos;
+	aiQuaternion aiRot;
+	aiVector3D aiScale;
+	assimpNode.mTransformation.Decompose(aiScale, aiRot, aiPos);
+	node->position = float3(aiPos.x, aiPos.y, aiPos.z);
+	node->rotation = Quat(aiRot.x, aiRot.y, aiRot.z, aiRot.w);
+	node->scale = float3(aiScale.x, aiScale.y, aiScale.z);
+
 	for (int i = 0; i < assimpNode.mNumMeshes; i++)
 	{
 		node->meshes.push_back(assimpNode.mMeshes[i]);
@@ -119,36 +128,57 @@ void Level::RecursiveNodeRead(Node* node, aiNode& assimpNode, Node* parentNode)
 	}
 }
 
-const void Level::PrintNodeInfo()
+void Level::RecursiveCalcTransforms(Node * node)
 {
-	DLOG("%s", root->name.c_str());
-	DLOG("x: %f,  y: %f,  z: %f", root->position.x, root->position.y, root->position.z);
-
-	for (int i = 0; i < root->childs.size(); i++)
+	node->localTransform = float4x4::FromTRS(node->position, node->rotation, node->scale);
+	if (node->parent != nullptr)
 	{
-		DLOG("%s is child of %s", root->childs[i]->name.c_str(), root->name.c_str());
-		DLOG("x: %f,  y: %f,  z: %f", root->childs[i]->position.x, root->childs[i]->position.y, root->childs[i]->position.z);
+		node->globalTransform = node->parent->globalTransform * node->localTransform;
+	}
+	else
+	{
+		node->globalTransform = node->localTransform;
+	}
 
+	for (int i = 0; i < node->childs.size(); i++)
+	{
+		RecursiveCalcTransforms(node->childs[i]);
 	}
 }
 
-
-void Level::Draw()
+const void Level::PrintNodeInfo(Node & node)
 {
-	glMatrixMode(GL_MODELVIEW);
-
-	glPushMatrix();
-
-	//glTranslatef(0, 0, 0);
-	//glRotatef(45.0, 0.0, 1.0, 0.0);
-	//glScalef(1, 1, 2);
-
-
-	for (int i = 0; i < root->childs.size(); i++)
-	{
-		meshes[i]->Draw();
+	if (node.parent != nullptr) {
+		DLOG("%s is child of %s", node.name.c_str(), node.parent->name.c_str());
 	}
+	else {
+		DLOG("%s", node.name.c_str());
+	}
+
+	//DLOG("x: %f,  y: %f,  z: %f", node.position.x, node.position.y, node.position.z);
+
+	for (int i = 0; i < node.childs.size(); i++)
+	{
+		PrintNodeInfo(*node.childs[i]);
+	}
+}
+
+void Level::Draw(Node* node)
+{
+	glPushMatrix();
+	glMultMatrixf(node->globalTransform.Transposed().ptr());
+
+	for (int i = 0; i < node->meshes.size(); i++)
+	{
+		meshes[node->meshes[i]]->Draw();
+	}
+
 	glPopMatrix();
+	for (int i = 0; i < node->childs.size(); i++)
+	{
+		Draw(node->childs[i]);
+	}
+
 }
 
 void Level::RecursiveNodeRelease(Node * node)
@@ -163,40 +193,65 @@ void Level::RecursiveNodeRelease(Node * node)
 void Level::Clear()
 {
 	RecursiveNodeRelease(root);
-
 	RELEASE(imageNames);
 	for (int i = 0; i < meshes.size(); i++)
 	{
 		RELEASE(meshes[i]);
 	}
-	//delete root;
 }
 
 Node * Level::FindNode(const char * name)
 {
-	for (int i = 0; i < root->childs.size(); i++) {
-		if (root->childs[i]->name.compare(name) == 0) {
-			return root->childs[i];
-		}
+	Node * findNode = RecursiveSearchNode(name, root);
+	if (findNode != nullptr)
+	{
+		DLOG("x: %f,  y: %f,  z: %f", findNode->position.x, findNode->position.y, findNode->position.z);
 	}
-	return nullptr;
+	return findNode;
 }
 
-void Level::LinkNode(Node * node, Node * parent)
+Node * Level::RecursiveSearchNode(const char * name, Node * node)
 {
+	Node* findNode = nullptr;
+	if (node->name.compare(name) == 0)
+	{
+		return node;
+	}
+	else
+	{
+		for (int i = 0; i < node->childs.size() && findNode == nullptr; i++) {
+			findNode = RecursiveSearchNode(name, node->childs[i]);
+		}
+		return findNode;
+	}
+}
+
+bool Level::LinkNode(Node * node, Node * parent)
+{
+	bool ret = false;
+	if (node == nullptr || parent == nullptr)
+		return ret;
+
 	//Find position of the node in the parents child list
 	int pos = -1;
-	for (int i = 0; i < node->parent->childs.size(); i++) {
-		if (node->parent->childs[i]->name.compare(node->parent->name) == 0) {
+	for (int i = 0; (i < node->parent->childs.size()) && (pos == -1); i++) {
+		if (node->parent->childs[i]->name.compare(node->name) == 0) {
 			pos = i;
 		}
 	}
+
+	node->localTransform = parent->globalTransform.Inverted()*(node->parent->globalTransform * node->localTransform);
+	node->localTransform.Decompose(node->position, node->rotation, node->scale);
+	node->globalTransform = parent->globalTransform * node->localTransform;
+
 	//Remove from the old parents child list
 	node->parent->childs.erase(node->parent->childs.begin() + pos);
 	//Assign new parent
 	node->parent = parent;
 	//Add to the new parents child list
 	parent->childs.push_back(node);
+
+
 }
 
 Node::~Node()

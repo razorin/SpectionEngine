@@ -5,8 +5,10 @@
 #include "ModuleWindow.h"
 #include "ModuleRender.h"
 #include "ModuleCamera.h"
+#include "ModuleTestScene.h"
 #include "LightsManager.h"
 #include "Light.h"
+#include "Level.h"
 #include "SDL\include\SDL_version.h"
 #include "Point.h"
 #include<list>
@@ -63,8 +65,8 @@ update_status ModuleGUI::Update(float dt)
 			showPreferences = DrawPreferencesMenu();
 		}
 
-		if (showInstantiator) {
-			showInstantiator = DrawInstantiatorMenu(0.0f, { 0.0f,0.0f,0.0f });
+		if (showGOHierarchy) {
+			showGOHierarchy = DrawGOHierarchyMenu();
 		}
 
 		if (showLights) {
@@ -124,7 +126,7 @@ bool ModuleGUI::DrawMainMenuBar() {
 		}
 		if (ImGui::BeginMenu("GameObject"))
 		{
-			if (ImGui::MenuItem("Cube")) { showInstantiator = true; }
+			if (ImGui::MenuItem("GameObjects Hierarchy")) { showGOHierarchy = true; }
 			if (ImGui::MenuItem("Lights")) { showLights = true; }
 			ImGui::EndMenu();
 		}
@@ -242,14 +244,39 @@ bool ModuleGUI::DrawPreferencesMenu() {
 	return open;
 }
 
-bool ModuleGUI::DrawInstantiatorMenu(float size, fPoint position) {
+bool ModuleGUI::DrawGOHierarchyMenu() {
 	bool open = true;
 	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
 	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
-	ImGui::Begin("Primitive", &open);
-	ImGui::Text("Not done yet");
+	treeNodeFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+	ImGui::Begin("GameObjects Hierarchy", &open);
+	bool treeNode = ImGui::TreeNodeEx(App->testScene->importedLevel->root->name.c_str(), treeNodeFlags);
+	if (ImGui::IsItemClicked()) { console.AddLog("%s Selected", App->testScene->importedLevel->root->name.c_str()); }
+	if (treeNode)
+	{
+		for (int i = 0; i < App->testScene->importedLevel->root->childs.size(); i++)
+		{
+			RecursiveTreePrint(*App->testScene->importedLevel->root->childs[i]);
+		}
+		ImGui::TreePop();
+	}
 	ImGui::End();
 	return open;
+}
+
+const void ModuleGUI::RecursiveTreePrint(Node & node)
+{
+	if (!node.name.empty()) {
+		bool treeNode = ImGui::TreeNodeEx(node.name.c_str(), treeNodeFlags);
+		if (ImGui::IsItemClicked()) { console.AddLog("%s Selected", node.name.c_str()); }
+		if (treeNode) {
+			for (int i = 0; i < node.childs.size(); i++)
+			{
+				RecursiveTreePrint(*node.childs[i]);
+			}
+			ImGui::TreePop();
+		}
+	}
 }
 
 bool ModuleGUI::DrawLightsMenu() {

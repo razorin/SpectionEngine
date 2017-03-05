@@ -9,6 +9,7 @@
 #include<list>
 
 struct ImGuiTextBuffer;
+struct Node;
 
 struct AppConsole {
 	ImGuiTextBuffer consoleBuffer;
@@ -60,6 +61,7 @@ public:
 	bool DrawMainMenuBar();
 	bool DrawHWInfoMenu();
 	bool DrawPreferencesMenu();
+	bool DrawGOHierarchyMenu();
 	bool DrawInstantiatorMenu(float size, fPoint position);
 	bool DrawLightsMenu();
 	bool DrawAppInfo();
@@ -67,6 +69,7 @@ public:
 	void AddFpsLog(float fps);
 	void AddMsLog(float ms);
 
+	const void ModuleGUI::RecursiveTreePrint(Node & node);
 
 public:
 	AppConsole console;
@@ -85,7 +88,7 @@ private:
 	bool showPreferences = false;
 	//Assets
 	//GameObject
-	bool showInstantiator = false;
+	bool showGOHierarchy = true;
 	bool showLights = false;
 	//Component
 	//Window
@@ -111,6 +114,8 @@ private:
 	fPoint lightPos = { 0, 0, 0 };
 	int minLightPosition = -100;
 	int maxLightPosition = 100;
+
+	ImGuiTreeNodeFlags treeNodeFlags;
 
 	//Inspector
 	float matColor[4] = { 1.0f,1.0f,1.0f,1.0f };

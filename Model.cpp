@@ -21,22 +21,22 @@ Model::Model()
 
 Model::~Model()
 {
-	
-	
+
+
 }
 
-void Model::Load(const char* path, const char* file) 
+void Model::Load(const char* path, const char* file)
 {
 	string folderPath = string(path);
 	string filePath = path + string(file);
 
 	scene = aiImportFile(filePath.c_str(), aiProcess_PreTransformVertices | aiProcess_Triangulate);
 
-	if (!scene) 
+	if (!scene)
 	{
 		DLOG("Error when trying to load model");
 	}
-	else 
+	else
 	{
 		//We get all textures and put it on imageNames
 		imageNames = new uint[scene->mNumMaterials];
@@ -72,7 +72,7 @@ void Model::Load(const char* path, const char* file)
 		// we get all meshes info and put it on an Mesh array
 		meshes = new Mesh[scene->mNumMeshes];
 		numMeshes = scene->mNumMeshes;
-		
+
 		for (int i = 0; i < scene->mNumMeshes; ++i)
 		{
 			aiMesh* aiMesh = scene->mMeshes[i];
@@ -85,10 +85,13 @@ void Model::Load(const char* path, const char* file)
 
 			meshes[i].normals = new float[numVertices * 3];
 			memcpy(meshes[i].normals, aiMesh->mNormals, sizeof(float) * 3 * numVertices);
-			
+
 			//Just one texture
-			meshes[i].textureCoords = new float[numVertices * 3];
-			memcpy(meshes[i].textureCoords, aiMesh->mTextureCoords[0], sizeof(float) * 3 * numVertices);
+			if (aiMesh->HasTextureCoords(0))
+			{
+				meshes[i].textureCoords = new float[numVertices * 3];
+				memcpy(meshes[i].textureCoords, aiMesh->mTextureCoords[0], sizeof(float) * 3 * numVertices);
+			}
 
 			//More than one texture
 			//DLOG("El numero de texturas de esta mesh es: %d", aiMesh->GetNumUVChannels());
@@ -100,7 +103,7 @@ void Model::Load(const char* path, const char* file)
 			//}
 
 			meshes[i].imageName = imageNames[aiMesh->mMaterialIndex];
-			
+
 			uint numFaces = aiMesh->mNumFaces;
 
 			meshes[i].numIndices = numFaces * 3;
@@ -109,23 +112,23 @@ void Model::Load(const char* path, const char* file)
 			{
 				aiFace aiFace = aiMesh->mFaces[j];
 				//assert(aiFace.mNumIndices == 3);
-				memcpy(&meshes[i].indices[j*3], aiFace.mIndices, sizeof(uint) * 3);
+				memcpy(&meshes[i].indices[j * 3], aiFace.mIndices, sizeof(uint) * 3);
 			}
-			
-			
+
+
 			//After all info is on our mesh we can initialize VBOs
 			meshes[i].InitializeBuffers();
 		}
 	}
 }
 
-void Model::Clear() 
+void Model::Clear()
 {
 	RELEASE(imageNames);
 	RELEASE_ARRAY(meshes);
 }
 
-void Model::Draw() 
+void Model::Draw()
 {
 	//for (int i = 0; i < scene->mNumMeshes; ++i)
 	//{
