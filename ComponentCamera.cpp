@@ -2,8 +2,9 @@
 
 
 
-ComponentCamera::ComponentCamera()
+ComponentCamera::ComponentCamera() : Component(ComponentType::COMPONENT_TYPE_CAMERA)
 {
+	
 }
 
 

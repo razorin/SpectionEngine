@@ -2,7 +2,7 @@
 
 
 
-ComponentLight::ComponentLight()
+ComponentLight::ComponentLight() : Component(ComponentType::COMPONENT_TYPE_LIGHT)
 {
 }
 

@@ -2,7 +2,7 @@
 
 
 
-ComponentScript::ComponentScript()
+ComponentScript::ComponentScript() : Component(ComponentType::COMPONENT_TYPE_SCRIPT)
 {
 }
 

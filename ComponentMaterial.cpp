@@ -2,7 +2,7 @@
 
 
 
-ComponentMaterial::ComponentMaterial()
+ComponentMaterial::ComponentMaterial() : Component(ComponentType::COMPONENT_TYPE_MATERIAL)
 {
 }
 

@@ -2,7 +2,7 @@
 
 
 
-ComponentTransform::ComponentTransform()
+ComponentTransform::ComponentTransform() : Component(ComponentType::COMPONENT_TYPE_TRANSFORM)
 {
 }
 

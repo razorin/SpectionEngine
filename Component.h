@@ -17,7 +17,7 @@ class GameObject;
 class Component
 {
 public:
-	Component();
+	Component(ComponentType type);
 	virtual ~Component();
 
 private:

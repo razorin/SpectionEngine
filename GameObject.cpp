@@ -31,131 +31,59 @@ GameObject::~GameObject()
 Component * GameObject::addComponent(const ComponentType &type)
 {
 	Component *result = nullptr;
-	//TODO: Create component
-	//TODO: Review max number of components allowed by GameObject
-	//TODO: Increment componentCounter!!!
+	int typeCounter = componentCounter[type];
+
+	//If typeCounter is zero it means that can add any number components of this type
+	if (typeCounter > 0 && typeCounter < result->maxNumberOfComponentByGameObject) {
+		return result;
+	}
 	switch (type) {
 	case ComponentType::COMPONENT_TYPE_CAMERA:
-		//Create component
 		result = new ComponentCamera();
-		//Review max number of components allowed by GameObject
-		if (componentCounter[type] < result->maxNumberOfComponentByGameObject) {
-			//Set type
-			result->type = type;
-			//Add to the components list
-			components.push_back(result);
-			//Increment componentCounter!!!
-			componentCounter[type] = componentCounter[type] + 1;
-		}
-		else {
-			RELEASE(result);
-		}
 		break;
-	case ComponentType::COMPONENT_TYPE_LIGHT:
-		//Create component
-		result = new ComponentLight();
-		//Review max number of components allowed by GameObject
-		if (componentCounter[type] < result->maxNumberOfComponentByGameObject) {
-			//Set type
-			result->type = type;
-			//Add to the components list
-			components.push_back(result);
-			//Increment componentCounter!!!
-			componentCounter[type] = componentCounter[type] + 1;
-		}
-		else {
-			RELEASE(result);
-		}
+	case ComponentType::COMPONENT_TYPE_LIGHT:	
+			result = new ComponentLight();
 		break;
 	case ComponentType::COMPONENT_TYPE_MATERIAL:
-		//Create component
 		result = new ComponentMaterial();
-		//Review max number of components allowed by GameObject
-		if (componentCounter[type] < result->maxNumberOfComponentByGameObject) {
-			//Set type
-			result->type = type;
-			//Add to the components list
-			components.push_back(result);
-			//Increment componentCounter!!!
-			componentCounter[type] = componentCounter[type] + 1;
-		}
-		else {
-			RELEASE(result);
-		}
 		break;
 	case ComponentType::COMPONENT_TYPE_MODEL:
-		//Create component
 		result = new ComponentModel();
-		//Review max number of components allowed by GameObject
-		if (componentCounter[type] < result->maxNumberOfComponentByGameObject) {
-			//Set type
-			result->type = type;
-			//Add to the components list
-			components.push_back(result);
-			//Increment componentCounter!!!
-			componentCounter[type] = componentCounter[type] + 1;
-		}
-		else {
-			RELEASE(result);
-		}
 		break;
 	case ComponentType::COMPONENT_TYPE_SCRIPT:
-		//Create component
 		result = new ComponentScript();
-		//Review max number of components allowed by GameObject
-		if (componentCounter[type] < result->maxNumberOfComponentByGameObject) {
-			//Set type
-			result->type = type;
-			//Add to the components list
-			components.push_back(result);
-			//Increment componentCounter!!!
-			componentCounter[type] = componentCounter[type] + 1;
-		}
-		else {
-			RELEASE(result);
-		}
 		break;
 	case ComponentType::COMPONENT_TYPE_TRANSFORM:
-		//Create component
 		result = new ComponentTransform();
-		//Review max number of components allowed by GameObject
-		if (componentCounter[type] < result->maxNumberOfComponentByGameObject) {
-			//Set type
-			result->type = type;
-			//Add to the components list
-			components.push_back(result);
-			//Increment componentCounter!!!
-			componentCounter[type] = componentCounter[type] + 1;
-		}
-		else {
-			RELEASE(result);
-		}
 		break;
+	}
+
+	if (result != nullptr) {
+		++componentCounter[type];
+		components.push_back(result);
 	}
 
 	return result;
 }
 
-void GameObject::removeComponent(Component *component)
+bool GameObject::removeComponent(Component *component)
 {
 	bool found = false;
 	//Find Component
 	for (std::list<Component *>::iterator it = components.begin(); it != components.end();) {
 		if (component == (*it)) {
-			ComponentType type = (*it)->type;
-			//Remove and release element
-			delete (*it);
-			it = components.erase(it);
-			//Decrement componentCounter (assuming we can only have 1 component of each type per GameObject)
-			componentCounter[type]--;
-			//Found
+			--componentCounter[(*it)->type];
+			RELEASE(*it);
+			components.erase(it);
 			found = true;
+			break;
 		}
-		
-		++it;
+		else {
+			++it;
+		}
 	}
 	
-	if (!found) DLOG("Component not found!");
+	return found;
 	
 }
 

@@ -15,7 +15,7 @@ public:
 	GameObject();
 	virtual ~GameObject();
 	Component * addComponent(const ComponentType &type);
-	void removeComponent(Component *);
+	bool removeComponent(Component *);
 
 private:
 	GameObject *parent = nullptr;
