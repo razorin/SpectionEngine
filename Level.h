@@ -15,6 +15,7 @@ struct Node {
 	float3 position = float3::zero;
 	Quat rotation = Quat::identity;
 	float3 scale = float3::one;
+	float4x4 localTransform = float4x4::identity;
 	float4x4 globalTransform = float4x4::identity;
 	std::vector<unsigned> meshes;
 	Node* parent = nullptr;

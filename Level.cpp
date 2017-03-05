@@ -130,14 +130,14 @@ void Level::RecursiveNodeRead(Node* node, aiNode& assimpNode, Node* parentNode)
 
 void Level::RecursiveCalcTransforms(Node * node)
 {
-	float4x4 transform = float4x4::FromTRS(node->position, node->rotation, node->scale);
+	node->localTransform = float4x4::FromTRS(node->position, node->rotation, node->scale);
 	if (node->parent != nullptr)
 	{
-		node->globalTransform = node->parent->globalTransform * transform;
+		node->globalTransform = node->parent->globalTransform * node->localTransform;
 	}
 	else
 	{
-		node->globalTransform = transform;
+		node->globalTransform = node->localTransform;
 	}
 
 	for (int i = 0; i < node->childs.size(); i++)
@@ -173,12 +173,12 @@ void Level::Draw(Node* node)
 		meshes[node->meshes[i]]->Draw();
 	}
 
+	glPopMatrix();
 	for (int i = 0; i < node->childs.size(); i++)
 	{
 		Draw(node->childs[i]);
 	}
 
-	glPopMatrix();
 }
 
 void Level::RecursiveNodeRelease(Node * node)
@@ -203,6 +203,10 @@ void Level::Clear()
 Node * Level::FindNode(const char * name)
 {
 	Node * findNode = RecursiveSearchNode(name, root);
+	if (findNode != nullptr)
+	{
+		DLOG("x: %f,  y: %f,  z: %f", findNode->position.x, findNode->position.y, findNode->position.z);
+	}
 	return findNode;
 }
 
@@ -235,12 +239,19 @@ bool Level::LinkNode(Node * node, Node * parent)
 			pos = i;
 		}
 	}
+
+	node->localTransform = parent->globalTransform.Inverted()*(node->parent->globalTransform * node->localTransform);
+	node->localTransform.Decompose(node->position, node->rotation, node->scale);
+	node->globalTransform = parent->globalTransform * node->localTransform;
+
 	//Remove from the old parents child list
 	node->parent->childs.erase(node->parent->childs.begin() + pos);
 	//Assign new parent
 	node->parent = parent;
 	//Add to the new parents child list
 	parent->childs.push_back(node);
+
+
 }
 
 Node::~Node()
