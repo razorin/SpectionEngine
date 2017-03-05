@@ -65,7 +65,7 @@ SCube::SCube()
 		}
 	}
 
-	ImageName = App->textures->LoadTexture("Lenna.png");
+	ImageName = App->textures->LoadTexture(aiString("Lenna.png"));
 	/*
 	// Load texture coord buffer
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
