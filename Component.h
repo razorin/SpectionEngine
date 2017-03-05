@@ -24,6 +24,9 @@ private:
 	GameObject *parent = nullptr;
 	bool enable = true;
 	std::string name = "";
+
+public:
+	ComponentType type;
 	int maxNumberOfComponentByGameObject = 1;
 };
 
