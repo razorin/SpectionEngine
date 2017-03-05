@@ -17,6 +17,8 @@ class ModuleFadeToBlack;
 class ModuleCollision;
 class ModuleParticles;
 class ModuleTestScene;
+class ModulePrimitives;
+
 
 class Timer;
 class PreciseTimer;
@@ -48,6 +50,8 @@ public:
 	ModuleCollision* collision;
 	ModuleParticles* particles;
 	ModuleTestScene* testScene;
+	ModulePrimitives* primitives;
+
 
 	JSON_Value *configuration;
 	Timer *gamestartTimer;

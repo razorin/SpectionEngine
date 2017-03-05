@@ -3,6 +3,7 @@
 #include "ModuleTestScene.h"
 #include "ModuleRender.h"
 #include "ModuleTextures.h"
+#include "ModulePrimitives.h"
 #include "Animation.h"
 #include "Model.h"
 #include "SCube.h"
@@ -23,8 +24,11 @@ ModuleTestScene::~ModuleTestScene()
 
 bool ModuleTestScene::Start() {
 
-	primitives.push_back(cube = new SCube());
-
+	SPrimitive *primitive = nullptr;
+	primitive = App->primitives->AddPrimitive(SPRIMITIVE_TYPE::SCUBE_TYPE, { 0, 6.5, 0 }, 0.25);
+	primitives.push_back(primitive);
+	primitive = App->primitives->AddPrimitive(SPRIMITIVE_TYPE::SCYLINDER_TYPE, { 0, 5, 0 }, 0.25);
+	primitives.push_back(primitive);
 	//model = new Model();
 	//model->Load("models/batman/","batman.obj");
 
@@ -105,10 +109,7 @@ void ModuleTestScene::Draw()
 
 bool ModuleTestScene::CleanUp() {
 
-	for (std::list<SPrimitive*>::iterator it = primitives.begin(); it != primitives.end(); ++it)
-	{
-		RELEASE(*it);
-	}
+	primitives.clear();
 
 	if (model != nullptr)
 	{

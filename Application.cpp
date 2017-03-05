@@ -11,6 +11,8 @@
 #include "ModuleParticles.h"
 #include "ModuleCamera.h"
 #include "ModuleTestScene.h"
+#include "ModulePrimitives.h"
+
 #include "Timer.h"
 #include "PreciseTimer.h"
 #include "LightsManager.h"
@@ -41,6 +43,8 @@ Application::Application()
 	modules.push_back(renderer = new ModuleRender(json_object_dotget_object(root, "config.renderer")));
 	modules.push_back(textures = new ModuleTextures());
 	modules.push_back(audio = new ModuleAudio());
+	modules.push_back(primitives = new ModulePrimitives());
+
 
 	// Modules to draw on top of game logic
 	//modules.push_back(collision = new ModuleCollision());

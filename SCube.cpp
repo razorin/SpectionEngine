@@ -4,10 +4,11 @@
 #include "ModuleTextures.h"
 
 
-SCube::SCube()
+SCube::SCube(const fPoint &position, float scale)
 {
-	float min = -0.5f;
-	float max = 0.5f;
+	float base = scale / 2;
+	float min = -base;
+	float max = base;
 
 	numVertices = 12;
 	vertices = new float[numVertices * 3]{
@@ -20,20 +21,20 @@ SCube::SCube()
 		//  |/      |/            |/      |/
 		//  0-------1             0-------1
 
-		min, min, max,
-		max, min, max,
-		min, max, max,
-		max, max, max,
-		min, min, min,
-		max, min, min,
-		min, max, min,
-		max, max, min,
+		position.x + min, position.y + min, position.z + max,
+		position.x + max, position.y + min, position.z + max,
+		position.x + min, position.y + max, position.z + max,
+		position.x + max, position.y + max, position.z + max,
+		position.x + min, position.y + min, position.z + min,
+		position.x + max, position.y + min, position.z + min,
+		position.x + min, position.y + max, position.z + min,
+		position.x + max, position.y + max, position.z + min,
 
 		//Extra vertices, we are repeating topface vertices (2,3,6,7)
-		min, max, max,
-		max, max, max,
-		min, max, min,
-		max, max, min,
+		position.x + min, position.y + max, position.z + max,
+		position.x + max, position.y + max, position.z + max,
+		position.x + min, position.y + max, position.z + min,
+		position.x + max, position.y + max, position.z + min,
 	};
 
 	numIndices = 36;
