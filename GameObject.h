@@ -16,6 +16,7 @@ public:
 	virtual ~GameObject();
 	Component * addComponent(const ComponentType &type);
 	bool removeComponent(Component *);
+	std::list<Component *> * findComponents(const ComponentType &type);
 
 private:
 	GameObject *parent = nullptr;

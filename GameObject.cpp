@@ -31,31 +31,35 @@ GameObject::~GameObject()
 Component * GameObject::addComponent(const ComponentType &type)
 {
 	Component *result = nullptr;
-	int typeCounter = componentCounter[type];
+	std::map<ComponentType, int>::iterator it = componentCounter.find(type);
+	
+	//Init counter for this type
+	if (it == componentCounter.end())
+		componentCounter[type] = 0;
 
-	//If typeCounter is zero it means that can add any number components of this type
-	if (typeCounter > 0 && typeCounter < result->maxNumberOfComponentByGameObject) {
+	if (result->maxNumberOfComponentByGameObject != 0 && componentCounter[type] > result->maxNumberOfComponentByGameObject) {
 		return result;
 	}
+	
 	switch (type) {
-	case ComponentType::COMPONENT_TYPE_CAMERA:
-		result = new ComponentCamera();
-		break;
-	case ComponentType::COMPONENT_TYPE_LIGHT:	
+		case ComponentType::COMPONENT_TYPE_CAMERA:
+			result = new ComponentCamera();
+			break;
+		case ComponentType::COMPONENT_TYPE_LIGHT:	
 			result = new ComponentLight();
-		break;
-	case ComponentType::COMPONENT_TYPE_MATERIAL:
-		result = new ComponentMaterial();
-		break;
-	case ComponentType::COMPONENT_TYPE_MODEL:
-		result = new ComponentModel();
-		break;
-	case ComponentType::COMPONENT_TYPE_SCRIPT:
-		result = new ComponentScript();
-		break;
-	case ComponentType::COMPONENT_TYPE_TRANSFORM:
-		result = new ComponentTransform();
-		break;
+			break;
+		case ComponentType::COMPONENT_TYPE_MATERIAL:
+			result = new ComponentMaterial();
+			break;
+		case ComponentType::COMPONENT_TYPE_MODEL:
+			result = new ComponentModel();
+			break;
+		case ComponentType::COMPONENT_TYPE_SCRIPT:
+			result = new ComponentScript();
+			break;
+		case ComponentType::COMPONENT_TYPE_TRANSFORM:
+			result = new ComponentTransform();
+			break;
 	}
 
 	if (result != nullptr) {
@@ -85,6 +89,25 @@ bool GameObject::removeComponent(Component *component)
 	
 	return found;
 	
+}
+
+std::list<Component*> * GameObject::findComponents(const ComponentType & type) {
+	//Delete list not members!!!!
+	std::list<Component*> *result = new std::list<Component*>();
+	int typeCounter = componentCounter[type];
+	
+	if (typeCounter == 0)
+		return result;
+
+	for (std::list<Component *>::iterator it = components.begin(); it != components.end();) {
+		if ((*it)->type == type) {
+			result->push_back((*it));
+			if (result->size() == typeCounter)
+				break;
+		}
+	}
+	
+	return result;
 }
 
 void GameObject::Update()
