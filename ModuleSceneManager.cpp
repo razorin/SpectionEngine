@@ -25,12 +25,12 @@ update_status ModuleSceneManager::PreUpdate(float dt)
 
 update_status ModuleSceneManager::Update(float dt)
 {
+	if (currentScene != nullptr) currentScene->Draw();
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleSceneManager::PostUpdate(float dt)
 {
-	if (currentScene != nullptr) currentScene->Draw();
 	return UPDATE_CONTINUE;
 }
 
