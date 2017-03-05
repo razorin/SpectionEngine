@@ -17,6 +17,7 @@ class ModuleFadeToBlack;
 class ModuleCollision;
 class ModuleParticles;
 class ModuleTestScene;
+class ModuleSceneManager;
 class ModulePrimitives;
 
 
@@ -49,6 +50,7 @@ public:
 	ModuleFadeToBlack* fade;
 	ModuleCollision* collision;
 	ModuleParticles* particles;
+	ModuleSceneManager* sceneManager;
 	ModuleTestScene* testScene;
 	ModulePrimitives* primitives;
 

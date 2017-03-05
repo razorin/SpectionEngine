@@ -11,6 +11,7 @@
 #include "ModuleParticles.h"
 #include "ModuleCamera.h"
 #include "ModuleTestScene.h"
+#include "ModuleSceneManager.h"
 #include "ModulePrimitives.h"
 
 #include "Timer.h"
@@ -53,6 +54,10 @@ Application::Application()
 
 	//Game Modules
 	modules.push_back(testScene = new ModuleTestScene(true));
+	//sceneManager = new ModuleSceneManager();
+	//sceneManager->loadCurrentScene("Models/street/", "Street environment_V01.fbx");
+	modules.push_back(sceneManager = new ModuleSceneManager(nullptr,true));
+	
 
 	lightsManager = new LightsManager();
 

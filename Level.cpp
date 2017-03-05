@@ -176,6 +176,7 @@ void Level::Draw(Node* node)
 	{
 		meshes[node->meshes[i]]->Draw();
 	}
+	DLOG("El numero de meshes del nivel es: %d", node->meshes.size());
 
 	glPopMatrix();
 	for (int i = 0; i < node->childs.size(); i++)

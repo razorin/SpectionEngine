@@ -169,6 +169,12 @@
     <ClInclude Include="ComponentLight.h">
       <Filter>GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleSceneManager.h">
+      <Filter>Game Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Game Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -290,6 +296,12 @@
     </ClCompile>
     <ClCompile Include="ComponentLight.cpp">
       <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleSceneManager.cpp">
+      <Filter>Game Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Game Modules</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
