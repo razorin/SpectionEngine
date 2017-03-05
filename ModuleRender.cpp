@@ -147,7 +147,6 @@ update_status ModuleRender::PostUpdate(float dt)
 // Called before quitting
 bool ModuleRender::CleanUp()
 {
-
 	RELEASE(positionLight);
 	RELEASE(diffuseLight);
 	App->gui->console.AddLog("Destroying renderer");

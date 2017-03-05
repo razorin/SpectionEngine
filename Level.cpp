@@ -108,11 +108,9 @@ void Level::RecursiveNodeRead(Node* node, aiNode& assimpNode, Node* parentNode)
 	aiQuaternion aiRot;
 	aiVector3D aiScale;
 	assimpNode.mTransformation.Decompose(aiScale, aiRot, aiPos);
-	node->position = float3 (aiPos.x, aiPos.y, aiPos.z);
-	node->rotation = Quat (aiRot.x, aiRot.y, aiRot.z, aiRot.w);
+	node->position = float3(aiPos.x, aiPos.y, aiPos.z);
+	node->rotation = Quat(aiRot.x, aiRot.y, aiRot.z, aiRot.w);
 	node->scale = float3(aiScale.x, aiScale.y, aiScale.z);
-
-	//assimpNode.mTransformation.Decompose(node->scale, node->rotation, node->position);
 
 	for (int i = 0; i < assimpNode.mNumMeshes; i++)
 	{
@@ -150,7 +148,7 @@ void Level::RecursiveCalcTransforms(Node * node)
 
 const void Level::PrintNodeInfo(Node & node)
 {
-	if (node.parent != nullptr)	{
+	if (node.parent != nullptr) {
 		DLOG("%s is child of %s", node.name.c_str(), node.parent->name.c_str());
 	}
 	else {
@@ -165,30 +163,10 @@ const void Level::PrintNodeInfo(Node & node)
 	}
 }
 
-//const void Level::PrintNodeInfo()
-//{
-//	DLOG("%s", root->name.c_str());
-//	DLOG("x: %f,  y: %f,  z: %f", root->position.x, root->position.y, root->position.z);
-//
-//	for (int i = 0; i < root->childs.size(); i++)
-//	{
-//		DLOG("%s is child of %s", root->childs[i]->name.c_str(), root->name.c_str());
-//		DLOG("x: %f,  y: %f,  z: %f", root->childs[i]->position.x, root->childs[i]->position.y, root->childs[i]->position.z);
-//
-//	}
-//}
-
-
 void Level::Draw(Node* node)
 {
 	glPushMatrix();
 	glMultMatrixf(node->globalTransform.Transposed().ptr());
-
-	//Position
-	//glTranslatef(node.position.x, node.position.y, node.position.z);
-
-	//Last we scale it
-	//glScalef(node.scale.x, node.scale.y, node.scale.z);
 
 	for (int i = 0; i < node->meshes.size(); i++)
 	{
@@ -224,31 +202,36 @@ void Level::Clear()
 
 Node * Level::FindNode(const char * name)
 {
-	Node * node = nullptr;
-	for (int i = 0; i < root->childs.size() && node == nullptr; i++) {
-		if (root->childs[i]->childs.size() > 0) {
-			node = FindNode(name);
-		}
-		if (root->childs[i]->name.compare(name) == 0) {
-			return root->childs[i];
-		}
-	}
-
-	if (node != nullptr) {
-		return node;
-	}
-	else {
-		return nullptr;
-	}
-
+	Node * findNode = RecursiveSearchNode(name, root);
+	return findNode;
 }
 
-void Level::LinkNode(Node * node, Node * parent)
+Node * Level::RecursiveSearchNode(const char * name, Node * node)
 {
+	Node* findNode = nullptr;
+	if (node->name.compare(name) == 0)
+	{
+		return node;
+	}
+	else
+	{
+		for (int i = 0; i < node->childs.size() && findNode == nullptr; i++) {
+			findNode = RecursiveSearchNode(name, node->childs[i]);
+		}
+		return findNode;
+	}
+}
+
+bool Level::LinkNode(Node * node, Node * parent)
+{
+	bool ret = false;
+	if (node == nullptr || parent == nullptr)
+		return ret;
+
 	//Find position of the node in the parents child list
 	int pos = -1;
-	for (int i = 0; i < node->parent->childs.size(); i++) {
-		if (node->parent->childs[i]->name.compare(node->parent->name) == 0) {
+	for (int i = 0; (i < node->parent->childs.size()) && (pos == -1); i++) {
+		if (node->parent->childs[i]->name.compare(node->name) == 0) {
 			pos = i;
 		}
 	}

@@ -31,15 +31,7 @@ bool ModuleTestScene::Start() {
 	//model2 = new Model();
 	//model2->Load("Models/Magnetto/", "magnetto2.fbx");
 	
-	//Test FindNode function
-	//Node* node = importedLevel->FindNode("g City_building_004");
-	//if (node == nullptr) {
-	//	DLOG("Node not found");
-	//}
-	//else
-	//{
-	//	DLOG("The name of the node is: %s", node->name.c_str());
-	//}
+	
 
 
 	importedLevel = new Level();
@@ -48,11 +40,26 @@ bool ModuleTestScene::Start() {
 
 	//This is a little hack to se the scene in the correct rotation (Node Dummy001 is rotated -90 in X axis)
 	float angleRad = -90 * DEGTORAD;
-	importedLevel->root->rotation = importedLevel->root->rotation.RotateX(angleRad);
+	importedLevel->root->rotation = Quat::RotateX(angleRad);
 	importedLevel->RecursiveCalcTransforms(importedLevel->root);
 
+	//Test FindNode function
+	Node* node = importedLevel->FindNode("City_building_004");
+	if (node == nullptr) {
+		DLOG("Node not found");
+	}
+	else
+	{
+		DLOG("The name of the node is: %s", node->name.c_str());
+	}
+
+
 	//This is a test to try the LinkNode and FindNode methods
-	//importedLevel->LinkNode(importedLevel->FindNode("Line002"), importedLevel->FindNode("Sky001"));
+	importedLevel->LinkNode(importedLevel->FindNode("City_building_004"), importedLevel->FindNode("City_building_001"));
+
+	//importedLevel->FindNode("City_building_001")->position.z += 40;
+	//importedLevel->FindNode("City_building_001")->rotation = Quat::RotateX(angleRad/5);
+	//importedLevel->RecursiveCalcTransforms(importedLevel->root);
 
 	return true;
 }

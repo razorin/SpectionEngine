@@ -16,9 +16,6 @@ struct Node {
 	Quat rotation = Quat::identity;
 	float3 scale = float3::one;
 	float4x4 globalTransform = float4x4::identity;
-	//aiVector3D position = aiVector3D(0,0,0);
-	//aiQuaternion rotation = aiQuaternion(1,0,0,0);
-	//aiVector3D scale = aiVector3D(1, 1, 1);
 	std::vector<unsigned> meshes;
 	Node* parent = nullptr;
 	std::vector<Node*> childs;
@@ -60,7 +57,8 @@ public:
 	//const Node* GetRootNode() { return root; }
 
 	Node* FindNode(const char* name);
-	void LinkNode(Node* node, Node* parent);
+	Node* RecursiveSearchNode(const char* name, Node* node);
+	bool LinkNode(Node* node, Node* parent);
 
 public:
 	Node* root = nullptr;
