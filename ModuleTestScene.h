@@ -12,7 +12,6 @@ class SCube;
 class SCylinder;
 class Model;
 
-
 class ModuleTestScene : public Module {
 public:
 	ModuleTestScene(const JSON_Value *json, bool active);

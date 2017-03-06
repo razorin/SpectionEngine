@@ -5,9 +5,7 @@
 #include "ModuleCamera.h"
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
-#include "ModuleCollision.h"
 #include "ModuleTestScene.h"
-#include "Animation.h"
 #include "Parson.h"
 #include "SPrimitive.h"
 #include "SCube.h"
@@ -296,106 +294,6 @@ void ModuleRender::DrawDirectCube()
 
 	glEnd();
 
-}
-
-// Blit to screen
-bool ModuleRender::Blit(SDL_Texture* texture, iPoint &position, Frame* frame, bool flip, float speed)
-{
-	bool ret = true;
-	SDL_Rect rect;
-	rect.x = (int)(camera.x * speed) + (position.x + (flip ? -frame->offset_x : frame->offset_x)) * App->window->screen_size;
-	rect.y = (int)(camera.y * speed) + (position.y + frame->offset_y + position.z) * App->window->screen_size;
-
-	if (frame != NULL)
-	{
-		rect.w = frame->section.w;
-		rect.h = frame->section.h;
-	}
-	else
-	{
-		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
-	}
-
-	rect.w *= App->window->screen_size;
-	rect.h *= App->window->screen_size;
-	if (!flip) {
-		if (SDL_RenderCopy(renderer, texture, &frame->section, &rect) != 0)
-		{
-			App->gui->console.AddLog("Destroying renderer");
-			DLOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
-			ret = false;
-		}
-	}
-	else {
-		if (SDL_RenderCopyEx(renderer, texture, &frame->section, &rect, NULL, nullptr, SDL_FLIP_HORIZONTAL) != 0) {
-			DLOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
-			ret = false;
-		}
-	}
-
-	return ret;
-}
-
-bool ModuleRender::StaticBlit(SDL_Texture* texture, const iPoint &position, const SDL_Rect &section) {
-	bool ret = true;
-	SDL_Rect rec(section);
-
-	rec.x = (int)(position.x * App->window->screen_size);
-	rec.y = (int)(position.y  * App->window->screen_size);
-	rec.w *= App->window->screen_size;
-	rec.h *= App->window->screen_size;
-
-	if (SDL_RenderCopy(renderer, texture, &section, &rec) != 0) {
-		DLOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
-		ret = false;
-	}
-
-	return ret;
-}
-
-bool ModuleRender::DrawQuad(const Collider& collider, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera)
-{
-	bool ret = true;
-
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(renderer, r, g, b, a);
-
-	SDL_Rect rec(collider.rect);
-	if (use_camera)
-	{
-		rec.x = (int)(camera.x + collider.rect.x * App->window->screen_size);
-		rec.y = (int)(camera.y + (collider.rect.y + collider.z) * App->window->screen_size);
-		rec.w *= App->window->screen_size;
-		rec.h *= App->window->screen_size;
-	}
-
-	if (SDL_RenderFillRect(renderer, &rec) != 0)
-	{
-		DLOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
-		ret = false;
-	}
-
-	return ret;
-}
-
-bool ModuleRender::DrawRect(const SDL_Rect &rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
-	bool ret = true;
-
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(renderer, r, g, b, a);
-
-	SDL_Rect rec(rect);
-	rec.x = (int)(rec.x * App->window->screen_size);
-	rec.y = (int)(rec.y  * App->window->screen_size);
-	rec.w *= App->window->screen_size;
-	rec.h *= App->window->screen_size;
-
-	if (SDL_RenderFillRect(renderer, &rec) != 0) {
-		DLOG("Cannot draw rectangle to screen. SDL_RenderFillRect error: %s", SDL_GetError());
-		ret = false;
-	}
-
-	return ret;
 }
 
 void ModuleRender::GetHWAndDriverCapabilities()

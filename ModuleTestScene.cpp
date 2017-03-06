@@ -3,7 +3,6 @@
 #include "ModuleTestScene.h"
 #include "ModuleRender.h"
 #include "ModuleTextures.h"
-#include "Animation.h"
 #include "Model.h"
 #include "SCube.h"
 #include "MemLeaks.h"

@@ -15,6 +15,7 @@ class ModuleAudio;
 class ModuleGUI;
 class ModuleFadeToBlack;
 class ModuleCollision;
+class ModuleAnimation;
 class ModuleParticles;
 class ModuleTestScene;
 
@@ -46,6 +47,7 @@ public:
 	ModuleGUI* gui;
 	ModuleFadeToBlack* fade;
 	ModuleCollision* collision;
+	ModuleAnimation* animations;
 	ModuleParticles* particles;
 	ModuleTestScene* testScene;
 

@@ -46,12 +46,6 @@
     <ClInclude Include="ModuleAudio.h">
       <Filter>Core Modules</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleFadeToBlack.h">
-      <Filter>Core Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Point.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -61,17 +55,11 @@
     <ClInclude Include="MemLeaks.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleParticles.h">
-      <Filter>Core Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleCollision.h">
-      <Filter>Core Modules</Filter>
-    </ClInclude>
     <ClInclude Include="Parson.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
-	  <Filter>Utils</Filter>
+      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="PreciseTimer.h">
       <Filter>Utils</Filter>
@@ -136,12 +124,13 @@
     <ClInclude Include="LightsManager.h">
       <Filter>Lights</Filter>
     </ClInclude>
-    <ClInclude Include="Material.h" >
-	  <Filter>Geometric primitive</Filter>
-	</ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Geometric primitive</Filter>
+    </ClInclude>
     <ClInclude Include="Level.h">
       <Filter>Geometric primitive</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleAnimation.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -159,19 +148,10 @@
     <ClCompile Include="ModuleAudio.cpp">
       <Filter>Core Modules</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleFadeToBlack.cpp">
-      <Filter>Core Modules</Filter>
-    </ClCompile>
     <ClCompile Include="Log.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="ModuleInput.cpp">
-      <Filter>Core Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleParticles.cpp">
-      <Filter>Core Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleCollision.cpp">
       <Filter>Core Modules</Filter>
     </ClCompile>
     <ClCompile Include="Parson.c">
@@ -235,10 +215,13 @@
       <Filter>Lights</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
-		<Filter>Geometric primitive</Filter>
-	</ClCompile>
+      <Filter>Geometric primitive</Filter>
+    </ClCompile>
     <ClCompile Include="Level.cpp">
       <Filter>Geometric primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleAnimation.cpp">
+      <Filter>Main</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
