@@ -168,10 +168,3 @@ Component * GameObject::FindComponent(const ComponentType & type)
 }
 
 
-
-
-
-void GameObject::Update()
-{
-}
-

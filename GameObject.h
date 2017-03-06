@@ -26,10 +26,6 @@ public:
 	std::list<Component *> * FindComponents(const ComponentType &type);
 	Component* FindComponent(const ComponentType &type);
 
-	//Todo delete uptade. makes no sense in gameobject
-private:
-	void Update();
-
 
 private:
 	GameObject *parent = nullptr;

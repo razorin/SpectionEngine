@@ -88,23 +88,23 @@ update_status ModuleTestScene::PostUpdate()
 
 void ModuleTestScene::Draw()
 {
-	/*for (std::list<SPrimitive*>::iterator it = primitives.begin(); it != primitives.end(); ++it)
+	for (std::list<SPrimitive*>::iterator it = primitives.begin(); it != primitives.end(); ++it)
 	{
 		(*it)->Draw();
 	}
 
-	if (model != nullptr)
-		model->Draw();
+	//if (model != nullptr)
+	//	model->Draw();
 
-	if (model2 != nullptr)
-		model2->Draw();
+	//if (model2 != nullptr)
+	//	model2->Draw();
 
 
 
-	if (importedLevel != nullptr)
-	{
-		importedLevel->Draw(importedLevel->root);
-	}*/
+	//if (importedLevel != nullptr)
+	//{
+	//	importedLevel->Draw(importedLevel->root);
+	//}
 }
 
 bool ModuleTestScene::CleanUp() {

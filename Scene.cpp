@@ -39,20 +39,20 @@ GameObject * Scene::GetGameObject(std::string name)
 
 void Scene::LoadLevel(const char * path, const char * file)
 {
-	aiString folderPath = aiString(path);
-	aiString filePath = folderPath;
-	filePath.Append(file);
+	//aiString folderPath = aiString(path);
+	//aiString filePath = folderPath;
+	//filePath.Append(file);
 
-	const aiScene* scene = aiImportFile(filePath.data,
-		aiProcess_CalcTangentSpace |
-		aiProcess_Triangulate |
-		aiProcess_JoinIdenticalVertices |
-		aiProcess_SortByPType);
+	//const aiScene* scene = aiImportFile(filePath.data,
+	//	aiProcess_CalcTangentSpace |
+	//	aiProcess_Triangulate |
+	//	aiProcess_JoinIdenticalVertices |
+	//	aiProcess_SortByPType);
 
-	root = new GameObject();
+	//root = new GameObject();
 
-	aiNode* rootNode = scene->mRootNode;
-	RecursiveNodeRead(root, *rootNode, nullptr);
+	//aiNode* rootNode = scene->mRootNode;
+	//RecursiveNodeRead(root, *rootNode, nullptr);
 
 
 
