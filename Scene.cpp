@@ -18,6 +18,25 @@ Scene::Scene()
 
 Scene::~Scene()
 {
+	if(cube != nullptr) RELEASE(cube);
+	if (plane != nullptr) RELEASE(plane);
+	if (cylinder != nullptr) RELEASE(cylinder);
+	if (model != nullptr) {
+		model->Clear();
+		RELEASE(model);
+	}
+	if (model2 != nullptr) {
+		model2->Clear();
+		RELEASE(model2);
+	}
+	if (importedLevel != nullptr) {
+		importedLevel->Clear();
+		RELEASE(importedLevel);
+	}
+
+	gameobjects.clear();
+	primitives.clear();
+
 }
 
 GameObject * Scene::getGameObject(std::string name)

@@ -7,6 +7,7 @@
 #include "ModuleWindow.h"
 #include "ModuleCollision.h"
 #include "ModuleTestScene.h"
+#include "ModuleSceneManager.h"
 #include "Animation.h"
 #include "Parson.h"
 #include "SPrimitive.h"
@@ -127,6 +128,9 @@ update_status ModuleRender::Update(float dt)
 	DrawGizmo();
 
 	App->lightsManager->Draw();
+
+	// Draw the current scene
+	if (App->sceneManager->getCurrentScene() != nullptr) App->sceneManager->Draw();
 
 	//DrawDirectCube();
 

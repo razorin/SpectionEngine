@@ -24,8 +24,6 @@ update_status ModuleSceneManager::PreUpdate(float dt)
 
 update_status ModuleSceneManager::Update(float dt)
 {
-	//TODO this should be done in moduleRender update, NOT HERE
-	if (currentScene != nullptr) currentScene->Draw();
 	return UPDATE_CONTINUE;
 }
 
@@ -34,9 +32,15 @@ update_status ModuleSceneManager::PostUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
+void ModuleSceneManager::Draw()
+{
+	if (currentScene != nullptr) currentScene->Draw();
+}
+
 bool ModuleSceneManager::CleanUp()
 {
 	//TODO Clean up
+	if(currentScene != nullptr) RELEASE(currentScene);
 	return true;
 }
 
@@ -57,7 +61,7 @@ Scene * ModuleSceneManager::getCurrentScene()
 
 void ModuleSceneManager::deleteCurrentScene()
 {
-	RELEASE(currentScene);
+	if (currentScene != nullptr) RELEASE(currentScene);
 	currentScene = nullptr;
 }
 
