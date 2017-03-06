@@ -2,10 +2,9 @@
 
 
 
-ComponentLight::ComponentLight() : Component(ComponentType::COMPONENT_TYPE_LIGHT)
+ComponentLight::ComponentLight(GameObject * container) : Component(container, ComponentType::COMPONENT_TYPE_LIGHT)
 {
 }
-
 
 ComponentLight::~ComponentLight()
 {

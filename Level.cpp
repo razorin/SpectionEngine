@@ -1,16 +1,13 @@
-#include "Level.h"
-#include "Mesh.h"
 #include "Globals.h"
 #include "Application.h"
+#include "Level.h"
+#include "Mesh.h"
 #include "ModuleTextures.h"
-#include "assimp\vector3.h"
 #include "assimp/cimport.h"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 #include "assimp\anim.h"
 #include "MathGeoLib\include\MathGeoLib.h"
-#include "Application.h"
-#include "ModuleCamera.h"
 
 using namespace std;
 
@@ -176,7 +173,6 @@ void Level::Draw(Node* node)
 	{
 		meshes[node->meshes[i]]->Draw();
 	}
-	DLOG("El numero de meshes del nivel es: %d", node->meshes.size());
 
 	glPopMatrix();
 	for (int i = 0; i < node->childs.size(); i++)

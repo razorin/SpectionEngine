@@ -1,11 +1,9 @@
 #include "ComponentMaterial.h"
 
 
-
-ComponentMaterial::ComponentMaterial() : Component(ComponentType::COMPONENT_TYPE_MATERIAL)
+ComponentMaterial::ComponentMaterial(GameObject * container) : Component(container, ComponentType::COMPONENT_TYPE_MATERIAL)
 {
 }
-
 
 ComponentMaterial::~ComponentMaterial()
 {

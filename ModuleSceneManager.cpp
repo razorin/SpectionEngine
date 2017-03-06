@@ -19,12 +19,12 @@ bool ModuleSceneManager::Start() {
 
 update_status ModuleSceneManager::PreUpdate(float dt)
 {
-	DLOG("PreUpdate SceneManager");
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleSceneManager::Update(float dt)
 {
+	//TODO this should be done in moduleRender update, NOT HERE
 	if (currentScene != nullptr) currentScene->Draw();
 	return UPDATE_CONTINUE;
 }
@@ -36,7 +36,8 @@ update_status ModuleSceneManager::PostUpdate(float dt)
 
 bool ModuleSceneManager::CleanUp()
 {
-	return false;
+	//TODO Clean up
+	return true;
 }
 
 void ModuleSceneManager::setCurrentScene(Scene * scene)

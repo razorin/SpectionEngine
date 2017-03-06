@@ -29,7 +29,6 @@ struct Collider
 	COLLIDER_TYPE type;
 	std::function<void(const Collider &)> onCollision;
 
-	// TODO 10: Add a way to notify other classes that a collision happened
 
 	Collider(SDL_Rect rectangle, COLLIDER_TYPE type, bool ignore_z, bool ignore_y, std::function<void(const Collider &)> onCollision) : // expand this call if you need to
 		rect(rectangle), z(0), type(type), ignore_z(ignore_z), ignore_y(ignore_y), onCollision(onCollision)

@@ -6,7 +6,7 @@ class ComponentCamera :
 	public Component
 {
 public:
-	ComponentCamera();
+	ComponentCamera(GameObject* container);
 	~ComponentCamera();
 };
 

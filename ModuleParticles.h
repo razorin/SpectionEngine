@@ -18,7 +18,6 @@ enum PARTICLE_TYPE {
 struct Particle
 {
 
-	// TODO 1: Fill in the structure with all the properties you need for each particle
 	iPoint speed;
 	iPoint position;
 	float time_to_live;
@@ -35,7 +34,6 @@ struct Particle
 	
 
 
-	// TODO 11: Add an optional collider to each particle
 	Particle();
 	Particle(const Particle& p);
 	~Particle();

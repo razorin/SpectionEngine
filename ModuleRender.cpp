@@ -121,8 +121,8 @@ update_status ModuleRender::PreUpdate(float dt)
 // Called every draw update
 update_status ModuleRender::Update(float dt)
 {
-
-	App->testScene->Draw();
+	//TODO scene draw here. NOT TESTSCENE which should be deleted in the future (whole module is unnnecessary)
+	//App->testScene->Draw();
 	DrawGrid();
 	DrawGizmo();
 

@@ -96,7 +96,6 @@ Collider* ModuleCollision::AddCollider(const SDL_Rect& rect, COLLIDER_TYPE type,
 
 bool Collider::CheckCollision(const Collider &other) const
 {
-	// TODO 7: Create by hand (avoid consulting the internet) a simple collision test
 	// Return true if the argument and the own rectangle are intersecting
 	return (this->rect.x < other.rect.x + other.rect.w &&
 		this->rect.x + this->rect.w > other.rect.x &&

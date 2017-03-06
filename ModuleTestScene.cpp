@@ -24,11 +24,11 @@ ModuleTestScene::~ModuleTestScene()
 
 bool ModuleTestScene::Start() {
 
-	SPrimitive *primitive = nullptr;
-	primitive = App->primitives->AddPrimitive(SPRIMITIVE_TYPE::SCUBE_TYPE, { 0, 6.5, 0 }, 0.25);
-	primitives.push_back(primitive);
-	primitive = App->primitives->AddPrimitive(SPRIMITIVE_TYPE::SCYLINDER_TYPE, { 0, 5, 0 }, 0.25);
-	primitives.push_back(primitive);
+	//SPrimitive *primitive = nullptr;
+	//primitive = App->primitives->AddPrimitive(SPRIMITIVE_TYPE::SCUBE_TYPE, { 0, 6.5, 0 }, 0.25);
+	//primitives.push_back(primitive);
+	//primitive = App->primitives->AddPrimitive(SPRIMITIVE_TYPE::SCYLINDER_TYPE, { 0, 5, 0 }, 0.25);
+	//primitives.push_back(primitive);
 	//model = new Model();
 	//model->Load("models/batman/","batman.obj");
 
@@ -38,12 +38,12 @@ bool ModuleTestScene::Start() {
 	
 
 
-	importedLevel = new Level();
+	//importedLevel = new Level();
 	//importedLevel->Load("Models/street/", "Street.obj");
-	importedLevel->Load("Models/street/", "Street environment_V01.fbx");
+	//importedLevel->Load("Models/street/", "Street environment_V01.fbx");
 
 	//This is a little hack to se the scene in the correct rotation (Node Dummy001 is rotated -90 in X axis)
-	float angleRad = 90 * DEGTORAD;
+	//float angleRad = 90 * DEGTORAD;
 	//importedLevel->root->rotation = Quat::RotateX(angleRad);
 	//importedLevel->RecursiveCalcTransforms(importedLevel->root);
 
@@ -59,7 +59,7 @@ bool ModuleTestScene::Start() {
 
 
 	//This is a test to try the LinkNode and FindNode methods
-	importedLevel->LinkNode(importedLevel->FindNode("City_building_014"), importedLevel->FindNode("City_building_001"));
+	//importedLevel->LinkNode(importedLevel->FindNode("City_building_014"), importedLevel->FindNode("City_building_001"));
 
 	//importedLevel->FindNode("City_building_001")->rotation = Quat::RotateX(angleRad/2);
 	//importedLevel->FindNode("g City_building_001")->position.y += 5;

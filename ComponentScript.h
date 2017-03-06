@@ -6,7 +6,7 @@ class ComponentScript :
 	public Component
 {
 public:
-	ComponentScript();
+	ComponentScript(GameObject* container);
 	~ComponentScript();
 };
 

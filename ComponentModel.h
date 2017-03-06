@@ -6,7 +6,7 @@ class ComponentModel :
 	public Component
 {
 public:
-	ComponentModel();
+	ComponentModel(GameObject* container);
 	~ComponentModel();
 };
 

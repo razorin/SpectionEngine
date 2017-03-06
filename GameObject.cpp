@@ -8,8 +8,25 @@
 #include "ComponentScript.h"
 #include "ComponentTransform.h"
 
+
 GameObject::GameObject()
 {
+}
+
+//TODO delete empty constuctor.This one below can do the same
+GameObject::GameObject(GameObject * parent, const char * name) : parent(parent),  name(name)
+{
+	AddComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
+}
+
+GameObject::GameObject(GameObject * parent, const char * name, const float3 & position, const float3 & scale, const Quat & rotation):
+	parent(parent), name(name)
+{
+	AddComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
+	ComponentTransform* componentTransform = (ComponentTransform*)FindComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
+	componentTransform->SetPosition(position);
+	componentTransform->SetScale(scale);
+	componentTransform->SetRotation(rotation);
 }
 
 
@@ -28,7 +45,12 @@ GameObject::~GameObject()
 	}
 }
 
-Component * GameObject::addComponent(const ComponentType &type)
+GameObject * GameObject::GetParent() const
+{
+	return parent;
+}
+
+Component * GameObject::AddComponent(const ComponentType &type)
 {
 	Component *result = nullptr;
 	std::map<ComponentType, int>::iterator it = componentCounter.find(type);
@@ -37,28 +59,28 @@ Component * GameObject::addComponent(const ComponentType &type)
 	if (it == componentCounter.end())
 		componentCounter[type] = 0;
 
-	if (result->maxNumberOfComponentByGameObject != 0 && componentCounter[type] > result->maxNumberOfComponentByGameObject) {
+	if (result->maxComponentsByGO != 0 && componentCounter[type] > result->maxComponentsByGO) {
 		return result;
 	}
 	
 	switch (type) {
 		case ComponentType::COMPONENT_TYPE_CAMERA:
-			result = new ComponentCamera();
+			result = new ComponentCamera(this);
 			break;
 		case ComponentType::COMPONENT_TYPE_LIGHT:	
-			result = new ComponentLight();
+			result = new ComponentLight(this);
 			break;
 		case ComponentType::COMPONENT_TYPE_MATERIAL:
-			result = new ComponentMaterial();
+			result = new ComponentMaterial(this);
 			break;
 		case ComponentType::COMPONENT_TYPE_MODEL:
-			result = new ComponentModel();
+			result = new ComponentModel(this);
 			break;
 		case ComponentType::COMPONENT_TYPE_SCRIPT:
-			result = new ComponentScript();
+			result = new ComponentScript(this);
 			break;
 		case ComponentType::COMPONENT_TYPE_TRANSFORM:
-			result = new ComponentTransform();
+			result = new ComponentTransform(this);
 			break;
 	}
 
@@ -70,7 +92,7 @@ Component * GameObject::addComponent(const ComponentType &type)
 	return result;
 }
 
-bool GameObject::removeComponent(Component *component)
+bool GameObject::RemoveComponent(Component *component)
 {
 	bool found = false;
 	//Find Component
@@ -91,7 +113,7 @@ bool GameObject::removeComponent(Component *component)
 	
 }
 
-std::list<Component*> * GameObject::findComponents(const ComponentType & type) {
+std::list<Component*> * GameObject::FindComponents(const ComponentType & type) {
 	//Delete list not members!!!!
 	std::list<Component*> *result = new std::list<Component*>();
 	int typeCounter = componentCounter[type];
@@ -109,6 +131,21 @@ std::list<Component*> * GameObject::findComponents(const ComponentType & type) {
 	
 	return result;
 }
+
+Component * GameObject::FindComponent(const ComponentType & type)
+{
+	Component* componentFound = nullptr;
+	for (std::list<Component *>::iterator it = components.begin(); it != components.end();) {
+		if ((*it)->type == type) {
+			componentFound = *it;
+		}
+	}
+	return componentFound;
+}
+
+
+
+
 
 void GameObject::Update()
 {

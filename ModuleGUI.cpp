@@ -246,7 +246,7 @@ bool ModuleGUI::DrawPreferencesMenu() {
 
 bool ModuleGUI::DrawGOHierarchyMenu() {
 	bool open = true;
-	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
+	/*ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
 	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
 	treeNodeFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 	ImGui::Begin("GameObjects Hierarchy", &open);
@@ -260,7 +260,7 @@ bool ModuleGUI::DrawGOHierarchyMenu() {
 		}
 		ImGui::TreePop();
 	}
-	ImGui::End();
+	ImGui::End();*/
 	return open;
 }
 

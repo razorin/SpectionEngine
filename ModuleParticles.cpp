@@ -25,7 +25,6 @@ bool ModuleParticles::Start()
 	/*graphics = App->textures->Load("rtype/particles.png");
 
 
-	// TODO 2: Create a prototype for the laser particle
 	// audio: rtype/laser.wav
 	// coords: {232, 103, 16, 12}; {249, 103, 16, 12};
 	
@@ -66,7 +65,6 @@ bool ModuleParticles::Start()
 	explosion_particle.collider_type = COLLIDER_TYPE::NONE;
 
 
-	// TODO 12: Create a new "Explosion" particle 
 	// audio: rtype/explosion.wav
 	// coords: {274, 296, 33, 30}; {313, 296, 33, 30}; {346, 296, 33, 30}; {382, 296, 33, 30}; {419, 296, 33, 30}; {457, 296, 33, 30};
 	*/
@@ -107,7 +105,6 @@ update_status ModuleParticles::Update(float dt)
 
 void ModuleParticles::AddParticle(const Particle& particle, int x, int y)
 {
-	// TODO 4: Fill in a method to create an instance of a prototype particle	
 	Particle *p = new Particle(particle);
 	p->area.x = x;
 	p->area.y = y;
@@ -125,7 +122,6 @@ void ModuleParticles::AddParticle(const Particle& particle, int x, int y)
 Particle::Particle()
 {}
 
-// TODO 3: Fill in a copy constructor
 Particle::Particle(const Particle& p) 
 {
 	this->speed = p.speed;
@@ -155,7 +151,7 @@ bool Particle::Update(float dt)
 {
 	bool ret = true;
 
-	// TODO 5: This is the core of the particle functionality.
+
 	// Return false if the particle must be destroyed
 	App->renderer->Blit(App->particles->graphics, position, &(animation.GetCurrentFrame()));
 	if (fx >= 0) {
