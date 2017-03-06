@@ -82,21 +82,27 @@ Component * GameObject::AddComponent(const ComponentType &type)
 	switch (type) {
 		case ComponentType::COMPONENT_TYPE_CAMERA:
 			result = new ComponentCamera(this);
+			result->maxComponentsByGO = 1;
 			break;
 		case ComponentType::COMPONENT_TYPE_LIGHT:	
 			result = new ComponentLight(this);
+			result->maxComponentsByGO = 0;
 			break;
 		case ComponentType::COMPONENT_TYPE_MATERIAL:
 			result = new ComponentMaterial(this);
+			result->maxComponentsByGO = 0;
 			break;
 		case ComponentType::COMPONENT_TYPE_MODEL:
 			result = new ComponentModel(this);
+			result->maxComponentsByGO = 1;
 			break;
 		case ComponentType::COMPONENT_TYPE_SCRIPT:
 			result = new ComponentScript(this);
+			result->maxComponentsByGO = 0;
 			break;
 		case ComponentType::COMPONENT_TYPE_TRANSFORM:
 			result = new ComponentTransform(this);
+			result->maxComponentsByGO = 1;
 			break;
 	}
 

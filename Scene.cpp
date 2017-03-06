@@ -9,6 +9,7 @@
 #include "SPrimitive.h"
 #include "Level.h"
 #include "Model.h"
+#include "Component.h"
 
 
 Scene::Scene()
@@ -85,6 +86,12 @@ void Scene::loadLevel(const char * path, const char * file)
 
 	//This is a test to try the LinkNode and FindNode methods
 	importedLevel->LinkNode(importedLevel->FindNode("City_building_014"), importedLevel->FindNode("City_building_001"));
+
+	//GameObject test
+	//GameObject* gameobject = new GameObject(nullptr,"Prueba");
+	//gameobject->AddComponent(COMPONENT_TYPE_TRANSFORM);
+	//gameobject->AddComponent(COMPONENT_TYPE_MODEL);
+	//gameobjects.push_back(gameobject);
 }
 
 void Scene::Draw()
