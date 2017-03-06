@@ -3,14 +3,12 @@
 
 #include "Component.h"
 #include "MathGeoLib/include/MathGeoLib.h"
+#include "GameObject.h"
 
 enum SpaceMode {
 	SPACE_LOCAL,
 	SPACE_GLOBAL
 };
-
-
-
 
 class ComponentTransform :
 	public Component
@@ -24,6 +22,7 @@ public:
 	float3 Position(SpaceMode space = SpaceMode::SPACE_LOCAL) const;
 	float3 Scale(SpaceMode space = SpaceMode::SPACE_LOCAL) const;
 	Quat Rotation(SpaceMode space = SpaceMode::SPACE_LOCAL) const;
+	float4x4 GlobalTransform() const;
 
 	//Setters
 	void SetPosition(const float3& position);

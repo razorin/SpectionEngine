@@ -1,6 +1,6 @@
+#include "Globals.h"
 #include "GameObject.h"
 #include "Component.h"
-#include "Globals.h"
 #include "ComponentCamera.h"
 #include "ComponentLight.h"
 #include "ComponentMaterial.h"
@@ -17,16 +17,18 @@ GameObject::GameObject()
 GameObject::GameObject(GameObject * parent, const char * name) : parent(parent),  name(name)
 {
 	AddComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
+	Transform()->SetParent(parent->Transform()->GlobalTransform());
 }
 
 GameObject::GameObject(GameObject * parent, const char * name, const float3 & position, const float3 & scale, const Quat & rotation):
 	parent(parent), name(name)
 {
 	AddComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
-	ComponentTransform* componentTransform = (ComponentTransform*)FindComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
+	ComponentTransform* componentTransform = Transform();
 	componentTransform->SetPosition(position);
 	componentTransform->SetScale(scale);
 	componentTransform->SetRotation(rotation);
+	componentTransform->SetParent(parent->Transform()->GlobalTransform());
 }
 
 
@@ -48,6 +50,20 @@ GameObject::~GameObject()
 GameObject * GameObject::GetParent() const
 {
 	return parent;
+}
+
+void GameObject::SetParent(GameObject * parentGO)
+{
+	Transform()->SetParent(parentGO->Transform()->GlobalTransform());
+	//ALLWAYS change parent after changing transform values. It requires its older parent to recalculate its new localTransform;
+	parent = parentGO;
+}
+
+
+ComponentTransform * GameObject::Transform()
+{
+	ComponentTransform* componentTransform = (ComponentTransform*)FindComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
+	return componentTransform;
 }
 
 Component * GameObject::AddComponent(const ComponentType &type)

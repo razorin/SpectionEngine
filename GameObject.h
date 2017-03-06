@@ -1,4 +1,3 @@
-#pragma once
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
@@ -8,6 +7,7 @@
 #include "MathGeoLib\include\MathGeoLib.h"
 
 class Component;
+class ComponentTransform;
 enum ComponentType;
 
 class GameObject
@@ -19,6 +19,8 @@ public:
 	virtual ~GameObject();
 
 	GameObject* GetParent() const;
+	void SetParent(GameObject* parentGO);
+	ComponentTransform* Transform();
 
 	Component * AddComponent(const ComponentType &type);
 	bool RemoveComponent(Component *);

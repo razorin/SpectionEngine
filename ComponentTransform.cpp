@@ -47,6 +47,11 @@ Quat ComponentTransform::Rotation(SpaceMode space) const
 	}
 }
 
+float4x4 ComponentTransform::GlobalTransform() const
+{
+	return globalTransform;
+}
+
 
 void ComponentTransform::SetPosition(const float3 & position)
 {
@@ -80,8 +85,7 @@ void ComponentTransform::CalculateGlobalT()
 	GameObject* parentGO = container->GetParent();
 	if (parentGO != nullptr)
 	{
-		ComponentTransform* pTransformComp = (ComponentTransform*)parentGO->FindComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
-		globalTransform = pTransformComp->globalTransform * localTransform;
+		globalTransform = parentGO->Transform()->globalTransform * localTransform;
 	}
 	else
 	{
@@ -96,8 +100,7 @@ void ComponentTransform::SetParent(const float4x4 & newParentGT)
 	GameObject* parentGO = container->GetParent();
 	if (parentGO != nullptr)
 	{
-		ComponentTransform* pTransformComp = (ComponentTransform*)parentGO->FindComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
-		localTransform = newParentGT.Inverted() * (pTransformComp->globalTransform * localTransform);
+		localTransform = newParentGT.Inverted() * (parentGO->Transform()->globalTransform * localTransform);
 	}
 	else {
 		localTransform = newParentGT.Inverted() * localTransform;
