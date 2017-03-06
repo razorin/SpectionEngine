@@ -4,31 +4,34 @@
 #include "ComponentCamera.h"
 #include "ComponentLight.h"
 #include "ComponentMaterial.h"
-#include "ComponentModel.h"
+#include "ComponentMesh.h"
 #include "ComponentScript.h"
 #include "ComponentTransform.h"
 
 
-GameObject::GameObject()
-{
-}
-
 //TODO delete empty constuctor.This one below can do the same
-GameObject::GameObject(GameObject * parent, const char * name) : parent(parent),  name(name)
+GameObject::GameObject(GameObject * parent, const char * name) : parent(parent), name(name)
 {
 	AddComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
-	Transform()->SetParent(parent->Transform()->GlobalTransform());
+	AssignTransform();
+	if (parent != nullptr)
+	{
+		transform->SetParent(parent->transform->GlobalTransform());
+	}
 }
 
-GameObject::GameObject(GameObject * parent, const char * name, const float3 & position, const float3 & scale, const Quat & rotation):
+GameObject::GameObject(GameObject * parent, const char * name, const float3 & position, const float3 & scale, const Quat & rotation) :
 	parent(parent), name(name)
 {
 	AddComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
-	ComponentTransform* componentTransform = Transform();
-	componentTransform->SetPosition(position);
-	componentTransform->SetScale(scale);
-	componentTransform->SetRotation(rotation);
-	componentTransform->SetParent(parent->Transform()->GlobalTransform());
+	AssignTransform();
+	transform->SetPosition(position);
+	transform->SetScale(scale);
+	transform->SetRotation(rotation);
+	if (parent != nullptr)
+	{
+		transform->SetParent(parent->transform->GlobalTransform());
+	}
 }
 
 
@@ -47,6 +50,11 @@ GameObject::~GameObject()
 	}
 }
 
+void GameObject::AssignTransform()
+{
+	transform = (ComponentTransform*)FindComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
+}
+
 GameObject * GameObject::GetParent() const
 {
 	return parent;
@@ -54,56 +62,50 @@ GameObject * GameObject::GetParent() const
 
 void GameObject::SetParent(GameObject * parentGO)
 {
-	Transform()->SetParent(parentGO->Transform()->GlobalTransform());
+	transform->SetParent(parentGO->transform->GlobalTransform());
 	//ALLWAYS change parent after changing transform values. It requires its older parent to recalculate its new localTransform;
 	parent = parentGO;
 }
 
 
-ComponentTransform * GameObject::Transform()
-{
-	ComponentTransform* componentTransform = (ComponentTransform*)FindComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
-	return componentTransform;
-}
-
 Component * GameObject::AddComponent(const ComponentType &type)
 {
 	Component *result = nullptr;
 	std::map<ComponentType, int>::iterator it = componentCounter.find(type);
-	
+
 	//Init counter for this type
 	if (it == componentCounter.end())
 		componentCounter[type] = 0;
 
-	if (result->maxComponentsByGO != 0 && componentCounter[type] > result->maxComponentsByGO) {
-		return result;
-	}
-	
+	//if (result->maxComponentsByGO != 0 && componentCounter[type] > result->maxComponentsByGO) {
+	//	return result;
+	//}
+
 	switch (type) {
-		case ComponentType::COMPONENT_TYPE_CAMERA:
-			result = new ComponentCamera(this);
-			result->maxComponentsByGO = 1;
-			break;
-		case ComponentType::COMPONENT_TYPE_LIGHT:	
-			result = new ComponentLight(this);
-			result->maxComponentsByGO = 0;
-			break;
-		case ComponentType::COMPONENT_TYPE_MATERIAL:
-			result = new ComponentMaterial(this);
-			result->maxComponentsByGO = 0;
-			break;
-		case ComponentType::COMPONENT_TYPE_MODEL:
-			result = new ComponentModel(this);
-			result->maxComponentsByGO = 1;
-			break;
-		case ComponentType::COMPONENT_TYPE_SCRIPT:
-			result = new ComponentScript(this);
-			result->maxComponentsByGO = 0;
-			break;
-		case ComponentType::COMPONENT_TYPE_TRANSFORM:
-			result = new ComponentTransform(this);
-			result->maxComponentsByGO = 1;
-			break;
+	case ComponentType::COMPONENT_TYPE_CAMERA:
+		result = new ComponentCamera(this);
+		result->maxComponentsByGO = 1;
+		break;
+	case ComponentType::COMPONENT_TYPE_LIGHT:
+		result = new ComponentLight(this);
+		result->maxComponentsByGO = 0;
+		break;
+	case ComponentType::COMPONENT_TYPE_MATERIAL:
+		result = new ComponentMaterial(this);
+		result->maxComponentsByGO = 0;
+		break;
+	case ComponentType::COMPONENT_TYPE_MESH:
+		result = new ComponentMesh(this);
+		result->maxComponentsByGO = 1;
+		break;
+	case ComponentType::COMPONENT_TYPE_SCRIPT:
+		result = new ComponentScript(this);
+		result->maxComponentsByGO = 0;
+		break;
+	case ComponentType::COMPONENT_TYPE_TRANSFORM:
+		result = new ComponentTransform(this);
+		result->maxComponentsByGO = 1;
+		break;
 	}
 
 	if (result != nullptr) {
@@ -130,34 +132,34 @@ bool GameObject::RemoveComponent(Component *component)
 			++it;
 		}
 	}
-	
+
 	return found;
-	
+
 }
 
 std::list<Component*> * GameObject::FindComponents(const ComponentType & type) {
 	//Delete list not members!!!!
 	std::list<Component*> *result = new std::list<Component*>();
 	int typeCounter = componentCounter[type];
-	
+
 	if (typeCounter == 0)
 		return result;
 
-	for (std::list<Component *>::iterator it = components.begin(); it != components.end();) {
+	for (std::list<Component *>::iterator it = components.begin(); it != components.end(); it++) {
 		if ((*it)->type == type) {
 			result->push_back((*it));
 			if (result->size() == typeCounter)
 				break;
 		}
 	}
-	
+
 	return result;
 }
 
 Component * GameObject::FindComponent(const ComponentType & type)
 {
 	Component* componentFound = nullptr;
-	for (std::list<Component *>::iterator it = components.begin(); it != components.end();) {
+	for (std::list<Component *>::iterator it = components.begin(); (it != components.end()&& (componentFound == nullptr)); it++) {
 		if ((*it)->type == type) {
 			componentFound = *it;
 		}

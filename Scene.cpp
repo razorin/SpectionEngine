@@ -1,46 +1,22 @@
-#include "Scene.h"
-#include "GameObject.h"
-#include "SCube.h"
 #include "Globals.h"
 #include "Application.h"
-#include "ModuleRender.h"
-#include "ModuleTextures.h"
-#include "ModulePrimitives.h"
-#include "SPrimitive.h"
-#include "Level.h"
-#include "Model.h"
+#include "Scene.h"
+#include "GameObject.h"
 #include "Component.h"
+#include "ModuleTextures.h"
+#include "ComponentTransform.h"
 
 
 Scene::Scene()
 {
 }
 
-
 Scene::~Scene()
 {
-	if(cube != nullptr) RELEASE(cube);
-	if (plane != nullptr) RELEASE(plane);
-	if (cylinder != nullptr) RELEASE(cylinder);
-	if (model != nullptr) {
-		model->Clear();
-		RELEASE(model);
-	}
-	if (model2 != nullptr) {
-		model2->Clear();
-		RELEASE(model2);
-	}
-	if (importedLevel != nullptr) {
-		importedLevel->Clear();
-		RELEASE(importedLevel);
-	}
-
 	gameobjects.clear();
-	primitives.clear();
-
 }
 
-GameObject * Scene::getGameObject(std::string name)
+GameObject * Scene::GetGameObject(std::string name)
 {
 	bool found = false;
 	GameObject* gameobject;
@@ -61,56 +37,76 @@ GameObject * Scene::getGameObject(std::string name)
 	}
 }
 
-void Scene::loadLevel(const char * path, const char * file)
+void Scene::LoadLevel(const char * path, const char * file)
 {
-	/*SPrimitive *primitive = nullptr;
-	primitive = App->primitives->AddPrimitive(SPRIMITIVE_TYPE::SCUBE_TYPE, { 0, 6.5, 0 }, 0.25);
-	primitives.push_back(primitive);
-	primitive = App->primitives->AddPrimitive(SPRIMITIVE_TYPE::SCYLINDER_TYPE, { 0, 5, 0 }, 0.25);
-	primitives.push_back(primitive);*/
-	//model = new Model();
-	//model->Load("models/batman/","batman.obj");
+	aiString folderPath = aiString(path);
+	aiString filePath = folderPath;
+	filePath.Append(file);
 
-	//model2 = new Model();
-	//model2->Load("Models/Magnetto/", "magnetto2.fbx");
+	const aiScene* scene = aiImportFile(filePath.data,
+		aiProcess_CalcTangentSpace |
+		aiProcess_Triangulate |
+		aiProcess_JoinIdenticalVertices |
+		aiProcess_SortByPType);
+
+	root = new GameObject();
+
+	aiNode* rootNode = scene->mRootNode;
+	RecursiveNodeRead(root, *rootNode, nullptr);
 
 
 
 
-	importedLevel = new Level();
-	//importedLevel->Load("Models/street/", "Street.obj");
-	importedLevel->Load("Models/street/", "Street environment_V01.fbx");
 
-	//This is a little hack to se the scene in the correct rotation (Node Dummy001 is rotated -90 in X axis)
-	float angleRad = 90 * DEGTORAD;
 
-	//This is a test to try the LinkNode and FindNode methods
-	importedLevel->LinkNode(importedLevel->FindNode("City_building_014"), importedLevel->FindNode("City_building_001"));
 
-	//GameObject test
-	//GameObject* gameobject = new GameObject(nullptr,"Prueba");
-	//gameobject->AddComponent(COMPONENT_TYPE_TRANSFORM);
-	//gameobject->AddComponent(COMPONENT_TYPE_MODEL);
-	//gameobjects.push_back(gameobject);
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject * parentGO)
+{
+	go->name = assimpNode.mName.data;
+
+	aiVector3D aiPos;
+	aiQuaternion aiRot;
+	aiVector3D aiScale;
+	assimpNode.mTransformation.Decompose(aiScale, aiRot, aiPos);
+
+	go->transform->SetPosition(float3(aiPos.x, aiPos.y, aiPos.z));
+	go->transform->SetRotation(Quat(aiRot.x, aiRot.y, aiRot.z, aiRot.w));
+	go->transform->SetScale(float3(aiScale.x, aiScale.y, aiScale.z));
+
+	if (assimpNode.mNumMeshes >0)
+	{
+		go->AddComponent(ComponentType::COMPONENT_TYPE_MESH);
+	}
+
+
+
+
+
+
+}
+
+
+
+
+
+
 
 void Scene::Draw()
 {
-	for (std::list<SPrimitive*>::iterator it = primitives.begin(); it != primitives.end(); ++it)
-	{
-		(*it)->Draw();
-	}
-
-	if (model != nullptr)
-		model->Draw();
-
-	if (model2 != nullptr)
-		model2->Draw();
-
-
-
-	if (importedLevel != nullptr)
-	{
-		importedLevel->Draw(importedLevel->root);
-	}
+	//Draw Root GO
 }

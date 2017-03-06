@@ -13,14 +13,13 @@ enum ComponentType;
 class GameObject
 {
 public:
-	GameObject();
 	GameObject(GameObject* parent = nullptr, const char* name = "EmptyGO");
 	GameObject(GameObject* parent, const char* name, const float3& position, const float3& scale, const Quat& rotation);
 	virtual ~GameObject();
 
+	void AssignTransform();
 	GameObject* GetParent() const;
 	void SetParent(GameObject* parentGO);
-	ComponentTransform* Transform();
 
 	Component * AddComponent(const ComponentType &type);
 	bool RemoveComponent(Component *);
@@ -42,6 +41,7 @@ private:
 
 public:
 	std::string name = "";
+	ComponentTransform* transform = nullptr;
 };
 
 #endif // !GAMEOBJECT_H

@@ -68,11 +68,11 @@ void ModuleSceneManager::deleteCurrentScene()
 void ModuleSceneManager::loadCurrentScene(const char * path, const char * file)
 {
 	if (currentScene != nullptr) {
-		currentScene->loadLevel(path,file);
+		currentScene->LoadLevel(path,file);
 	}
 	else {
 		Scene* scene = new Scene();
 		currentScene = scene;
-		currentScene->loadLevel(path, file);
+		currentScene->LoadLevel(path, file);
 	}
 }

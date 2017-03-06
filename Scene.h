@@ -2,14 +2,13 @@
 #define __SCENE_H__
 
 #include <list>
+#include "assimp/cimport.h"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
+#include "assimp\anim.h"
+
 
 class GameObject;
-class Model;
-class Level;
-class SPrimitive;
-class SCube;
-class SPlane;
-class SCylinder;
 
 class Scene
 {
@@ -17,20 +16,16 @@ public:
 	Scene();
 	~Scene();
 
-	void addGameObject(GameObject* gameobject) { gameobjects.push_back(gameobject); }
-	GameObject* getGameObject(std::string name);
-	void loadLevel(const char* path, const char* file);
+	void AddGameObject(GameObject* gameobject) { gameobjects.push_back(gameobject); }
+	GameObject* GetGameObject(std::string name);
+	void LoadLevel(const char* path, const char* file);
+	void RecursiveNodeRead(GameObject* go, aiNode& aiNode, GameObject* parentGO);
+
 	void Draw();
 
 private:
 	std::list<GameObject *> gameobjects;
-	std::list<SPrimitive*> primitives;
-	SCube *cube = nullptr;
-	SPlane *plane = nullptr;
-	SCylinder *cylinder = nullptr;
-	Model *model = nullptr;
-	Model *model2 = nullptr;
-	Level* importedLevel = nullptr;
+	GameObject* root;
 };
 
 #endif // __SCENE_H__

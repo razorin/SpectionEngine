@@ -85,7 +85,7 @@ void ComponentTransform::CalculateGlobalT()
 	GameObject* parentGO = container->GetParent();
 	if (parentGO != nullptr)
 	{
-		globalTransform = parentGO->Transform()->globalTransform * localTransform;
+		globalTransform = parentGO->transform->globalTransform * localTransform;
 	}
 	else
 	{
@@ -100,7 +100,7 @@ void ComponentTransform::SetParent(const float4x4 & newParentGT)
 	GameObject* parentGO = container->GetParent();
 	if (parentGO != nullptr)
 	{
-		localTransform = newParentGT.Inverted() * (parentGO->Transform()->globalTransform * localTransform);
+		localTransform = newParentGT.Inverted() * (parentGO->transform->globalTransform * localTransform);
 	}
 	else {
 		localTransform = newParentGT.Inverted() * localTransform;

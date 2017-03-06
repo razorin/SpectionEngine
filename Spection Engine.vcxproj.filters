@@ -175,6 +175,9 @@
     <ClInclude Include="Scene.h">
       <Filter>Game Modules</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentMesh.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -302,6 +305,9 @@
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Game Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMesh.cpp">
+      <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
