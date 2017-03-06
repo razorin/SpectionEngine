@@ -35,8 +35,9 @@ bool ModuleTestScene::Start() {
 
 
 	importedLevel = new Level();
+	importedLevel->Load("Models/ArmyPilot/", "ArmyPilot.dae");
 	//importedLevel->Load("Models/street/", "Street.obj");
-	importedLevel->Load("Models/street/", "Street environment_V01.fbx");
+	//importedLevel->Load("Models/street/", "Street environment_V01.fbx");
 
 	//This is a little hack to se the scene in the correct rotation (Node Dummy001 is rotated -90 in X axis)
 	float angleRad = 90 * DEGTORAD;
@@ -55,7 +56,7 @@ bool ModuleTestScene::Start() {
 
 
 	//This is a test to try the LinkNode and FindNode methods
-	importedLevel->LinkNode(importedLevel->FindNode("City_building_014"), importedLevel->FindNode("City_building_001"));
+	//importedLevel->LinkNode(importedLevel->FindNode("City_building_014"), importedLevel->FindNode("City_building_001"));
 
 	//importedLevel->FindNode("City_building_001")->rotation = Quat::RotateX(angleRad/2);
 	//importedLevel->FindNode("g City_building_001")->position.y += 5;

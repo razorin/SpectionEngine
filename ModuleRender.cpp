@@ -106,7 +106,7 @@ bool ModuleRender::Init()
 
 update_status ModuleRender::PreUpdate(float dt)
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.f);
+	glClearColor(0.5f, 0.5f, 0.5f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -124,7 +124,7 @@ update_status ModuleRender::Update(float dt)
 
 	App->testScene->Draw();
 	DrawGrid();
-	DrawGizmo();
+	//DrawGizmo();
 
 	App->lightsManager->Draw();
 
@@ -184,6 +184,7 @@ void ModuleRender::DrawGrid()
 	}
 	glEnd();
 	glLineWidth(1.0f);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void ModuleRender::DrawGizmo()

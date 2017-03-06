@@ -61,6 +61,8 @@ public:
 	Node* RecursiveSearchNode(const char* name, Node* node);
 	bool LinkNode(Node* node, Node* parent);
 
+	void DrawHierarchy(Node * node);
+
 public:
 	Node* root = nullptr;
 	std::vector<Mesh*> meshes;

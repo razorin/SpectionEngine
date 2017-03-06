@@ -30,7 +30,8 @@ void Level::Load(const char * path, const char * file)
 		aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
 		aiProcess_JoinIdenticalVertices |
-		aiProcess_SortByPType);
+		aiProcess_SortByPType |
+		aiProcessPreset_TargetRealtime_MaxQuality);
 
 	//Load node hierarchy
 	root = new Node();
@@ -38,7 +39,6 @@ void Level::Load(const char * path, const char * file)
 	RecursiveNodeRead(root, *rootNode, nullptr);
 	RecursiveCalcTransforms(root);
 	PrintNodeInfo(*root);
-
 
 	//Load textures
 	imageNames = new uint[scene->mNumMaterials];
@@ -165,6 +165,7 @@ const void Level::PrintNodeInfo(Node & node)
 
 void Level::Draw(Node* node)
 {
+	/*
 	glPushMatrix();
 	glMultMatrixf(node->globalTransform.Transposed().ptr());
 
@@ -178,7 +179,8 @@ void Level::Draw(Node* node)
 	{
 		Draw(node->childs[i]);
 	}
-
+	*/
+	DrawHierarchy(node);
 }
 
 void Level::RecursiveNodeRelease(Node * node)
@@ -251,6 +253,29 @@ bool Level::LinkNode(Node * node, Node * parent)
 	//Add to the new parents child list
 	parent->childs.push_back(node);
 
+
+}
+
+void Level::DrawHierarchy(Node* node)
+{
+	if (node->parent != nullptr) {
+		float4 tempPos = { node->position.x, node->position.y, node->position.z, 1.0f };
+		float4 position = node->globalTransform * tempPos;
+		tempPos = { node->parent->position.x, node->parent->position.y, node->parent->position.z, 1.0f };
+		float4 parent_position = node->parent->globalTransform * tempPos;
+		glBegin(GL_LINES);
+		glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+
+		glVertex3f(position.x, position.y, position.z);
+		glVertex3f(parent_position.x, parent_position.y, parent_position.z);
+
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		glEnd();
+	}
+	for (int i = 0; i < node->childs.size(); i++)
+	{
+		DrawHierarchy(node->childs[i]);
+	}
 
 }
 
