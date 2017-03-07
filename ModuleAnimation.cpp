@@ -108,5 +108,9 @@ void ModuleAnimation::Load(const char * path, const char * file)
 		animations[scene->mAnimations[i]->mName.data] = anim;
 	}
 
+	DLOG("Size es: %d", animations["Idle"]->channels[0].positionKeyFrames->Size);
+	DLOG("El primer nodo es %s", animations["Idle"]->channels[0].nodeName.data());
+	//DLOG("El ultimo nodo es %s", animations["Idle"]->channels[63].nodeName.data());
+
 	aiReleaseImport(scene);
 }

@@ -62,6 +62,7 @@ public:
 	bool LinkNode(Node* node, Node* parent);
 
 	void DrawHierarchy(Node * node);
+	void TransformHierarchy();
 
 public:
 	Node* root = nullptr;
@@ -69,6 +70,9 @@ public:
 	std::vector<Material*> materials;
 
 	uint* imageNames;
+
+	int frame = 0;
+	int maxFrames;
 };
 
 #endif /* _LEVEL_H_ */

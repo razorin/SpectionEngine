@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleTextures.h"
+#include "ModuleAnimation.h"
 #include "assimp\vector3.h"
 #include "assimp/cimport.h"
 #include "assimp/scene.h"
@@ -180,6 +181,7 @@ void Level::Draw(Node* node)
 		Draw(node->childs[i]);
 	}
 	*/
+	TransformHierarchy();
 	DrawHierarchy(node);
 }
 
@@ -207,7 +209,7 @@ Node * Level::FindNode(const char * name)
 	Node * findNode = RecursiveSearchNode(name, root);
 	if (findNode != nullptr)
 	{
-		DLOG("x: %f,  y: %f,  z: %f", findNode->position.x, findNode->position.y, findNode->position.z);
+		//DLOG("x: %f,  y: %f,  z: %f", findNode->position.x, findNode->position.y, findNode->position.z);
 	}
 	return findNode;
 }
@@ -277,6 +279,28 @@ void Level::DrawHierarchy(Node* node)
 		DrawHierarchy(node->childs[i]);
 	}
 
+}
+
+void Level::TransformHierarchy() {
+	DLOG("Frame: %d", frame);
+	for (std::map<string, Animation*>::iterator it = App->animations->animations.begin(); it != App->animations->animations.end(); ++it)
+	{
+		
+		(*it).second;
+		for (int i = 0; i < (*it).second->numChannels; i++) {
+			maxFrames = (*it).second->channels[i].positionKeyFrames->Size;
+			Node* node = FindNode((*it).second->channels[i].nodeName.data());
+			node->position.x = (*it).second->channels[i].positionKeyFrames[frame].x;
+			node->position.y = (*it).second->channels[i].positionKeyFrames[frame].y;
+			node->position.z = (*it).second->channels[i].positionKeyFrames[frame].z;
+			RecursiveCalcTransforms(node);
+		}
+		
+	}
+	frame++;
+	if (frame == maxFrames) {
+		frame = 0;
+	}
 }
 
 Node::~Node()
