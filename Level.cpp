@@ -38,7 +38,7 @@ void Level::Load(const char * path, const char * file)
 	aiNode* rootNode = scene->mRootNode;
 	RecursiveNodeRead(root, *rootNode, nullptr);
 	RecursiveCalcTransforms(root);
-	PrintNodeInfo(*root);
+	//PrintNodeInfo(*root);
 
 	//Load textures
 	imageNames = new uint[scene->mNumMaterials];

@@ -130,7 +130,9 @@
     <ClInclude Include="Level.h">
       <Filter>Geometric primitive</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleAnimation.h" />
+    <ClInclude Include="ModuleAnimation.h">
+      <Filter>Core Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -221,7 +223,7 @@
       <Filter>Geometric primitive</Filter>
     </ClCompile>
     <ClCompile Include="ModuleAnimation.cpp">
-      <Filter>Main</Filter>
+      <Filter>Core Modules</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

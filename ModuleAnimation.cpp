@@ -48,6 +48,18 @@ update_status ModuleAnimation::PostUpdate(float dt)
 // Called before quitting
 bool ModuleAnimation::CleanUp()
 {
+	for (std::map<string, Animation*>::iterator it = animations.begin(); it != animations.end(); ++it)
+	{
+		for (int i = 0; i < (*it).second->numChannels; i++) {
+			RELEASE_ARRAY((*it).second->channels[i].positionKeyFrames);
+			RELEASE_ARRAY((*it).second->channels[i].rotationKeyFrames);
+			RELEASE_ARRAY((*it).second->channels[i].scalingKeyFrames);
+		}
+		RELEASE_ARRAY((*it).second->channels);
+		delete (*it).second;
+	}
+
+	animations.clear();
 	return true;
 }
 
@@ -67,6 +79,7 @@ void ModuleAnimation::Load(const char * path, const char * file)
 		Animation* anim = new Animation();
 		anim->name = scene->mAnimations[i]->mName.data;
 		anim->duration = scene->mAnimations[i]->mDuration;
+		anim->numChannels = scene->mAnimations[i]->mNumChannels;
 		anim->channels = new AnimationChannel[scene->mAnimations[i]->mNumChannels];
 		for (int j = 0; j < scene->mAnimations[i]->mNumChannels; j++) {
 			anim->channels[j].nodeName = scene->mAnimations[i]->mChannels[j]->mNodeName.data;
@@ -95,5 +108,5 @@ void ModuleAnimation::Load(const char * path, const char * file)
 		animations[scene->mAnimations[i]->mName.data] = anim;
 	}
 
-	//DLOG("El nombre de la primera animacion es: %s", animations["idle"]->name);
+	aiReleaseImport(scene);
 }

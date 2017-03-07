@@ -15,6 +15,7 @@ struct AnimationChannel {
 struct Animation {
 	std::string name;
 	double duration;
+	int numChannels;
 	AnimationChannel* channels;
 };
 
