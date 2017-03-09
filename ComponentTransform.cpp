@@ -2,8 +2,6 @@
 #include <assert.h>
 
 
-
-
 ComponentTransform::ComponentTransform(GameObject* container) : Component(container, ComponentType::COMPONENT_TYPE_TRANSFORM)
 {
 }
@@ -17,11 +15,13 @@ ComponentTransform::~ComponentTransform()
 {
 }
 
+
 void ComponentTransform::ResetTransforms()
 {
 	localTransform = float4x4::identity;
 	globalTransform = float4x4::identity;
 }
+
 
 float3 ComponentTransform::Position(SpaceMode space) const
 {
@@ -53,25 +53,24 @@ Quat ComponentTransform::Rotation(SpaceMode space) const
 	}
 }
 
+float3 ComponentTransform::EulerAngles(SpaceMode space) const
+{
+	if (space == SpaceMode::SPACE_LOCAL) {
+		return eulerAngles;
+	}
+	else {
+		//return
+	}
+}
+
+float4x4 ComponentTransform::LocalTransform() const
+{
+	return localTransform;
+}
+
 float4x4 ComponentTransform::GlobalTransform() const
 {
 	return globalTransform;
-}
-
-
-void ComponentTransform::SetPosition(const float3 & position)
-{
-	this->position = position;
-}
-
-void ComponentTransform::SetScale(const float3 & scale)
-{
-	this->scale = scale;
-}
-
-void ComponentTransform::SetRotation(const Quat & rotation)
-{
-	this->rotation = rotation;
 }
 
 
@@ -99,18 +98,49 @@ void ComponentTransform::CalculateGlobalT()
 	}
 }
 
-void ComponentTransform::SetParent(const float4x4 & newParentGT)
-{
-	//We change the parent but we want to keep global pos, rot and scale
 
-	GameObject* parentGO = container->GetParent();
-	if (parentGO != nullptr)
-	{
-		localTransform = newParentGT.Inverted() * (parentGO->transform->globalTransform * localTransform);
-	}
-	else {
-		localTransform = newParentGT.Inverted() * localTransform;
-	}
+
+void ComponentTransform::SetPosition(const float3 & position)
+{
+	this->position = position;
+	CalculateLocalT();
+}
+
+void ComponentTransform::SetScale(const float3 & scale)
+{
+	this->scale = scale;
+	CalculateLocalT();
+}
+
+void ComponentTransform::SetRotation(const Quat & rotation)
+{
+	CalculateLocalT();
+}
+
+void ComponentTransform::SetEulerAngles(const float3 & eulerAngles)
+{
+	//set euler angles. calcular target quaternion. Interpolar entre nuestra rotacion actual y el quaternion obtenido. 
+	// Actualizar los valores de euler angles haciend
+}
+
+void ComponentTransform::SetTransform(const float3 & position, const float3 & scale, const Quat & rotation)
+{
+	this->position = position;
+	this->scale = scale;
+	this->rotation = rotation;
+	CalculateLocalT();
+}
+
+void ComponentTransform::SetParent(const float4x4 & parentGT)
+{
+	CalculateLocalT();
+	parentGlobalTransform = parentGT;
+	globalTransform = globalTransform * localTransform;
+}
+
+void ComponentTransform::ChangeParent(const float4x4 & newParentGT)
+{
+	localTransform = newParentGT.Inverted() * (parentGlobalTransform * localTransform);
 	localTransform.Decompose(position, rotation, scale);
 	globalTransform = newParentGT * localTransform;
 }

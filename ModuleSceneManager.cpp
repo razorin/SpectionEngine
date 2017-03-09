@@ -1,6 +1,7 @@
 #include "ModuleSceneManager.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include "ComponentTransform.h"
 
 
 ModuleSceneManager::ModuleSceneManager(const JSON_Object *json, bool active) : Module(json, active)
@@ -16,6 +17,12 @@ bool ModuleSceneManager::Start() {
 	loadCurrentScene("Models/street/", "Street environment_V01.fbx");
 	//loadCurrentScene("Models/street/", "Street.obj");
 	//GameObject* go = currentScene->GetGameObject("Street.obj");
+
+	Quat rotation = Quat::RotateX(90 * DEGTORAD);
+	currentScene->root->transform->SetRotation(rotation);
+
+
+
 	currentScene->DebugGOInfo(currentScene->root);
 	return true;
 }
