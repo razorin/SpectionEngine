@@ -128,8 +128,7 @@ void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject *
 	{
 		for (int i = 0; i < assimpNode.mNumMeshes; i++)
 		{
-			ComponentMesh* cmesh = (ComponentMesh*)go->AddComponent(ComponentType::COMPONENT_TYPE_MESH);
-			cmesh->mesh = meshes[assimpNode.mMeshes[i]];
+			go->AddComponentMesh(meshes[assimpNode.mMeshes[i]]);
 		}
 	}
 

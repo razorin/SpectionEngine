@@ -278,4 +278,9 @@ bool GameObject::CleanUp()
 	return false;
 }
 
-
+void GameObject::AddComponentMesh(Mesh * mesh) {
+	ComponentMesh* cmesh = (ComponentMesh*)AddComponent(ComponentType::COMPONENT_TYPE_MESH);
+	cmesh->mesh = mesh;
+	bBox.SetNegativeInfinity();
+	bBox.Enclose((float3*)cmesh->mesh->vertices, cmesh->mesh->numVertices);
+}
