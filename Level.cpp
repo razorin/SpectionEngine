@@ -290,10 +290,28 @@ void Level::TransformHierarchy() {
 		for (int i = 0; i < (*it).second->numChannels; i++) {
 			maxFrames = (*it).second->channels[i].positionKeyFrames->Size;
 			Node* node = FindNode((*it).second->channels[i].nodeName.data());
-			node->position.x = (*it).second->channels[i].positionKeyFrames[frame].x;
-			node->position.y = (*it).second->channels[i].positionKeyFrames[frame].y;
-			node->position.z = (*it).second->channels[i].positionKeyFrames[frame].z;
-			RecursiveCalcTransforms(node);
+			if (node != nullptr) {
+				//position
+				node->position.x = (*it).second->channels[i].positionKeyFrames[frame].x;
+				node->position.y = (*it).second->channels[i].positionKeyFrames[frame].y;
+				node->position.z = (*it).second->channels[i].positionKeyFrames[frame].z;
+				//rotation
+				node->position.x = (*it).second->channels[i].rotationKeyFrames[frame].x;
+				node->position.y = (*it).second->channels[i].rotationKeyFrames[frame].y;
+				node->position.z = (*it).second->channels[i].rotationKeyFrames[frame].z;
+				//scale
+				node->scale.x = (*it).second->channels[i].scalingKeyFrames[frame].x;
+				node->scale.y = (*it).second->channels[i].scalingKeyFrames[frame].y;
+				node->scale.z = (*it).second->channels[i].scalingKeyFrames[frame].z;
+				//Recalculate local and global transforms
+				float3 positionTransform = (*it).second->channels[i].positionKeyFrames[frame];
+				float3 rotationTransform = (*it).second->channels[i].rotationKeyFrames[frame];
+				Quat rotationQuaternion;
+				float3 scalingTransform = (*it).second->channels[i].scalingKeyFrames[frame];
+				//node->localTransform.FromTRS(positionTransform, rotationTransform, scalingTransform);
+				RecursiveCalcTransforms(node);
+			}
+			int a = 1;
 		}
 		
 	}
