@@ -27,6 +27,8 @@ public:
 	void SetActive(bool active);
 	bool IsActive();
 
+	virtual bool DrawGUI() = 0;
+
 public:
 	ComponentType type = ComponentType::COMPONENT_TYPE_UNDEFINED;
 

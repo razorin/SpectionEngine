@@ -8,3 +8,8 @@ ComponentCamera::ComponentCamera(GameObject * container) : Component(container, 
 ComponentCamera::~ComponentCamera()
 {
 }
+
+bool ComponentCamera::DrawGUI()
+{
+	return false;
+}

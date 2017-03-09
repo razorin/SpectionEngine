@@ -14,6 +14,8 @@ public:
 	ComponentMesh(GameObject* container);
 	~ComponentMesh();
 
+	bool DrawGUI();
+
 public:
 	Mesh* mesh = nullptr;
 	//std::vector<unsigned> meshes;

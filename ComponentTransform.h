@@ -38,6 +38,8 @@ public:
 	//New "link node" function, called from GameObject setParent
 	void SetParent(const float4x4& parentGlobalTrasnform);
 
+	bool DrawGUI();
+
 
 private:
 	float3 position = float3::zero;

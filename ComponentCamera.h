@@ -8,6 +8,8 @@ class ComponentCamera :
 public:
 	ComponentCamera(GameObject* container);
 	~ComponentCamera();
+
+	bool DrawGUI();
 };
 
 #endif // !COMPONENTCAMERA_H

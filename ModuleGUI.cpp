@@ -5,10 +5,12 @@
 #include "ModuleWindow.h"
 #include "ModuleRender.h"
 #include "ModuleCamera.h"
-#include "ModuleTestScene.h"
 #include "LightsManager.h"
 #include "Light.h"
+#include "ModuleSceneManager.h"
+#include "Scene.h"
 #include "Level.h"
+#include "GameObject.h"
 #include "SDL\include\SDL_version.h"
 #include "Point.h"
 #include<list>
@@ -81,6 +83,8 @@ update_status ModuleGUI::Update(float dt)
 			showConsole = console.Draw();
 		}
 	}
+
+	//transform->DrawGUI();
 	return ret;
 }
 
@@ -246,33 +250,33 @@ bool ModuleGUI::DrawPreferencesMenu() {
 
 bool ModuleGUI::DrawGOHierarchyMenu() {
 	bool open = true;
-	/*ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
+	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
 	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
 	treeNodeFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 	ImGui::Begin("GameObjects Hierarchy", &open);
-	bool treeNode = ImGui::TreeNodeEx(App->testScene->importedLevel->root->name.c_str(), treeNodeFlags);
-	if (ImGui::IsItemClicked()) { console.AddLog("%s Selected", App->testScene->importedLevel->root->name.c_str()); }
+	bool treeNode = ImGui::TreeNodeEx(App->sceneManager->getCurrentScene()->root->name.c_str(), treeNodeFlags);
+	if (ImGui::IsItemClicked()) { console.AddLog("%s Selected", App->sceneManager->getCurrentScene()->root->name.c_str()); }
 	if (treeNode)
 	{
-		for (int i = 0; i < App->testScene->importedLevel->root->childs.size(); i++)
+		for (auto it = App->sceneManager->getCurrentScene()->root->childs.begin(); it != App->sceneManager->getCurrentScene()->root->childs.end(); ++it)
 		{
-			RecursiveTreePrint(*App->testScene->importedLevel->root->childs[i]);
+			RecursiveTreePrint(**it);
 		}
 		ImGui::TreePop();
 	}
-	ImGui::End();*/
+	ImGui::End();
 	return open;
 }
 
-const void ModuleGUI::RecursiveTreePrint(Node & node)
+void ModuleGUI::RecursiveTreePrint(GameObject & GO)
 {
-	if (!node.name.empty()) {
-		bool treeNode = ImGui::TreeNodeEx(node.name.c_str(), treeNodeFlags);
-		if (ImGui::IsItemClicked()) { console.AddLog("%s Selected", node.name.c_str()); }
+	if (!GO.name.empty()) {
+		bool treeNode = ImGui::TreeNodeEx(GO.name.c_str(), treeNodeFlags);
+		if (ImGui::IsItemClicked()) { console.AddLog("%s Selected", GO.name.c_str()); }
 		if (treeNode) {
-			for (int i = 0; i < node.childs.size(); i++)
+			for (auto it = GO.childs.begin(); it != GO.childs.end(); ++it)
 			{
-				RecursiveTreePrint(*node.childs[i]);
+				RecursiveTreePrint(**it);
 			}
 			ImGui::TreePop();
 		}
