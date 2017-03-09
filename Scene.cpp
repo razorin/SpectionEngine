@@ -7,6 +7,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
+#include "MemLeaks.h"
 
 
 Scene::Scene()
@@ -175,4 +176,19 @@ void Scene::DebugGOInfo(GameObject * go)
 	}
 
 
+}
+
+bool Scene::CleanUp()
+{
+	RELEASE(textureIds);
+	for (int i = 0; i < meshes.size(); i++)
+	{
+		RELEASE(meshes[i]);
+	}
+
+	root->CleanUp();
+	RELEASE(root);
+
+	return true;
+	
 }

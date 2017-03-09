@@ -3,7 +3,7 @@
 #include "GameObject.h"
 
 
-ModuleSceneManager::ModuleSceneManager(const JSON_Object *json, bool active) : Module(json,active)
+ModuleSceneManager::ModuleSceneManager(const JSON_Object *json, bool active) : Module(json, active)
 {
 }
 
@@ -43,7 +43,11 @@ void ModuleSceneManager::Draw()
 bool ModuleSceneManager::CleanUp()
 {
 	//TODO Clean up
-	if(currentScene != nullptr) RELEASE(currentScene);
+	if (currentScene != nullptr)
+	{
+		currentScene->CleanUp();
+		RELEASE(currentScene);
+	}
 	return true;
 }
 
@@ -71,7 +75,7 @@ void ModuleSceneManager::deleteCurrentScene()
 void ModuleSceneManager::loadCurrentScene(const char * path, const char * file)
 {
 	if (currentScene != nullptr) {
-		currentScene->LoadLevel(path,file);
+		currentScene->LoadLevel(path, file);
 	}
 	else {
 		Scene* scene = new Scene();

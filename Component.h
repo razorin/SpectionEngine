@@ -3,6 +3,7 @@
 
 #include <string>
 #include "GameObject.h"
+#include "MemLeaks.h"
 
 enum ComponentType {
 	COMPONENT_TYPE_CAMERA,

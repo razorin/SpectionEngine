@@ -27,6 +27,7 @@ public:
 	void Draw() const;
 	void DebugGOInfo(GameObject* go);
 	GameObject* root;
+	bool CleanUp();
 
 private:
 	std::list<GameObject *> gameobjects;

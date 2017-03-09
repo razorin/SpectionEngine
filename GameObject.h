@@ -28,6 +28,7 @@ public:
 	Component* FindComponent(const ComponentType &type);
 
 	void Draw() const;
+	bool CleanUp();
 
 
 private:

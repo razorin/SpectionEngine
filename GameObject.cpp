@@ -40,17 +40,17 @@ GameObject::GameObject(GameObject * parent, const char * name, const float3 & po
 
 GameObject::~GameObject()
 {
-	for (std::list<GameObject *>::iterator it = childs.begin(); it != childs.end();) {
-		delete (*it);
-		it = childs.erase(it);
-		++it;
-	}
+	//for (std::list<GameObject *>::iterator it = childs.begin(); it != childs.end();) {
+	//	delete (*it);
+	//	it = childs.erase(it);
+	//	++it;
+	//}
 
-	for (std::list<Component *>::iterator it = components.begin(); it != components.end();) {
-		delete (*it);
-		it = components.erase(it);
-		++it;
-	}
+	//for (std::list<Component *>::iterator it = components.begin(); it != components.end();) {
+	//	delete (*it);
+	//	it = components.erase(it);
+	//	++it;
+	//}
 }
 
 void GameObject::AssignTransform()
@@ -261,6 +261,21 @@ void GameObject::Draw() const
 
 
 
+}
+
+bool GameObject::CleanUp()
+{
+	for (std::list<Component*>::iterator it = components.begin(); it != components.end(); it++)
+	{
+		RELEASE(*it);
+	}
+
+	for (std::list<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
+	{
+		(*it)->CleanUp();
+		RELEASE(*it);
+	}
+	return false;
 }
 
 
