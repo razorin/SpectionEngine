@@ -5,8 +5,12 @@
 #include "SDL/include/SDL_rect.h"
 
 #define DLOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
+#define DLOGS(format, ...) logs(__LINE__, format, __VA_ARGS__);
+
 
 void log(const char file[], int line, const char* format, ...);
+void logs(int line, const char* format, ...);
+
 
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f

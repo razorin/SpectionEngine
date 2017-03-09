@@ -156,22 +156,22 @@ void Scene::DebugGOInfo(GameObject * go)
 	float3 pos = CT->Position();
 	float3 scale = CT->Position();
 	Quat rot = CT->Rotation();
-	float3 rotation = rot.ToEulerYXZ();
-	DLOG("Node:%s     Position X:%f  Y:%f   Z:%f", go->name.c_str(), pos.x, pos.y, pos.z);
-	DLOG("Node:%s     Rotation X:%f    Y:%f    Z:%f  ", go->name.c_str(), rotation.x * RADTODEG, rotation.y* RADTODEG, rotation.z* RADTODEG);
+	float3 rotation = rot.ToEulerXYZ();
+	//DLOG("Node:%s     Position X:%f  Y:%f   Z:%f", go->name.c_str(), pos.x, pos.y, pos.z);
+	DLOGS("Node:%s     Rotation X:%f    Y:%f    Z:%f  ", go->name.c_str(), rotation.x * RADTODEG, rotation.y* RADTODEG, rotation.z* RADTODEG);
 
 
 
 	for (std::list<GameObject*>::iterator it = go->childs.begin(); it != go->childs.end(); )
 	{
 		if (it == go->childs.begin())
-			DLOG("Childs of :%s", go->name.c_str());
+			DLOGS("Childs of :%s", go->name.c_str());
 
 		DebugGOInfo((*it));
 
 		it++;
 		if (it == go->childs.end())
-			DLOG("End of childs of :%s", go->name.c_str());
+			DLOGS("End of childs of :%s", go->name.c_str());
 	}
 
 
