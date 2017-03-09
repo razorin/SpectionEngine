@@ -257,10 +257,6 @@ void GameObject::Draw() const
 	{
 		(*it)->Draw();
 	}
-
-
-
-
 }
 
 bool GameObject::CleanUp()
