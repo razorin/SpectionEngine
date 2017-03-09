@@ -8,6 +8,7 @@
 #include "Point.h"
 #include<list>
 
+class GameObject;
 struct ImGuiTextBuffer;
 struct Node;
 
@@ -62,14 +63,13 @@ public:
 	bool DrawHWInfoMenu();
 	bool DrawPreferencesMenu();
 	bool DrawGOHierarchyMenu();
-	bool DrawInstantiatorMenu(float size, fPoint position);
 	bool DrawLightsMenu();
 	bool DrawAppInfo();
 	bool DrawInspectorMenu();
 	void AddFpsLog(float fps);
 	void AddMsLog(float ms);
 
-	const void ModuleGUI::RecursiveTreePrint(Node & node);
+	void ModuleGUI::RecursiveTreePrint(GameObject & GO);
 
 public:
 	AppConsole console;

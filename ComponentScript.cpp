@@ -8,3 +8,8 @@ ComponentScript::ComponentScript(GameObject * container) : Component(container, 
 ComponentScript::~ComponentScript()
 {
 }
+
+bool ComponentScript::DrawGUI()
+{
+	return false;
+}

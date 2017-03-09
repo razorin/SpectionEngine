@@ -8,6 +8,8 @@ class ComponentLight :
 public:
 	ComponentLight(GameObject* container);
 	~ComponentLight();
+
+	bool DrawGUI();
 };
 
 #endif // !COMPONENTLIGHT_H

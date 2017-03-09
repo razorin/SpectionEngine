@@ -1,5 +1,5 @@
 #include "Component.h"
-
+#include "Globals.h"
 
 
 Component::Component(GameObject * container, ComponentType type) : container(container), type(type)

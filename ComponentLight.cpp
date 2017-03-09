@@ -9,3 +9,8 @@ ComponentLight::ComponentLight(GameObject * container) : Component(container, Co
 ComponentLight::~ComponentLight()
 {
 }
+
+bool ComponentLight::DrawGUI()
+{
+	return false;
+}

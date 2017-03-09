@@ -8,6 +8,8 @@ class ComponentModel :
 public:
 	ComponentModel(GameObject* container);
 	~ComponentModel();
+
+	bool DrawGUI();
 };
 
 #endif // !COMPONENTMODEL_H

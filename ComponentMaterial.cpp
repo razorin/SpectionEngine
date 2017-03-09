@@ -8,3 +8,8 @@ ComponentMaterial::ComponentMaterial(GameObject * container) : Component(contain
 ComponentMaterial::~ComponentMaterial()
 {
 }
+
+bool ComponentMaterial::DrawGUI()
+{
+	return false;
+}

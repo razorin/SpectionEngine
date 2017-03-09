@@ -10,3 +10,7 @@ ComponentMesh::~ComponentMesh()
 {
 }
 
+bool ComponentMesh::DrawGUI()
+{
+	return false;
+}

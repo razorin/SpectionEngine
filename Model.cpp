@@ -134,35 +134,6 @@ void Model::Clear()
 
 void Model::Draw()
 {
-	//for (int i = 0; i < scene->mNumMeshes; ++i)
-	//{
-	//	aiMesh* mesh = scene->mMeshes[i];
-	//	int numFaces = mesh->mNumFaces;
-	//	uint materialIndex = mesh->mMaterialIndex;
-
-
-	//	glBindTexture(GL_TEXTURE_2D, imageNames[materialIndex]);
-	//	glBegin(GL_TRIANGLES);
-
-	//	for (int j = 0; j < numFaces; j++)
-	//	{
-	//		aiFace face = mesh->mFaces[j];
-	//		
-	//		for (int k = 0; k < 3; k++)
-	//		{
-	//			aiVector3D vertex = mesh->mVertices[face.mIndices[k]];
-	//			aiVector3D uv = mesh->mTextureCoords[0][face.mIndices[k]];
-	//			aiVector3D normal = mesh->HasNormals() ? mesh->mNormals[face.mIndices[k]] : aiVector3D(1.0f, 1.0f, 1.0f);
-	//			glNormal3f(normal.x, normal.y, normal.z);
-	//			glTexCoord2f(uv.x, uv.y);
-	//			glVertex3f(vertex.x, vertex.y, vertex.z);
-	//		}
-
-	//	}
-	//	glEnd();
-	//	glBindTexture(GL_TEXTURE_2D, 0);
-	//}
-
 	for (int i = 0; i < numMeshes; ++i)
 	{
 		meshes[i].Draw();

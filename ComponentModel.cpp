@@ -8,3 +8,8 @@ ComponentModel::ComponentModel(GameObject * container) : Component(container, Co
 ComponentModel::~ComponentModel()
 {
 }
+
+bool ComponentModel::DrawGUI()
+{
+	return false;
+}

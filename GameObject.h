@@ -8,6 +8,7 @@
 
 class Component;
 class ComponentTransform;
+class Mesh;
 enum ComponentType;
 
 class GameObject
@@ -30,11 +31,15 @@ public:
 	void Draw() const;
 	bool CleanUp();
 
+	void AddComponentMesh(Mesh *);
+	void DrawBoundingBoxes() const;
+
 
 private:
 	GameObject *parent = nullptr;
 	bool enable = true;
 	std::map<ComponentType, int> componentCounter;
+	std::list<math::AABB> AABBoxes;
 
 public:
 	std::string name = "";

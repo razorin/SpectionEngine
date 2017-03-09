@@ -40,6 +40,8 @@ public:
 	void SetParent(const float4x4& parentGT);
 	void ChangeParent(const float4x4& newParentGT);
 
+	bool DrawGUI();
+
 
 private:
 	float3 position = float3::zero;

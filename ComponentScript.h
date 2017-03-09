@@ -8,6 +8,8 @@ class ComponentScript :
 public:
 	ComponentScript(GameObject* container);
 	~ComponentScript();
+
+	bool DrawGUI();
 };
 
 #endif // !COMPONENTSCRIPT_H

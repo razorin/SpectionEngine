@@ -8,6 +8,8 @@ class ComponentMaterial :
 public:
 	ComponentMaterial(GameObject* container);
 	~ComponentMaterial();
+
+	bool DrawGUI();
 };
 
 #endif // !COMPONENTMATERIAL_H
