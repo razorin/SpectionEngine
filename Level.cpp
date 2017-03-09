@@ -1,5 +1,6 @@
 #include "Level.h"
 #include "Mesh.h"
+#include "Application.h"
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleTextures.h"
@@ -12,6 +13,8 @@
 #include "MathGeoLib\include\MathGeoLib.h"
 #include "Application.h"
 #include "ModuleCamera.h"
+#include "ModuleGUI.h"
+
 
 using namespace std;
 
@@ -181,18 +184,46 @@ void Level::Draw(Node* node)
 		Draw(node->childs[i]);
 	}
 	*/
-	//TransformHierarchy();
+	if (!print) {
+		App->gui->console.AddLog("ANTES DEL TRANSFORMHIERARCHY:");
+		Node* node = FindNode("LArmCollarbone");
+		App->gui->console.AddLog("Position: %f    %f    %f", node->position.x, node->position.y, node->position.z);
+		App->gui->console.AddLog("------------------------------");
+		TransformHierarchy();
+		App->gui->console.AddLog("DESPUES DEL TRANSFORMHIERARCHY:");
+		node = FindNode("LArmCollarbone");
+		App->gui->console.AddLog("Position: %f    %f    %f", node->position.x, node->position.y, node->position.z);
+		App->gui->console.AddLog("------------------------------");
+		
+		
+
+		for (std::map<string, Animation*>::iterator it = App->animations->animations.begin(); it != App->animations->animations.end(); ++it)
+		{
+			for (int i = 0; i < (*it).second->channels[0].positionKeyFrames->Size; i++) {
+				App->gui->console.AddLog("Y EL FRAME %d DE ANIMACION ES:", i);
+				App->gui->console.AddLog("NodeName: %s", (*it).second->channels[0].nodeName.data());
+				App->gui->console.AddLog("Position: %f    %f    %f", (*it).second->channels[0].positionKeyFrames[i].x, (*it).second->channels[0].positionKeyFrames[i].y, (*it).second->channels[0].positionKeyFrames[i].z);
+				App->gui->console.AddLog("------------------------------");
+			}
+			
+		}
+
+		print = true;
+	}
+	
 	//root->position.x += 0.002;
 	//root->position.y += 0.002;
 	//root->position.z += 0.002;
+	/*DLOG("%f",root->rotation.y * RADTODEG);
 	if (root->rotation.y == 360 * DEGTORAD) {
 		root->rotation.y = 0 * DEGTORAD;
 	}
 	else {
 		root->rotation.y += 0.1 * DEGTORAD;
-	}
+	}*/
 	//root->scale.x += 0.01;
-	RecursiveCalcTransforms(root);
+	TransformHierarchy();
+	//RecursiveCalcTransforms(root);
 	DrawHierarchy(node);
 }
 
@@ -300,8 +331,9 @@ void Level::TransformHierarchy() {
 		(*it).second;
 		for (int i = 0; i < (*it).second->numChannels; i++) {
 			maxFrames = (*it).second->channels[i].positionKeyFrames->Size;
+			//DLOG("%s", (*it).second->channels[i].nodeName.data());
 			Node* node = FindNode((*it).second->channels[i].nodeName.data());
-			if (node != nullptr) {
+ 			if (node != nullptr) {
 				//position
 				//node->position.x = (*it).second->channels[i].positionKeyFrames[frame].x;
 				//node->position.y = (*it).second->channels[i].positionKeyFrames[frame].y;
@@ -319,7 +351,7 @@ void Level::TransformHierarchy() {
 				node->position.x = position.x;
 				node->position.y = position.y;
 				node->position.z = position.z;
-
+				
 				
 				//float3 rotationTransform = (*it).second->channels[i].rotationKeyFrames[frame];
 				//Quat rotationQuaternion = Quat::RotateX(rotationTransform.x * DEGTORAD);

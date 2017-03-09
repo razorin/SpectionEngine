@@ -73,6 +73,8 @@ public:
 
 	int frame = 0;
 	int maxFrames;
+
+	bool print = false;
 };
 
 #endif /* _LEVEL_H_ */
