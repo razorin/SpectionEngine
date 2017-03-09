@@ -18,6 +18,8 @@ public:
 	ComponentTransform(GameObject* container, Quat& rotation, float3& position, float3& scale);
 	~ComponentTransform();
 
+	void ResetTransforms();
+
 	//Getters
 	float3 Position(SpaceMode space = SpaceMode::SPACE_LOCAL) const;
 	float3 Scale(SpaceMode space = SpaceMode::SPACE_LOCAL) const;

@@ -18,6 +18,7 @@ public:
 	virtual ~GameObject();
 
 	void AssignTransform();
+	void RecursiveCalcTrasnforms();
 	GameObject* GetParent() const;
 	void SetParent(GameObject* parentGO);
 
@@ -26,18 +27,19 @@ public:
 	std::list<Component *> * FindComponents(const ComponentType &type);
 	Component* FindComponent(const ComponentType &type);
 
+	void Draw() const;
+
 
 private:
 	GameObject *parent = nullptr;
 	bool enable = true;
 	std::map<ComponentType, int> componentCounter;
-	std::list<GameObject *> childrens;
-	std::list<Component *> components;
-
 
 public:
 	std::string name = "";
 	ComponentTransform* transform = nullptr;
+	std::list<GameObject *> childs;
+	std::list<Component *> components;
 };
 
 #endif // !GAMEOBJECT_H

@@ -17,6 +17,12 @@ ComponentTransform::~ComponentTransform()
 {
 }
 
+void ComponentTransform::ResetTransforms()
+{
+	localTransform = float4x4::identity;
+	globalTransform = float4x4::identity;
+}
+
 float3 ComponentTransform::Position(SpaceMode space) const
 {
 	if (space == SpaceMode::SPACE_LOCAL) {

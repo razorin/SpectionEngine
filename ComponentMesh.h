@@ -15,10 +15,8 @@ public:
 	~ComponentMesh();
 
 public:
-	//TODO use this reference of a scene
-	Scene* scene = nullptr;
-	
-	std::vector<unsigned> meshes;
+	Mesh* mesh = nullptr;
+	//std::vector<unsigned> meshes;
 
 };
 

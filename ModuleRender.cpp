@@ -125,6 +125,7 @@ update_status ModuleRender::Update(float dt)
 {
 	//TODO scene draw here. NOT TESTSCENE which should be deleted in the future (whole module is unnnecessary)
 	//App->testScene->Draw();
+	App->sceneManager->Draw();
 	DrawGrid();
 	DrawGizmo();
 

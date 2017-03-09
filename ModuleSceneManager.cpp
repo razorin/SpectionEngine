@@ -1,5 +1,6 @@
 #include "ModuleSceneManager.h"
 #include "Scene.h"
+#include "GameObject.h"
 
 
 ModuleSceneManager::ModuleSceneManager(const JSON_Object *json, bool active) : Module(json,active)
@@ -13,7 +14,9 @@ ModuleSceneManager::~ModuleSceneManager()
 
 bool ModuleSceneManager::Start() {
 	loadCurrentScene("Models/street/", "Street environment_V01.fbx");
-	
+	//loadCurrentScene("Models/street/", "Street.obj");
+	//GameObject* go = currentScene->GetGameObject("Street.obj");
+	currentScene->DebugGOInfo(currentScene->root);
 	return true;
 }
 
