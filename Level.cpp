@@ -181,7 +181,18 @@ void Level::Draw(Node* node)
 		Draw(node->childs[i]);
 	}
 	*/
-	TransformHierarchy();
+	//TransformHierarchy();
+	//root->position.x += 0.002;
+	//root->position.y += 0.002;
+	//root->position.z += 0.002;
+	if (root->rotation.y == 360 * DEGTORAD) {
+		root->rotation.y = 0 * DEGTORAD;
+	}
+	else {
+		root->rotation.y += 0.1 * DEGTORAD;
+	}
+	//root->scale.x += 0.01;
+	RecursiveCalcTransforms(root);
 	DrawHierarchy(node);
 }
 
@@ -292,28 +303,45 @@ void Level::TransformHierarchy() {
 			Node* node = FindNode((*it).second->channels[i].nodeName.data());
 			if (node != nullptr) {
 				//position
-				node->position.x = (*it).second->channels[i].positionKeyFrames[frame].x;
-				node->position.y = (*it).second->channels[i].positionKeyFrames[frame].y;
-				node->position.z = (*it).second->channels[i].positionKeyFrames[frame].z;
+				//node->position.x = (*it).second->channels[i].positionKeyFrames[frame].x;
+				//node->position.y = (*it).second->channels[i].positionKeyFrames[frame].y;
+				//node->position.z = (*it).second->channels[i].positionKeyFrames[frame].z;
 				//rotation
-				node->position.x = (*it).second->channels[i].rotationKeyFrames[frame].x;
-				node->position.y = (*it).second->channels[i].rotationKeyFrames[frame].y;
-				node->position.z = (*it).second->channels[i].rotationKeyFrames[frame].z;
+				//node->position.x = (*it).second->channels[i].rotationKeyFrames[frame].x;
+				//node->position.y = (*it).second->channels[i].rotationKeyFrames[frame].y;
+				//node->position.z = (*it).second->channels[i].rotationKeyFrames[frame].z;
 				//scale
-				node->scale.x = (*it).second->channels[i].scalingKeyFrames[frame].x;
-				node->scale.y = (*it).second->channels[i].scalingKeyFrames[frame].y;
-				node->scale.z = (*it).second->channels[i].scalingKeyFrames[frame].z;
+				//node->scale.x = (*it).second->channels[i].scalingKeyFrames[frame].x;
+				//node->scale.y = (*it).second->channels[i].scalingKeyFrames[frame].y;
+				//node->scale.z = (*it).second->channels[i].scalingKeyFrames[frame].z;
 				//Recalculate local and global transforms
-				float3 positionTransform = (*it).second->channels[i].positionKeyFrames[frame];
-				float3 rotationTransform = (*it).second->channels[i].rotationKeyFrames[frame];
-				Quat rotationQuaternion;
-				float3 scalingTransform = (*it).second->channels[i].scalingKeyFrames[frame];
-				//node->localTransform.FromTRS(positionTransform, rotationTransform, scalingTransform);
-				RecursiveCalcTransforms(node);
+				float3 position = (*it).second->channels[i].positionKeyFrames[frame];
+				node->position.x = position.x;
+				node->position.y = position.y;
+				node->position.z = position.z;
+
+				
+				//float3 rotationTransform = (*it).second->channels[i].rotationKeyFrames[frame];
+				//Quat rotationQuaternion = Quat::RotateX(rotationTransform.x * DEGTORAD);
+
+				//vec3 EulerAngles(90, 45, 0);
+				//rotationQuaternion = Quat(EulerAngles(rotationTransform.x, rotationTransform.y, rotationTransform.z));
+				//rotationQuaternion.RotateX(rotationTransform.x * DEGTORAD);
+
+				//rotationQuaternion.RotateX(rotationTransform.x * DEGTORAD);
+				//rotationQuaternion.RotateY(rotationTransform.y * DEGTORAD);
+				//rotationQuaternion.RotateZ(rotationTransform.z * DEGTORAD);
+				//float3 scalingTransform = (*it).second->channels[i].scalingKeyFrames[frame];
+				//node->localTransform.Translate(positionTransform.x, positionTransform.y, positionTransform.z);
+				//node->localTransform.RotateAxisAngle(float3(1, 0, 0), rotationTransform.x * DEGTORAD);
+				//node->localTransform.RotateAxisAngle(float3(0, 1, 0), rotationTransform.y * DEGTORAD);
+				//node->localTransform.RotateAxisAngle(float3(0, 0, 1), rotationTransform.z * DEGTORAD);
+				//node->localTransform.FromTRS(position, Quat::identity, float3::one);
+				
 			}
 			int a = 1;
 		}
-		
+		RecursiveCalcTransforms(root);
 	}
 	frame++;
 	if (frame == maxFrames) {
