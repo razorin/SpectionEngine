@@ -32,13 +32,14 @@ public:
 	bool CleanUp();
 
 	void AddComponentMesh(Mesh *);
+	void DrawBoundingBoxes() const;
 
 
 private:
 	GameObject *parent = nullptr;
 	bool enable = true;
 	std::map<ComponentType, int> componentCounter;
-	math::AABB bBox;
+	std::list<math::AABB> AABBoxes;
 
 public:
 	std::string name = "";

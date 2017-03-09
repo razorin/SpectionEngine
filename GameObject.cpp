@@ -10,7 +10,6 @@
 #include "ComponentTransform.h"
 
 
-
 //TODO delete empty constuctor.This one below can do the same
 GameObject::GameObject(GameObject * parent, const char * name) : parent(parent), name(name)
 {
@@ -250,17 +249,15 @@ void GameObject::Draw() const
 			glDisableClientState(GL_VERTEX_ARRAY);
 		}
 	}
-	glPopMatrix();
 
+	DrawBoundingBoxes();
+
+	glPopMatrix();
 
 	for (std::list<GameObject*>::const_iterator it = childs.begin(); it != childs.end(); it++)
 	{
 		(*it)->Draw();
 	}
-
-
-
-
 }
 
 bool GameObject::CleanUp()
@@ -281,6 +278,116 @@ bool GameObject::CleanUp()
 void GameObject::AddComponentMesh(Mesh * mesh) {
 	ComponentMesh* cmesh = (ComponentMesh*)AddComponent(ComponentType::COMPONENT_TYPE_MESH);
 	cmesh->mesh = mesh;
-	bBox.SetNegativeInfinity();
-	bBox.Enclose((float3*)cmesh->mesh->vertices, cmesh->mesh->numVertices);
+	math::AABB AABBox;
+	AABBox.SetNegativeInfinity();
+	AABBox.Enclose((float3*)cmesh->mesh->vertices, cmesh->mesh->numVertices);
+	AABBoxes.push_back(AABBox);
+}
+
+void GameObject::DrawBoundingBoxes() const {
+
+	for (std::list<math::AABB>::const_iterator it = AABBoxes.begin(); it != AABBoxes.end(); ++it) {
+		math::vec AABBoxPoints[8];
+		(*it).GetCornerPoints(AABBoxPoints);
+		glColor4f(1, 0, 1, 1);
+		glBegin(GL_LINES);
+		glVertex3f(
+			AABBoxPoints[0].x,
+			AABBoxPoints[0].y,
+			AABBoxPoints[0].z);
+		glVertex3f(
+			AABBoxPoints[1].x,
+			AABBoxPoints[1].y,
+			AABBoxPoints[1].z);
+		glVertex3f(
+			AABBoxPoints[0].x,
+			AABBoxPoints[0].y,
+			AABBoxPoints[0].z);
+		glVertex3f(
+			AABBoxPoints[2].x,
+			AABBoxPoints[2].y,
+			AABBoxPoints[2].z);
+		glVertex3f(
+			AABBoxPoints[0].x,
+			AABBoxPoints[0].y,
+			AABBoxPoints[0].z);
+		glVertex3f(
+			AABBoxPoints[4].x,
+			AABBoxPoints[4].y,
+			AABBoxPoints[4].z);
+		glVertex3f(
+			AABBoxPoints[5].x,
+			AABBoxPoints[5].y,
+			AABBoxPoints[5].z);
+		glVertex3f(
+			AABBoxPoints[1].x,
+			AABBoxPoints[1].y,
+			AABBoxPoints[1].z);
+		glVertex3f(
+			AABBoxPoints[5].x,
+			AABBoxPoints[5].y,
+			AABBoxPoints[5].z);
+		glVertex3f(
+			AABBoxPoints[4].x,
+			AABBoxPoints[4].y,
+			AABBoxPoints[4].z);
+		glVertex3f(
+			AABBoxPoints[5].x,
+			AABBoxPoints[5].y,
+			AABBoxPoints[5].z);
+		glVertex3f(
+			AABBoxPoints[7].x,
+			AABBoxPoints[7].y,
+			AABBoxPoints[7].z);
+		glVertex3f(
+			AABBoxPoints[3].x,
+			AABBoxPoints[3].y,
+			AABBoxPoints[3].z);
+		glVertex3f(
+			AABBoxPoints[2].x,
+			AABBoxPoints[2].y,
+			AABBoxPoints[2].z);
+		glVertex3f(
+			AABBoxPoints[3].x,
+			AABBoxPoints[3].y,
+			AABBoxPoints[3].z);
+		glVertex3f(
+			AABBoxPoints[7].x,
+			AABBoxPoints[7].y,
+			AABBoxPoints[7].z);
+		glVertex3f(
+			AABBoxPoints[3].x,
+			AABBoxPoints[3].y,
+			AABBoxPoints[3].z);
+		glVertex3f(
+			AABBoxPoints[1].x,
+			AABBoxPoints[1].y,
+			AABBoxPoints[1].z);
+		glVertex3f(
+			AABBoxPoints[6].x,
+			AABBoxPoints[6].y,
+			AABBoxPoints[6].z);
+		glVertex3f(
+			AABBoxPoints[4].x,
+			AABBoxPoints[4].y,
+			AABBoxPoints[4].z);
+		glVertex3f(
+			AABBoxPoints[6].x,
+			AABBoxPoints[6].y,
+			AABBoxPoints[6].z);
+		glVertex3f(
+			AABBoxPoints[2].x,
+			AABBoxPoints[2].y,
+			AABBoxPoints[2].z);
+		glVertex3f(
+			AABBoxPoints[6].x,
+			AABBoxPoints[6].y,
+			AABBoxPoints[6].z);
+		glVertex3f(
+			AABBoxPoints[7].x,
+			AABBoxPoints[7].y,
+			AABBoxPoints[7].z);
+		glEnd();
+		glColor4f(1, 1, 1, 1);
+	}
 }
