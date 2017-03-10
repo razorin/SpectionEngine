@@ -26,7 +26,7 @@ bool ModuleAnimation::Init()
 bool ModuleAnimation::Start() 
 {
 	//Load("Models/ArmyPilot/Animations/", "ArmyPilot_Idle.fbx");
-	Load("Models/ArmyPilot/Animations/", "ArmyPilot_Walk Aiming.fbx");
+	Load("Models/ArmyPilot/Animations/", "ArmyPilot_Walk.fbx");
 	return true;
 }
 
@@ -84,30 +84,39 @@ void ModuleAnimation::Load(const char * path, const char * file)
 		anim->channels = new AnimationChannel[scene->mAnimations[i]->mNumChannels];
 		for (int j = 0; j < scene->mAnimations[i]->mNumChannels; j++) {
 			anim->channels[j].nodeName = scene->mAnimations[i]->mChannels[j]->mNodeName.data;
+			anim->channels[j].numFrames = scene->mAnimations[i]->mChannels[j]->mNumPositionKeys;
+			//DLOG("numFrames: %d", anim->channels[j].numFrames);
 			//Position Key Frames
 			anim->channels[j].positionKeyFrames = new float3[scene->mAnimations[i]->mChannels[j]->mNumPositionKeys];
 			for (int k = 0; k < scene->mAnimations[i]->mChannels[j]->mNumPositionKeys; k++) {
-				anim->channels[j].positionKeyFrames[k].x = scene->mAnimations[i]->mChannels[j]->mPositionKeys->mValue.x;
-				anim->channels[j].positionKeyFrames[k].y = scene->mAnimations[i]->mChannels[j]->mPositionKeys->mValue.y;
-				anim->channels[j].positionKeyFrames[k].z = scene->mAnimations[i]->mChannels[j]->mPositionKeys->mValue.z;
+				anim->channels[j].positionKeyFrames[k].x = scene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mValue.x;
+				anim->channels[j].positionKeyFrames[k].y = scene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mValue.y;
+				anim->channels[j].positionKeyFrames[k].z = scene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mValue.z;
 			}
 			//Rotation Key Frames
 			anim->channels[j].rotationKeyFrames = new float3[scene->mAnimations[i]->mChannels[j]->mNumRotationKeys];
 			for (int k = 0; k < scene->mAnimations[i]->mChannels[j]->mNumRotationKeys; k++) {
-				anim->channels[j].rotationKeyFrames[k].x = scene->mAnimations[i]->mChannels[j]->mRotationKeys->mValue.x;
-				anim->channels[j].rotationKeyFrames[k].y = scene->mAnimations[i]->mChannels[j]->mRotationKeys->mValue.y;
-				anim->channels[j].rotationKeyFrames[k].z = scene->mAnimations[i]->mChannels[j]->mRotationKeys->mValue.z;
+				anim->channels[j].rotationKeyFrames[k].x = scene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mValue.x;
+				anim->channels[j].rotationKeyFrames[k].y = scene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mValue.y;
+				anim->channels[j].rotationKeyFrames[k].z = scene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mValue.z;
 			}
 			//Position Key Frames
 			anim->channels[j].scalingKeyFrames = new float3[scene->mAnimations[i]->mChannels[j]->mNumScalingKeys];
 			for (int k = 0; k < scene->mAnimations[i]->mChannels[j]->mNumScalingKeys; k++) {
-				anim->channels[j].scalingKeyFrames[k].x = scene->mAnimations[i]->mChannels[j]->mScalingKeys->mValue.x;
-				anim->channels[j].scalingKeyFrames[k].y = scene->mAnimations[i]->mChannels[j]->mScalingKeys->mValue.y;
-				anim->channels[j].scalingKeyFrames[k].z = scene->mAnimations[i]->mChannels[j]->mScalingKeys->mValue.z;
+				anim->channels[j].scalingKeyFrames[k].x = scene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mValue.x;
+				anim->channels[j].scalingKeyFrames[k].y = scene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mValue.y;
+				anim->channels[j].scalingKeyFrames[k].z = scene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mValue.z;
 			}
 		}
 		animations[scene->mAnimations[i]->mName.data] = anim;
 	}
+
+	/*DLOG("Nodo es: %s", animations["Walk Aiming"]->channels[0].nodeName.data());
+	for (int i = 0; i < animations["Walk Aiming"]->channels[0].numFrames; i++) {
+		DLOG("Posicion en el frame %d es: (%f, %f, %f)", i, animations["Walk Aiming"]->channels[0].positionKeyFrames[i].x, animations["Walk Aiming"]->channels[0].positionKeyFrames[i].y, animations["Walk Aiming"]->channels[0].positionKeyFrames[i].z);
+		DLOG("Rotacion en el frame %d es: (%f, %f, %f)", i, animations["Walk Aiming"]->channels[0].rotationKeyFrames[i].x, animations["Walk Aiming"]->channels[0].rotationKeyFrames[i].y, animations["Walk Aiming"]->channels[0].rotationKeyFrames[i].z);
+		DLOG("Escala en el frame %d es: (%f, %f, %f)", i, animations["Walk Aiming"]->channels[0].scalingKeyFrames[i].x, animations["Walk Aiming"]->channels[0].scalingKeyFrames[i].y, animations["Walk Aiming"]->channels[0].scalingKeyFrames[i].z);
+	}*/
 
 	//DLOG("Size es: %d", animations["Idle"]->channels[0].positionKeyFrames->Size);
 	//DLOG("El primer nodo es %s", animations["Idle"]->channels[0].nodeName.data());

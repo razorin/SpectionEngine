@@ -324,33 +324,34 @@ void Level::DrawHierarchy(Node* node)
 }
 
 void Level::TransformHierarchy() {
-	DLOG("Frame: %d", frame);
+	//DLOG("Frame: %d", frame);
 	for (std::map<string, Animation*>::iterator it = App->animations->animations.begin(); it != App->animations->animations.end(); ++it)
 	{
 		
 		(*it).second;
 		for (int i = 0; i < (*it).second->numChannels; i++) {
-			maxFrames = (*it).second->channels[i].positionKeyFrames->Size;
+			maxFrames = (*it).second->channels[i].numFrames;
+			//DLOG("MaxFrames es: %d", maxFrames);
 			//DLOG("%s", (*it).second->channels[i].nodeName.data());
 			Node* node = FindNode((*it).second->channels[i].nodeName.data());
  			if (node != nullptr) {
-				//position
-				//node->position.x = (*it).second->channels[i].positionKeyFrames[frame].x;
-				//node->position.y = (*it).second->channels[i].positionKeyFrames[frame].y;
-				//node->position.z = (*it).second->channels[i].positionKeyFrames[frame].z;
-				//rotation
-				//node->position.x = (*it).second->channels[i].rotationKeyFrames[frame].x;
-				//node->position.y = (*it).second->channels[i].rotationKeyFrames[frame].y;
-				//node->position.z = (*it).second->channels[i].rotationKeyFrames[frame].z;
-				//scale
-				//node->scale.x = (*it).second->channels[i].scalingKeyFrames[frame].x;
-				//node->scale.y = (*it).second->channels[i].scalingKeyFrames[frame].y;
-				//node->scale.z = (*it).second->channels[i].scalingKeyFrames[frame].z;
+
 				//Recalculate local and global transforms
 				float3 position = (*it).second->channels[i].positionKeyFrames[frame];
 				node->position.x = position.x;
 				node->position.y = position.y;
 				node->position.z = position.z;
+
+				/*float3 rotation = (*it).second->channels[i].rotationKeyFrames[frame];
+				node->rotation.x = rotation.x;
+				node->rotation.y = rotation.y;
+				node->rotation.z = rotation.z;*/
+
+				float3 scale = (*it).second->channels[i].scalingKeyFrames[frame];
+				node->scale.x = scale.x;
+				node->scale.y = scale.y;
+				node->scale.z = scale.z;
+				//DLOG("En el frame %d la posicion es (%f, %f, %f)", frame, position.x, position.y, position.z);
 				
 				
 				//float3 rotationTransform = (*it).second->channels[i].rotationKeyFrames[frame];

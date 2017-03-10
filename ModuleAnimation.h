@@ -7,6 +7,7 @@
 
 struct AnimationChannel {
 	std::string nodeName;
+	int numFrames;
 	float3* positionKeyFrames;
 	float3* rotationKeyFrames;
 	float3* scalingKeyFrames;
