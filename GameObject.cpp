@@ -57,10 +57,6 @@ void GameObject::AssignTransform()
 	transform = (ComponentTransform*)FindComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
 }
 
-void GameObject::RecursiveCalcTrasnforms()
-{
-}
-
 GameObject * GameObject::GetParent() const
 {
 	return parent;
@@ -84,6 +80,14 @@ void GameObject::SetParent(GameObject * parentGO)
 	}
 
 	parent = parentGO;
+}
+
+void GameObject::OnTransformChange()
+{
+	for (std::list<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
+	{
+		(*it)->transform->SetParent(transform->GlobalTransform());
+	}
 }
 
 

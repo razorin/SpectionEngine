@@ -18,6 +18,8 @@ bool ModuleSceneManager::Start() {
 	//loadCurrentScene("Models/Batman/", "Batman.obj");
 	//loadCurrentScene("Models/street/", "Street.obj");
 	//GameObject* go = currentScene->GetGameObject("Street.obj");
+	
+
 
 	currentScene->DebugGOInfo(currentScene->root);
 	return true;
@@ -40,7 +42,15 @@ update_status ModuleSceneManager::PostUpdate(float dt)
 
 void ModuleSceneManager::Draw()
 {
-	if (currentScene != nullptr) currentScene->Draw();
+	if (currentScene != nullptr) {
+		GameObject* go = currentScene->GetGameObject("RootNode");
+		if (go != nullptr)
+		{
+			//go->transform->SetPosition(go->transform->Position() + float3(0.002, 0, 0));
+			go->transform->Rotate(0.001f, float3::unitY);
+		}
+		currentScene->Draw();
+	}
 }
 
 bool ModuleSceneManager::CleanUp()

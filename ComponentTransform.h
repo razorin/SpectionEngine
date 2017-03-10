@@ -36,6 +36,7 @@ public:
 	void SetScale(const float3& scale);
 	void SetRotation(const Quat& rotation);
 	void SetEulerAngles(const float3& eulerAngles);
+	void Rotate(float angles, float3 axis);
 	void SetTransform(const float3& position, const float3& scale, const Quat& rotation);
 	void SetParent(const float4x4& parentGT);
 	void ChangeParent(const float4x4& newParentGT);

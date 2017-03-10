@@ -104,6 +104,7 @@ void ComponentTransform::CalculateLocalT()
 void ComponentTransform::CalculateGlobalT()
 {
 	globalTransform = parentGlobalTransform * localTransform;
+	container->OnTransformChange();
 }
 
 
@@ -134,6 +135,13 @@ void ComponentTransform::SetEulerAngles(const float3 & eulerAngles)
 	this->rotation = Quat::Lerp(rotation, targetRotation, 0.5f);
 	//set euler angles. calcular target quaternion. Interpolar entre nuestra rotacion actual y el quaternion obtenido. 
 	// Actualizar los valores de euler angles haciend
+	CalculateTransforms();
+}
+
+void ComponentTransform::Rotate(float angle, float3 axis)
+{
+	Quat changeRotation = Quat(axis, angle);
+	rotation = rotation * changeRotation;
 	CalculateTransforms();
 }
 

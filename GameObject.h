@@ -19,9 +19,9 @@ public:
 	virtual ~GameObject();
 
 	void AssignTransform();
-	void RecursiveCalcTrasnforms();
 	GameObject* GetParent() const;
 	void SetParent(GameObject* parentGO);
+	void OnTransformChange();
 
 	Component * AddComponent(const ComponentType &type);
 	bool RemoveComponent(Component *);
