@@ -10,14 +10,21 @@
 #include "IMGUI\stb_rect_pack.h"
 #include "IMGUI\stb_textedit.h"
 #include "IMGUI\stb_truetype.h"
+//
+// TODO --- CREATE AN H FILE WITH ALL THIS INCLUDES. INCLUDE IT WHEN YOU WANT TO USE IMGUI INSTEAD OF THIS
+//
+
 
 ComponentTransform::ComponentTransform(GameObject* container) : Component(container, ComponentType::COMPONENT_TYPE_TRANSFORM)
 {
+	ResetTransforms();
 }
 
 ComponentTransform::ComponentTransform(GameObject* container, Quat& rotation, float3& position, float3& scale) :
 	Component(container, ComponentType::COMPONENT_TYPE_TRANSFORM), rotation(rotation), position(position), scale(scale)
 {
+	ResetTransforms();
+	CalculateTransforms();
 }
 
 ComponentTransform::~ComponentTransform()
@@ -96,15 +103,7 @@ void ComponentTransform::CalculateLocalT()
 
 void ComponentTransform::CalculateGlobalT()
 {
-	GameObject* parentGO = container->GetParent();
-	if (parentGO != nullptr)
-	{
-		globalTransform = parentGO->transform->globalTransform * localTransform;
-	}
-	else
-	{
-		globalTransform = localTransform;
-	}
+	globalTransform = parentGlobalTransform * localTransform;
 }
 
 
@@ -112,24 +111,30 @@ void ComponentTransform::CalculateGlobalT()
 void ComponentTransform::SetPosition(const float3 & position)
 {
 	this->position = position;
-	CalculateLocalT();
+	CalculateTransforms();
 }
 
 void ComponentTransform::SetScale(const float3 & scale)
 {
 	this->scale = scale;
-	CalculateLocalT();
+	CalculateTransforms();
 }
 
 void ComponentTransform::SetRotation(const Quat & rotation)
 {
-	CalculateLocalT();
+	this->rotation = rotation;
+	this->eulerAngles = rotation.ToEulerXYZ();
+	CalculateTransforms();
 }
 
 void ComponentTransform::SetEulerAngles(const float3 & eulerAngles)
 {
+	this->eulerAngles = eulerAngles;
+	Quat targetRotation = Quat::FromEulerXYZ(eulerAngles.x, eulerAngles.y, eulerAngles.z);
+	this->rotation = Quat::Lerp(rotation, targetRotation, 0.5f);
 	//set euler angles. calcular target quaternion. Interpolar entre nuestra rotacion actual y el quaternion obtenido. 
 	// Actualizar los valores de euler angles haciend
+	CalculateTransforms();
 }
 
 void ComponentTransform::SetTransform(const float3 & position, const float3 & scale, const Quat & rotation)
@@ -137,14 +142,13 @@ void ComponentTransform::SetTransform(const float3 & position, const float3 & sc
 	this->position = position;
 	this->scale = scale;
 	this->rotation = rotation;
-	CalculateLocalT();
+	CalculateTransforms();
 }
 
 void ComponentTransform::SetParent(const float4x4 & parentGT)
 {
-	CalculateLocalT();
 	parentGlobalTransform = parentGT;
-	globalTransform = globalTransform * localTransform;
+	CalculateTransforms();
 }
 
 void ComponentTransform::ChangeParent(const float4x4 & newParentGT)

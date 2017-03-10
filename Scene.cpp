@@ -117,11 +117,10 @@ void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject *
 	aiQuaternion aiRot;
 	aiVector3D aiScale;
 	assimpNode.mTransformation.Decompose(aiScale, aiRot, aiPos);
-
-	go->transform->SetPosition(float3(aiPos.x, aiPos.y, aiPos.z));
-	go->transform->SetRotation(Quat(aiRot.x, aiRot.y, aiRot.z, aiRot.w));
-	go->transform->SetScale(float3(aiScale.x, aiScale.y, aiScale.z));
-	go->transform->CalculateLocalT();
+	float3 pos = float3(aiPos.x, aiPos.y, aiPos.z);
+	Quat rot = Quat(aiRot.x, aiRot.y, aiRot.z, aiRot.w);
+	float3 scale = float3(aiScale.x, aiScale.y, aiScale.z);
+	go->transform->SetTransform(pos, scale, rot);
 	go->SetParent(parentGO);
 
 	if (assimpNode.mNumMeshes > 0)

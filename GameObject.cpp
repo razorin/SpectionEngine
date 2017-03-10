@@ -68,13 +68,21 @@ GameObject * GameObject::GetParent() const
 
 void GameObject::SetParent(GameObject * parentGO)
 {
-	if (parentGO != nullptr) {
-		transform->SetParent(parentGO->transform->GlobalTransform());
+	//We have 2 cases. We may have already a parent or not
+	//Also if we dont want a parent anymore, parentGo will be nullptr
+
+	float4x4 newParentGT = float4x4::identity;
+	if (parentGO != nullptr){
+		newParentGT = parentGO->transform->GlobalTransform();
+	}
+
+	if (parent == nullptr){
+		transform->SetParent(newParentGT);
 	}
 	else {
-		transform->SetParent(float4x4::identity);
+		transform->ChangeParent(newParentGT);
 	}
-	//ALLWAYS change parent after changing transform values. It requires its older parent to recalculate its new localTransform;
+
 	parent = parentGO;
 }
 

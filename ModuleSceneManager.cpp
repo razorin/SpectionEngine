@@ -19,11 +19,6 @@ bool ModuleSceneManager::Start() {
 	//loadCurrentScene("Models/street/", "Street.obj");
 	//GameObject* go = currentScene->GetGameObject("Street.obj");
 
-	Quat rotation = Quat::RotateX(90 * DEGTORAD);
-	currentScene->root->transform->SetRotation(rotation);
-
-
-
 	currentScene->DebugGOInfo(currentScene->root);
 	return true;
 }
