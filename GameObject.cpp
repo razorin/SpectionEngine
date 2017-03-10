@@ -206,7 +206,6 @@ void GameObject::Draw() const
 	//Materials
 
 	//Meshes
-
 	for (std::list<Component*>::const_iterator it = components.begin(); it != components.end(); it++)
 	{
 		if ((*it)->type == ComponentType::COMPONENT_TYPE_MESH)
@@ -262,6 +261,7 @@ void GameObject::Draw() const
 		}
 	}
 
+	// Bounding Boxes
 	DrawBoundingBoxes();
 
 	glPopMatrix();
@@ -401,5 +401,11 @@ void GameObject::DrawBoundingBoxes() const {
 			AABBoxPoints[7].z);
 		glEnd();
 		glColor4f(1, 1, 1, 1);
+	}
+}
+
+void GameObject::DrawGUIPanel() const {
+	for (std::list<Component *>::const_iterator it = components.begin(); it != components.end(); it++) {
+		(*it)->DrawGUI();
 	}
 }

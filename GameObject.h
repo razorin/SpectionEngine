@@ -33,6 +33,7 @@ public:
 
 	void AddComponentMesh(Mesh *);
 	void DrawBoundingBoxes() const;
+	void DrawGUIPanel() const;
 
 
 private:

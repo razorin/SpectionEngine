@@ -255,7 +255,9 @@ bool ModuleGUI::DrawGOHierarchyMenu() {
 	treeNodeFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 	ImGui::Begin("GameObjects Hierarchy", &open);
 	bool treeNode = ImGui::TreeNodeEx(App->sceneManager->getCurrentScene()->root->name.c_str(), treeNodeFlags);
-	if (ImGui::IsItemClicked()) { console.AddLog("%s Selected", App->sceneManager->getCurrentScene()->root->name.c_str()); }
+	if (ImGui::IsItemClicked()) {
+		GameObjectSelected(*App->sceneManager->getCurrentScene()->root);
+	}
 	if (treeNode)
 	{
 		for (auto it = App->sceneManager->getCurrentScene()->root->childs.begin(); it != App->sceneManager->getCurrentScene()->root->childs.end(); ++it)
@@ -272,7 +274,7 @@ void ModuleGUI::RecursiveTreePrint(GameObject & GO)
 {
 	if (!GO.name.empty()) {
 		bool treeNode = ImGui::TreeNodeEx(GO.name.c_str(), treeNodeFlags);
-		if (ImGui::IsItemClicked()) { console.AddLog("%s Selected", GO.name.c_str()); }
+		if (ImGui::IsItemClicked()) { GameObjectSelected(GO); }
 		if (treeNode) {
 			for (auto it = GO.childs.begin(); it != GO.childs.end(); ++it)
 			{
@@ -281,6 +283,11 @@ void ModuleGUI::RecursiveTreePrint(GameObject & GO)
 			ImGui::TreePop();
 		}
 	}
+}
+
+void ModuleGUI::GameObjectSelected(GameObject & GO) {
+	console.AddLog("%s Selected", GO.name.c_str());
+	selectedGO = &GO;
 }
 
 bool ModuleGUI::DrawLightsMenu() {
@@ -352,7 +359,7 @@ bool ModuleGUI::DrawLightsMenu() {
 	if (currentLights->size() < MAXLIGHTS) {
 		if (ImGui::Button("New Light")) { App->lightsManager->AddLight(LT_POINT_LIGHT, { 0.0f, 5.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }); }
 	}
-	
+
 	ImGui::End();
 	return open;
 }
@@ -385,42 +392,9 @@ bool ModuleGUI::DrawInspectorMenu() {
 	float menuPosY = (float)(19);
 	ImGui::SetNextWindowPos(ImVec2(menuPosX, menuPosY), ImGuiSetCond_Once);
 	ImGui::Begin("Inspector", &open);
-	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
-	{
-		ImGui::InputFloat3("Position", position);
-		ImGui::SameLine();
-		if (ImGui::Button("Clear")) {
-			for (int i = 0; i < 3; ++i) {
-				position[i] = 0.0f;
-			}
-		}
-		ImGui::InputFloat3("Rotation", rotation);
-		ImGui::SameLine();
-		if (ImGui::Button("Clear")) {
-			for (int i = 0; i < 3; ++i) {
-				rotation[i] = 0.0f;
-			}
-		}
-		ImGui::InputFloat3("Scale", scale);
-		ImGui::SameLine();
-		if (ImGui::Button("Clear")) {
-			for (int i = 0; i < 3; ++i) {
-				scale[i] = 0.0f;
-			}
-		}
+	if (selectedGO != nullptr) {
+		selectedGO->DrawGUIPanel();
 	}
-	if (ImGui::Button("Clear Transform")) {
-		for (int i = 0; i < 3; ++i) {
-			position[i] = 0.0f;
-			rotation[i] = 0.0f;
-			scale[i] = 0.0f;
-		}
-	}
-	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen))
-	{
-		ImGui::ColorEdit4("Color", matColor);
-	}
-	ImGui::Text("\n\n\nAll the components...");
 	ImGui::End();
 	return open;
 }

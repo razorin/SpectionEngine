@@ -10,9 +10,6 @@
 #include "IMGUI\stb_rect_pack.h"
 #include "IMGUI\stb_textedit.h"
 #include "IMGUI\stb_truetype.h"
-//
-// TODO --- CREATE AN H FILE WITH ALL THIS INCLUDES. INCLUDE IT WHEN YOU WANT TO USE IMGUI INSTEAD OF THIS
-//
 
 
 ComponentTransform::ComponentTransform(GameObject* container) : Component(container, ComponentType::COMPONENT_TYPE_TRANSFORM)
@@ -167,6 +164,47 @@ void ComponentTransform::ChangeParent(const float4x4 & newParentGT)
 }
 
 bool ComponentTransform::DrawGUI() {
+	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		float3 pos = Position();
+		float3 rot = EulerAngles();
+		float3 sca = Scale();;
 
+		if (ImGui::InputFloat3("Position", (float*)&pos)) {
+			SetPosition(pos);
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Clear")) {
+			pos = float3::zero;
+			SetPosition(pos);
+		}
+
+		if (ImGui::InputFloat3("Rotation", (float*)&rot)) {
+			SetEulerAngles(rot);
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Clear")) {
+			rot = float3::zero;
+			SetEulerAngles(rot);
+		}
+
+		if (ImGui::InputFloat3("Scale", (float*)&sca)) {
+			SetScale(sca);
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Clear")) {
+			sca = float3::one;
+			SetScale(sca);
+		}
+
+		if (ImGui::Button("Clear Transform")) {
+			pos = float3::zero;
+			SetPosition(pos);
+			rot = float3::zero;
+			SetEulerAngles(rot);
+			sca = float3::one;
+			SetScale(sca);
+		}
+	}
 	return true;
 }

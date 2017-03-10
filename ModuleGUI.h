@@ -69,7 +69,8 @@ public:
 	void AddFpsLog(float fps);
 	void AddMsLog(float ms);
 
-	void ModuleGUI::RecursiveTreePrint(GameObject & GO);
+	void RecursiveTreePrint(GameObject & GO);
+	void GameObjectSelected(GameObject & GO);
 
 public:
 	AppConsole console;
@@ -116,6 +117,8 @@ private:
 	int maxLightPosition = 100;
 
 	ImGuiTreeNodeFlags treeNodeFlags;
+
+	GameObject * selectedGO = nullptr;
 
 	//Inspector
 	float matColor[4] = { 1.0f,1.0f,1.0f,1.0f };
