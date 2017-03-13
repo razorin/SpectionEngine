@@ -18,6 +18,9 @@ class ModuleCollision;
 class ModuleAnimation;
 class ModuleParticles;
 class ModuleTestScene;
+class ModuleSceneManager;
+class ModulePrimitives;
+
 
 class Timer;
 class PreciseTimer;
@@ -49,7 +52,10 @@ public:
 	ModuleCollision* collision;
 	ModuleAnimation* animations;
 	ModuleParticles* particles;
+	ModuleSceneManager* sceneManager;
 	ModuleTestScene* testScene;
+	ModulePrimitives* primitives;
+
 
 	JSON_Value *configuration;
 	Timer *gamestartTimer;

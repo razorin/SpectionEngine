@@ -2,9 +2,18 @@
 #include <cmath>
 
 
-SCylinder::SCylinder()
+SCylinder::SCylinder(const fPoint &position, float scale) : SCylinder(position, scale, 6)
 {
+
+}
+
+SCylinder::SCylinder(const fPoint &position, float scale, int numberOfFaces) {
 	numVertices = 12;
+	float calculatedCos = cos((360 / numberOfFaces) * DEGTORAD);
+	float calculatedSen = sin((360.0f / numberOfFaces) * DEGTORAD);
+	float height = scale;
+	float width = scale / 2;
+
 	// Create cylinder vertex array
 	vertices = new float[numVertices * 3]{
 		// ----- CYLINDER ----- 12verts 20tris
@@ -20,18 +29,19 @@ SCylinder::SCylinder()
 		//     \|   |/
 		//     10---9
 		
-		-0.5f*cos(60.0f * DEGTORAD), 1.0f, -0.5f*sin(60.0f * DEGTORAD),			//0
-		0.5f*cos(60.0f * DEGTORAD), 1.0f, -0.5f*sin(60.0f * DEGTORAD),			//1
-		0.5f, 1.0f, 0.0f,														//2
-		0.5f*cos(60.0f * DEGTORAD), 1.0f, 0.5f*sin(60.0f * DEGTORAD),			//3
-		-0.5f*cos(60.0f * DEGTORAD), 1.0f, 0.5f*sin(60.0f * DEGTORAD),			//4
-		-0.5f, 1.0f, 0.0f,														//5
-		-0.5f*cos(60.0f * DEGTORAD), -1.0f, -0.5f*sin(60.0f * DEGTORAD),		//6
-		0.5f*cos(60.0f * DEGTORAD), -1.0f, -0.5f*sin(60.0f * DEGTORAD),			//7
-		0.5f, -1.0f, 0.0f,														//8
-		0.5f*cos(60.0f * DEGTORAD), -1.0f, 0.5f*sin(60.0f * DEGTORAD),			//9
-		-0.5f*cos(60.0f * DEGTORAD), -1.0f, 0.5f*sin(60.0f * DEGTORAD),			//10
-		-0.5f, -1.0f, 0.0f														//11
+		position.x - width * calculatedCos, position.y + height, position.z - width * calculatedSen,			//0
+		position.x + width * calculatedCos, position.y + height, position.z - width * calculatedSen,			//1
+		position.x + width, position.y + height, position.z,														//2
+		position.x + width * calculatedCos, position.y + height, position.z + width * calculatedSen,			//3
+
+		position.x - width * calculatedCos, position.y + height, position.z + width * calculatedSen,			//4
+		position.x - width, position.y + height, position.z,														//5
+		position.x - width * calculatedCos, position.y - height, position.z - width * calculatedSen,		//6
+		position.x + width * calculatedCos, position.y - height, position.z - width * calculatedSen,			//7
+		position.x + width, position.y - height, position.z,														//8
+		position.x + width * calculatedCos, position.y - height, position.z + width * calculatedSen,			//9
+		position.x - width * calculatedCos, position.y - height, position.z + width * calculatedSen,			//10
+		position.x - width, position.y - height, position.z
 
 	};
 

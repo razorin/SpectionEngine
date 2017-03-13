@@ -6,6 +6,7 @@
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
 #include "ModuleTestScene.h"
+#include "ModuleSceneManager.h"
 #include "Parson.h"
 #include "SPrimitive.h"
 #include "SCube.h"
@@ -125,6 +126,9 @@ update_status ModuleRender::Update(float dt)
 	//DrawGizmo();
 
 	App->lightsManager->Draw();
+
+	// Draw the current scene
+	if (App->sceneManager->getCurrentScene() != nullptr) App->sceneManager->Draw();
 
 	//DrawDirectCube();
 

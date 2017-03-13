@@ -1,8 +1,7 @@
-#include "Level.h"
-#include "Mesh.h"
-#include "Application.h"
 #include "Globals.h"
 #include "Application.h"
+#include "Level.h"
+#include "Mesh.h"
 #include "ModuleTextures.h"
 #include "ModuleAnimation.h"
 #include "assimp\vector3.h"
@@ -11,10 +10,8 @@
 #include "assimp/postprocess.h"
 #include "assimp\anim.h"
 #include "MathGeoLib\include\MathGeoLib.h"
-#include "Application.h"
 #include "ModuleCamera.h"
 #include "ModuleGUI.h"
-
 
 using namespace std;
 
@@ -28,9 +25,11 @@ Level::~Level()
 
 void Level::Load(const char * path, const char * file)
 {
-	string folderPath = string(path);
-	string filePath = path + string(file);
-	const aiScene* scene = aiImportFile(filePath.c_str(),
+	aiString folderPath = aiString(path);
+	aiString filePath = folderPath;
+	filePath.Append(file);
+
+	const aiScene* scene = aiImportFile(filePath.data,
 		aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
 		aiProcess_JoinIdenticalVertices |
@@ -51,13 +50,15 @@ void Level::Load(const char * path, const char * file)
 		const aiMaterial* material = scene->mMaterials[i];
 		// Just one texture
 		int texIndex = 0;
-		aiString path;
+		aiString textureFileName;
 		int texturesPerMaterial = material->GetTextureCount(aiTextureType_DIFFUSE);
-		if (material->GetTexture(aiTextureType_DIFFUSE, texIndex, &path) == AI_SUCCESS)
+		if (material->GetTexture(aiTextureType_DIFFUSE, texIndex, &textureFileName) == AI_SUCCESS)
 		{
-			string textureFile = path.data;
-			string texturePath = folderPath + textureFile;
-			imageNames[i] = App->textures->LoadTexture(texturePath.c_str());
+			//aiString textureFile = path.data;
+			aiString texturePath = folderPath;
+			texturePath.Append(textureFileName.data);
+
+			imageNames[i] = App->textures->LoadTexture(texturePath);
 		}
 	}
 

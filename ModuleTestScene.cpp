@@ -3,6 +3,7 @@
 #include "ModuleTestScene.h"
 #include "ModuleRender.h"
 #include "ModuleTextures.h"
+#include "ModulePrimitives.h"
 #include "Model.h"
 #include "SCube.h"
 #include "MemLeaks.h"
@@ -22,8 +23,11 @@ ModuleTestScene::~ModuleTestScene()
 
 bool ModuleTestScene::Start() {
 
-	primitives.push_back(cube = new SCube());
-
+	//SPrimitive *primitive = nullptr;
+	//primitive = App->primitives->AddPrimitive(SPRIMITIVE_TYPE::SCUBE_TYPE, { 0, 6.5, 0 }, 0.25);
+	//primitives.push_back(primitive);
+	//primitive = App->primitives->AddPrimitive(SPRIMITIVE_TYPE::SCYLINDER_TYPE, { 0, 5, 0 }, 0.25);
+	//primitives.push_back(primitive);
 	//model = new Model();
 	//model->Load("models/batman/","batman.obj");
 
@@ -35,11 +39,12 @@ bool ModuleTestScene::Start() {
 
 	importedLevel = new Level();
 	importedLevel->Load("Models/ArmyPilot/", "ArmyPilot.dae");
+	//importedLevel = new Level();
 	//importedLevel->Load("Models/street/", "Street.obj");
 	//importedLevel->Load("Models/street/", "Street environment_V01.fbx");
 
 	//This is a little hack to se the scene in the correct rotation (Node Dummy001 is rotated -90 in X axis)
-	float angleRad = 90 * DEGTORAD;
+	//float angleRad = 90 * DEGTORAD;
 	//importedLevel->root->rotation = Quat::RotateX(angleRad);
 	//importedLevel->RecursiveCalcTransforms(importedLevel->root);
 
@@ -89,26 +94,23 @@ void ModuleTestScene::Draw()
 		(*it)->Draw();
 	}
 
-	if (model != nullptr)
-		model->Draw();
+	//if (model != nullptr)
+	//	model->Draw();
 
-	if (model2 != nullptr)
-		model2->Draw();
+	//if (model2 != nullptr)
+	//	model2->Draw();
 
 
 
-	if (importedLevel != nullptr)
-	{
-		importedLevel->Draw(importedLevel->root);
-	}
+	//if (importedLevel != nullptr)
+	//{
+	//	importedLevel->Draw(importedLevel->root);
+	//}
 }
 
 bool ModuleTestScene::CleanUp() {
 
-	for (std::list<SPrimitive*>::iterator it = primitives.begin(); it != primitives.end(); ++it)
-	{
-		RELEASE(*it);
-	}
+	primitives.clear();
 
 	if (model != nullptr)
 	{

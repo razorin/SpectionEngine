@@ -25,12 +25,14 @@ Model::~Model()
 
 }
 
+//TODO: Refactor this code and Level.cpp Load method (they does same actions!!!!!)
 void Model::Load(const char* path, const char* file)
 {
-	string folderPath = string(path);
-	string filePath = path + string(file);
+	aiString folderPath = aiString(path);
+	aiString filePath = folderPath;
+	filePath.Append(file);
 
-	scene = aiImportFile(filePath.c_str(), aiProcess_PreTransformVertices | aiProcess_Triangulate);
+	scene = aiImportFile(filePath.data, aiProcess_PreTransformVertices | aiProcess_Triangulate);
 
 	if (!scene)
 	{
@@ -59,13 +61,15 @@ void Model::Load(const char* path, const char* file)
 			materials[i].shininess *= 128.0f;
 			// Just one texture
 			int texIndex = 0;
-			aiString path;
+			aiString textureFileName;
 			int texturesPerMaterial = material->GetTextureCount(aiTextureType_DIFFUSE);
-			if (material->GetTexture(aiTextureType_DIFFUSE, texIndex, &path) == AI_SUCCESS)
+			if (material->GetTexture(aiTextureType_DIFFUSE, texIndex, &textureFileName) == AI_SUCCESS)
 			{
-				string textureFile = path.data;
-				string texturePath = folderPath + textureFile;
-				imageNames[i] = App->textures->LoadTexture(texturePath.c_str());
+				//aiString textureFile = path.data;
+				aiString texturePath = folderPath;
+				texturePath.Append(textureFileName.data);
+
+				imageNames[i] = App->textures->LoadTexture(texturePath);
 			}
 		}
 
@@ -130,35 +134,6 @@ void Model::Clear()
 
 void Model::Draw()
 {
-	//for (int i = 0; i < scene->mNumMeshes; ++i)
-	//{
-	//	aiMesh* mesh = scene->mMeshes[i];
-	//	int numFaces = mesh->mNumFaces;
-	//	uint materialIndex = mesh->mMaterialIndex;
-
-
-	//	glBindTexture(GL_TEXTURE_2D, imageNames[materialIndex]);
-	//	glBegin(GL_TRIANGLES);
-
-	//	for (int j = 0; j < numFaces; j++)
-	//	{
-	//		aiFace face = mesh->mFaces[j];
-	//		
-	//		for (int k = 0; k < 3; k++)
-	//		{
-	//			aiVector3D vertex = mesh->mVertices[face.mIndices[k]];
-	//			aiVector3D uv = mesh->mTextureCoords[0][face.mIndices[k]];
-	//			aiVector3D normal = mesh->HasNormals() ? mesh->mNormals[face.mIndices[k]] : aiVector3D(1.0f, 1.0f, 1.0f);
-	//			glNormal3f(normal.x, normal.y, normal.z);
-	//			glTexCoord2f(uv.x, uv.y);
-	//			glVertex3f(vertex.x, vertex.y, vertex.z);
-	//		}
-
-	//	}
-	//	glEnd();
-	//	glBindTexture(GL_TEXTURE_2D, 0);
-	//}
-
 	for (int i = 0; i < numMeshes; ++i)
 	{
 		meshes[i].Draw();

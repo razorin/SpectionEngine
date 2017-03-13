@@ -70,6 +70,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentCamera.h" />
+    <ClInclude Include="ComponentLight.h" />
+    <ClInclude Include="ComponentMaterial.h" />
+    <ClInclude Include="ComponentMesh.h" />
+    <ClInclude Include="ComponentModel.h" />
+    <ClInclude Include="ComponentScript.h" />
+    <ClInclude Include="ComponentTransform.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightsManager.h" />
     <ClInclude Include="Material.h" />
@@ -87,6 +96,8 @@
     <ClInclude Include="ModuleCamera.h" />
     <ClInclude Include="ModuleGUI.h" />
     <ClInclude Include="ModulePrimitives.h" />
+    <ClInclude Include="ModuleSceneManager.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="SCube.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="MemLeaks.h" />
@@ -108,6 +119,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="ComponentCamera.cpp" />
+    <ClCompile Include="ComponentLight.cpp" />
+    <ClCompile Include="ComponentMaterial.cpp" />
+    <ClCompile Include="ComponentMesh.cpp" />
+    <ClCompile Include="ComponentModel.cpp" />
+    <ClCompile Include="ComponentScript.cpp" />
+    <ClCompile Include="ComponentTransform.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LightsManager.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -122,6 +142,8 @@
     <ClCompile Include="ModuleCamera.cpp" />
     <ClCompile Include="ModuleGUI.cpp" />
     <ClCompile Include="ModulePrimitives.cpp" />
+    <ClCompile Include="ModuleSceneManager.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SCube.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Main.cpp" />

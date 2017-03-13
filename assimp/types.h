@@ -89,13 +89,13 @@ namespace Intern        {
         // http://www.gotw.ca/publications/mill15.htm
 
         // new/delete overload
-        void *operator new    ( size_t num_bytes) /* throw( std::bad_alloc ) */;
-        void *operator new    ( size_t num_bytes, const std::nothrow_t& ) throw();
+        //void *operator new    ( size_t num_bytes) /* throw( std::bad_alloc ) */;
+        //void *operator new    ( size_t num_bytes, const std::nothrow_t& ) throw();
         void  operator delete ( void* data);
 
         // array new/delete overload
-        void *operator new[]    ( size_t num_bytes) /* throw( std::bad_alloc ) */;
-        void *operator new[]    ( size_t num_bytes, const std::nothrow_t& )  throw();
+        //void *operator new[]    ( size_t num_bytes) /* throw( std::bad_alloc ) */;
+        //void *operator new[]    ( size_t num_bytes, const std::nothrow_t& )  throw();
         void  operator delete[] ( void* data);
 
     }; // struct AllocateFromAssimpHeap

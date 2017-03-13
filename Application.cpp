@@ -9,6 +9,9 @@
 #include "ModuleAnimation.h"
 #include "ModuleCamera.h"
 #include "ModuleTestScene.h"
+#include "ModuleSceneManager.h"
+#include "ModulePrimitives.h"
+
 #include "Timer.h"
 #include "PreciseTimer.h"
 #include "LightsManager.h"
@@ -41,9 +44,16 @@ Application::Application()
 	modules.push_back(renderer = new ModuleRender(json_object_dotget_object(root, "config.renderer")));
 	modules.push_back(textures = new ModuleTextures());
 	modules.push_back(audio = new ModuleAudio());
+	modules.push_back(primitives = new ModulePrimitives());
+
 
 	//Game Modules
+	modules.push_back(sceneManager = new ModuleSceneManager(nullptr, true));
 	modules.push_back(testScene = new ModuleTestScene(true));
+	//sceneManager = new ModuleSceneManager();
+	//sceneManager->loadCurrentScene("Models/street/", "Street environment_V01.fbx");
+	
+	
 
 	//Animations
 	modules.push_back(animations = new ModuleAnimation(nullptr,true));
