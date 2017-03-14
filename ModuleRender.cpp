@@ -105,7 +105,7 @@ bool ModuleRender::Init()
 
 update_status ModuleRender::PreUpdate(float dt)
 {
-	glClearColor(0.5f, 0.5f, 0.5f, 1.f);
+	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
