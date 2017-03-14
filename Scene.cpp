@@ -157,7 +157,7 @@ void Scene::DebugGOInfo(GameObject * go)
 	float3 scale = CT->Position();
 	Quat rot = CT->Rotation();
 	float3 rotation = rot.ToEulerXYZ();
-	//DLOG("Node:%s     Position X:%f  Y:%f   Z:%f", go->name.c_str(), pos.x, pos.y, pos.z);
+
 	DLOGS("Node:%s     Rotation X:%f    Y:%f    Z:%f  ", go->name.c_str(), rotation.x * RADTODEG, rotation.y* RADTODEG, rotation.z* RADTODEG);
 
 

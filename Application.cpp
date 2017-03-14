@@ -8,7 +8,6 @@
 #include "ModuleGUI.h"
 #include "ModuleAnimation.h"
 #include "ModuleCamera.h"
-#include "ModuleTestScene.h"
 #include "ModuleSceneManager.h"
 #include "ModulePrimitives.h"
 
@@ -49,7 +48,6 @@ Application::Application()
 
 	//Game Modules
 	modules.push_back(sceneManager = new ModuleSceneManager(nullptr, true));
-	modules.push_back(testScene = new ModuleTestScene(true));
 	//sceneManager = new ModuleSceneManager();
 	//sceneManager->loadCurrentScene("Models/street/", "Street environment_V01.fbx");
 	

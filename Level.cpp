@@ -170,6 +170,7 @@ const void Level::PrintNodeInfo(Node & node)
 
 void Level::Draw(Node* node)
 {
+	// TODO: Código que no se usa actualmente pero puede servir en un futuro
 	/*
 	glPushMatrix();
 	glMultMatrixf(node->globalTransform.Transposed().ptr());
@@ -211,20 +212,7 @@ void Level::Draw(Node* node)
 
 		print = true;
 	}
-	
-	//root->position.x += 0.002;
-	//root->position.y += 0.002;
-	//root->position.z += 0.002;
-	/*DLOG("%f",root->rotation.y * RADTODEG);
-	if (root->rotation.y == 360 * DEGTORAD) {
-		root->rotation.y = 0 * DEGTORAD;
-	}
-	else {
-		root->rotation.y += 0.1 * DEGTORAD;
-	}*/
-	//root->scale.x += 0.01;
 	TransformHierarchy();
-	//RecursiveCalcTransforms(root);
 	DrawHierarchy(node);
 }
 
@@ -325,15 +313,12 @@ void Level::DrawHierarchy(Node* node)
 }
 
 void Level::TransformHierarchy() {
-	//DLOG("Frame: %d", frame);
 	for (std::map<string, Animation*>::iterator it = App->animations->animations.begin(); it != App->animations->animations.end(); ++it)
 	{
 		
 		(*it).second;
 		for (int i = 0; i < (*it).second->numChannels; i++) {
 			maxFrames = (*it).second->channels[i].numFrames;
-			//DLOG("MaxFrames es: %d", maxFrames);
-			//DLOG("%s", (*it).second->channels[i].nodeName.data());
 			Node* node = FindNode((*it).second->channels[i].nodeName.data());
  			if (node != nullptr) {
 
@@ -352,25 +337,6 @@ void Level::TransformHierarchy() {
 				node->scale.x = scale.x;
 				node->scale.y = scale.y;
 				node->scale.z = scale.z;
-				//DLOG("En el frame %d la posicion es (%f, %f, %f)", frame, position.x, position.y, position.z);
-				
-				
-				//float3 rotationTransform = (*it).second->channels[i].rotationKeyFrames[frame];
-				//Quat rotationQuaternion = Quat::RotateX(rotationTransform.x * DEGTORAD);
-
-				//vec3 EulerAngles(90, 45, 0);
-				//rotationQuaternion = Quat(EulerAngles(rotationTransform.x, rotationTransform.y, rotationTransform.z));
-				//rotationQuaternion.RotateX(rotationTransform.x * DEGTORAD);
-
-				//rotationQuaternion.RotateX(rotationTransform.x * DEGTORAD);
-				//rotationQuaternion.RotateY(rotationTransform.y * DEGTORAD);
-				//rotationQuaternion.RotateZ(rotationTransform.z * DEGTORAD);
-				//float3 scalingTransform = (*it).second->channels[i].scalingKeyFrames[frame];
-				//node->localTransform.Translate(positionTransform.x, positionTransform.y, positionTransform.z);
-				//node->localTransform.RotateAxisAngle(float3(1, 0, 0), rotationTransform.x * DEGTORAD);
-				//node->localTransform.RotateAxisAngle(float3(0, 1, 0), rotationTransform.y * DEGTORAD);
-				//node->localTransform.RotateAxisAngle(float3(0, 0, 1), rotationTransform.z * DEGTORAD);
-				//node->localTransform.FromTRS(position, Quat::identity, float3::one);
 				
 			}
 			int a = 1;

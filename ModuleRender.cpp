@@ -5,7 +5,6 @@
 #include "ModuleCamera.h"
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
-#include "ModuleTestScene.h"
 #include "ModuleSceneManager.h"
 #include "Parson.h"
 #include "SPrimitive.h"
@@ -120,8 +119,6 @@ update_status ModuleRender::PreUpdate(float dt)
 // Called every draw update
 update_status ModuleRender::Update(float dt)
 {
-
-	App->testScene->Draw();
 	DrawGrid();
 	//DrawGizmo();
 

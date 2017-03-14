@@ -111,16 +111,5 @@ void ModuleAnimation::Load(const char * path, const char * file)
 		animations[scene->mAnimations[i]->mName.data] = anim;
 	}
 
-	/*DLOG("Nodo es: %s", animations["Walk Aiming"]->channels[0].nodeName.data());
-	for (int i = 0; i < animations["Walk Aiming"]->channels[0].numFrames; i++) {
-		DLOG("Posicion en el frame %d es: (%f, %f, %f)", i, animations["Walk Aiming"]->channels[0].positionKeyFrames[i].x, animations["Walk Aiming"]->channels[0].positionKeyFrames[i].y, animations["Walk Aiming"]->channels[0].positionKeyFrames[i].z);
-		DLOG("Rotacion en el frame %d es: (%f, %f, %f)", i, animations["Walk Aiming"]->channels[0].rotationKeyFrames[i].x, animations["Walk Aiming"]->channels[0].rotationKeyFrames[i].y, animations["Walk Aiming"]->channels[0].rotationKeyFrames[i].z);
-		DLOG("Escala en el frame %d es: (%f, %f, %f)", i, animations["Walk Aiming"]->channels[0].scalingKeyFrames[i].x, animations["Walk Aiming"]->channels[0].scalingKeyFrames[i].y, animations["Walk Aiming"]->channels[0].scalingKeyFrames[i].z);
-	}*/
-
-	//DLOG("Size es: %d", animations["Idle"]->channels[0].positionKeyFrames->Size);
-	//DLOG("El primer nodo es %s", animations["Idle"]->channels[0].nodeName.data());
-	//DLOG("El ultimo nodo es %s", animations["Idle"]->channels[63].nodeName.data());
-
 	aiReleaseImport(scene);
 }

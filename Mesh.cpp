@@ -19,8 +19,6 @@ Mesh::~Mesh()
 	//	RELEASE_ARRAY(this->textureCoords[i]);
 	//}
 	RELEASE_ARRAY(this->textureCoords);
-	//RELEASE(vboTextures);
-	//RELEASE(imageName);
 }
 
 void Mesh::InitializeBuffers()
