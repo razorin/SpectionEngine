@@ -208,8 +208,8 @@ bool ModuleGUI::DrawMainMenuBar() {
 
 bool ModuleGUI::DrawHWInfoMenu() {
 	bool open = true;
-	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 3), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
-	ImGui::SetNextWindowPos(ImVec2((float)(0), (float)(App->window->screen_height * App->window->screen_size / 2)), ImGuiSetCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(300, 120), ImGuiSetCond_Once);
+	ImGui::SetNextWindowPos(ImVec2(0, 400), ImGuiSetCond_Once);
 	ImGui::Begin("Hardware Info", &open);
 	ImGui::Text("SDL Version:");
 	ImGui::SameLine();
@@ -231,8 +231,8 @@ bool ModuleGUI::DrawHWInfoMenu() {
 
 bool ModuleGUI::DrawPreferencesMenu() {
 	bool open = true;
-	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
-	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(400, 150), ImGuiSetCond_Once);
+	ImGui::SetNextWindowPos(ImVec2(0, 200), ImGuiSetCond_Once);
 	ImGui::Begin("Preferences", &open);
 	const char* items[] = { "Fullscreen", "Borderless", "Fullscreen Windowed" };
 	if (ImGui::Combo("Display", &currentDisplayMode, items, IM_ARRAYSIZE(items))) {
@@ -250,8 +250,8 @@ bool ModuleGUI::DrawPreferencesMenu() {
 
 bool ModuleGUI::DrawGOHierarchyMenu() {
 	bool open = true;
-	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 4)), ImGuiSetCond_Once);
-	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(600, 200), ImGuiSetCond_Once);
+	ImGui::SetNextWindowPos(ImVec2(300, 200), ImGuiSetCond_Once);
 	treeNodeFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 	ImGui::Begin("GameObjects Hierarchy", &open);
 	bool treeNode = ImGui::TreeNodeEx(App->sceneManager->getCurrentScene()->root->name.c_str(), treeNodeFlags);
@@ -293,8 +293,8 @@ void ModuleGUI::GameObjectSelected(GameObject & GO) {
 bool ModuleGUI::DrawLightsMenu() {
 	bool open = true;
 	const char* items[] = { "DIRECTIONAL LIGHT", "POINT LIGHT", "SPOTLIGHT", "AMBIENTLIGHT" };
-	ImGui::SetNextWindowSize(ImVec2((float)(App->window->screen_width * App->window->screen_size / 2), (float)(App->window->screen_height * App->window->screen_size / 2)), ImGuiSetCond_Once);
-	ImGui::SetNextWindowPos(ImVec2((float)(App->window->screen_width * App->window->screen_size / 4), (float)(App->window->screen_height * App->window->screen_size * 1 / 4)), ImGuiSetCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiSetCond_Once);
+	ImGui::SetNextWindowPos(ImVec2(300, 200), ImGuiSetCond_Once);
 	ImGui::Begin("Lights", &open);
 	std::list<Light*>* currentLights = App->lightsManager->GetLights();
 	for (std::list<Light*>::iterator it = currentLights->begin(); it != currentLights->end(); )
@@ -366,12 +366,9 @@ bool ModuleGUI::DrawLightsMenu() {
 
 bool ModuleGUI::DrawAppInfo() {
 	bool open = true;
-	float menuWidth = (float)(App->window->screen_width * App->window->screen_size * 2 / 5);
-	float menuHeight = NULL;
-	ImGui::SetNextWindowSize(ImVec2(menuWidth, menuHeight), ImGuiSetCond_Once);
-	float menuPosX = (float)(App->window->screen_width * App->window->screen_size - menuWidth);
-	float menuPosY = (float)(19);
-	ImGui::SetNextWindowPos(ImVec2(menuPosX, menuPosY), ImGuiSetCond_Once);
+	float menuWidth = 400;
+	ImGui::SetNextWindowSize(ImVec2(menuWidth, 300), ImGuiSetCond_Once);
+	ImGui::SetNextWindowPos(ImVec2(800, 20), ImGuiSetCond_Once);
 	ImGui::Begin("Application Information", &open);
 	ImGui::Text("Application Name: %s", App->window->title);
 	char title[25];
@@ -385,12 +382,10 @@ bool ModuleGUI::DrawAppInfo() {
 
 bool ModuleGUI::DrawInspectorMenu() {
 	bool open = true;
-	float menuWidth = (float)(App->window->screen_width * App->window->screen_size * 3 / 5);
-	float menuHeight = (float)(App->window->screen_height * App->window->screen_size * 5 / 6);;
-	ImGui::SetNextWindowSize(ImVec2(menuWidth, menuHeight), ImGuiSetCond_Once);
-	float menuPosX = (float)(App->window->screen_width * App->window->screen_size - menuWidth);
-	float menuPosY = (float)(19);
-	ImGui::SetNextWindowPos(ImVec2(menuPosX, menuPosY), ImGuiSetCond_Once);
+	float menuWidth = 500;
+	ImGui::SetNextWindowSize(ImVec2(menuWidth, 750), ImGuiSetCond_Once);
+	float menuPosY = 19;
+	ImGui::SetNextWindowPos(ImVec2(App->window->screen_width - menuWidth, menuPosY), ImGuiSetCond_Once);
 	ImGui::Begin("Inspector", &open);
 	if (selectedGO != nullptr) {
 		selectedGO->DrawGUIPanel();

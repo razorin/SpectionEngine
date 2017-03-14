@@ -9,6 +9,15 @@
 #include "ComponentScript.h"
 #include "ComponentTransform.h"
 
+//IMGUI Includes
+#include "IMGUI\imconfig.h"
+#include "IMGUI\imgui.h"
+#include "IMGUI\imgui_impl_sdl_gl3.h"
+#include "IMGUI\imgui_internal.h"
+#include "IMGUI\stb_rect_pack.h"
+#include "IMGUI\stb_textedit.h"
+#include "IMGUI\stb_truetype.h"
+
 
 //TODO delete empty constuctor.This one below can do the same
 GameObject::GameObject(GameObject * parent, const char * name) : parent(parent), name(name)
@@ -405,6 +414,7 @@ void GameObject::DrawBoundingBoxes() const {
 }
 
 void GameObject::DrawGUIPanel() const {
+	ImGui::Text(this->name.c_str());
 	for (std::list<Component *>::const_iterator it = components.begin(); it != components.end(); it++) {
 		(*it)->DrawGUI();
 	}

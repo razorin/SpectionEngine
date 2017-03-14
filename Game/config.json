@@ -9,14 +9,14 @@
 		},
 		"window": {
 			"resolution": {
-				"width": 360,
-				"height": 360
+				"width": 1280,
+				"height": 800
 			},
 			"fullscreen": false,
 			"borderless": false,
 			"resizable": true,
 			"fullscreenWindowed": false,
-			"size": 2,
+			"size": 1,
 			"title": "Spection Engine"
 		},
 		"camera": {
