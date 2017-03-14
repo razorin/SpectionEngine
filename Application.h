@@ -15,8 +15,8 @@ class ModuleAudio;
 class ModuleGUI;
 class ModuleFadeToBlack;
 class ModuleCollision;
+class ModuleAnimation;
 class ModuleParticles;
-class ModuleTestScene;
 class ModuleSceneManager;
 class ModulePrimitives;
 
@@ -49,9 +49,9 @@ public:
 	ModuleGUI* gui;
 	ModuleFadeToBlack* fade;
 	ModuleCollision* collision;
+	ModuleAnimation* animations;
 	ModuleParticles* particles;
 	ModuleSceneManager* sceneManager;
-	ModuleTestScene* testScene;
 	ModulePrimitives* primitives;
 
 

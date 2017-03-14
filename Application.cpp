@@ -6,11 +6,8 @@
 #include "ModuleInput.h"
 #include "ModuleAudio.h"
 #include "ModuleGUI.h"
-#include "ModuleFadeToBlack.h"
-#include "ModuleCollision.h"
-#include "ModuleParticles.h"
+#include "ModuleAnimation.h"
 #include "ModuleCamera.h"
-#include "ModuleTestScene.h"
 #include "ModuleSceneManager.h"
 #include "ModulePrimitives.h"
 
@@ -20,6 +17,8 @@
 #include "Parson.h"
 #include "MathGeoLib\include\MathGeoLib.h"
 #include <assert.h>
+#include "SDL\include\SDL_cpuinfo.h"
+#include "SDL\include\SDL_timer.h"
 
 using namespace std;
 
@@ -47,17 +46,15 @@ Application::Application()
 	modules.push_back(primitives = new ModulePrimitives());
 
 
-	// Modules to draw on top of game logic
-	//modules.push_back(collision = new ModuleCollision());
-	//modules.push_back(particles = new ModuleParticles());
-	//modules.push_back(fade = new ModuleFadeToBlack());
-
 	//Game Modules
-	modules.push_back(testScene = new ModuleTestScene(true));
+	modules.push_back(sceneManager = new ModuleSceneManager(nullptr, true));
 	//sceneManager = new ModuleSceneManager();
 	//sceneManager->loadCurrentScene("Models/street/", "Street environment_V01.fbx");
-	modules.push_back(sceneManager = new ModuleSceneManager(nullptr,true));
 	
+	
+
+	//Animations
+	modules.push_back(animations = new ModuleAnimation(nullptr,true));
 
 	lightsManager = new LightsManager();
 
