@@ -13,13 +13,19 @@ class GameObject;
 class Mesh;
 class Material;
 
+enum ObjectType {
+	OT_EMPTY,
+	OT_CUBE
+};
+
 class Scene
 {
 public:
 	Scene();
 	~Scene();
 
-	void AddGameObject(GameObject* gameobject);
+	void AddGameObject(ObjectType type);
+	void DeleteGameObject(std::string name);
 	GameObject* GetGameObject(std::string name);
 	void LoadLevel(const char* path, const char* file);
 	void RecursiveNodeRead(GameObject* go, aiNode& aiNode, GameObject* parentGO);

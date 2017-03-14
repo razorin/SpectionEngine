@@ -21,9 +21,13 @@ Scene::~Scene()
 	gameobjects.clear();
 }
 
-void Scene::AddGameObject(GameObject * gameobject)
+void Scene::AddGameObject(ObjectType type)
 {
-	gameobjects.push_back(gameobject);
+	
+}
+
+void Scene::DeleteGameObject(std::string name)
+{
 }
 
 GameObject * Scene::GetGameObject(std::string name)
@@ -205,7 +209,6 @@ bool Scene::CleanUp()
 
 void Scene::DrawHierarchyNodes(GameObject* go)
 {
-	//if (node->parent != nullptr) {
 	if (go->GetParent() != nullptr) {
 		float4 tempPos = { go->transform->Position().x, go->transform->Position().y, go->transform->Position().z, 1.0f };
 		float4 position = go->transform->GlobalTransform() * tempPos;
@@ -220,10 +223,6 @@ void Scene::DrawHierarchyNodes(GameObject* go)
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		glEnd();
 	}
-	/*for (int i = 0; i < go->childs.size(); i++)
-	{
-		DrawHierarchyNodes(go->childs[i]);
-	}*/
 	for (list<GameObject*>::iterator it = go->childs.begin(); it != go->childs.end(); ++it) {
 		DrawHierarchyNodes(*it);
 	}
@@ -238,32 +237,20 @@ void Scene::TransformHierarchy() {
 		for (int i = 0; i < (*it).second->numChannels; i++) {
 			maxFrames = (*it).second->channels[i].numFrames;
 			GameObject* go = GetGameObject((*it).second->channels[i].nodeName.data());
-			//Node* node = FindNode((*it).second->channels[i].nodeName.data());
 			if (go != nullptr) {
 
 				//Recalculate local and global transforms
 				float3 position = (*it).second->channels[i].positionKeyFrames[frame];
-				//node->position.x = position.x;
-				//node->position.y = position.y;
-				//node->position.z = position.z;
 
 				float3 rotation = (*it).second->channels[i].rotationKeyFrames[frame];
-				//node->rotation.x = rotation.x;
-				//node->rotation.y = rotation.y;
-				//node->rotation.z = rotation.z;
-
 				Quat rotationQuat = Quat::FromEulerXYZ(rotation.x, rotation.y, rotation.z);
 
 				float3 scale = (*it).second->channels[i].scalingKeyFrames[frame];
-				//node->scale.x = scale.x;
-				//node->scale.y = scale.y;
-				//node->scale.z = scale.z;
 
 				go->transform->SetTransform(position, scale, rotationQuat);
 
 			}
 		}
-		//RecursiveCalcTransforms(root);
 	}
 	frame++;
 	if (frame == maxFrames) {
