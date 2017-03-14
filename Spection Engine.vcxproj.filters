@@ -67,9 +67,6 @@
     <ClInclude Include="PreciseTimer.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleTestScene.h">
-      <Filter>Game Modules</Filter>
-    </ClInclude>
     <ClInclude Include="SPrimitive.h">
       <Filter>Geometric primitive</Filter>
     </ClInclude>
@@ -130,12 +127,9 @@
     <ClInclude Include="Material.h">
       <Filter>Geometric primitive</Filter>
     </ClInclude>
-    <ClInclude Include="Level.h">
-      <Filter>Geometric primitive</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleAnimation.h">
       <Filter>Core Modules</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="Component.h">
       <Filter>GameObject</Filter>
     </ClInclude>
@@ -204,9 +198,6 @@
     <ClCompile Include="PreciseTimer.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleTestScene.cpp">
-      <Filter>Game Modules</Filter>
-    </ClCompile>
     <ClCompile Include="SPrimitive.cpp">
       <Filter>Geometric primitive</Filter>
     </ClCompile>
@@ -253,9 +244,6 @@
       <Filter>Lights</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
-      <Filter>Geometric primitive</Filter>
-    </ClCompile>
-    <ClCompile Include="Level.cpp">
       <Filter>Geometric primitive</Filter>
     </ClCompile>
     <ClCompile Include="ModuleAnimation.cpp">
