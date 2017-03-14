@@ -179,12 +179,12 @@ bool ComponentTransform::DrawGUI() {
 		}
 
 		if (ImGui::DragFloat3("Rotation", (float*)&rot, 0.1f)) {
-			SetEulerAngles(rot);
+			SetEulerAngles(rot * DEGTORAD);
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Clear Rotation")) {
 			rot = float3::zero;
-			SetEulerAngles(rot);
+			SetEulerAngles(rot * DEGTORAD);
 		}
 
 		if (ImGui::DragFloat3("Scale", (float*)&sca, 0.1f)) {
