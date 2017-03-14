@@ -18,8 +18,6 @@ public:
 	ComponentCamera(GameObject* container);
 	~ComponentCamera();
 
-	bool DrawGUI();
-
 	//Projection Related Functions
 	void ChangeWindowSize(int width, int height);
 	void SetFOV(float verticalFov);
@@ -36,6 +34,8 @@ public:
 
 	float * GetMatrixProjection() const;
 	float * GetMatrixView() const;
+
+	bool DrawGUI();
 
 public:
 	//These two params may be added as json config

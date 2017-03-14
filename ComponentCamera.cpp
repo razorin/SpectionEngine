@@ -4,6 +4,15 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 
+//IMGUI Includes
+#include "IMGUI\imconfig.h"
+#include "IMGUI\imgui.h"
+#include "IMGUI\imgui_impl_sdl_gl3.h"
+#include "IMGUI\imgui_internal.h"
+#include "IMGUI\stb_rect_pack.h"
+#include "IMGUI\stb_textedit.h"
+#include "IMGUI\stb_truetype.h"
+
 
 ComponentCamera::ComponentCamera(GameObject * container) : Component(container, ComponentType::COMPONENT_TYPE_CAMERA)
 {
@@ -11,11 +20,6 @@ ComponentCamera::ComponentCamera(GameObject * container) : Component(container, 
 
 ComponentCamera::~ComponentCamera()
 {
-}
-
-	bool ComponentCamera::DrawGUI()
-{
-	return false;
 }
 
 void ComponentCamera::SetFOV(float verticalFov)
@@ -193,4 +197,27 @@ float * ComponentCamera::GetMatrixView() const
 	float4x4 viewMatrix = frustum.ViewMatrix();
 	float4x4 m = viewMatrix.Transposed();
 	return &(m[0][0]);
+}
+
+bool ComponentCamera::DrawGUI()
+{
+	if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		float fov = this->verticalFov;
+		float near = this->nearPlane;
+		float far = this->farPlane;
+
+		if (ImGui::InputFloat("Vertical FOV", (float*)&fov)) {
+			SetFOV(fov);
+		}
+
+		if (ImGui::InputFloat("Near Plane", (float*)&near)) {
+			SetPlaneDistances(near, far);
+		}
+
+		if (ImGui::InputFloat("Far Plane", (float*)&far)) {
+			SetPlaneDistances(near, far);
+		}
+	}
+	return true;
 }

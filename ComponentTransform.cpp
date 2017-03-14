@@ -168,7 +168,7 @@ bool ComponentTransform::DrawGUI() {
 	{
 		float3 pos = Position();
 		float3 rot = EulerAngles();
-		float3 sca = Scale();;
+		float3 sca = Scale();
 
 		if (ImGui::InputFloat3("Position", (float*)&pos)) {
 			SetPosition(pos);
