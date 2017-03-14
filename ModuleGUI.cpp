@@ -382,7 +382,7 @@ bool ModuleGUI::DrawAppInfo() {
 
 bool ModuleGUI::DrawInspectorMenu() {
 	bool open = true;
-	float menuWidth = 500;
+	float menuWidth = 550;
 	ImGui::SetNextWindowSize(ImVec2(menuWidth, 750), ImGuiSetCond_Once);
 	float menuPosY = 19;
 	ImGui::SetNextWindowPos(ImVec2(App->window->screen_width - menuWidth, menuPosY), ImGuiSetCond_Once);
