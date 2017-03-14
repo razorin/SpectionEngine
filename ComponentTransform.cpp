@@ -66,10 +66,13 @@ Quat ComponentTransform::Rotation(SpaceMode space) const
 	}
 }
 
+/**
+Returns euler angles in Degrees
+*/
 float3 ComponentTransform::EulerAngles(SpaceMode space) const
 {
 	if (space == SpaceMode::SPACE_LOCAL) {
-		return eulerAngles;
+		return eulerAngles * RADTODEG;
 	}
 	else {
 		//return
@@ -125,10 +128,14 @@ void ComponentTransform::SetRotation(const Quat & rotation)
 	CalculateTransforms();
 }
 
+/**
+Sets rotation in euler angles
+@param eulerAngles the rotation in Degrees
+*/
 void ComponentTransform::SetEulerAngles(const float3 & eulerAngles)
 {
-	this->eulerAngles = eulerAngles;
-	Quat targetRotation = Quat::FromEulerXYZ(eulerAngles.x, eulerAngles.y, eulerAngles.z);
+	this->eulerAngles = eulerAngles * DEGTORAD;
+	Quat targetRotation = Quat::FromEulerXYZ(this->eulerAngles.x, this->eulerAngles.y, this->eulerAngles.z);
 	this->rotation = Quat::Lerp(rotation, targetRotation, 0.5f);
 	//set euler angles. calcular target quaternion. Interpolar entre nuestra rotacion actual y el quaternion obtenido. 
 	// Actualizar los valores de euler angles haciend
@@ -179,12 +186,12 @@ bool ComponentTransform::DrawGUI() {
 		}
 
 		if (ImGui::DragFloat3("Rotation", (float*)&rot, 0.1f)) {
-			SetEulerAngles(rot * DEGTORAD);
+			SetEulerAngles(rot);
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Clear Rotation")) {
 			rot = float3::zero;
-			SetEulerAngles(rot * DEGTORAD);
+			SetEulerAngles(rot);
 		}
 
 		if (ImGui::DragFloat3("Scale", (float*)&sca, 0.1f)) {
