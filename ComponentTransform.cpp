@@ -170,7 +170,7 @@ bool ComponentTransform::DrawGUI() {
 		float3 rot = EulerAngles();
 		float3 sca = Scale();
 
-		if (ImGui::InputFloat3("Position", (float*)&pos)) {
+		if (ImGui::DragFloat3("Position", (float*)&pos)) {
 			SetPosition(pos);
 		}
 		ImGui::SameLine();
@@ -179,7 +179,7 @@ bool ComponentTransform::DrawGUI() {
 			SetPosition(pos);
 		}
 
-		if (ImGui::InputFloat3("Rotation", (float*)&rot)) {
+		if (ImGui::DragFloat3("Rotation", (float*)&rot)) {
 			SetEulerAngles(rot);
 		}
 		ImGui::SameLine();
@@ -188,7 +188,7 @@ bool ComponentTransform::DrawGUI() {
 			SetEulerAngles(rot);
 		}
 
-		if (ImGui::InputFloat3("Scale", (float*)&sca)) {
+		if (ImGui::DragFloat3("Scale", (float*)&sca)) {
 			SetScale(sca);
 		}
 		ImGui::SameLine();

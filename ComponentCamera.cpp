@@ -207,15 +207,15 @@ bool ComponentCamera::DrawGUI()
 		float near = this->nearPlane;
 		float far = this->farPlane;
 
-		if (ImGui::InputFloat("Vertical FOV", (float*)&fov)) {
+		if (ImGui::DragFloat3("Vertical FOV", (float*)&fov)) {
 			SetFOV(fov);
 		}
 
-		if (ImGui::InputFloat("Near Plane", (float*)&near)) {
+		if (ImGui::DragFloat3("Near Plane", (float*)&near)) {
 			SetPlaneDistances(near, far);
 		}
 
-		if (ImGui::InputFloat("Far Plane", (float*)&far)) {
+		if (ImGui::DragFloat3("Far Plane", (float*)&far)) {
 			SetPlaneDistances(near, far);
 		}
 	}
