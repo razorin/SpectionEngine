@@ -18,10 +18,6 @@ bool ModuleSceneManager::Start() {
 	//loadCurrentScene("Models/Batman/", "Batman.obj");
 	//loadCurrentScene("Models/street/", "Street.obj");
 	//GameObject* go = currentScene->GetGameObject("Street.obj");
-	
-
-
-	currentScene->DebugGOInfo(currentScene->root);
 	return true;
 }
 

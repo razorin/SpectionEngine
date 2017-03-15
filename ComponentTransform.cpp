@@ -136,9 +136,8 @@ void ComponentTransform::SetEulerAngles(const float3 & eulerAngles)
 {
 	this->eulerAngles = eulerAngles * DEGTORAD;
 	Quat targetRotation = Quat::FromEulerXYZ(this->eulerAngles.x, this->eulerAngles.y, this->eulerAngles.z);
-	this->rotation = Quat::Lerp(rotation, targetRotation, 0.5f);
-	//set euler angles. calcular target quaternion. Interpolar entre nuestra rotacion actual y el quaternion obtenido. 
-	// Actualizar los valores de euler angles haciend
+	//this->rotation = Quat::Lerp(rotation, targetRotation, 0.5f);
+	this->rotation = targetRotation;
 	CalculateTransforms();
 }
 

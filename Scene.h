@@ -25,7 +25,6 @@ public:
 	void RecursiveNodeRead(GameObject* go, aiNode& aiNode, GameObject* parentGO);
 
 	void Draw() const;
-	void DebugGOInfo(GameObject* go);
 	GameObject* root;
 	bool CleanUp();
 
