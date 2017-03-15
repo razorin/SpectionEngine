@@ -249,25 +249,33 @@ bool ModuleGUI::DrawPreferencesMenu() {
 }
 
 bool ModuleGUI::DrawGOHierarchyMenu() {
-	bool open = true;
-	ImGui::SetNextWindowSize(ImVec2(600, 200), ImGuiSetCond_Once);
-	ImGui::SetNextWindowPos(ImVec2(300, 200), ImGuiSetCond_Once);
-	treeNodeFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
-	ImGui::Begin("GameObjects Hierarchy", &open);
-	bool treeNode = ImGui::TreeNodeEx(App->sceneManager->getCurrentScene()->root->name.c_str(), treeNodeFlags);
-	if (ImGui::IsItemClicked()) {
-		GameObjectSelected(*App->sceneManager->getCurrentScene()->root);
-	}
-	if (treeNode)
+	if (App->sceneManager->getCurrentScene() != nullptr)
 	{
-		for (auto it = App->sceneManager->getCurrentScene()->root->childs.begin(); it != App->sceneManager->getCurrentScene()->root->childs.end(); ++it)
-		{
-			RecursiveTreePrint(**it);
+		GameObject* root = App->sceneManager->getCurrentScene()->root;
+		bool open = true;
+
+		ImGui::SetNextWindowSize(ImVec2(600, 200), ImGuiSetCond_Once);
+		ImGui::SetNextWindowPos(ImVec2(300, 200), ImGuiSetCond_Once);
+		treeNodeFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+		ImGui::Begin("GameObjects Hierarchy", &open);
+		bool treeNode = ImGui::TreeNodeEx(root->name.c_str(), treeNodeFlags);
+
+		if (ImGui::IsItemClicked()) {
+			GameObjectSelected(*root);
 		}
-		ImGui::TreePop();
+		if (treeNode) {
+			for (auto it = root->childs.begin(); it != root->childs.end(); ++it)
+			{
+				RecursiveTreePrint(**it);
+			}
+			ImGui::TreePop();
+		}
+		ImGui::End();
+		return open;
 	}
-	ImGui::End();
-	return open;
+	else {
+		return false;
+	}
 }
 
 void ModuleGUI::RecursiveTreePrint(GameObject & GO)

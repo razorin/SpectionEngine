@@ -153,6 +153,7 @@ void ComponentTransform::SetTransform(const float3 & position, const float3 & sc
 	this->position = position;
 	this->scale = scale;
 	this->rotation = rotation;
+	this->eulerAngles = rotation.ToEulerXYZ();
 	CalculateTransforms();
 }
 
