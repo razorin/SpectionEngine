@@ -114,9 +114,9 @@ void ModuleCamera::Move(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 		movement -= frustum.Front();
 
-	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_REPEAT)
-		movement += float3::unitY;
 	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT)
+		movement += float3::unitY;
+	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_REPEAT)
 		movement -= float3::unitY;
 
 	movementSpeed = 5.0f;
@@ -166,7 +166,7 @@ void ModuleCamera::Rotate(float dt)
 	float angleChange = rotationSpeed * (dt / 1000);
 
 	fPoint mouseMotion = App->input->GetMouseMotion();
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && mouseBlocked == false)
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_REPEAT && mouseBlocked == false)
 	{
 		if (invertYAxis) {
 			angleX += (mouseMotion.y / 4) * angleChange;
