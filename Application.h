@@ -19,6 +19,7 @@ class ModuleParticles;
 class ModuleTestScene;
 class ModuleSceneManager;
 class ModulePrimitives;
+class ModuleAnimation;
 
 
 class Timer;
@@ -53,6 +54,7 @@ public:
 	ModuleSceneManager* sceneManager;
 	ModuleTestScene* testScene;
 	ModulePrimitives* primitives;
+	ModuleAnimation* animator;
 
 
 	JSON_Value *configuration;

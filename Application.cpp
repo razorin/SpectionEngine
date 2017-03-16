@@ -13,6 +13,7 @@
 #include "ModuleTestScene.h"
 #include "ModuleSceneManager.h"
 #include "ModulePrimitives.h"
+#include "ModuleAnimation.h"
 
 #include "Timer.h"
 #include "PreciseTimer.h"
@@ -54,9 +55,8 @@ Application::Application()
 
 	//Game Modules
 	modules.push_back(testScene = new ModuleTestScene(true));
-	//sceneManager = new ModuleSceneManager();
-	//sceneManager->loadCurrentScene("Models/street/", "Street environment_V01.fbx");
 	modules.push_back(sceneManager = new ModuleSceneManager(nullptr,true));
+	modules.push_back(animator = new ModuleAnimation());
 	
 
 	lightsManager = new LightsManager();

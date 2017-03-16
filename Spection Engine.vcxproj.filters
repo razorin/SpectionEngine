@@ -178,6 +178,9 @@
     <ClInclude Include="ComponentMesh.h">
       <Filter>GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleAnimation.h">
+      <Filter>Core Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -308,6 +311,9 @@
     </ClCompile>
     <ClCompile Include="ComponentMesh.cpp">
       <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleAnimation.cpp">
+      <Filter>Core Modules</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

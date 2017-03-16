@@ -93,6 +93,7 @@
     <ClInclude Include="IMGUI\stb_textedit.h" />
     <ClInclude Include="IMGUI\stb_truetype.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="ModuleAnimation.h" />
     <ClInclude Include="ModuleCamera.h" />
     <ClInclude Include="ModuleGUI.h" />
     <ClInclude Include="ModulePrimitives.h" />
@@ -141,6 +142,7 @@
     <ClCompile Include="IMGUI\imgui_draw.cpp" />
     <ClCompile Include="IMGUI\imgui_impl_sdl_gl3.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ModuleAnimation.cpp" />
     <ClCompile Include="ModuleCamera.cpp" />
     <ClCompile Include="ModuleGUI.cpp" />
     <ClCompile Include="ModulePrimitives.cpp" />
