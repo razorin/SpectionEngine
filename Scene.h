@@ -24,9 +24,12 @@ public:
 	void LoadLevel(const char* path, const char* file);
 	void RecursiveNodeRead(GameObject* go, aiNode& aiNode, GameObject* parentGO);
 
-	void Draw() const;
+	void Draw();
 	GameObject* root;
 	bool CleanUp();
+
+	void DrawHierarchyNodes(GameObject* go);
+	void DrawRecursively(GameObject* go);
 
 private:
 	std::list<GameObject *> gameobjects;

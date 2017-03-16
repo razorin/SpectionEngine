@@ -123,8 +123,10 @@ update_status ModuleRender::PreUpdate(float dt)
 // Called every draw update
 update_status ModuleRender::Update(float dt)
 {
-	//TODO scene draw here. NOT TESTSCENE which should be deleted in the future (whole module is unnnecessary)
-	//App->testScene->Draw();
+	//Hotfix TODO find cause of bug with ilumination
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+
 	App->sceneManager->Draw();
 	DrawGrid();
 	DrawGizmo();

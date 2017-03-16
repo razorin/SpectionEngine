@@ -142,9 +142,11 @@ void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject *
 	}
 }
 
-void Scene::Draw() const
+void Scene::Draw()
 {
 	root->Draw();
+
+	DrawHierarchyNodes(root);
 }
 
 bool Scene::CleanUp()
@@ -160,4 +162,31 @@ bool Scene::CleanUp()
 
 	return true;
 	
+}
+
+void Scene::DrawHierarchyNodes(GameObject * go)
+{
+		glBegin(GL_LINES);
+		//glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+
+		DrawRecursively(go);
+
+		//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		glEnd();
+}
+
+void Scene::DrawRecursively(GameObject * go)
+{
+	for (std::list<GameObject*>::iterator it = go->childs.begin(); it != go->childs.end(); it++)
+	{
+		float3 parentPos = go->transform->Position(SpaceMode::SPACE_GLOBAL);
+		float3 childPos = (*it)->transform->Position(SpaceMode::SPACE_GLOBAL);
+
+		glVertex3f(parentPos.x, parentPos.y, parentPos.z);
+		glVertex3f(childPos.x, childPos.y, childPos.z);
+
+		DrawRecursively(*it);
+	}
+
+
 }
