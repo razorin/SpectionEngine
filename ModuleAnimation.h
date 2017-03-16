@@ -11,20 +11,24 @@
 #include "assimp\anim.h"
 
 
-struct ChannelAnim
+struct AnimChannel
 {
 	aiString name;
 	aiVector3D* positions = nullptr;
 	aiQuaternion* rotations = nullptr;
+	aiVector3D* scales = nullptr;
 	uint numPositions = 0;
 	uint numRotations = 0;
+	uint numScales = 0;
+	uint numKeyframes = 0;
 };
 
 struct Anim
 {
+	aiString name;
 	uint duration = 0;
 	uint numChannels = 0;
-	ChannelAnim* channels = nullptr;
+	AnimChannel* channels = nullptr;
 };
 
 struct AnimInstance
@@ -50,7 +54,7 @@ public:
 
 	bool Init();
 	bool Start();
-	void Load(const char* name, const char* file);
+	void Load(const char* path, const char* file);
 	bool CleanUp();
 	update_status Update(float dt = 0);
 
