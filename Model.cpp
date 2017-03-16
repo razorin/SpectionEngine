@@ -25,7 +25,6 @@ Model::~Model()
 
 }
 
-//TODO: Refactor this code and Level.cpp Load method (they does same actions!!!!!)
 void Model::Load(const char* path, const char* file)
 {
 	aiString folderPath = aiString(path);

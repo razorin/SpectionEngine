@@ -1,5 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleAnimation.h"
 #include "Scene.h"
 #include "GameObject.h"
 #include "ModuleTextures.h"
@@ -9,6 +10,7 @@
 #include "ComponentMaterial.h"
 #include "MemLeaks.h"
 
+using namespace std;
 
 Scene::Scene()
 {
@@ -17,6 +19,15 @@ Scene::Scene()
 Scene::~Scene()
 {
 	gameobjects.clear();
+}
+
+void Scene::AddGameObject(ObjectType type)
+{
+	
+}
+
+void Scene::DeleteGameObject(std::string name)
+{
 }
 
 GameObject * Scene::GetGameObject(std::string name)
@@ -142,9 +153,40 @@ void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject *
 	}
 }
 
-void Scene::Draw() const
+void Scene::Draw()
 {
 	root->Draw();
+
+	TransformHierarchy();
+	DrawHierarchyNodes(*gameobjects.begin());
+	
+}
+
+void Scene::DebugGOInfo(GameObject * go)
+{
+	ComponentTransform * CT = go->transform;
+	float3 pos = CT->Position();
+	float3 scale = CT->Position();
+	Quat rot = CT->Rotation();
+	float3 rotation = rot.ToEulerXYZ();
+
+	DLOGS("Node:%s     Rotation X:%f    Y:%f    Z:%f  ", go->name.c_str(), rotation.x * RADTODEG, rotation.y* RADTODEG, rotation.z* RADTODEG);
+
+
+
+	for (std::list<GameObject*>::iterator it = go->childs.begin(); it != go->childs.end(); )
+	{
+		if (it == go->childs.begin())
+			DLOGS("Childs of :%s", go->name.c_str());
+
+		DebugGOInfo((*it));
+
+		it++;
+		if (it == go->childs.end())
+			DLOGS("End of childs of :%s", go->name.c_str());
+	}
+
+
 }
 
 bool Scene::CleanUp()
@@ -160,4 +202,55 @@ bool Scene::CleanUp()
 
 	return true;
 	
+}
+
+void Scene::DrawHierarchyNodes(GameObject* go)
+{
+	if (go->GetParent() != nullptr) {
+		float4 tempPos = { go->transform->Position().x, go->transform->Position().y, go->transform->Position().z, 1.0f };
+		float4 position = go->transform->GlobalTransform() * tempPos;
+		tempPos = { go->GetParent()->transform->Position().x, go->GetParent()->transform->Position().y, go->GetParent()->transform->Position().z, 1.0f };
+		float4 parent_position = go->GetParent()->transform->GlobalTransform() * tempPos;
+		glBegin(GL_LINES);
+		glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+
+		glVertex3f(position.x, position.y, position.z);
+		glVertex3f(parent_position.x, parent_position.y, parent_position.z);
+
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		glEnd();
+	}
+	for (list<GameObject*>::iterator it = go->childs.begin(); it != go->childs.end(); ++it) {
+		DrawHierarchyNodes(*it);
+	}
+
+}
+
+void Scene::TransformHierarchy() {
+	for (std::map<string, Animation*>::iterator it = App->animations->animations.begin(); it != App->animations->animations.end(); ++it)
+	{
+
+		(*it).second;
+		for (int i = 0; i < (*it).second->numChannels; i++) {
+			maxFrames = (*it).second->channels[i].numFrames;
+			GameObject* go = GetGameObject((*it).second->channels[i].nodeName.data());
+			if (go != nullptr) {
+
+				//Recalculate local and global transforms
+				float3 position = (*it).second->channels[i].positionKeyFrames[frame];
+
+				float3 rotation = (*it).second->channels[i].rotationKeyFrames[frame];
+				Quat rotationQuat = Quat::FromEulerXYZ(rotation.x, rotation.y, rotation.z);
+
+				float3 scale = (*it).second->channels[i].scalingKeyFrames[frame];
+
+				go->transform->SetTransform(position, scale, rotationQuat);
+
+			}
+		}
+	}
+	frame++;
+	if (frame == maxFrames) {
+		frame = 0;
+	}
 }

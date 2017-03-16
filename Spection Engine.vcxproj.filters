@@ -49,12 +49,6 @@
     <ClInclude Include="ModuleAudio.h">
       <Filter>Core Modules</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleFadeToBlack.h">
-      <Filter>Core Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Point.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -64,12 +58,6 @@
     <ClInclude Include="MemLeaks.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleParticles.h">
-      <Filter>Core Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleCollision.h">
-      <Filter>Core Modules</Filter>
-    </ClInclude>
     <ClInclude Include="Parson.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -78,9 +66,6 @@
     </ClInclude>
     <ClInclude Include="PreciseTimer.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleTestScene.h">
-      <Filter>Game Modules</Filter>
     </ClInclude>
     <ClInclude Include="SPrimitive.h">
       <Filter>Geometric primitive</Filter>
@@ -142,8 +127,8 @@
     <ClInclude Include="Material.h">
       <Filter>Geometric primitive</Filter>
     </ClInclude>
-    <ClInclude Include="Level.h">
-      <Filter>Geometric primitive</Filter>
+    <ClInclude Include="ModuleAnimation.h">
+      <Filter>Core Modules</Filter>
     </ClInclude>
     <ClInclude Include="Component.h">
       <Filter>GameObject</Filter>
@@ -195,19 +180,10 @@
     <ClCompile Include="ModuleAudio.cpp">
       <Filter>Core Modules</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleFadeToBlack.cpp">
-      <Filter>Core Modules</Filter>
-    </ClCompile>
     <ClCompile Include="Log.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="ModuleInput.cpp">
-      <Filter>Core Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleParticles.cpp">
-      <Filter>Core Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleCollision.cpp">
       <Filter>Core Modules</Filter>
     </ClCompile>
     <ClCompile Include="Parson.c">
@@ -221,9 +197,6 @@
     </ClCompile>
     <ClCompile Include="PreciseTimer.cpp">
       <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleTestScene.cpp">
-      <Filter>Game Modules</Filter>
     </ClCompile>
     <ClCompile Include="SPrimitive.cpp">
       <Filter>Geometric primitive</Filter>
@@ -273,8 +246,8 @@
     <ClCompile Include="Material.cpp">
       <Filter>Geometric primitive</Filter>
     </ClCompile>
-    <ClCompile Include="Level.cpp">
-      <Filter>Geometric primitive</Filter>
+    <ClCompile Include="ModuleAnimation.cpp">
+      <Filter>Core Modules</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>GameObject</Filter>

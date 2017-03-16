@@ -13,20 +13,30 @@ class GameObject;
 class Mesh;
 class Material;
 
+enum ObjectType {
+	OT_EMPTY,
+	OT_CUBE
+};
+
 class Scene
 {
 public:
 	Scene();
 	~Scene();
 
-	void AddGameObject(GameObject* gameobject) { gameobjects.push_back(gameobject); }
+	void AddGameObject(ObjectType type);
+	void DeleteGameObject(std::string name);
 	GameObject* GetGameObject(std::string name);
 	void LoadLevel(const char* path, const char* file);
 	void RecursiveNodeRead(GameObject* go, aiNode& aiNode, GameObject* parentGO);
 
-	void Draw() const;
-	GameObject* root;
+	void Draw();
+	void DebugGOInfo(GameObject* go);
+
 	bool CleanUp();
+
+	void DrawHierarchyNodes(GameObject* go);
+	void TransformHierarchy();
 
 private:
 	std::list<GameObject *> gameobjects;
@@ -34,8 +44,15 @@ private:
 	std::vector<Material *> materials;
 	//std::list<Animation *> animations;
 
+	int frame = 0;
+	int maxFrames;
+
 	//TODO use the texture manager instead of this
 	uint* textureIds;
+
+public:
+	GameObject* root;
+
 };
 
 #endif // __SCENE_H__
