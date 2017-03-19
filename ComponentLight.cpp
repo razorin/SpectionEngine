@@ -25,5 +25,9 @@ bool ComponentLight::DrawGUI()
 	{
 		ImGui::Text("Light stuff...");
 	}
+	if (ImGui::Button("Remove Component")) {
+		//TODO: Delete component bug on iterating GO's DrawGUIPanel components list.
+		//container->RemoveComponent(this);
+	}
 	return true;
 }

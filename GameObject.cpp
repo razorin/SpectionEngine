@@ -417,9 +417,12 @@ void GameObject::DrawGUIPanel() {
 	const char* items[] = { "CAMERA", "SCRIPT", "LIGHT", "TRANSFORM", "MATERIAL", "MESH" };
 	int componentType = newComponentType;
 	ImGui::Text(this->name.c_str());
-	for (std::list<Component *>::const_iterator it = components.begin(); it != components.end(); it++) {
-		(*it)->DrawGUI();
+	for (std::list<Component *>::const_iterator it = components.begin(); it != components.end(); ++it) {
+		if ((*it) != nullptr) {
+			(*it)->DrawGUI();
+		}
 	}
+	ImGui::Separator();
 	if (ImGui::Combo("", &componentType, items, IM_ARRAYSIZE(items))) {
 		newComponentType = static_cast<ComponentType>(componentType);
 	}
