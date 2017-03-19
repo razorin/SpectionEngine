@@ -144,7 +144,7 @@ void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject *
 
 void Scene::Draw()
 {
-	root->Draw();
+	//root->Draw();
 
 	DrawHierarchyNodes(root);
 }

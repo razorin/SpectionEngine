@@ -9,45 +9,53 @@
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 #include "assimp\anim.h"
+#include "MathGeoLib\include\MathGeoLib.h"
 
 
-struct AnimChannel
+
+class ModuleAnimation : public Module
 {
-	aiString name;
-	aiVector3D* positions = nullptr;
-	aiQuaternion* rotations = nullptr;
-	aiVector3D* scales = nullptr;
-	uint numPositions = 0;
-	uint numRotations = 0;
-	uint numScales = 0;
-	uint numKeyframes = 0;
-};
 
-struct Anim
-{
-	aiString name;
-	uint duration = 0;
-	uint numChannels = 0;
-	AnimChannel* channels = nullptr;
-};
+private:
+	struct NodeAnim
+	{
+		aiString name;
+		float3* positions = nullptr;
+		Quat* rotations = nullptr;
+		float3* scales = nullptr;
+		uint numPositions = 0;
+		uint numRotations = 0;
+		uint numScales = 0;
+		uint numKeyframes = 0;
+	};
 
-struct AnimInstance
-{
-	Anim* animation;
-	uint id = 0;
-	uint time = 0;
-	bool loop = true;
-	AnimInstance* next = nullptr;
-	uint blendDuration = 0;
-	uint blendTime = 0;
-};
+	struct Anim
+	{
+		aiString name;
+		uint duration = 0;
+		uint numChannels = 0;
+		NodeAnim* channels = nullptr;
+	};
 
+	struct AnimInstance
+	{
+		Anim* animation;
+		uint id = 0;
+		uint time = 0;
+		bool loop = true;
+		AnimInstance* next = nullptr;
+		uint blendDuration = 0;
+		uint blendTime = 0;
+	};
 
+	typedef std::map<std::string, Anim*> AnimationMap;
+	typedef std::vector<AnimInstance*> InstanceList;
+	typedef std::vector<uint> HoleList;
 
+	AnimationMap animations;
+	InstanceList instances;
+	HoleList holes;
 
-class ModuleAnimation :
-	public Module
-{
 public:
 	ModuleAnimation();
 	~ModuleAnimation();
@@ -58,18 +66,12 @@ public:
 	bool CleanUp();
 	update_status Update(float dt = 0);
 
-	uint Play(const char* goName);
+	uint Play(const char* animName);
 	void Stop(uint instanceId);
-	void BlendTo(uint instanceId, const char* name, uint blendTime);
-	bool GetTransform(uint instanceId, const char* channel, aiVector3D& position, aiQuaternion& rotation);
-
-public:
-	std::map<std::string, Anim*> animations;
-	std::vector<AnimInstance*> instances;
-	std::vector<uint*> holes;
-
-
-
+	void BlendTo(uint instanceId, const char* newAnim, uint blendTime);
+	bool GetTransform(uint instanceId, const char* channelName, float3& position, Quat& rotation, float3& scale);
+	float3 InterpVector3D(const float3& first, const float3& second, float lambda) const;
+	Quat InterpQuaternion(const Quat& first, const Quat& second, float lambda) const;
 
 };
 
