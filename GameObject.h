@@ -11,6 +11,12 @@ class ComponentTransform;
 class Mesh;
 enum ComponentType;
 
+enum ObjectType {
+	OT_EMPTY,
+	OT_CUBE,
+	OT_UNDEFINED
+};
+
 class GameObject
 {
 public:
@@ -33,7 +39,7 @@ public:
 
 	void AddComponentMesh(Mesh *);
 	void DrawBoundingBoxes() const;
-	void DrawGUIPanel() const;
+	void DrawGUIPanel();
 
 
 private:
@@ -41,6 +47,8 @@ private:
 	bool enable = true;
 	std::map<ComponentType, int> componentCounter;
 	std::list<math::AABB> AABBoxes;
+
+	ComponentType newComponentType;
 
 public:
 	std::string name = "";

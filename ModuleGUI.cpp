@@ -129,6 +129,7 @@ bool ModuleGUI::DrawMainMenuBar() {
 		}
 		if (ImGui::BeginMenu("GameObject"))
 		{
+			if (ImGui::MenuItem("Create Empty")) { App->sceneManager->getCurrentScene()->AddGameObject(OT_EMPTY); }
 			if (ImGui::MenuItem("GameObjects Hierarchy")) { showGOHierarchy = true; }
 			if (ImGui::MenuItem("Lights")) { showLights = true; }
 			ImGui::EndMenu();

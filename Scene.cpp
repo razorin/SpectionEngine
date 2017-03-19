@@ -23,7 +23,15 @@ Scene::~Scene()
 
 void Scene::AddGameObject(ObjectType type)
 {
-	
+	switch (type) {
+	case (OT_EMPTY) :
+		break;
+	case (OT_UNDEFINED) :
+		break;
+	}
+	GameObject* go = new GameObject(root);
+	root->childs.push_back(go);
+	this->gameobjects.push_back(go);
 }
 
 void Scene::DeleteGameObject(std::string name)
