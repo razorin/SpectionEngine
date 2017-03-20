@@ -36,12 +36,12 @@ void Scene::DeleteGameObject(std::string name)
 {
 }
 
-GameObject * Scene::GetGameObject(std::string name)
+GameObject * Scene::GetGameObject(std::string code)
 {
 	bool found = false;
 	GameObject* gameObject = nullptr;
-	for (std::list<GameObject *>::iterator it = gameObjects.begin(); (it != gameObjects.end() && found == false); it++) {
-		if ((*it)->name.compare(name) == 0) {
+	for (std::list<GameObject *>::iterator it = gameObjects.begin(); (it != gameObjects.end() && found == false); ++it) {
+		if ((*it)->GetCode() == code) {
 			gameObject = *it;
 			found = true;
 		}
@@ -128,6 +128,7 @@ void Scene::LoadLevel(const char * path, const char * file)
 void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject * parentGO)
 {
 	go->name = assimpNode.mName.data;
+	go->SetCode(assimpNode.mName.data);
 
 	aiVector3D aiPos;
 	aiQuaternion aiRot;

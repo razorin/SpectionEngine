@@ -414,13 +414,31 @@ void GameObject::DrawBoundingBoxes() const {
 	}
 }
 
+std::string GameObject::GetID() {
+	return id;
+}
+
+std::string GameObject::GetCode() {
+	return code;
+}
+
+void GameObject::SetCode(std::string value) {
+	code = std::string(value);
+}
+
 void GameObject::DrawGUIPanel() {
 	const char* items[] = { "CAMERA", "SCRIPT", "LIGHT", "TRANSFORM", "MATERIAL", "MESH" };
 	int componentType = newComponentType;
-	//ImGui::InputText();
-	ImGui::Text(this->name.c_str());
+	/*
+	char *inputName = new char[name.size() + 1];
+	std::copy(name.begin(), name.end(), inputName);
+	inputName[name.size()] = '\0';
+	if (ImGui::InputText("", inputName, 255)) {
+		name = std::string(inputName);
+	}*/
+	ImGui::Text(this->name.c_str(), ImGuiInputTextFlags_CharsHexadecimal);
 	ImGui::SameLine();
-	std::string goLabel = "Remove " + this->name;
+	std::string goLabel = this->name;
 	if (ImGui::Button(goLabel.c_str())) {
 
 	}

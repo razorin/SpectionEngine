@@ -21,7 +21,7 @@ public:
 
 	GameObject* AddGameObject(GameObject* parent = nullptr);
 	void DeleteGameObject(std::string name);
-	GameObject* GetGameObject(std::string name);
+	GameObject* GetGameObject(std::string code);
 	void LoadLevel(const char* path, const char* file);
 	void RecursiveNodeRead(GameObject* go, aiNode& aiNode, GameObject* parentGO);
 

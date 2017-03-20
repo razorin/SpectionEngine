@@ -33,11 +33,15 @@ public:
 
 	void AddComponentMesh(Mesh *);
 	void DrawBoundingBoxes() const;
+	std::string GetID();
+	std::string GetCode();
+	void SetCode(std::string value);
 	void DrawGUIPanel();
 
 
 private:
-	std::string id = 0;
+	std::string id = "";
+	std::string code = "";
 	GameObject *parent = nullptr;
 	bool enable = true;
 	std::map<ComponentType, int> componentCounterByType;
