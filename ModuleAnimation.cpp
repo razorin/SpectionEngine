@@ -131,25 +131,29 @@ update_status ModuleAnimation::Update(float dt)
 	{
 		AnimInstance* instance = instances[i];
 		instance->time += dt;
-		while (instance->time > instance->animation->duration)
+		if (instance->time > instance->animation->duration)
 		{
-			instance->time -= instance->animation->duration;
+			if(instance->loop) instance->time -= instance->animation->duration;
 		}
-
-
-		for (int j = 0; j < instance->animation->numChannels; j++)
-		{
-			GameObject* go = App->sceneManager->getCurrentScene()->GetGameObject(instance->animation->channels[j].name.data);
-			if (go == nullptr)
+		else {
+			for (int j = 0; j < instance->animation->numChannels; j++)
 			{
-				int a = 1;
+				GameObject* go = App->sceneManager->getCurrentScene()->GetGameObject(instance->animation->channels[j].name.data);
+				if (go == nullptr)
+				{
+					int a = 1;
+				}
+				else {
+					float3 pos = go->transform->Position();
+					Quat rot = go->transform->Rotation();
+					float3 scale = go->transform->Scale();
+					GetTransform(instance->id, instance->animation->channels[j].name.data, pos, rot, scale);
+					go->transform->SetTransform(pos, scale, rot);
+				}
 			}
-			float3 pos = go->transform->Position();
-			Quat rot = go->transform->Rotation();
-			float3 scale = go->transform->Scale();
-			GetTransform(instance->id, instance->animation->channels[j].name.data, pos, rot, scale);
-			go->transform->SetTransform(pos, scale, rot);
 		}
+
+		
 	}
 
 	return UPDATE_CONTINUE;
@@ -165,7 +169,7 @@ uint ModuleAnimation::Play(const char * animName)
 	AnimInstance* animInstance = new AnimInstance();
 	animInstance->animation = (*it).second;
 	animInstance->time = 0;
-	animInstance->loop = true;
+	animInstance->loop = false;
 
 	if (holes.size() == 0)
 	{
