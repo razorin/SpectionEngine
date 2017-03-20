@@ -10,7 +10,7 @@
 #include "IMGUI\stb_truetype.h"
 
 
-ComponentScript::ComponentScript(GameObject * container) : Component(container, ComponentType::COMPONENT_TYPE_SCRIPT)
+ComponentScript::ComponentScript(GameObject * container, std::string id) : Component(container, ComponentType::COMPONENT_TYPE_SCRIPT, id)
 {
 }
 

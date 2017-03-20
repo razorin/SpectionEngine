@@ -12,13 +12,13 @@
 #include "IMGUI\stb_truetype.h"
 
 
-ComponentTransform::ComponentTransform(GameObject* container) : Component(container, ComponentType::COMPONENT_TYPE_TRANSFORM)
+ComponentTransform::ComponentTransform(GameObject* container, std::string id) : Component(container, ComponentType::COMPONENT_TYPE_TRANSFORM, id)
 {
 	ResetTransforms();
 }
 
-ComponentTransform::ComponentTransform(GameObject* container, Quat& rotation, float3& position, float3& scale) :
-	Component(container, ComponentType::COMPONENT_TYPE_TRANSFORM), rotation(rotation), position(position), scale(scale)
+ComponentTransform::ComponentTransform(GameObject* container, Quat& rotation, float3& position, float3& scale, std::string id) :
+	Component(container, ComponentType::COMPONENT_TYPE_TRANSFORM, id), rotation(rotation), position(position), scale(scale)
 {
 	ResetTransforms();
 	CalculateTransforms();

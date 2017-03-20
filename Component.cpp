@@ -2,7 +2,7 @@
 #include "Globals.h"
 
 
-Component::Component(GameObject * container, ComponentType type) : container(container), type(type)
+Component::Component(GameObject * container, ComponentType type, std::string id) : container(container), type(type), id(id)
 {
 }
 
@@ -18,4 +18,9 @@ void Component::SetActive(bool active)
 bool Component::IsActive()
 {
 	return active;
+}
+
+bool Component::IsToDelete() const
+{
+	return toDelete;
 }

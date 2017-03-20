@@ -13,10 +13,7 @@ class GameObject;
 class Mesh;
 class Material;
 
-enum ObjectType {
-	OT_EMPTY,
-	OT_CUBE
-};
+enum ObjectType;
 
 class Scene
 {

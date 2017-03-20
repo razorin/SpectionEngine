@@ -15,7 +15,7 @@ class ComponentCamera :
 	public Component
 {
 public:
-	ComponentCamera(GameObject* container);
+	ComponentCamera(GameObject* container, std::string id);
 	~ComponentCamera();
 
 	//Projection Related Functions
