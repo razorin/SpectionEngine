@@ -18,20 +18,18 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-	gameobjects.clear();
+	gameObjects.clear();
 }
 
-void Scene::AddGameObject(ObjectType type)
+GameObject* Scene::AddGameObject(GameObject* parent)
 {
-	switch (type) {
-	case (OT_EMPTY) :
-		break;
-	case (OT_UNDEFINED) :
-		break;
+	++gameObjectsCounter;
+	GameObject* go = new GameObject(std::to_string(gameObjectsCounter), parent, "Empty Game Object");
+	if (parent != nullptr) {
+		parent->childs.push_back(go);
 	}
-	GameObject* go = new GameObject(root);
-	root->childs.push_back(go);
-	this->gameobjects.push_back(go);
+	this->gameObjects.push_back(go);
+	return go;
 }
 
 void Scene::DeleteGameObject(std::string name)
@@ -42,7 +40,7 @@ GameObject * Scene::GetGameObject(std::string name)
 {
 	bool found = false;
 	GameObject* gameObject = nullptr;
-	for (std::list<GameObject *>::iterator it = gameobjects.begin(); (it != gameobjects.end() && found == false); it++) {
+	for (std::list<GameObject *>::iterator it = gameObjects.begin(); (it != gameObjects.end() && found == false); it++) {
 		if ((*it)->name.compare(name) == 0) {
 			gameObject = *it;
 			found = true;
@@ -120,8 +118,7 @@ void Scene::LoadLevel(const char * path, const char * file)
 	}
 
 	//Create Gameobjects recursively
-	root = new GameObject();
-	gameobjects.push_back(root);
+	root = AddGameObject();
 	aiNode* rootNode = scene->mRootNode;
 	RecursiveNodeRead(root, *rootNode, nullptr);
 
@@ -153,11 +150,12 @@ void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject *
 	uint numChild = assimpNode.mNumChildren;
 	for (int i = 0; i < numChild; i++)
 	{
-		GameObject* childGO = new GameObject();
+		++gameObjectsCounter;
+		GameObject* childGO = new GameObject(std::to_string(gameObjectsCounter), nullptr, "");
 		aiNode* aiChildNode = assimpNode.mChildren[i];
 		RecursiveNodeRead(childGO, *aiChildNode, go);
 		go->childs.push_back(childGO);
-		this->gameobjects.push_back(childGO);
+		this->gameObjects.push_back(childGO);
 	}
 }
 

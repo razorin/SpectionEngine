@@ -13,15 +13,13 @@ class GameObject;
 class Mesh;
 class Material;
 
-enum ObjectType;
-
 class Scene
 {
 public:
 	Scene();
 	~Scene();
 
-	void AddGameObject(ObjectType type);
+	GameObject* AddGameObject(GameObject* parent = nullptr);
 	void DeleteGameObject(std::string name);
 	GameObject* GetGameObject(std::string name);
 	void LoadLevel(const char* path, const char* file);
@@ -34,7 +32,8 @@ public:
 	void DrawRecursively(GameObject* go);
 
 private:
-	std::list<GameObject *> gameobjects;
+	int gameObjectsCounter = 0;
+	std::list<GameObject *> gameObjects;
 	std::vector<Mesh *> meshes;
 	std::vector<Material *> materials;
 	//std::list<Animation *> animations;

@@ -20,7 +20,7 @@
 
 
 //TODO delete empty constuctor.This one below can do the same
-GameObject::GameObject(GameObject * parent, const char * name) : parent(parent), name(name)
+GameObject::GameObject(std::string id, GameObject * parent, const char * name) : id(id), parent(parent), name(name)
 {
 	AddComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
 	AssignTransform();
@@ -30,8 +30,8 @@ GameObject::GameObject(GameObject * parent, const char * name) : parent(parent),
 	}
 }
 
-GameObject::GameObject(GameObject * parent, const char * name, const float3 & position, const float3 & scale, const Quat & rotation) :
-	parent(parent), name(name)
+GameObject::GameObject(std::string id, GameObject * parent, const char * name, const float3 & position, const float3 & scale, const Quat & rotation) :
+	id(id), parent(parent), name(name)
 {
 	AddComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
 	AssignTransform();
@@ -417,7 +417,13 @@ void GameObject::DrawBoundingBoxes() const {
 void GameObject::DrawGUIPanel() {
 	const char* items[] = { "CAMERA", "SCRIPT", "LIGHT", "TRANSFORM", "MATERIAL", "MESH" };
 	int componentType = newComponentType;
+	//ImGui::InputText();
 	ImGui::Text(this->name.c_str());
+	ImGui::SameLine();
+	std::string goLabel = "Remove " + this->name;
+	if (ImGui::Button(goLabel.c_str())) {
+
+	}
 	for (std::list<Component *>::iterator it = components.begin(); it != components.end(); ) {
 		if (!(*it)->IsToDelete()) {
 			(*it)->DrawGUI();

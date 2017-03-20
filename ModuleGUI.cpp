@@ -129,7 +129,7 @@ bool ModuleGUI::DrawMainMenuBar() {
 		}
 		if (ImGui::BeginMenu("GameObject"))
 		{
-			if (ImGui::MenuItem("Create Empty")) { App->sceneManager->getCurrentScene()->AddGameObject(OT_EMPTY); }
+			if (ImGui::MenuItem("Create Empty")) { App->sceneManager->getCurrentScene()->AddGameObject(App->sceneManager->getCurrentScene()->root); }
 			if (ImGui::MenuItem("GameObjects Hierarchy")) { showGOHierarchy = true; }
 			if (ImGui::MenuItem("Lights")) { showLights = true; }
 			ImGui::EndMenu();
@@ -258,17 +258,9 @@ bool ModuleGUI::DrawGOHierarchyMenu() {
 		ImGui::SetNextWindowPos(ImVec2(300, 200), ImGuiSetCond_Once);
 		treeNodeFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 		ImGui::Begin("GameObjects Hierarchy", &open);
-		bool treeNode = ImGui::TreeNodeEx(root->name.c_str(), treeNodeFlags);
-
-		if (ImGui::IsItemClicked()) {
-			GameObjectSelected(*root);
-		}
-		if (treeNode) {
-			for (auto it = root->childs.begin(); it != root->childs.end(); ++it)
-			{
-				RecursiveTreePrint(**it);
-			}
-			ImGui::TreePop();
+		for (auto it = root->childs.begin(); it != root->childs.end(); ++it)
+		{
+			RecursiveTreePrint(**it);
 		}
 		ImGui::End();
 		return open;
