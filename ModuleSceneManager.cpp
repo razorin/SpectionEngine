@@ -14,8 +14,8 @@ ModuleSceneManager::~ModuleSceneManager()
 }
 
 bool ModuleSceneManager::Start() {
-	//loadCurrentScene("Models/street/", "Street environment_V01.fbx");
-	loadCurrentScene("Models/ArmyPilot/", "ArmyPilot.dae");
+	loadCurrentScene("Models/street/", "Street environment_V01.fbx");
+	//loadCurrentScene("Models/ArmyPilot/", "ArmyPilot.dae");
 	//loadCurrentScene("Models/Batman/", "Batman.obj");
 	//loadCurrentScene("Models/street/", "Street.obj");
 	//GameObject* go = currentScene->GetGameObject("Street.obj");

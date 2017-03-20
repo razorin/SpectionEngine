@@ -157,8 +157,8 @@ void Scene::Draw()
 {
 	root->Draw();
 
-	TransformHierarchy();
-	DrawHierarchyNodes(*gameobjects.begin());
+	//TransformHierarchy();
+	//DrawHierarchyNodes(*gameobjects.begin());
 	
 }
 
