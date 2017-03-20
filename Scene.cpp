@@ -159,7 +159,6 @@ void Scene::Draw()
 
 	//TransformHierarchy();
 	//DrawHierarchyNodes(*gameobjects.begin());
-	
 }
 
 void Scene::DebugGOInfo(GameObject * go)
