@@ -2,7 +2,7 @@
 	"config": {
 		"app": {
 		  "title": "Spection Engine",
-		  "fps_cap": 60
+		  "fps_cap": 120
 		},
 		"renderer": {
 			"vsync": false
@@ -10,7 +10,7 @@
 		"window": {
 			"resolution": {
 				"width": 1024,
-				"height": 768
+				"height": 720
 			},
 			"fullscreen": false,
 			"borderless": false,

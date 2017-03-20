@@ -119,6 +119,7 @@ update_status ModuleRender::PreUpdate(float dt)
 // Called every draw update
 update_status ModuleRender::Update(float dt)
 {
+	glBindTexture(GL_TEXTURE_2D, 0);
 	DrawGrid();
 	//DrawGizmo();
 

@@ -10,6 +10,7 @@
 #include "ModuleCamera.h"
 #include "ModuleSceneManager.h"
 #include "ModulePrimitives.h"
+#include "ModuleAnimation.h"
 
 #include "Timer.h"
 #include "PreciseTimer.h"
@@ -47,14 +48,8 @@ Application::Application()
 
 
 	//Game Modules
-	modules.push_back(sceneManager = new ModuleSceneManager(nullptr, true));
-	//sceneManager = new ModuleSceneManager();
-	//sceneManager->loadCurrentScene("Models/street/", "Street environment_V01.fbx");
-	
-	
-
-	//Animations
-	modules.push_back(animations = new ModuleAnimation(nullptr,true));
+	modules.push_back(sceneManager = new ModuleSceneManager(nullptr,true));
+	modules.push_back(animator = new ModuleAnimation());
 
 	lightsManager = new LightsManager();
 
@@ -153,6 +148,7 @@ update_status Application::Update()
 	lastFrameMilliseconds = avgTimer->EllapsedInMilliseconds();
 	float dt = lastFrameMilliseconds - previousFrameTime;
 	//DLOG("DT: %f milliseconds", dt);
+	window->ChangeTitle((std::to_string(dt)).c_str());
 
 	if (ellapsedTime < this->msByFrame) {
 		gui->AddMsLog(msByFrame);
