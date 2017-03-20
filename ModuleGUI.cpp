@@ -314,20 +314,19 @@ bool ModuleGUI::DrawLightsMenu() {
 		if (ImGui::CollapsingHeader(headerLabel))
 		{
 			int newType = (*it)->type;
-			ImGui::Text("Light Type %d", (*it)->type);
 			// Generic strings
-			std::string typeName = "Type " + std::to_string(itPosition);
-			std::string position = "Position " + std::to_string(itPosition);
-			std::string diffuse = "Diffuse " + std::to_string(itPosition);
-			std::string ambient = "Ambient " + std::to_string(itPosition);
-			std::string specular = "Specular " + std::to_string(itPosition);
-			std::string direction = "Direction " + std::to_string(itPosition);
+			std::string typeName = "Type##" + std::to_string(itPosition);
+			std::string position = "Position##" + std::to_string(itPosition);
+			std::string diffuse = "Diffuse##" + std::to_string(itPosition);
+			std::string ambient = "Ambient##" + std::to_string(itPosition);
+			std::string specular = "Specular##" + std::to_string(itPosition);
+			std::string direction = "Direction##" + std::to_string(itPosition);
 			// Extra strings
-			std::string exponent = "Exponent " + std::to_string(itPosition);
-			std::string cutoff = "Cutoff " + std::to_string(itPosition);
-			std::string constantAttenuation = "Constant Attenuation " + std::to_string(itPosition);
-			std::string linearAttenuation = "Linear Attenuation " + std::to_string(itPosition);
-			std::string quadraticAttenuation = "Quadratic Attenuation " + std::to_string(itPosition);
+			std::string exponent = "Exponent##" + std::to_string(itPosition);
+			std::string cutoff = "Cutoff##" + std::to_string(itPosition);
+			std::string constantAttenuation = "Constant Attenuation##" + std::to_string(itPosition);
+			std::string linearAttenuation = "Linear Attenuation##" + std::to_string(itPosition);
+			std::string quadraticAttenuation = "Quadratic Attenuation##" + std::to_string(itPosition);
 			if (ImGui::Combo(typeName.c_str(), &newType, items, IM_ARRAYSIZE(items))) {
 				(*it)->type = static_cast<LightType>(newType);
 			}
@@ -352,7 +351,7 @@ bool ModuleGUI::DrawLightsMenu() {
 				ImGui::InputFloat(quadraticAttenuation.c_str(), &(*it)->quadraticAttenuation);
 				ImGui::TreePop();
 			}
-			std::string remove = "Remove Light " + std::to_string(itPosition);
+			std::string remove = "Remove Light##" + std::to_string(itPosition);
 			if (ImGui::Button(remove.c_str())) {
 				hasBeenRemoved = true;
 				App->lightsManager->DisableLight(itPosition);

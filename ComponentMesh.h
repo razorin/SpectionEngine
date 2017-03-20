@@ -11,7 +11,7 @@ class ComponentMesh :
 	public Component
 {
 public:
-	ComponentMesh(GameObject* container);
+	ComponentMesh(GameObject* container, std::string id);
 	~ComponentMesh();
 
 	bool DrawGUI();

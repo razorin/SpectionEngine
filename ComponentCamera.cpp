@@ -14,7 +14,7 @@
 #include "IMGUI\stb_truetype.h"
 
 
-ComponentCamera::ComponentCamera(GameObject * container) : Component(container, ComponentType::COMPONENT_TYPE_CAMERA)
+ComponentCamera::ComponentCamera(GameObject * container, std::string id) : Component(container, ComponentType::COMPONENT_TYPE_CAMERA, id)
 {
 }
 

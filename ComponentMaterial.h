@@ -6,7 +6,7 @@ class ComponentMaterial :
 	public Component
 {
 public:
-	ComponentMaterial(GameObject* container);
+	ComponentMaterial(GameObject* container, std::string id);
 	~ComponentMaterial();
 
 	bool DrawGUI();

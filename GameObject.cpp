@@ -102,46 +102,47 @@ void GameObject::OnTransformChange()
 
 Component * GameObject::AddComponent(const ComponentType &type)
 {
+	++componentCounter;
 	Component *result = nullptr;
-	std::map<ComponentType, int>::iterator it = componentCounter.find(type);
+	std::map<ComponentType, int>::iterator it = componentCounterByType.find(type);
 
 	//Init counter for this type
-	if (it == componentCounter.end())
-		componentCounter[type] = 0;
+	if (it == componentCounterByType.end())
+		componentCounterByType[type] = 0;
 
-	//if (result->maxComponentsByGO != 0 && componentCounter[type] > result->maxComponentsByGO) {
+	//if (result->maxComponentsByGO != 0 && componentCounterByType[type] > result->maxComponentsByGO) {
 	//	return result;
 	//}
 
 	switch (type) {
 	case ComponentType::COMPONENT_TYPE_CAMERA:
-		result = new ComponentCamera(this);
+		result = new ComponentCamera(this, std::to_string(componentCounter));
 		result->maxComponentsByGO = 1;
 		break;
 	case ComponentType::COMPONENT_TYPE_LIGHT:
-		result = new ComponentLight(this);
+		result = new ComponentLight(this, std::to_string(componentCounter));
 		result->maxComponentsByGO = 0;
 		break;
 	case ComponentType::COMPONENT_TYPE_MATERIAL:
-		result = new ComponentMaterial(this);
+		result = new ComponentMaterial(this, std::to_string(componentCounter));
 		result->maxComponentsByGO = 0;
 		break;
 	case ComponentType::COMPONENT_TYPE_MESH:
-		result = new ComponentMesh(this);
+		result = new ComponentMesh(this, std::to_string(componentCounter));
 		result->maxComponentsByGO = 1;
 		break;
 	case ComponentType::COMPONENT_TYPE_SCRIPT:
-		result = new ComponentScript(this);
+		result = new ComponentScript(this, std::to_string(componentCounter));
 		result->maxComponentsByGO = 0;
 		break;
 	case ComponentType::COMPONENT_TYPE_TRANSFORM:
-		result = new ComponentTransform(this);
+		result = new ComponentTransform(this, std::to_string(componentCounter));
 		result->maxComponentsByGO = 1;
 		break;
 	}
 
 	if (result != nullptr) {
-		++componentCounter[type];
+		++componentCounterByType[type];
 		components.push_back(result);
 	}
 
@@ -154,7 +155,7 @@ bool GameObject::RemoveComponent(Component *component)
 	//Find Component
 	for (std::list<Component *>::iterator it = components.begin(); it != components.end();) {
 		if (component == (*it)) {
-			--componentCounter[(*it)->type];
+			--componentCounterByType[(*it)->type];
 			RELEASE(*it);
 			components.erase(it);
 			found = true;
@@ -172,7 +173,7 @@ bool GameObject::RemoveComponent(Component *component)
 std::list<Component*> * GameObject::FindComponents(const ComponentType & type) {
 	//Delete list not members!!!!
 	std::list<Component*> *result = new std::list<Component*>();
-	int typeCounter = componentCounter[type];
+	int typeCounter = componentCounterByType[type];
 
 	if (typeCounter == 0)
 		return result;
@@ -417,9 +418,14 @@ void GameObject::DrawGUIPanel() {
 	const char* items[] = { "CAMERA", "SCRIPT", "LIGHT", "TRANSFORM", "MATERIAL", "MESH" };
 	int componentType = newComponentType;
 	ImGui::Text(this->name.c_str());
-	for (std::list<Component *>::const_iterator it = components.begin(); it != components.end(); ++it) {
-		if ((*it) != nullptr) {
+	for (std::list<Component *>::iterator it = components.begin(); it != components.end(); ) {
+		if (!(*it)->IsToDelete()) {
 			(*it)->DrawGUI();
+			++it;
+		}
+		else {
+			RELEASE(*it);
+			it = components.erase(it);
 		}
 	}
 	ImGui::Separator();

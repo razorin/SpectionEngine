@@ -6,7 +6,7 @@ class ComponentLight :
 	public Component
 {
 public:
-	ComponentLight(GameObject* container);
+	ComponentLight(GameObject* container, std::string id);
 	~ComponentLight();
 
 	bool DrawGUI();

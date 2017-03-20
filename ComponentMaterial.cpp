@@ -10,7 +10,7 @@
 #include "IMGUI\stb_truetype.h"
 
 
-ComponentMaterial::ComponentMaterial(GameObject * container) : Component(container, ComponentType::COMPONENT_TYPE_MATERIAL)
+ComponentMaterial::ComponentMaterial(GameObject * container, std::string id) : Component(container, ComponentType::COMPONENT_TYPE_MATERIAL, id)
 {
 }
 

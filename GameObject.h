@@ -45,7 +45,8 @@ public:
 private:
 	GameObject *parent = nullptr;
 	bool enable = true;
-	std::map<ComponentType, int> componentCounter;
+	std::map<ComponentType, int> componentCounterByType;
+	int componentCounter = 0;
 	std::list<math::AABB> AABBoxes;
 
 	ComponentType newComponentType;
