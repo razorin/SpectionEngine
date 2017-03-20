@@ -14,6 +14,9 @@ Light::Light(LightType type, fPoint position, float4 ambient, float4 diffuse, fl
 	this->ambient = new float[4]{ ambient.x, ambient.y, ambient.z, ambient.w };
 	this->diffuse = new float[4]{ diffuse.x, diffuse.y, diffuse.z, diffuse.w };
 	this->specular = new float[4]{ specular.x, specular.y, specular.z, specular.w };
+	this->direction = new float[3]{ 0, 0, 0 };
+	this->exponent = 0;
+	this->cutoff = 180.0f;
 	this->constantAttenuation = constantAttenuation;
 	this->linearAttenuation = linearAttenuation;
 	this->quadraticAttenuation = quadraticAttenuation;

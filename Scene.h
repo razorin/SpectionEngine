@@ -13,10 +13,7 @@ class GameObject;
 class Mesh;
 class Material;
 
-enum ObjectType {
-	OT_EMPTY,
-	OT_CUBE
-};
+enum ObjectType;
 
 class Scene
 {
@@ -31,12 +28,10 @@ public:
 	void RecursiveNodeRead(GameObject* go, aiNode& aiNode, GameObject* parentGO);
 
 	void Draw();
-	void DebugGOInfo(GameObject* go);
-
 	bool CleanUp();
 
 	void DrawHierarchyNodes(GameObject* go);
-	void TransformHierarchy();
+	void DrawRecursively(GameObject* go);
 
 private:
 	std::list<GameObject *> gameobjects;

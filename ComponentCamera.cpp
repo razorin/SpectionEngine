@@ -3,6 +3,7 @@
 #include "ModuleInput.h"
 #include "Application.h"
 #include "ModuleWindow.h"
+#include "ModuleGUI.h"
 
 //IMGUI Includes
 #include "IMGUI\imconfig.h"
@@ -14,8 +15,19 @@
 #include "IMGUI\stb_truetype.h"
 
 
-ComponentCamera::ComponentCamera(GameObject * container) : Component(container, ComponentType::COMPONENT_TYPE_CAMERA)
+ComponentCamera::ComponentCamera(GameObject * container, std::string id) : Component(container, ComponentType::COMPONENT_TYPE_CAMERA, id)
 {
+	aspectRatio = App->window->screen_width / App->window->screen_height;
+	verticalFov = 60 * DEGTORAD;
+	horizontalFov = 60 * DEGTORAD;
+	frustum.SetPerspective(horizontalFov, verticalFov);
+
+	SetPosition(math::vec{ 0,0.5f,4 });
+	SetLookAt(math::vec{ 0,1,0 }, math::vec{ 0,0,-1 });
+
+	SetPlaneDistances(0.1f, 100.0f);
+
+	frustum.SetKind(FrustumProjectiveSpace::FrustumSpaceGL, FrustumHandedness::FrustumRightHanded);
 }
 
 ComponentCamera::~ComponentCamera()
@@ -183,6 +195,8 @@ void ComponentCamera::SetLookAt(const math::vec & up, const math::vec & front)
 {
 	frustum.SetUp(up);
 	frustum.SetFront(front);
+
+	//frustum.GetCornerPoints()
 }
 
 float * ComponentCamera::GetMatrixProjection() const
@@ -199,6 +213,25 @@ float * ComponentCamera::GetMatrixView() const
 	return &(m[0][0]);
 }
 
+void ComponentCamera::Update(float dt)
+{
+	Move(dt);
+	Zoom(dt);
+	Rotate(dt);
+
+	// Print position and orientation
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
+		App->gui->console.AddLog("Camera position: %f, %f, %f", pos.x, pos.y, pos.z);
+		DLOG("Camera position: %f, %f, %f", pos.x, pos.y, pos.z);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN) {
+		App->gui->console.AddLog("Camera UP vector: %f, %f, %f", frustum.Up().x, frustum.Up().y, frustum.Up().z);
+		DLOG("Camera UP vector: %f, %f, %f", frustum.Up().x, frustum.Up().y, frustum.Up().z);
+		App->gui->console.AddLog("Camera FRONT vector: %f, %f, %f", frustum.Front().x, frustum.Front().y, frustum.Front().z);
+		DLOG("Camera FRONT vector: %f, %f, %f", frustum.Front().x, frustum.Front().y, frustum.Front().z);
+	}
+}
+
 bool ComponentCamera::DrawGUI()
 {
 	if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen))
@@ -207,17 +240,22 @@ bool ComponentCamera::DrawGUI()
 		float near = this->nearPlane;
 		float far = this->farPlane;
 
-		if (ImGui::DragFloat3("Vertical FOV", (float*)&fov, 0.1f)) {
+		if (ImGui::DragFloat("Vertical FOV", (float*)&fov, 0.1f)) {
 			SetFOV(fov);
 		}
 
-		if (ImGui::DragFloat3("Near Plane", (float*)&near, 0.1f)) {
+		if (ImGui::DragFloat("Near Plane", (float*)&near, 0.1f)) {
 			SetPlaneDistances(near, far);
 		}
 
-		if (ImGui::DragFloat3("Far Plane", (float*)&far, 0.1f)) {
+		if (ImGui::DragFloat("Far Plane", (float*)&far, 0.1f)) {
 			SetPlaneDistances(near, far);
 		}
 	}
 	return true;
+}
+
+void ComponentCamera::setMouseBlocked(bool mouseBlocked)
+{
+	this->mouseBlocked = mouseBlocked;
 }

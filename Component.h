@@ -20,12 +20,13 @@ class GameObject;
 class Component
 {
 public:
-	Component(GameObject* container, ComponentType type);
+	Component(GameObject* container, ComponentType type, std::string id);
 	virtual ~Component();
 
 	//We just do active for go and components. Unity uses enable = .. for components
 	void SetActive(bool active);
 	bool IsActive();
+	bool IsToDelete() const;
 
 	virtual bool DrawGUI() = 0;
 
@@ -35,6 +36,8 @@ public:
 protected:
 	GameObject *container = nullptr;
 	bool active = true;
+	bool toDelete = false;
+	std::string id = "";
 
 public:
 	int maxComponentsByGO = 1;

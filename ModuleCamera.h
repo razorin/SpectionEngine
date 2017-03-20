@@ -5,11 +5,13 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "MemLeaks.h"
 
-enum Axis {
-	X,
-	Y,
-	Z
-};
+class ComponentCamera;
+
+//enum Axis {
+//	X,
+//	Y,
+//	Z
+//};
 
 class ModuleCamera :
 	public Module
@@ -33,7 +35,6 @@ public:
 	void Zoom(float dt);
 	void Rotate(float dt);
 	void SetPosition(const math::vec &pos);
-	void SetOrientation(Axis axis, float rotation);
 	void SetLookAt(const math::vec &up, const math::vec &front);
 
 	float * GetMatrixProjection() const;
@@ -48,6 +49,8 @@ public:
 	bool invertYAxis = false;
 
 private:
+	ComponentCamera *activeCamera = nullptr;
+	//std::list<ComponentCamera *> cameras;
 	Frustum frustum;
 	float aspectRatio = 1.78;
 	float verticalFov = 30;

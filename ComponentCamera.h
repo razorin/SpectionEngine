@@ -15,7 +15,7 @@ class ComponentCamera :
 	public Component
 {
 public:
-	ComponentCamera(GameObject* container);
+	ComponentCamera(GameObject* container, std::string id);
 	~ComponentCamera();
 
 	//Projection Related Functions
@@ -34,13 +34,15 @@ public:
 
 	float * GetMatrixProjection() const;
 	float * GetMatrixView() const;
+	void Update(float dt);
 
 	bool DrawGUI();
+	void setMouseBlocked(bool mouseBlocked);
 
 public:
 	//These two params may be added as json config
-	float movementSpeed = NULL;
-	float rotationSpeed = NULL;
+	float movementSpeed = 0;
+	float rotationSpeed = 0;
 
 	bool invertXAxis = false;
 	bool invertYAxis = false;
@@ -57,6 +59,7 @@ private:
 	math::vec pos = { 0,0,0 };
 
 	bool mouseBlocked = false;
+	bool active = false;
 };
 
 #endif // !COMPONENTCAMERA_H
