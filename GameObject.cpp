@@ -1,5 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleSceneManager.h"
+#include "Scene.h"
 #include "GameObject.h"
 #include "Component.h"
 #include "ComponentCamera.h"
@@ -431,14 +433,22 @@ bool GameObject::IsEditableName() {
 	return editableName;
 }
 
+bool GameObject::IsToDelete() {
+	return toDelete;
+}
+
+void GameObject::SetToDelete(bool value) {
+	toDelete = value;
+}
+
 void GameObject::DrawGUIPanel() {
 	const char* items[] = { "CAMERA", "SCRIPT", "LIGHT", "TRANSFORM", "MATERIAL", "MESH" };
 	int componentType = newComponentType;
 	if (editableName) {
 		const int maxInput = 255;
 		char inputName[maxInput + 1];
-		strncpy(inputName, name.c_str(), maxInput);		// Copy all to maxInput, zero-padding if shorter
-		inputName[maxInput] = '\0';						// Terminate with Null
+		strncpy(inputName, name.c_str(), maxInput);				// Copy all to maxInput, zero-padding if shorter
+		inputName[maxInput] = '\0';								// Terminate with Null
 
 		ImGuiInputTextFlags inputFlags = 0;
 		inputFlags |= ImGuiInputTextFlags_CharsHexadecimal;
@@ -455,26 +465,28 @@ void GameObject::DrawGUIPanel() {
 		ImGui::Text(this->name.c_str());
 	}
 	ImGui::SameLine();
-	std::string goLabel = this->name;
+	std::string goLabel = "Remove##" + this->name;
 	if (ImGui::Button(goLabel.c_str())) {
-
+		SetToDelete(true);
 	}
-	for (std::list<Component *>::iterator it = components.begin(); it != components.end(); ) {
-		if (!(*it)->IsToDelete()) {
-			(*it)->DrawGUI();
-			++it;
+	else {
+		for (std::list<Component *>::iterator it = components.begin(); it != components.end(); ) {
+			if (!(*it)->IsToDelete()) {
+				(*it)->DrawGUI();
+				++it;
+			}
+			else {
+				RELEASE(*it);
+				it = components.erase(it);
+			}
 		}
-		else {
-			RELEASE(*it);
-			it = components.erase(it);
+		ImGui::Separator();
+		if (ImGui::Combo("", &componentType, items, IM_ARRAYSIZE(items))) {
+			newComponentType = static_cast<ComponentType>(componentType);
 		}
-	}
-	ImGui::Separator();
-	if (ImGui::Combo("", &componentType, items, IM_ARRAYSIZE(items))) {
-		newComponentType = static_cast<ComponentType>(componentType);
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("Add Component")) {
-		AddComponent(newComponentType);
+		ImGui::SameLine();
+		if (ImGui::Button("Add Component")) {
+			AddComponent(newComponentType);
+		}
 	}
 }

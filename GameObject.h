@@ -31,12 +31,14 @@ public:
 	void Draw() const;
 	bool CleanUp();
 
-	void AddComponentMesh(Mesh *);
+	void AddComponentMesh(Mesh * mesh);
 	void DrawBoundingBoxes() const;
 	std::string GetID();
 	std::string GetName();
 	void SetName(std::string value, bool editable = false);
 	bool IsEditableName();
+	bool IsToDelete();
+	void SetToDelete(bool value);
 	void DrawGUIPanel();
 
 
@@ -51,6 +53,8 @@ private:
 	std::list<math::AABB> AABBoxes;
 
 	ComponentType newComponentType;
+
+	bool toDelete = false;
 
 public:
 	ComponentTransform* transform = nullptr;

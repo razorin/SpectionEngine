@@ -20,7 +20,11 @@ public:
 	~Scene();
 
 	GameObject* AddGameObject(GameObject* parent = nullptr, bool editable = false);
-	void DeleteGameObject(std::string name);
+
+	/**
+	Delete scene gameObjects pending to delete
+	*/
+	void DeleteGameObjects();
 	GameObject* GetGameObject(std::string code);
 	void LoadLevel(const char* path, const char* file);
 	void RecursiveNodeRead(GameObject* go, aiNode& aiNode, GameObject* parentGO);
@@ -46,7 +50,6 @@ private:
 
 public:
 	GameObject* root;
-
 };
 
 #endif // __SCENE_H__

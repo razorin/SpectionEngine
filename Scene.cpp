@@ -32,8 +32,24 @@ GameObject* Scene::AddGameObject(GameObject* parent, bool editable)
 	return go;
 }
 
-void Scene::DeleteGameObject(std::string name)
+void Scene::DeleteGameObjects()
 {
+	/*
+	for (std::list<GameObject *>::iterator it = gameObjects.begin(); it != gameObjects.end(); ) {
+		if (!(*it)->IsToDelete()) {
+			++it;
+		}
+		else {
+			for (std::list<GameObject *>::iterator childsIt = (*it)->childs.begin(); childsIt != (*it)->childs.end(); ++childsIt) {
+				(*childsIt)->SetParent((*it)->GetParent());
+			}
+			(*it)->GetParent()->childs.erase(it);
+			RELEASE(*it);
+			it = gameObjects.erase(it);
+			--gameObjectsCounter;
+		}
+	}
+	*/
 }
 
 GameObject * Scene::GetGameObject(std::string name)
@@ -162,7 +178,7 @@ void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject *
 void Scene::Draw()
 {
 	//root->Draw();
-
+	DeleteGameObjects();
 	DrawHierarchyNodes(root);
 }
 
