@@ -475,7 +475,6 @@ void GameObject::DrawGUIPanel() {
 		inputName[maxInput] = '\0';								// Terminate with Null
 
 		ImGuiInputTextFlags inputFlags = 0;
-		inputFlags |= ImGuiInputTextFlags_CharsHexadecimal;
 		inputFlags |= ImGuiInputTextFlags_EnterReturnsTrue;
 
 		if (ImGui::InputText("", &*inputName, 255, inputFlags)) {
