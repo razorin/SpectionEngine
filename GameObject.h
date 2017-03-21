@@ -24,9 +24,12 @@ public:
 	void OnTransformChange();
 
 	Component * AddComponent(const ComponentType &type);
-	bool RemoveComponent(Component *);
+	bool RemoveComponent(Component* component);
+	bool RemoveChild(GameObject* go);
 	std::list<Component *> * FindComponents(const ComponentType &type);
 	Component* FindComponent(const ComponentType &type);
+
+	GameObject* FindGOByName(const std::string &name);
 
 	void Draw() const;
 	bool CleanUp();

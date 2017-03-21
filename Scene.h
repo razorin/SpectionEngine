@@ -21,10 +21,6 @@ public:
 
 	GameObject* AddGameObject(GameObject* parent = nullptr, bool editable = false);
 
-	/**
-	Delete scene gameObjects pending to delete
-	*/
-	void DeleteGameObjects();
 	GameObject* GetGameObject(std::string code);
 	void LoadLevel(const char* path, const char* file);
 	void RecursiveNodeRead(GameObject* go, aiNode& aiNode, GameObject* parentGO);
@@ -37,7 +33,6 @@ public:
 
 private:
 	int gameObjectsCounter = 0;
-	std::list<GameObject *> gameObjects;
 	std::vector<Mesh *> meshes;
 	std::vector<Material *> materials;
 	//std::list<Animation *> animations;

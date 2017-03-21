@@ -290,6 +290,11 @@ void ModuleGUI::GameObjectSelected(GameObject & GO) {
 	selectedGO = &GO;
 }
 
+void ModuleGUI::ClearSelection()
+{
+	selectedGO = nullptr;
+}
+
 bool ModuleGUI::DrawLightsMenu() {
 	bool open = true;
 	const char* items[] = { "DIRECTIONAL LIGHT", "POINT LIGHT", "SPOTLIGHT", "AMBIENTLIGHT" };

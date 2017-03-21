@@ -18,51 +18,21 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-	gameObjects.clear();
 }
 
 GameObject* Scene::AddGameObject(GameObject* parent, bool editable)
 {
 	++gameObjectsCounter;
-	GameObject* go = new GameObject(std::to_string(gameObjectsCounter), parent, "Empty Game Object", editable);
+	GameObject* go = new GameObject(std::to_string(gameObjectsCounter), parent, ("Empty Game Object###" + std::to_string(gameObjectsCounter)).c_str(), editable);
 	if (parent != nullptr) {
 		parent->childs.push_back(go);
 	}
-	this->gameObjects.push_back(go);
 	return go;
-}
-
-void Scene::DeleteGameObjects()
-{
-	/*
-	for (std::list<GameObject *>::iterator it = gameObjects.begin(); it != gameObjects.end(); ) {
-		if (!(*it)->IsToDelete()) {
-			++it;
-		}
-		else {
-			for (std::list<GameObject *>::iterator childsIt = (*it)->childs.begin(); childsIt != (*it)->childs.end(); ++childsIt) {
-				(*childsIt)->SetParent((*it)->GetParent());
-			}
-			(*it)->GetParent()->childs.erase(it);
-			RELEASE(*it);
-			it = gameObjects.erase(it);
-			--gameObjectsCounter;
-		}
-	}
-	*/
 }
 
 GameObject * Scene::GetGameObject(std::string name)
 {
-	bool found = false;
-	GameObject* gameObject = nullptr;
-	for (std::list<GameObject *>::iterator it = gameObjects.begin(); (it != gameObjects.end() && found == false && !(*it)->IsEditableName()); ++it) {
-		if ((*it)->GetName() == name) {
-			gameObject = *it;
-			found = true;
-		}
-	}
-	return gameObject;
+	return root->FindGOByName(name);
 }
 
 void Scene::LoadLevel(const char * path, const char * file)
@@ -171,14 +141,11 @@ void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject *
 		aiNode* aiChildNode = assimpNode.mChildren[i];
 		RecursiveNodeRead(childGO, *aiChildNode, go);
 		go->childs.push_back(childGO);
-		this->gameObjects.push_back(childGO);
 	}
 }
 
 void Scene::Draw()
 {
-	//root->Draw();
-	DeleteGameObjects();
 	DrawHierarchyNodes(root);
 }
 

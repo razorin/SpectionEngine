@@ -72,6 +72,8 @@ public:
 	void RecursiveTreePrint(GameObject & GO);
 	void GameObjectSelected(GameObject & GO);
 
+	void ClearSelection();
+
 public:
 	AppConsole console;
 

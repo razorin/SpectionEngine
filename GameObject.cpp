@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleSceneManager.h"
+#include "ModuleGUI.h"
 #include "Scene.h"
 #include "GameObject.h"
 #include "Component.h"
@@ -50,17 +51,7 @@ GameObject::GameObject(std::string id, GameObject * parent, const char * name, b
 
 GameObject::~GameObject()
 {
-	//for (std::list<GameObject *>::iterator it = childs.begin(); it != childs.end();) {
-	//	delete (*it);
-	//	it = childs.erase(it);
-	//	++it;
-	//}
-
-	//for (std::list<Component *>::iterator it = components.begin(); it != components.end();) {
-	//	delete (*it);
-	//	it = components.erase(it);
-	//	++it;
-	//}
+	CleanUp();
 }
 
 void GameObject::AssignTransform()
@@ -151,7 +142,7 @@ Component * GameObject::AddComponent(const ComponentType &type)
 	return result;
 }
 
-bool GameObject::RemoveComponent(Component *component)
+bool GameObject::RemoveComponent(Component* component)
 {
 	bool found = false;
 	//Find Component
@@ -172,6 +163,20 @@ bool GameObject::RemoveComponent(Component *component)
 
 }
 
+bool GameObject::RemoveChild(GameObject * go)
+{
+	bool ret = false;
+	for (std::list<GameObject *>::iterator it = childs.begin(); it != childs.end(); ++it) {
+		if ((*it) == go) {
+			RELEASE((*it));
+			childs.erase(it);
+			ret = true;
+			break;
+		}
+	}
+	return ret;
+}
+
 std::list<Component*> * GameObject::FindComponents(const ComponentType & type) {
 	//Delete list not members!!!!
 	std::list<Component*> *result = new std::list<Component*>();
@@ -180,7 +185,7 @@ std::list<Component*> * GameObject::FindComponents(const ComponentType & type) {
 	if (typeCounter == 0)
 		return result;
 
-	for (std::list<Component *>::iterator it = components.begin(); it != components.end(); it++) {
+	for (std::list<Component *>::iterator it = components.begin(); it != components.end(); ++it) {
 		if ((*it)->type == type) {
 			result->push_back((*it));
 			if (result->size() == typeCounter)
@@ -200,6 +205,24 @@ Component * GameObject::FindComponent(const ComponentType & type)
 		}
 	}
 	return componentFound;
+}
+
+GameObject * GameObject::FindGOByName(const std::string & name)
+{
+	GameObject* ret = nullptr;
+	for (std::list<GameObject *>::iterator it = childs.begin(); it != childs.end(); ++it) {
+		if ((*it)->name == name) {
+			ret = (*it);
+			break;
+		}
+		else {
+			ret = (*it)->FindGOByName(name);
+			if (ret != nullptr) {
+				break;
+			}
+		}
+	}
+	return ret;
 }
 
 void GameObject::Draw() const
@@ -286,15 +309,16 @@ void GameObject::Draw() const
 
 bool GameObject::CleanUp()
 {
-	for (std::list<Component*>::iterator it = components.begin(); it != components.end(); it++)
+	for (std::list<Component*>::iterator it = components.begin(); it != components.end();)
 	{
 		RELEASE(*it);
+		it = components.erase(it);
 	}
 
-	for (std::list<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
+	for (std::list<GameObject*>::iterator it = childs.begin(); it != childs.end(); )
 	{
-		(*it)->CleanUp();
 		RELEASE(*it);
+		it = childs.erase(it);
 	}
 	return false;
 }
@@ -467,7 +491,8 @@ void GameObject::DrawGUIPanel() {
 	ImGui::SameLine();
 	std::string goLabel = "Remove##" + this->name;
 	if (ImGui::Button(goLabel.c_str())) {
-		SetToDelete(true);
+		GetParent()->RemoveChild(this);
+		App->gui->ClearSelection();
 	}
 	else {
 		for (std::list<Component *>::iterator it = components.begin(); it != components.end(); ) {
