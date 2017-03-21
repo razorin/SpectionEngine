@@ -20,7 +20,7 @@
 
 
 //TODO delete empty constuctor.This one below can do the same
-GameObject::GameObject(std::string id, GameObject * parent, const char * name) : id(id), parent(parent), name(name)
+GameObject::GameObject(std::string id, GameObject * parent, const char * name, bool editableName) : id(id), parent(parent), name(name), editableName(editableName)
 {
 	AddComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
 	AssignTransform();
@@ -30,8 +30,8 @@ GameObject::GameObject(std::string id, GameObject * parent, const char * name) :
 	}
 }
 
-GameObject::GameObject(std::string id, GameObject * parent, const char * name, const float3 & position, const float3 & scale, const Quat & rotation) :
-	id(id), parent(parent), name(name)
+GameObject::GameObject(std::string id, GameObject * parent, const char * name, bool editableName, const float3 & position, const float3 & scale, const Quat & rotation) :
+	id(id), parent(parent), name(name), editableName(editableName)
 {
 	AddComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
 	AssignTransform();
@@ -77,11 +77,11 @@ void GameObject::SetParent(GameObject * parentGO)
 	//Also if we dont want a parent anymore, parentGo will be nullptr
 
 	float4x4 newParentGT = float4x4::identity;
-	if (parentGO != nullptr){
+	if (parentGO != nullptr) {
 		newParentGT = parentGO->transform->GlobalTransform();
 	}
 
-	if (parent == nullptr){
+	if (parent == nullptr) {
 		transform->SetParent(newParentGT);
 	}
 	else {
@@ -418,25 +418,42 @@ std::string GameObject::GetID() {
 	return id;
 }
 
-std::string GameObject::GetCode() {
-	return code;
+std::string GameObject::GetName() {
+	return name;
 }
 
-void GameObject::SetCode(std::string value) {
-	code = std::string(value);
+void GameObject::SetName(std::string value, bool editable) {
+	editableName = editable;
+	name = std::string(value);
+}
+
+bool GameObject::IsEditableName() {
+	return editableName;
 }
 
 void GameObject::DrawGUIPanel() {
 	const char* items[] = { "CAMERA", "SCRIPT", "LIGHT", "TRANSFORM", "MATERIAL", "MESH" };
 	int componentType = newComponentType;
-	/*
-	char *inputName = new char[name.size() + 1];
-	std::copy(name.begin(), name.end(), inputName);
-	inputName[name.size()] = '\0';
-	if (ImGui::InputText("", inputName, 255)) {
-		name = std::string(inputName);
-	}*/
-	ImGui::Text(this->name.c_str(), ImGuiInputTextFlags_CharsHexadecimal);
+	if (editableName) {
+		const int maxInput = 255;
+		char inputName[maxInput + 1];
+		strncpy(inputName, name.c_str(), maxInput);		// Copy all to maxInput, zero-padding if shorter
+		inputName[maxInput] = '\0';						// Terminate with Null
+
+		ImGuiInputTextFlags inputFlags = 0;
+		inputFlags |= ImGuiInputTextFlags_CharsHexadecimal;
+		inputFlags |= ImGuiInputTextFlags_EnterReturnsTrue;
+
+		if (ImGui::InputText("", &*inputName, 255, inputFlags)) {
+			if (inputName[0] == NULL || inputName[0] == ' ') {	//Give a default value in case of empty string
+				inputName[0] = '0';
+			}
+			name = inputName;
+		}
+	}
+	else {
+		ImGui::Text(this->name.c_str());
+	}
 	ImGui::SameLine();
 	std::string goLabel = this->name;
 	if (ImGui::Button(goLabel.c_str())) {

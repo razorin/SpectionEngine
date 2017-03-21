@@ -129,7 +129,7 @@ bool ModuleGUI::DrawMainMenuBar() {
 		}
 		if (ImGui::BeginMenu("GameObject"))
 		{
-			if (ImGui::MenuItem("Create Empty")) { App->sceneManager->getCurrentScene()->AddGameObject(App->sceneManager->getCurrentScene()->root); }
+			if (ImGui::MenuItem("Create Empty")) { App->sceneManager->getCurrentScene()->AddGameObject(App->sceneManager->getCurrentScene()->root, true); }
 			if (ImGui::MenuItem("GameObjects Hierarchy")) { showGOHierarchy = true; }
 			if (ImGui::MenuItem("Lights")) { showLights = true; }
 			ImGui::EndMenu();
@@ -272,8 +272,8 @@ bool ModuleGUI::DrawGOHierarchyMenu() {
 
 void ModuleGUI::RecursiveTreePrint(GameObject & GO)
 {
-	if (!GO.name.empty()) {
-		bool treeNode = ImGui::TreeNodeEx(GO.name.c_str(), treeNodeFlags);
+	if (!GO.GetName().empty()) {
+		bool treeNode = ImGui::TreeNodeEx(GO.GetName().c_str(), treeNodeFlags);
 		if (ImGui::IsItemClicked()) { GameObjectSelected(GO); }
 		if (treeNode) {
 			for (auto it = GO.childs.begin(); it != GO.childs.end(); ++it)
@@ -286,7 +286,7 @@ void ModuleGUI::RecursiveTreePrint(GameObject & GO)
 }
 
 void ModuleGUI::GameObjectSelected(GameObject & GO) {
-	console.AddLog("%s Selected", GO.name.c_str());
+	console.AddLog("%s Selected", GO.GetName().c_str());
 	selectedGO = &GO;
 }
 

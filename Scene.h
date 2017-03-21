@@ -19,7 +19,7 @@ public:
 	Scene();
 	~Scene();
 
-	GameObject* AddGameObject(GameObject* parent = nullptr);
+	GameObject* AddGameObject(GameObject* parent = nullptr, bool editable = false);
 	void DeleteGameObject(std::string name);
 	GameObject* GetGameObject(std::string code);
 	void LoadLevel(const char* path, const char* file);
