@@ -63,7 +63,7 @@ public:
 	bool DrawHWInfoMenu();
 	bool DrawPreferencesMenu();
 	bool DrawGOHierarchyMenu();
-	bool DrawLightsMenu();
+	//bool DrawLightsMenu();
 	bool DrawAppInfo();
 	bool DrawInspectorMenu();
 	void AddFpsLog(float fps);
@@ -92,7 +92,7 @@ private:
 	//Assets
 	//GameObject
 	bool showGOHierarchy = true;
-	bool showLights = false;
+	//bool showLights = false;
 	//Component
 	//Window
 	bool showInspector = true;

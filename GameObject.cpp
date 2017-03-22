@@ -1,6 +1,8 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleSceneManager.h"
+#include "LightsManager.h"
+#include "Light.h"
 #include "ModuleGUI.h"
 #include "Scene.h"
 #include "GameObject.h"
@@ -97,6 +99,7 @@ Component * GameObject::AddComponent(const ComponentType &type)
 {
 	++componentCounter;
 	Component *result = nullptr;
+	Light* light = nullptr;
 	std::map<ComponentType, int>::iterator it = componentCounterByType.find(type);
 
 	//Init counter for this type
@@ -113,8 +116,11 @@ Component * GameObject::AddComponent(const ComponentType &type)
 		result->maxComponentsByGO = 1;
 		break;
 	case ComponentType::COMPONENT_TYPE_LIGHT:
-		result = new ComponentLight(this, std::to_string(componentCounter));
-		result->maxComponentsByGO = 0;
+		light = App->lightsManager->AddLight(LT_POINT_LIGHT, { 0.0f, 5.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+		if (light != nullptr) {
+			result = new ComponentLight(this, std::to_string(componentCounter), light);
+			result->maxComponentsByGO = 0;
+		}
 		break;
 	case ComponentType::COMPONENT_TYPE_MATERIAL:
 		result = new ComponentMaterial(this, std::to_string(componentCounter));

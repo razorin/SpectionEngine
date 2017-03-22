@@ -31,27 +31,31 @@ bool LightsManager::CleanUp() {
 	return true;
 }
 
-bool LightsManager::AddLight(LightType type, fPoint position, float4 ambient, float4 diffuse, float4 specular,
+Light* LightsManager::AddLight(LightType type, fPoint position, float4 ambient, float4 diffuse, float4 specular,
 	float constantAttenuation, float linearAttenuation, float quadraticAttenuation) {
 
+	Light* light = nullptr;
 	if (lights.size() < MAXLIGHTS) {
-		lights.push_back(new Light(type, position, ambient, diffuse, specular, constantAttenuation, linearAttenuation, quadraticAttenuation));
+		light = new Light(type, position, ambient, diffuse, specular, constantAttenuation, linearAttenuation, quadraticAttenuation);
+		lights.push_back(light);
 		EnableLight(lights.size() - 1);
 	}
 
-	return true;
+	return light;
 }
 
-bool LightsManager::AddLight(LightType type, fPoint position, float4 ambient, float4 diffuse, float4 specular,
+Light* LightsManager::AddLight(LightType type, fPoint position, float4 ambient, float4 diffuse, float4 specular,
 	fPoint direction, float exponent, float cutoff, float constantAttenuation,
 	float linearAttenuation, float quadraticAttenuation) {
 
+	Light* light = nullptr;
 	if (lights.size() < MAXLIGHTS) {
-		lights.push_back(new Light(type, position, ambient, diffuse, specular, direction, exponent, cutoff, constantAttenuation, linearAttenuation, quadraticAttenuation));
+		light = new Light(type, position, ambient, diffuse, specular, direction, exponent, cutoff, constantAttenuation, linearAttenuation, quadraticAttenuation);
+		lights.push_back(light);
 		EnableLight(lights.size() - 1);
 	}
 
-	return true;
+	return light;
 }
 
 void LightsManager::Draw() {
@@ -104,8 +108,42 @@ bool LightsManager::EnableLight(ptrdiff_t position) {
 	return true;
 }
 
+bool LightsManager::EnableLight(Light* light) {
+	ptrdiff_t lightPos = -1;
+	for (std::list<Light*>::iterator it = lights.begin(); it != lights.end(); ++it)
+	{
+		if ((*it) == light) {
+			lightPos = std::distance(lights.begin(), it);
+			break;
+		}
+	}
+	GLenum lightNumber = lightsMap.find(lightPos)->second;
+	if (lights.size() == 1) {
+		glEnable(GL_LIGHTING);
+	}
+	glEnable(lightNumber);
+	return true;
+}
+
 bool LightsManager::DisableLight(ptrdiff_t position) {
 	GLenum lightNumber = lightsMap.find(position)->second;
+	glDisable(lightNumber);
+	if (lights.size() == 1) {
+		glDisable(GL_LIGHTING);
+	}
+	return true;
+}
+
+bool LightsManager::DisableLight(Light* light) {
+	ptrdiff_t lightPos = -1;
+	for (std::list<Light*>::iterator it = lights.begin(); it != lights.end(); ++it)
+	{
+		if ((*it) == light) {
+			lightPos = std::distance(lights.begin(), it);
+			break;
+		}
+	}
+	GLenum lightNumber = lightsMap.find(lightPos)->second;
 	glDisable(lightNumber);
 	if (lights.size() == 1) {
 		glDisable(GL_LIGHTING);
