@@ -254,8 +254,8 @@ bool ModuleGUI::DrawGOHierarchyMenu() {
 		GameObject* root = App->sceneManager->getCurrentScene()->root;
 		bool open = true;
 
-		ImGui::SetNextWindowSize(ImVec2(600, 200), ImGuiSetCond_Once);
-		ImGui::SetNextWindowPos(ImVec2(300, 200), ImGuiSetCond_Once);
+		ImGui::SetNextWindowSize(ImVec2(400, 500), ImGuiSetCond_Once);
+		ImGui::SetNextWindowPos(ImVec2(0, 19), ImGuiSetCond_Once);
 		treeNodeFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 		ImGui::Begin("GameObjects Hierarchy", &open);
 		for (auto it = root->childs.begin(); it != root->childs.end(); ++it)

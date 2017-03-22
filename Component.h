@@ -9,9 +9,9 @@ enum ComponentType {
 	COMPONENT_TYPE_CAMERA,
 	COMPONENT_TYPE_SCRIPT,
 	COMPONENT_TYPE_LIGHT,
-	COMPONENT_TYPE_TRANSFORM,
 	COMPONENT_TYPE_MATERIAL,
 	COMPONENT_TYPE_MESH,
+	COMPONENT_TYPE_TRANSFORM,
 	COMPONENT_TYPE_UNDEFINED
 };
 
@@ -38,6 +38,7 @@ protected:
 	bool active = true;
 	bool toDelete = false;
 	std::string id = "";
+	std::string name;
 
 public:
 	int maxComponentsByGO = 1;

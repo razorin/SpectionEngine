@@ -12,6 +12,7 @@
 
 ComponentScript::ComponentScript(GameObject * container, std::string id) : Component(container, ComponentType::COMPONENT_TYPE_SCRIPT, id)
 {
+	name = "Script";
 }
 
 ComponentScript::~ComponentScript()
@@ -20,9 +21,16 @@ ComponentScript::~ComponentScript()
 
 bool ComponentScript::DrawGUI()
 {
-	if (ImGui::CollapsingHeader("Script", ImGuiTreeNodeFlags_DefaultOpen))
+	std::string headerLabel = name + "##" + id;
+	if (ImGui::CollapsingHeader(headerLabel.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
+		std::string checkboxLabel = "Active##" + id;
+		ImGui::Checkbox(checkboxLabel.c_str(), &active);
 		ImGui::Text("Script stuff...");
+	}
+	std::string removeLabel = "Remove Component##" + id;
+	if (ImGui::Button(removeLabel.c_str())) {
+		toDelete = true;
 	}
 	return true;
 }

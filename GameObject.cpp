@@ -243,7 +243,7 @@ void GameObject::Draw() const
 	//Meshes
 	for (std::list<Component*>::const_iterator it = components.begin(); it != components.end(); it++)
 	{
-		if ((*it)->type == ComponentType::COMPONENT_TYPE_MESH)
+		if ((*it)->type == ComponentType::COMPONENT_TYPE_MESH && (*it)->IsActive())
 		{
 			ComponentMesh* cmesh = (ComponentMesh*)(*it);
 			Mesh* mesh = cmesh->mesh;
@@ -466,7 +466,7 @@ void GameObject::SetToDelete(bool value) {
 }
 
 void GameObject::DrawGUIPanel() {
-	const char* items[] = { "CAMERA", "SCRIPT", "LIGHT", "TRANSFORM", "MATERIAL", "MESH" };
+	const char* items[] = { "CAMERA", "SCRIPT", "LIGHT", "MATERIAL", "MESH" };
 	int componentType = newComponentType;
 	if (editableName) {
 		const int maxInput = 255;

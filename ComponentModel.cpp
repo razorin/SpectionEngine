@@ -12,6 +12,7 @@
 
 ComponentModel::ComponentModel(GameObject * container, std::string id) : Component(container, ComponentType::COMPONENT_TYPE_MESH, id)
 {
+	name = "Model";
 }
 
 ComponentModel::~ComponentModel()
@@ -20,9 +21,16 @@ ComponentModel::~ComponentModel()
 
 bool ComponentModel::DrawGUI()
 {
-	if (ImGui::CollapsingHeader("Model", ImGuiTreeNodeFlags_DefaultOpen))
+	std::string headerLabel = name + "##" + id;
+	if (ImGui::CollapsingHeader(headerLabel.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
+		std::string checkboxLabel = "Active##" + id;
+		ImGui::Checkbox(checkboxLabel.c_str(), &active);
 		ImGui::Text("Model stuff...");
+	}
+	std::string removeLabel = "Remove Component##" + id;
+	if (ImGui::Button(removeLabel.c_str())) {
+		toDelete = true;
 	}
 	return true;
 }

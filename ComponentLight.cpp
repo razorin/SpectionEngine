@@ -13,6 +13,7 @@
 
 ComponentLight::ComponentLight(GameObject * container, std::string id) : Component(container, ComponentType::COMPONENT_TYPE_LIGHT, id)
 {
+	name = "Light";
 }
 
 ComponentLight::~ComponentLight()
@@ -21,13 +22,15 @@ ComponentLight::~ComponentLight()
 
 bool ComponentLight::DrawGUI()
 {
-	if (ImGui::CollapsingHeader("Light", ImGuiTreeNodeFlags_DefaultOpen))
+	std::string headerLabel = name + "##" + id;
+	if (ImGui::CollapsingHeader(headerLabel.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
+		std::string checkboxLabel = "Active##" + id;
+		ImGui::Checkbox(checkboxLabel.c_str(), &active);
 		ImGui::Text("Light stuff...");
 	}
-	std::string label = "Remove Component##" + id;
-	if (ImGui::Button(label.c_str())) {
-		//TODO: Delete component bug on iterating GO's DrawGUIPanel components list.
+	std::string removeLabel = "Remove Component##" + id;
+	if (ImGui::Button(removeLabel.c_str())) {
 		toDelete = true;
 	}
 	return true;

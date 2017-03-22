@@ -15,6 +15,7 @@
 ComponentTransform::ComponentTransform(GameObject* container, std::string id) : Component(container, ComponentType::COMPONENT_TYPE_TRANSFORM, id)
 {
 	ResetTransforms();
+	name = "Transform";
 }
 
 ComponentTransform::ComponentTransform(GameObject* container, Quat& rotation, float3& position, float3& scale, std::string id) :
@@ -22,6 +23,7 @@ ComponentTransform::ComponentTransform(GameObject* container, Quat& rotation, fl
 {
 	ResetTransforms();
 	CalculateTransforms();
+	name = "Transform";
 }
 
 ComponentTransform::~ComponentTransform()
@@ -171,7 +173,8 @@ void ComponentTransform::ChangeParent(const float4x4 & newParentGT)
 }
 
 bool ComponentTransform::DrawGUI() {
-	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+	std::string headerLabel = name + "##" + id;
+	if (ImGui::CollapsingHeader(headerLabel.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		float3 pos = Position();
 		float3 rot = EulerAngles();
