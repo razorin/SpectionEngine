@@ -146,8 +146,21 @@ void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject *
 
 void Scene::Draw()
 {
+<<<<<<< Updated upstream
 	root->Draw();
 	DrawHierarchyNodes(root);
+=======
+	//for (std::list<GameObject*>::iterator it = root->childs.begin(); it != root->childs.end(); it++) {
+	//	//If object is not in frustum...dont draw
+	//	if (true) {
+	//		DrawRecursively(*it);
+	//	}
+	//}
+	//TransformHierarchy();
+	
+	DrawHierarchyNodes(root);
+	//DrawRecursively(root);
+>>>>>>> Stashed changes
 }
 
 bool Scene::CleanUp()
@@ -168,11 +181,7 @@ bool Scene::CleanUp()
 void Scene::DrawHierarchyNodes(GameObject * go)
 {
 		glBegin(GL_LINES);
-		//glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
-
-		DrawRecursively(go);
-
-		//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			DrawRecursively(go);
 		glEnd();
 }
 

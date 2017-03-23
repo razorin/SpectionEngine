@@ -96,6 +96,7 @@
     <ClInclude Include="ModuleGUI.h" />
     <ClInclude Include="ModulePrimitives.h" />
     <ClInclude Include="ModuleSceneManager.h" />
+    <ClInclude Include="Octree.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SCube.h" />
     <ClInclude Include="Globals.h" />
@@ -140,6 +141,7 @@
     <ClCompile Include="ModuleGUI.cpp" />
     <ClCompile Include="ModulePrimitives.cpp" />
     <ClCompile Include="ModuleSceneManager.cpp" />
+    <ClCompile Include="Octree.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SCube.cpp" />
     <ClCompile Include="Log.cpp" />
