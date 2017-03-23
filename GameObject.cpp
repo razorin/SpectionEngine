@@ -1,5 +1,10 @@
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleSceneManager.h"
+#include "LightsManager.h"
+#include "Light.h"
+#include "ModuleGUI.h"
+#include "Scene.h"
 #include "GameObject.h"
 #include "Component.h"
 #include "ComponentCamera.h"
@@ -20,7 +25,7 @@
 
 
 //TODO delete empty constuctor.This one below can do the same
-GameObject::GameObject(GameObject * parent, const char * name) : parent(parent), name(name)
+GameObject::GameObject(std::string id, GameObject * parent, const char * name, bool editableName) : id(id), parent(parent), name(name), editableName(editableName)
 {
 	AddComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
 	AssignTransform();
@@ -30,8 +35,8 @@ GameObject::GameObject(GameObject * parent, const char * name) : parent(parent),
 	}
 }
 
-GameObject::GameObject(GameObject * parent, const char * name, const float3 & position, const float3 & scale, const Quat & rotation) :
-	parent(parent), name(name)
+GameObject::GameObject(std::string id, GameObject * parent, const char * name, bool editableName, const float3 & position, const float3 & scale, const Quat & rotation) :
+	id(id), parent(parent), name(name), editableName(editableName)
 {
 	AddComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
 	AssignTransform();
@@ -48,17 +53,7 @@ GameObject::GameObject(GameObject * parent, const char * name, const float3 & po
 
 GameObject::~GameObject()
 {
-	//for (std::list<GameObject *>::iterator it = childs.begin(); it != childs.end();) {
-	//	delete (*it);
-	//	it = childs.erase(it);
-	//	++it;
-	//}
-
-	//for (std::list<Component *>::iterator it = components.begin(); it != components.end();) {
-	//	delete (*it);
-	//	it = components.erase(it);
-	//	++it;
-	//}
+	CleanUp();
 }
 
 void GameObject::AssignTransform()
@@ -77,11 +72,11 @@ void GameObject::SetParent(GameObject * parentGO)
 	//Also if we dont want a parent anymore, parentGo will be nullptr
 
 	float4x4 newParentGT = float4x4::identity;
-	if (parentGO != nullptr){
+	if (parentGO != nullptr) {
 		newParentGT = parentGO->transform->GlobalTransform();
 	}
 
-	if (parent == nullptr){
+	if (parent == nullptr) {
 		transform->SetParent(newParentGT);
 	}
 	else {
@@ -104,6 +99,7 @@ Component * GameObject::AddComponent(const ComponentType &type)
 {
 	++componentCounter;
 	Component *result = nullptr;
+	Light* light = nullptr;
 	std::map<ComponentType, int>::iterator it = componentCounterByType.find(type);
 
 	//Init counter for this type
@@ -120,8 +116,11 @@ Component * GameObject::AddComponent(const ComponentType &type)
 		result->maxComponentsByGO = 1;
 		break;
 	case ComponentType::COMPONENT_TYPE_LIGHT:
-		result = new ComponentLight(this, std::to_string(componentCounter));
-		result->maxComponentsByGO = 0;
+		light = App->lightsManager->AddLight(LT_POINT_LIGHT, { 0.0f, 5.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+		if (light != nullptr) {
+			result = new ComponentLight(this, std::to_string(componentCounter), light);
+			result->maxComponentsByGO = 0;
+		}
 		break;
 	case ComponentType::COMPONENT_TYPE_MATERIAL:
 		result = new ComponentMaterial(this, std::to_string(componentCounter));
@@ -149,7 +148,7 @@ Component * GameObject::AddComponent(const ComponentType &type)
 	return result;
 }
 
-bool GameObject::RemoveComponent(Component *component)
+bool GameObject::RemoveComponent(Component* component)
 {
 	bool found = false;
 	//Find Component
@@ -170,6 +169,20 @@ bool GameObject::RemoveComponent(Component *component)
 
 }
 
+bool GameObject::RemoveChild(GameObject * go)
+{
+	bool ret = false;
+	for (std::list<GameObject *>::iterator it = childs.begin(); it != childs.end(); ++it) {
+		if ((*it) == go) {
+			RELEASE((*it));
+			childs.erase(it);
+			ret = true;
+			break;
+		}
+	}
+	return ret;
+}
+
 std::list<Component*> * GameObject::FindComponents(const ComponentType & type) {
 	//Delete list not members!!!!
 	std::list<Component*> *result = new std::list<Component*>();
@@ -178,7 +191,7 @@ std::list<Component*> * GameObject::FindComponents(const ComponentType & type) {
 	if (typeCounter == 0)
 		return result;
 
-	for (std::list<Component *>::iterator it = components.begin(); it != components.end(); it++) {
+	for (std::list<Component *>::iterator it = components.begin(); it != components.end(); ++it) {
 		if ((*it)->type == type) {
 			result->push_back((*it));
 			if (result->size() == typeCounter)
@@ -200,6 +213,24 @@ Component * GameObject::FindComponent(const ComponentType & type)
 	return componentFound;
 }
 
+GameObject * GameObject::FindGOByName(const std::string & name)
+{
+	GameObject* ret = nullptr;
+	for (std::list<GameObject *>::iterator it = childs.begin(); it != childs.end(); ++it) {
+		if ((*it)->name == name) {
+			ret = (*it);
+			break;
+		}
+		else {
+			ret = (*it)->FindGOByName(name);
+			if (ret != nullptr) {
+				break;
+			}
+		}
+	}
+	return ret;
+}
+
 void GameObject::Draw() const
 {
 	glPushMatrix();
@@ -218,7 +249,7 @@ void GameObject::Draw() const
 	//Meshes
 	for (std::list<Component*>::const_iterator it = components.begin(); it != components.end(); it++)
 	{
-		if ((*it)->type == ComponentType::COMPONENT_TYPE_MESH)
+		if ((*it)->type == ComponentType::COMPONENT_TYPE_MESH && (*it)->IsActive())
 		{
 			ComponentMesh* cmesh = (ComponentMesh*)(*it);
 			Mesh* mesh = cmesh->mesh;
@@ -284,15 +315,16 @@ void GameObject::Draw() const
 
 bool GameObject::CleanUp()
 {
-	for (std::list<Component*>::iterator it = components.begin(); it != components.end(); it++)
+	for (std::list<Component*>::iterator it = components.begin(); it != components.end();)
 	{
 		RELEASE(*it);
+		it = components.erase(it);
 	}
 
-	for (std::list<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
+	for (std::list<GameObject*>::iterator it = childs.begin(); it != childs.end(); )
 	{
-		(*it)->CleanUp();
 		RELEASE(*it);
+		it = childs.erase(it);
 	}
 	return false;
 }
@@ -414,26 +446,94 @@ void GameObject::DrawBoundingBoxes() const {
 	}
 }
 
+std::string GameObject::GetID() {
+	return id;
+}
+
+std::string GameObject::GetName() {
+	return name;
+}
+
+void GameObject::SetName(std::string value, bool editable) {
+	editableName = editable;
+	name = std::string(value);
+}
+
+bool GameObject::IsEditableName() {
+	return editableName;
+}
+
+bool GameObject::IsToDelete() {
+	return toDelete;
+}
+
+void GameObject::SetToDelete(bool value) {
+	toDelete = value;
+}
+
+bool GameObject::IsStatic()
+{
+	return staticObject;
+}
+
+void GameObject::SetStatic(bool value)
+{
+	staticObject = value;
+}
+
 void GameObject::DrawGUIPanel() {
-	const char* items[] = { "CAMERA", "SCRIPT", "LIGHT", "TRANSFORM", "MATERIAL", "MESH" };
+	const char* items[] = { "CAMERA", "SCRIPT", "LIGHT", "MATERIAL", "MESH" };
 	int componentType = newComponentType;
-	ImGui::Text(this->name.c_str());
-	for (std::list<Component *>::iterator it = components.begin(); it != components.end(); ) {
-		if (!(*it)->IsToDelete()) {
-			(*it)->DrawGUI();
-			++it;
-		}
-		else {
-			RELEASE(*it);
-			it = components.erase(it);
+	// GameObject Name
+	if (editableName) {
+		const int maxInput = 255;
+		char inputName[maxInput + 1];
+		strncpy(inputName, name.c_str(), maxInput);				// Copy all to maxInput, zero-padding if shorter
+		inputName[maxInput] = '\0';								// Terminate with Null
+
+		ImGuiInputTextFlags inputFlags = 0;
+		inputFlags |= ImGuiInputTextFlags_EnterReturnsTrue;
+
+		if (ImGui::InputText("", &*inputName, 255, inputFlags)) {
+			if (inputName[0] == NULL || inputName[0] == ' ') {	//Give a default value in case of empty string
+				inputName[0] = '0';
+			}
+			name = inputName;
 		}
 	}
-	ImGui::Separator();
-	if (ImGui::Combo("", &componentType, items, IM_ARRAYSIZE(items))) {
-		newComponentType = static_cast<ComponentType>(componentType);
+	else {
+		ImGui::Text(this->name.c_str());
 	}
 	ImGui::SameLine();
-	if (ImGui::Button("Add Component")) {
-		AddComponent(newComponentType);
+	// Static checkbox
+	std::string checkboxLabel = "Static##" + id;
+	ImGui::Checkbox(checkboxLabel.c_str(), &staticObject);
+	ImGui::SameLine();
+	// Remove
+	std::string goLabel = "Remove##" + this->name;
+	if (ImGui::Button(goLabel.c_str())) {
+		GetParent()->RemoveChild(this);
+		App->gui->ClearSelection();
+	}
+	else {
+		for (std::list<Component *>::iterator it = components.begin(); it != components.end(); ) {
+			if (!(*it)->IsToDelete()) {
+				(*it)->DrawGUI();
+				++it;
+			}
+			else {
+				RELEASE(*it);
+				it = components.erase(it);
+			}
+		}
+		// Add component
+		ImGui::Separator();
+		if (ImGui::Combo("", &componentType, items, IM_ARRAYSIZE(items))) {
+			newComponentType = static_cast<ComponentType>(componentType);
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Add Component")) {
+			AddComponent(newComponentType);
+		}
 	}
 }

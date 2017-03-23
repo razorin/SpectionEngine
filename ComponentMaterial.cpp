@@ -12,6 +12,7 @@
 
 ComponentMaterial::ComponentMaterial(GameObject * container, std::string id) : Component(container, ComponentType::COMPONENT_TYPE_MATERIAL, id)
 {
+	name = "Material";
 }
 
 ComponentMaterial::~ComponentMaterial()
@@ -20,9 +21,16 @@ ComponentMaterial::~ComponentMaterial()
 
 bool ComponentMaterial::DrawGUI()
 {
-	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen))
+	std::string headerLabel = name + "##" + id;
+	if (ImGui::CollapsingHeader(headerLabel.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
+		std::string checkboxLabel = "Active##" + id;
+		ImGui::Checkbox(checkboxLabel.c_str(), &active);
 		ImGui::Text("Material stuff...");
+	}
+	std::string removeLabel = "Remove Component##" + id;
+	if (ImGui::Button(removeLabel.c_str())) {
+		toDelete = true;
 	}
 	return true;
 }

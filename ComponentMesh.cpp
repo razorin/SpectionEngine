@@ -13,6 +13,7 @@
 
 ComponentMesh::ComponentMesh(GameObject * container, std::string id) :Component(container, ComponentType::COMPONENT_TYPE_MESH, id)
 {
+	name = "Mesh";
 }
 
 ComponentMesh::~ComponentMesh()
@@ -21,5 +22,15 @@ ComponentMesh::~ComponentMesh()
 
 bool ComponentMesh::DrawGUI()
 {
+	std::string headerLabel = name + "##" + id;
+	if (ImGui::CollapsingHeader(headerLabel.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		std::string checkboxLabel = "Active##" + id;
+		ImGui::Checkbox(checkboxLabel.c_str(), &active);
+	}
+	std::string removeLabel = "Remove Component##" + id;
+	if (ImGui::Button(removeLabel.c_str())) {
+		toDelete = true;
+	}
 	return false;
 }

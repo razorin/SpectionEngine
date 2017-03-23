@@ -18,37 +18,21 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-	gameobjects.clear();
 }
 
-void Scene::AddGameObject(ObjectType type)
+GameObject* Scene::AddGameObject(GameObject* parent, bool editable)
 {
-	switch (type) {
-	case (OT_EMPTY) :
-		break;
-	case (OT_UNDEFINED) :
-		break;
+	++gameObjectsCounter;
+	GameObject* go = new GameObject(std::to_string(gameObjectsCounter), parent, ("Empty Game Object###" + std::to_string(gameObjectsCounter)).c_str(), editable);
+	if (parent != nullptr) {
+		parent->childs.push_back(go);
 	}
-	GameObject* go = new GameObject(root);
-	root->childs.push_back(go);
-	this->gameobjects.push_back(go);
-}
-
-void Scene::DeleteGameObject(std::string name)
-{
+	return go;
 }
 
 GameObject * Scene::GetGameObject(std::string name)
 {
-	bool found = false;
-	GameObject* gameObject = nullptr;
-	for (std::list<GameObject *>::iterator it = gameobjects.begin(); (it != gameobjects.end() && found == false); it++) {
-		if ((*it)->name.compare(name) == 0) {
-			gameObject = *it;
-			found = true;
-		}
-	}
-	return gameObject;
+	return root->FindGOByName(name);
 }
 
 void Scene::LoadLevel(const char * path, const char * file)
@@ -120,8 +104,7 @@ void Scene::LoadLevel(const char * path, const char * file)
 	}
 
 	//Create Gameobjects recursively
-	root = new GameObject();
-	gameobjects.push_back(root);
+	root = AddGameObject();
 	aiNode* rootNode = scene->mRootNode;
 	RecursiveNodeRead(root, *rootNode, nullptr);
 
@@ -130,7 +113,7 @@ void Scene::LoadLevel(const char * path, const char * file)
 
 void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject * parentGO)
 {
-	go->name = assimpNode.mName.data;
+	go->SetName(assimpNode.mName.data);
 
 	aiVector3D aiPos;
 	aiQuaternion aiRot;
@@ -153,11 +136,11 @@ void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject *
 	uint numChild = assimpNode.mNumChildren;
 	for (int i = 0; i < numChild; i++)
 	{
-		GameObject* childGO = new GameObject();
+		++gameObjectsCounter;
+		GameObject* childGO = new GameObject(std::to_string(gameObjectsCounter), nullptr, "", false);
 		aiNode* aiChildNode = assimpNode.mChildren[i];
 		RecursiveNodeRead(childGO, *aiChildNode, go);
 		go->childs.push_back(childGO);
-		this->gameobjects.push_back(childGO);
 	}
 }
 
@@ -171,8 +154,9 @@ void Scene::Draw()
 	//}
 	//TransformHierarchy();
 	
-	//DrawHierarchyNodes(root);
-	DrawRecursively(root);
+	//DrawRecursively(root);
+	//root->Draw();
+	DrawHierarchyNodes(root);
 }
 
 bool Scene::CleanUp()

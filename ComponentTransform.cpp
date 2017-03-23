@@ -15,6 +15,7 @@
 ComponentTransform::ComponentTransform(GameObject* container, std::string id) : Component(container, ComponentType::COMPONENT_TYPE_TRANSFORM, id)
 {
 	ResetTransforms();
+	name = "Transform";
 }
 
 ComponentTransform::ComponentTransform(GameObject* container, Quat& rotation, float3& position, float3& scale, std::string id) :
@@ -22,6 +23,7 @@ ComponentTransform::ComponentTransform(GameObject* container, Quat& rotation, fl
 {
 	ResetTransforms();
 	CalculateTransforms();
+	name = "Transform";
 }
 
 ComponentTransform::~ComponentTransform()
@@ -171,45 +173,51 @@ void ComponentTransform::ChangeParent(const float4x4 & newParentGT)
 }
 
 bool ComponentTransform::DrawGUI() {
-	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+	std::string headerLabel = name + "##" + id;
+	if (ImGui::CollapsingHeader(headerLabel.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		float3 pos = Position();
-		float3 rot = EulerAngles();
-		float3 sca = Scale();
-		if (ImGui::DragFloat3("Position", (float*)&pos, 0.1f)) {
-			SetPosition(pos);
+		if (container->IsStatic()) {
+			ImGui::Text("You can't edit this game object's transform if it's static");
 		}
-		ImGui::SameLine();
-		if (ImGui::Button("Clear Position")) {
-			pos = float3::zero;
-			SetPosition(pos);
-		}
+		else {
+			float3 pos = Position();
+			float3 rot = EulerAngles();
+			float3 sca = Scale();
+			if (ImGui::DragFloat3("Position", (float*)&pos, 0.1f)) {
+				SetPosition(pos);
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Clear Position")) {
+				pos = float3::zero;
+				SetPosition(pos);
+			}
 
-		if (ImGui::DragFloat3("Rotation", (float*)&rot, 0.1f)) {
-			SetEulerAngles(rot);
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Clear Rotation")) {
-			rot = float3::zero;
-			SetEulerAngles(rot);
-		}
+			if (ImGui::DragFloat3("Rotation", (float*)&rot, 0.1f)) {
+				SetEulerAngles(rot);
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Clear Rotation")) {
+				rot = float3::zero;
+				SetEulerAngles(rot);
+			}
 
-		if (ImGui::DragFloat3("Scale", (float*)&sca, 0.1f)) {
-			SetScale(sca);
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Clear Scale")) {
-			sca = float3::one;
-			SetScale(sca);
-		}
+			if (ImGui::DragFloat3("Scale", (float*)&sca, 0.1f)) {
+				SetScale(sca);
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Clear Scale")) {
+				sca = float3::one;
+				SetScale(sca);
+			}
 
-		if (ImGui::Button("Clear Transform")) {
-			pos = float3::zero;
-			SetPosition(pos);
-			rot = float3::zero;
-			SetEulerAngles(rot);
-			sca = float3::one;
-			SetScale(sca);
+			if (ImGui::Button("Clear Transform")) {
+				pos = float3::zero;
+				SetPosition(pos);
+				rot = float3::zero;
+				SetEulerAngles(rot);
+				sca = float3::one;
+				SetScale(sca);
+			}
 		}
 	}
 	return true;

@@ -70,10 +70,6 @@ update_status ModuleGUI::Update(float dt)
 			showGOHierarchy = DrawGOHierarchyMenu();
 		}
 
-		if (showLights) {
-			showLights = DrawLightsMenu();
-		}
-
 		if (showInspector) {
 			showInspector = DrawInspectorMenu();
 		}
@@ -82,8 +78,6 @@ update_status ModuleGUI::Update(float dt)
 			showConsole = console.Draw();
 		}
 	}
-
-	//transform->DrawGUI();
 	return ret;
 }
 
@@ -129,9 +123,8 @@ bool ModuleGUI::DrawMainMenuBar() {
 		}
 		if (ImGui::BeginMenu("GameObject"))
 		{
-			if (ImGui::MenuItem("Create Empty")) { App->sceneManager->getCurrentScene()->AddGameObject(OT_EMPTY); }
+			if (ImGui::MenuItem("Create Empty")) { App->sceneManager->getCurrentScene()->AddGameObject(App->sceneManager->getCurrentScene()->root, true); }
 			if (ImGui::MenuItem("GameObjects Hierarchy")) { showGOHierarchy = true; }
-			if (ImGui::MenuItem("Lights")) { showLights = true; }
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Component"))
@@ -254,21 +247,13 @@ bool ModuleGUI::DrawGOHierarchyMenu() {
 		GameObject* root = App->sceneManager->getCurrentScene()->root;
 		bool open = true;
 
-		ImGui::SetNextWindowSize(ImVec2(600, 200), ImGuiSetCond_Once);
-		ImGui::SetNextWindowPos(ImVec2(300, 200), ImGuiSetCond_Once);
+		ImGui::SetNextWindowSize(ImVec2(400, 500), ImGuiSetCond_Once);
+		ImGui::SetNextWindowPos(ImVec2(0, 19), ImGuiSetCond_Once);
 		treeNodeFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 		ImGui::Begin("GameObjects Hierarchy", &open);
-		bool treeNode = ImGui::TreeNodeEx(root->name.c_str(), treeNodeFlags);
-
-		if (ImGui::IsItemClicked()) {
-			GameObjectSelected(*root);
-		}
-		if (treeNode) {
-			for (auto it = root->childs.begin(); it != root->childs.end(); ++it)
-			{
-				RecursiveTreePrint(**it);
-			}
-			ImGui::TreePop();
+		for (auto it = root->childs.begin(); it != root->childs.end(); ++it)
+		{
+			RecursiveTreePrint(**it);
 		}
 		ImGui::End();
 		return open;
@@ -280,8 +265,8 @@ bool ModuleGUI::DrawGOHierarchyMenu() {
 
 void ModuleGUI::RecursiveTreePrint(GameObject & GO)
 {
-	if (!GO.name.empty()) {
-		bool treeNode = ImGui::TreeNodeEx(GO.name.c_str(), treeNodeFlags);
+	if (!GO.GetName().empty()) {
+		bool treeNode = ImGui::TreeNodeEx(GO.GetName().c_str(), treeNodeFlags);
 		if (ImGui::IsItemClicked()) { GameObjectSelected(GO); }
 		if (treeNode) {
 			for (auto it = GO.childs.begin(); it != GO.childs.end(); ++it)
@@ -294,81 +279,13 @@ void ModuleGUI::RecursiveTreePrint(GameObject & GO)
 }
 
 void ModuleGUI::GameObjectSelected(GameObject & GO) {
-	console.AddLog("%s Selected", GO.name.c_str());
+	console.AddLog("%s Selected", GO.GetName().c_str());
 	selectedGO = &GO;
 }
 
-bool ModuleGUI::DrawLightsMenu() {
-	bool open = true;
-	const char* items[] = { "DIRECTIONAL LIGHT", "POINT LIGHT", "SPOTLIGHT", "AMBIENTLIGHT" };
-	ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiSetCond_Once);
-	ImGui::SetNextWindowPos(ImVec2(300, 200), ImGuiSetCond_Once);
-	ImGui::Begin("Lights", &open);
-	std::list<Light*>* currentLights = App->lightsManager->GetLights();
-	for (std::list<Light*>::iterator it = currentLights->begin(); it != currentLights->end(); )
-	{
-		auto itPosition = std::distance(currentLights->begin(), it);
-		std::string tempString = "Light" + std::to_string(itPosition);
-		const char * headerLabel = tempString.c_str();
-		bool hasBeenRemoved = false;
-		if (ImGui::CollapsingHeader(headerLabel))
-		{
-			int newType = (*it)->type;
-			// Generic strings
-			std::string typeName = "Type##" + std::to_string(itPosition);
-			std::string position = "Position##" + std::to_string(itPosition);
-			std::string diffuse = "Diffuse##" + std::to_string(itPosition);
-			std::string ambient = "Ambient##" + std::to_string(itPosition);
-			std::string specular = "Specular##" + std::to_string(itPosition);
-			std::string direction = "Direction##" + std::to_string(itPosition);
-			// Extra strings
-			std::string exponent = "Exponent##" + std::to_string(itPosition);
-			std::string cutoff = "Cutoff##" + std::to_string(itPosition);
-			std::string constantAttenuation = "Constant Attenuation##" + std::to_string(itPosition);
-			std::string linearAttenuation = "Linear Attenuation##" + std::to_string(itPosition);
-			std::string quadraticAttenuation = "Quadratic Attenuation##" + std::to_string(itPosition);
-			if (ImGui::Combo(typeName.c_str(), &newType, items, IM_ARRAYSIZE(items))) {
-				(*it)->type = static_cast<LightType>(newType);
-			}
-			if ((*it)->type == LT_DIRECTIONAL_LIGHT) {
-				ImGui::InputFloat3(direction.c_str(), (*it)->position);
-			}
-			else {
-				ImGui::InputFloat3(position.c_str(), (*it)->position);
-			}
-			ImGui::ColorEdit3(diffuse.c_str(), (*it)->diffuse);
-			ImGui::ColorEdit3(ambient.c_str(), (*it)->ambient);
-			ImGui::ColorEdit3(specular.c_str(), (*it)->specular);
-			if ((*it)->type == LT_SPOTLIGHT_LIGHT) {
-				ImGui::InputFloat3(direction.c_str(), (*it)->direction);
-				ImGui::InputFloat(exponent.c_str(), &(*it)->exponent);
-				ImGui::InputFloat(cutoff.c_str(), &(*it)->cutoff);
-			}
-			if (ImGui::TreeNode("More options"))
-			{
-				ImGui::InputFloat(constantAttenuation.c_str(), &(*it)->constantAttenuation);
-				ImGui::InputFloat(linearAttenuation.c_str(), &(*it)->linearAttenuation);
-				ImGui::InputFloat(quadraticAttenuation.c_str(), &(*it)->quadraticAttenuation);
-				ImGui::TreePop();
-			}
-			std::string remove = "Remove Light##" + std::to_string(itPosition);
-			if (ImGui::Button(remove.c_str())) {
-				hasBeenRemoved = true;
-				App->lightsManager->DisableLight(itPosition);
-				RELEASE(*it);
-				it = currentLights->erase(it);
-			}
-		}
-		if (!hasBeenRemoved) {
-			++it;
-		}
-	}
-	if (currentLights->size() < MAXLIGHTS) {
-		if (ImGui::Button("New Light")) { App->lightsManager->AddLight(LT_POINT_LIGHT, { 0.0f, 5.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }); }
-	}
-
-	ImGui::End();
-	return open;
+void ModuleGUI::ClearSelection()
+{
+	selectedGO = nullptr;
 }
 
 bool ModuleGUI::DrawAppInfo() {

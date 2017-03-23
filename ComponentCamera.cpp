@@ -259,3 +259,30 @@ void ComponentCamera::setMouseBlocked(bool mouseBlocked)
 {
 	this->mouseBlocked = mouseBlocked;
 }
+
+bool ComponentCamera::ContainsAaBox(const math::AABB& refBox) const
+{
+	math::vec vCorner[8];
+	int iTotalIn = 0;
+	refBox.GetCornerPoints(vCorner);
+	math::Plane* planes;
+	refBox.GetFacePlanes(planes);
+	for (int p = 0; p < 6; ++p) {
+		int iInCount = 8;
+		int iPtIn = 1;
+		for (int i = 0; i < 8; ++i) {
+			if (planes[p].IsOnPositiveSide(vCorner[i]) == false) {
+				iPtIn = 0;
+				--iInCount;
+			}
+		}
+		if (iInCount == 0) {
+			return false;
+		}
+		iTotalIn += iPtIn;
+	}
+	if (iTotalIn == 6) {
+		return true;
+	}
+	return true;
+}

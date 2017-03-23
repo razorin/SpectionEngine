@@ -39,6 +39,8 @@ public:
 	bool DrawGUI();
 	void setMouseBlocked(bool mouseBlocked);
 
+	bool ContainsAaBox(const math::AABB & refBox) const;
+
 public:
 	//These two params may be added as json config
 	float movementSpeed = 0;
