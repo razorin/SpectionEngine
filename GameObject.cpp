@@ -471,9 +471,20 @@ void GameObject::SetToDelete(bool value) {
 	toDelete = value;
 }
 
+bool GameObject::IsStatic()
+{
+	return staticObject;
+}
+
+void GameObject::SetStatic(bool value)
+{
+	staticObject = value;
+}
+
 void GameObject::DrawGUIPanel() {
 	const char* items[] = { "CAMERA", "SCRIPT", "LIGHT", "MATERIAL", "MESH" };
 	int componentType = newComponentType;
+	// GameObject Name
 	if (editableName) {
 		const int maxInput = 255;
 		char inputName[maxInput + 1];
@@ -494,6 +505,11 @@ void GameObject::DrawGUIPanel() {
 		ImGui::Text(this->name.c_str());
 	}
 	ImGui::SameLine();
+	// Static checkbox
+	std::string checkboxLabel = "Static##" + id;
+	ImGui::Checkbox(checkboxLabel.c_str(), &staticObject);
+	ImGui::SameLine();
+	// Remove
 	std::string goLabel = "Remove##" + this->name;
 	if (ImGui::Button(goLabel.c_str())) {
 		GetParent()->RemoveChild(this);
@@ -510,6 +526,7 @@ void GameObject::DrawGUIPanel() {
 				it = components.erase(it);
 			}
 		}
+		// Add component
 		ImGui::Separator();
 		if (ImGui::Combo("", &componentType, items, IM_ARRAYSIZE(items))) {
 			newComponentType = static_cast<ComponentType>(componentType);

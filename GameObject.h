@@ -42,6 +42,8 @@ public:
 	bool IsEditableName();
 	bool IsToDelete();
 	void SetToDelete(bool value);
+	bool IsStatic();
+	void SetStatic(bool value);
 	void DrawGUIPanel();
 
 
@@ -51,6 +53,7 @@ private:
 	bool editableName = false;
 	GameObject *parent = nullptr;
 	bool enable = true;
+	bool staticObject = false;
 	std::map<ComponentType, int> componentCounterByType;
 	int componentCounter = 0;
 	std::list<math::AABB> AABBoxes;
