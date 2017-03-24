@@ -246,29 +246,28 @@ void ComponentCamera::DrawFrustum() {
 
 bool ComponentCamera::ContainsAaBox(const math::AABB& refBox) const
 {
+	bool ret = true;
 	math::vec vCorner[8];
 	int iTotalIn = 0;
 	refBox.GetCornerPoints(vCorner);
-	math::Plane* planes = new math::Plane();
-	refBox.GetFacePlanes(planes);
+	math::Plane planes[6];
+	frustum.GetPlanes(planes);
 	for (int p = 0; p < 6; ++p) {
 		int iInCount = 8;
 		int iPtIn = 1;
 		for (int i = 0; i < 8; ++i) {
-			if (planes[p].IsOnPositiveSide(vCorner[i]) == false) {
+			if (planes[p].IsOnPositiveSide(vCorner[i]) == true) {
 				iPtIn = 0;
 				--iInCount;
 			}
 		}
 		if (iInCount == 0) {
-			return false;
+			ret = false;
+			break;
 		}
 		iTotalIn += iPtIn;
 	}
-	if (iTotalIn == 6) {
-		return true;
-	}
-	return true;
+	return ret;
 }
 
 bool ComponentCamera::DrawGUI()
@@ -300,4 +299,9 @@ bool ComponentCamera::DrawGUI()
 		toDelete = true;
 	}
 	return true;
+}
+
+bool ComponentCamera::IsFrustumCulling()
+{
+	return frustumCulling;
 }

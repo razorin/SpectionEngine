@@ -44,6 +44,8 @@ public:
 	void SetToDelete(bool value);
 	bool IsStatic();
 	void SetStatic(bool value);
+	bool IsSelected();
+	void SetSelected(bool value);
 	void DrawGUIPanel();
 
 
@@ -54,6 +56,7 @@ private:
 	GameObject *parent = nullptr;
 	bool enable = true;
 	bool staticObject = false;
+	bool selectedGO = false;
 	std::map<ComponentType, int> componentCounterByType;
 	int componentCounter = 0;
 	std::list<math::AABB> AABBoxes;

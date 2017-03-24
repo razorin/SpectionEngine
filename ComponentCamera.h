@@ -47,6 +47,8 @@ public:
 
 	bool DrawGUI();
 
+	bool IsFrustumCulling();
+
 public:
 	//These two params may be added as json config
 	float movementSpeed = 0;

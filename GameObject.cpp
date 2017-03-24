@@ -251,7 +251,31 @@ void GameObject::Draw() const
 			//Meshes
 			else if ((*it)->type == ComponentType::COMPONENT_TYPE_MESH)
 			{
-				static_cast<ComponentMesh*>(*it)->DrawMesh();
+				// Apply frustum culling only if option activated and object is static
+				if (this->staticObject) { //&& App->camera->GetActiveCamera()->IsFrustumCulling()) {
+					bool contained = false;
+					// Test all AABBs from this GO
+					for (auto itBoxes = AABBoxes.begin(); itBoxes != AABBoxes.end(); ++itBoxes) {
+						if (App->camera->GetActiveCamera()->ContainsAaBox((*itBoxes))) {
+							contained = true;
+							break;
+						}
+					}
+					// Draw mesh if its inside the frustum
+					if (contained) {
+						static_cast<ComponentMesh*>(*it)->DrawMesh();
+						App->gui->console.AddLog("PRINTING MESH %s", this->name.c_str());
+					}
+					else {
+						App->gui->console.AddLog("NOT PRINTING MESH %s", this->name.c_str());
+					}
+				}
+				else {
+					// Draw mesh
+					static_cast<ComponentMesh*>(*it)->DrawMesh();
+					App->gui->console.AddLog("PRINTING MESH %s", this->name.c_str());
+				}
+				
 			}
 		}
 	}
@@ -433,6 +457,16 @@ bool GameObject::IsStatic()
 void GameObject::SetStatic(bool value)
 {
 	staticObject = value;
+}
+
+bool GameObject::IsSelected()
+{
+	return selectedGO;
+}
+
+void GameObject::SetSelected(bool value)
+{
+	selectedGO = value;
 }
 
 void GameObject::DrawGUIPanel() {
