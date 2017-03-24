@@ -40,6 +40,8 @@ public:
 	float * GetMatrixProjection() const;
 	float * GetMatrixView() const;
 
+	ComponentCamera* GetActiveCamera() const;
+
 public:
 	//These two params may be added as json config
 	float movementSpeed = NULL;

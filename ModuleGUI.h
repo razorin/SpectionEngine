@@ -95,7 +95,7 @@ private:
 	//bool showLights = false;
 	//Component
 	//Window
-	bool showInspector = true;
+	bool showInspector = false;
 	bool showConsole = true;
 	//EndMenus
 

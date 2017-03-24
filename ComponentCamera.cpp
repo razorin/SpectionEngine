@@ -4,6 +4,7 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleGUI.h"
+#include <vector>
 
 //IMGUI Includes
 #include "IMGUI\imconfig.h"
@@ -17,15 +18,16 @@
 
 ComponentCamera::ComponentCamera(GameObject * container, std::string id) : Component(container, ComponentType::COMPONENT_TYPE_CAMERA, id)
 {
+	name = "Camera";
 	aspectRatio = App->window->screen_width / App->window->screen_height;
 	verticalFov = 60 * DEGTORAD;
 	horizontalFov = 60 * DEGTORAD;
 	frustum.SetPerspective(horizontalFov, verticalFov);
 
-	SetPosition(math::vec{ 0,0.5f,4 });
+	SetPosition(math::vec{ 0,2,4 });
 	SetLookAt(math::vec{ 0,1,0 }, math::vec{ 0,0,-1 });
 
-	SetPlaneDistances(0.1f, 100.0f);
+	SetPlaneDistances(0.1f, 300.0f);
 
 	frustum.SetKind(FrustumProjectiveSpace::FrustumSpaceGL, FrustumHandedness::FrustumRightHanded);
 }
@@ -169,34 +171,17 @@ void ComponentCamera::Rotate(float dt)
 
 }
 
-
-
 void ComponentCamera::SetPosition(const math::vec &pos)
 {
 	this->pos = pos;
 	frustum.SetPos(pos);
 }
 
-// TODO Instead of a float it will receive a rotation matrix that will be multiplied by frustum->Up and frustum->Front
-void ComponentCamera::SetOrientation(Axis axis, float rotation)
-{
-	switch (axis) {
-	case X:
-		break;
-	case Y:
-		break;
-	case Z:
-		break;
-	}
-}
-
-// TODO An assert must check Front and Up vectors are in a 90 degree angle
+// Sets the camera Up vector and Front vector
 void ComponentCamera::SetLookAt(const math::vec & up, const math::vec & front)
 {
 	frustum.SetUp(up);
 	frustum.SetFront(front);
-
-	//frustum.GetCornerPoints()
 }
 
 float * ComponentCamera::GetMatrixProjection() const
@@ -232,32 +217,31 @@ void ComponentCamera::Update(float dt)
 	}
 }
 
-bool ComponentCamera::DrawGUI()
-{
-	if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen))
-	{
-		float fov = this->verticalFov;
-		float near = this->nearPlane;
-		float far = this->farPlane;
-
-		if (ImGui::DragFloat("Vertical FOV", (float*)&fov, 0.1f)) {
-			SetFOV(fov);
-		}
-
-		if (ImGui::DragFloat("Near Plane", (float*)&near, 0.1f)) {
-			SetPlaneDistances(near, far);
-		}
-
-		if (ImGui::DragFloat("Far Plane", (float*)&far, 0.1f)) {
-			SetPlaneDistances(near, far);
-		}
-	}
-	return true;
-}
-
-void ComponentCamera::setMouseBlocked(bool mouseBlocked)
+void ComponentCamera::SetMouseBlocked(bool mouseBlocked)
 {
 	this->mouseBlocked = mouseBlocked;
+}
+
+// TODO: Optimize code
+void ComponentCamera::DrawFrustum() {
+	// Frustum CornerPoint order
+	//    2-------6	
+	//   /|      /| 
+	//  3-------7 |	
+	//  | |     | |	
+	//  | |0----|-|4
+	//  |/      |/  
+	//  1-------5  	
+	math::vec corners[8];
+	for (int i = 0; i < 8; ++i) {
+		corners[i] = frustum.CornerPoint(i);
+	}
+	int vertexOrder[24] = { 0,1,1,3,3,2,2,0,0,4,1,5,3,7,2,6,4,5,5,7,7,6,6,4 };
+	glBegin(GL_LINES);
+	for (int i = 0; i < 24; ++i) {
+		glVertex3f(corners[vertexOrder[i]].x, corners[vertexOrder[i]].y, corners[vertexOrder[i]].z);
+	}
+	glEnd();
 }
 
 bool ComponentCamera::ContainsAaBox(const math::AABB& refBox) const
@@ -265,7 +249,7 @@ bool ComponentCamera::ContainsAaBox(const math::AABB& refBox) const
 	math::vec vCorner[8];
 	int iTotalIn = 0;
 	refBox.GetCornerPoints(vCorner);
-	math::Plane* planes;
+	math::Plane* planes = new math::Plane();
 	refBox.GetFacePlanes(planes);
 	for (int p = 0; p < 6; ++p) {
 		int iInCount = 8;
@@ -283,6 +267,37 @@ bool ComponentCamera::ContainsAaBox(const math::AABB& refBox) const
 	}
 	if (iTotalIn == 6) {
 		return true;
+	}
+	return true;
+}
+
+bool ComponentCamera::DrawGUI()
+{
+	std::string headerLabel = name + "##" + id;
+	if (ImGui::CollapsingHeader(headerLabel.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		std::string checkboxLabel2 = "Frustum Culling##" + id;
+		ImGui::Checkbox(checkboxLabel2.c_str(), &frustumCulling);
+
+		float fov = this->verticalFov;
+		float near = this->nearPlane;
+		float far = this->farPlane;
+
+		if (ImGui::DragFloat("Vertical FOV", (float*)&fov, 0.1f)) {
+			SetFOV(fov);
+		}
+
+		if (ImGui::DragFloat("Near Plane", (float*)&near, 0.1f)) {
+			SetPlaneDistances(near, far);
+		}
+
+		if (ImGui::DragFloat("Far Plane", (float*)&far, 0.1f)) {
+			SetPlaneDistances(near, far);
+		}
+	}
+	std::string removeLabel = "Remove Component##" + id;
+	if (ImGui::Button(removeLabel.c_str())) {
+		toDelete = true;
 	}
 	return true;
 }

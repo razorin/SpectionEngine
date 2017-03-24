@@ -29,17 +29,23 @@ public:
 	void Zoom(float dt);
 	void Rotate(float dt);
 	void SetPosition(const math::vec &pos);
-	void SetOrientation(Axis axis, float rotation);
+	/**
+	Sets the camera Up vector and Front vector
+	@param up The up vector
+	@param front The front vector
+	*/
 	void SetLookAt(const math::vec &up, const math::vec &front);
 
 	float * GetMatrixProjection() const;
 	float * GetMatrixView() const;
 	void Update(float dt);
 
-	bool DrawGUI();
-	void setMouseBlocked(bool mouseBlocked);
+	void SetMouseBlocked(bool mouseBlocked);
+	void DrawFrustum();
 
 	bool ContainsAaBox(const math::AABB & refBox) const;
+
+	bool DrawGUI();
 
 public:
 	//These two params may be added as json config
@@ -62,6 +68,7 @@ private:
 
 	bool mouseBlocked = false;
 	bool active = false;
+	bool frustumCulling = false;
 };
 
 #endif // !COMPONENTCAMERA_H

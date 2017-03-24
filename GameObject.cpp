@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleSceneManager.h"
+#include "ModuleCamera.h"
 #include "LightsManager.h"
 #include "Light.h"
 #include "ModuleGUI.h"
@@ -239,66 +240,19 @@ void GameObject::Draw() const
 
 	glMultMatrixf(globalTransform.Transposed().ptr());
 
-
-	//Textures
-
-	//Lights
-
-	//Materials
-
-	//Meshes
 	for (std::list<Component*>::const_iterator it = components.begin(); it != components.end(); it++)
 	{
-		if ((*it)->type == ComponentType::COMPONENT_TYPE_MESH && (*it)->IsActive())
-		{
-			ComponentMesh* cmesh = (ComponentMesh*)(*it);
-			Mesh* mesh = cmesh->mesh;
-
-
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->vboVertices);
-			glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-
-
-			if (mesh->normals != nullptr)
+		if ((*it)->IsActive()) {
+			//Camera
+			if ((*it)->type == ComponentType::COMPONENT_TYPE_CAMERA)
 			{
-				glEnableClientState(GL_NORMAL_ARRAY);
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->vboNormals);
-				glNormalPointer(GL_FLOAT, sizeof(float) * 3, 0);
+				static_cast<ComponentCamera*>(*it)->DrawFrustum();
 			}
-
-			if (mesh->colors != nullptr)
+			//Meshes
+			else if ((*it)->type == ComponentType::COMPONENT_TYPE_MESH)
 			{
-				glEnableClientState(GL_COLOR_ARRAY);
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->vboColors);
-				glColorPointer(3, GL_FLOAT, 0, NULL);
+				static_cast<ComponentMesh*>(*it)->DrawMesh();
 			}
-
-			if (mesh->textureCoords != nullptr)
-			{
-				//for (int i = 0; i < numTextures; i++) {
-				//	glBindTexture(GL_TEXTURE_2D, imageName);
-				//	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-				//	glBindBuffer(GL_ARRAY_BUFFER, vboTextures[i]);
-				//	//Deberia estar fuera
-				//	//glTexCoordPointer(3, GL_FLOAT, 0, NULL);
-				//}
-				glTexCoordPointer(3, GL_FLOAT, 0, NULL);
-				glBindTexture(GL_TEXTURE_2D, mesh->imageName);
-				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->vboTextures);
-				glTexCoordPointer(3, GL_FLOAT, 0, NULL);
-			}
-
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->vboIndices);
-			glDrawElements(GL_TRIANGLES, mesh->numIndices, GL_UNSIGNED_INT, NULL);
-
-
-			glBindTexture(GL_TEXTURE_2D, 0);
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-			glDisableClientState(GL_COLOR_ARRAY);
-			glDisableClientState(GL_VERTEX_ARRAY);
 		}
 	}
 

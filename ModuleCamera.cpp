@@ -4,9 +4,9 @@
 #include "ModuleGUI.h"
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
+#include "ComponentCamera.h"
 #include "Parson.h"
 #include <math.h>
-#include "ComponentCamera.h"
 
 
 ModuleCamera::ModuleCamera(const JSON_Object *json) : Module(json)
@@ -19,6 +19,7 @@ ModuleCamera::ModuleCamera(const JSON_Object *json) : Module(json)
 
 ModuleCamera::~ModuleCamera()
 {
+	RELEASE(activeCamera);
 }
 
 bool ModuleCamera::Init()
@@ -49,7 +50,7 @@ update_status ModuleCamera::Update(float dt)
 {
 	mouseBlocked = App->gui->uiInput;
 	
-	activeCamera->setMouseBlocked(mouseBlocked);
+	activeCamera->SetMouseBlocked(mouseBlocked);
 	activeCamera->Update(dt);
 
 	return UPDATE_CONTINUE;
@@ -232,4 +233,9 @@ float * ModuleCamera::GetMatrixView() const
 	//float4x4 viewMatrix = frustum.ViewMatrix();
 	//float4x4 m = viewMatrix.Transposed();
 	//return &(m[0][0]);
+}
+
+ComponentCamera* ModuleCamera::GetActiveCamera() const
+{
+	return activeCamera;
 }

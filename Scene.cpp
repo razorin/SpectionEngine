@@ -155,7 +155,7 @@ void Scene::Draw()
 	//TransformHierarchy();
 	
 	//DrawRecursively(root);
-	//root->Draw();
+	root->Draw();
 	DrawHierarchyNodes(root);
 }
 
@@ -176,18 +176,18 @@ bool Scene::CleanUp()
 
 void Scene::DrawHierarchyNodes(GameObject * go)
 {
-		glBegin(GL_LINES);
-		//glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+	glBegin(GL_LINES);
+	//glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
 
-		DrawRecursively(go);
+	DrawRecursively(go);
 
-		//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		glEnd();
+	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glEnd();
 }
 
 void Scene::DrawRecursively(GameObject * go)
 {
-	glBegin(GL_LINES);
+	//glBegin(GL_LINES);
 	for (std::list<GameObject*>::iterator it = go->childs.begin(); it != go->childs.end(); it++)
 	{
 		float3 parentPos = go->transform->Position(SpaceMode::SPACE_GLOBAL);
@@ -198,5 +198,5 @@ void Scene::DrawRecursively(GameObject * go)
 
 		DrawRecursively(*it);
 	}
-	glEnd();
+	//glEnd();
 }

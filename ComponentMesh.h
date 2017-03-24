@@ -14,6 +14,8 @@ public:
 	ComponentMesh(GameObject* container, std::string id);
 	~ComponentMesh();
 
+	void DrawMesh();
+
 	bool DrawGUI();
 
 public:
