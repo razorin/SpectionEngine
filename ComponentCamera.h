@@ -4,6 +4,7 @@
 #include "Component.h"
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "MemLeaks.h"
+#include "ModuleCamera.h"
 
 enum Axis {
 	X,
@@ -14,6 +15,7 @@ enum Axis {
 class ComponentCamera :
 	public Component
 {
+	friend class ModuleCamera;
 public:
 	ComponentCamera(GameObject* container, std::string id);
 	~ComponentCamera();
@@ -25,10 +27,11 @@ public:
 	void SetPlaneDistances(float near, float far);
 
 	//View Related Functions
-	void Move(float dt);
-	void Zoom(float dt);
-	void Rotate(float dt);
-	void SetPosition(const math::vec &pos);
+	//void Move(float dt);
+	//void Zoom(float dt);
+	//void Rotate(float dt);
+	//void SetPosition(const math::vec &pos);
+
 	/**
 	Sets the camera Up vector and Front vector
 	@param up The up vector
@@ -38,7 +41,7 @@ public:
 
 	float * GetMatrixProjection() const;
 	float * GetMatrixView() const;
-	void Update(float dt);
+	//void Update(float dt);
 
 	void SetMouseBlocked(bool mouseBlocked);
 	void DrawFrustum();

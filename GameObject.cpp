@@ -252,11 +252,11 @@ void GameObject::Draw() const
 			else if ((*it)->type == ComponentType::COMPONENT_TYPE_MESH)
 			{
 				// Apply frustum culling only if option activated and object is static
-				if (this->staticObject) { //&& App->camera->GetActiveCamera()->IsFrustumCulling()) {
+				if (this->staticObject) { //&& App->camera->GetEditorCamera()->IsFrustumCulling()) {
 					bool contained = false;
 					// Test all AABBs from this GO
 					for (auto itBoxes = AABBoxes.begin(); itBoxes != AABBoxes.end(); ++itBoxes) {
-						if (App->camera->GetActiveCamera()->ContainsAaBox((*itBoxes))) {
+						if (App->camera->GetEditorCamera()->ContainsAaBox((*itBoxes))) {
 							contained = true;
 							break;
 						}

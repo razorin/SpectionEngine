@@ -4,14 +4,9 @@
 #include "Module.h"
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "MemLeaks.h"
+#include  <list>
 
 class ComponentCamera;
-
-//enum Axis {
-//	X,
-//	Y,
-//	Z
-//};
 
 class ModuleCamera :
 	public Module
@@ -40,7 +35,10 @@ public:
 	float * GetMatrixProjection() const;
 	float * GetMatrixView() const;
 
-	ComponentCamera* GetActiveCamera() const;
+	void AddCamera(ComponentCamera* cam);
+	void RemoveCamera(ComponentCamera* cam);
+
+	ComponentCamera* GetEditorCamera() const;
 
 public:
 	//These two params may be added as json config
@@ -51,14 +49,8 @@ public:
 	bool invertYAxis = false;
 
 private:
-	ComponentCamera *activeCamera = nullptr;
-	//std::list<ComponentCamera *> cameras;
-	Frustum frustum;
-	float aspectRatio = 1.78;
-	float verticalFov = 30;
-	float horizontalFov = 30;
-	float nearPlane = 0;
-	float farPlane = 0;
+	ComponentCamera *editorCamera = nullptr;
+	std::list<ComponentCamera *> cameras;
 
 	math::vec pos = { 0,0,0 };
 
