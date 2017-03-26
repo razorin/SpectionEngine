@@ -3,9 +3,30 @@
 
 #include <list>
 #include "Globals.h"
+#include "assimp/cimport.h"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
+#include "assimp\anim.h"
+
+
+
+struct Weight
+{
+	unsigned vertex = 0;
+	float weight = 0.0f;
+};
+
+struct Bone
+{
+	aiString name;
+	Weight* weights = nullptr;
+	unsigned numWegiths = 0;
+	aiMatrix4x4 bind;
+};
 
 class Mesh
 {
+
 public:
 	Mesh();
 	~Mesh();
@@ -18,7 +39,6 @@ public:
 	uint vboColors = 0;
 	uint vboNormals = 0;
 	uint vboTextures = 0;
-	//uint *vboTextures = nullptr;
 
 	uint numVertices = 0;
 	uint numIndices = 0;
@@ -29,8 +49,10 @@ public:
 	float *vertices = nullptr;
 	float *colors = nullptr;
 	float* normals = nullptr;
-	//float *textureCoords = nullptr;
 	float *textureCoords = nullptr;
+
+	Bone* bones = nullptr;
+	unsigned numBones = 0;
 
 };
 

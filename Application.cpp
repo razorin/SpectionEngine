@@ -155,6 +155,7 @@ update_status Application::Update()
 	float previousFrameTime = lastFrameMilliseconds;
 	lastFrameMilliseconds = avgTimer->EllapsedInMilliseconds();
 	float dt = lastFrameMilliseconds - previousFrameTime;
+	assert(dt >= 0);
 	//DLOG("DT: %f milliseconds", dt);
 	window->ChangeTitle((std::to_string(dt)).c_str());
 

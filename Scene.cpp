@@ -8,6 +8,7 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "MemLeaks.h"
+#include "Mesh.h"
 
 
 Scene::Scene()
@@ -97,6 +98,27 @@ void Scene::LoadLevel(const char * path, const char * file)
 		}
 
 		mesh->InitializeBuffers();
+
+		// Save bones info
+		if (aiMesh->HasBones())
+		{
+			mesh->numBones = aiMesh->mNumBones;
+			mesh->bones = new Bone[mesh->numBones];
+			for (int j = 0; j < mesh->numBones; j++)
+			{
+				mesh->bones[j].name = aiMesh->mBones[j]->mName;
+				mesh->bones[j].bind = aiMesh->mBones[j]->mOffsetMatrix;
+
+				mesh->bones[j].numWegiths = aiMesh->mBones[j]->mNumWeights;
+				mesh->bones[j].weights = new Weight[mesh->bones[j].numWegiths];
+				for (int k = 0; k < mesh->bones[j].numWegiths; k++)
+				{
+					mesh->bones[j].weights[k].vertex = aiMesh->mBones[j]->mWeights[k].mVertexId;
+					mesh->bones[j].weights[k].weight = aiMesh->mBones[j]->mWeights[k].mWeight;
+				}
+			}
+		}
+
 		meshes.push_back(mesh);
 	}
 
@@ -144,7 +166,7 @@ void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject *
 
 void Scene::Draw()
 {
-	//root->Draw();
+	root->Draw();
 
 	DrawHierarchyNodes(root);
 }

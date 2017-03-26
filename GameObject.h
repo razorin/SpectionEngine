@@ -28,6 +28,8 @@ public:
 	std::list<Component *> * FindComponents(const ComponentType &type);
 	Component* FindComponent(const ComponentType &type);
 
+	GameObject* FindGoInChilds(const char* name);
+
 	void Draw() const;
 	bool CleanUp();
 

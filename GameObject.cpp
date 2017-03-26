@@ -77,11 +77,11 @@ void GameObject::SetParent(GameObject * parentGO)
 	//Also if we dont want a parent anymore, parentGo will be nullptr
 
 	float4x4 newParentGT = float4x4::identity;
-	if (parentGO != nullptr){
+	if (parentGO != nullptr) {
 		newParentGT = parentGO->transform->GlobalTransform();
 	}
 
-	if (parent == nullptr){
+	if (parent == nullptr) {
 		transform->SetParent(newParentGT);
 	}
 	else {
@@ -197,6 +197,27 @@ Component * GameObject::FindComponent(const ComponentType & type)
 		}
 	}
 	return componentFound;
+}
+
+GameObject * GameObject::FindGoInChilds(const char * name)
+{
+	GameObject * goFound = nullptr;
+	bool found = false;
+
+	for (std::list<GameObject *>::iterator it = childs.begin(); (it != childs.end() && !found); it++) {
+		if ((*it)->name.compare(name) == 0) {
+			goFound = *it;
+			found = true;
+		}
+		else
+		{
+			goFound = (*it)->FindGoInChilds(name);
+			if (goFound != nullptr) {
+				found = true;
+			}
+		}
+	}
+	return goFound;
 }
 
 void GameObject::Draw() const

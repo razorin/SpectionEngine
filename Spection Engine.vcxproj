@@ -71,7 +71,9 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="AssimpIncludes.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentAnim.h" />
     <ClInclude Include="ComponentCamera.h" />
     <ClInclude Include="ComponentLight.h" />
     <ClInclude Include="ComponentMaterial.h" />
@@ -124,6 +126,7 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="ComponentAnim.cpp" />
     <ClCompile Include="ComponentCamera.cpp" />
     <ClCompile Include="ComponentLight.cpp" />
     <ClCompile Include="ComponentMaterial.cpp" />

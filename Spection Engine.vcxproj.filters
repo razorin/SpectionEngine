@@ -181,6 +181,12 @@
     <ClInclude Include="ModuleAnimation.h">
       <Filter>Core Modules</Filter>
     </ClInclude>
+    <ClInclude Include="AssimpIncludes.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentAnim.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -314,6 +320,9 @@
     </ClCompile>
     <ClCompile Include="ModuleAnimation.cpp">
       <Filter>Core Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentAnim.cpp">
+      <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

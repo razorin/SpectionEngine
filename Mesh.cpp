@@ -15,12 +15,14 @@ Mesh::~Mesh()
 	RELEASE(this->colors);
 	RELEASE(this->indices);
 	RELEASE(this->vertices);
-	//for (int i = 0; i < numTextures; i++) {
-	//	RELEASE_ARRAY(this->textureCoords[i]);
-	//}
 	RELEASE_ARRAY(this->textureCoords);
 	//RELEASE(vboTextures);
-	//RELEASE(imageName);
+
+	for (int i = 0; i < numBones; i++)
+	{
+		RELEASE_ARRAY(this->bones[i].weights);
+	}
+	RELEASE_ARRAY(this->bones);
 }
 
 void Mesh::InitializeBuffers()

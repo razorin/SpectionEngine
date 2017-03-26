@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "ComponentTransform.h"
+#include <assert.h>
 
 
 ModuleSceneManager::ModuleSceneManager(const JSON_Object *json, bool active) : Module(json, active)
@@ -18,7 +19,8 @@ bool ModuleSceneManager::Start() {
 	//loadCurrentScene("Models/Batman/", "Batman.obj");
 	//loadCurrentScene("Models/street/", "Street.obj");
 	loadCurrentScene("Models/ArmyPilot/", "ArmyPilot.dae");
-	//GameObject* go = currentScene->GetGameObject("Street.obj");
+	//GameObject* go = currentScene->GetGameObject("RootFrame");
+	//GameObject* goChild = go->FindGoInChilds("Pelvis");
 	return true;
 }
 
