@@ -159,7 +159,7 @@ update_status Application::Update()
 	float dt = lastFrameMilliseconds - previousFrameTime;
 	assert(dt >= 0);
 	//DLOG("DT: %f milliseconds", dt);
-	window->ChangeTitle((std::to_string(dt)).c_str());
+	//window->ChangeTitle((std::to_string(dt)).c_str());
 
 	if (ellapsedTime < this->msByFrame) {
 		gui->AddMsLog(msByFrame);

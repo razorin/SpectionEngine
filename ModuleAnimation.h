@@ -10,6 +10,8 @@
 #include "assimp/postprocess.h"
 #include "assimp\anim.h"
 #include "MathGeoLib\include\MathGeoLib.h"
+#include "PreciseTimer.h"
+#include "GameObject.h"
 
 struct NodeAnim
 {
@@ -19,8 +21,6 @@ struct NodeAnim
 	uint numPositions = 0;
 	uint numRotations = 0;
 	uint numKeyframes = 0;
-	float3 currentPos = float3::zero;
-	Quat currentRot = Quat::identity;
 };
 
 struct Anim
@@ -64,16 +64,20 @@ public:
 	bool CleanUp();
 	update_status Update(float dt = 0);
 	void UpdateInstances(float dt);
-	void UpdateBones(float dt);
-
+	void DeformMeshes();
+	void DeformMeshRecursive(GameObject* go);
 
 	uint Play(const char* animName, bool loop = true);
 	void Stop(uint instanceId);
 	void BlendTo(uint instanceId, const char* newAnim, uint blendTime);
 	bool GetTransform(uint instanceId, const char* channelName, float3& position, Quat& rotation);
-	bool GetTransform(AnimInstance* instance, NodeAnim* channel);
+	bool GetTransform(AnimInstance* instance, NodeAnim* channel, float3& position, Quat& rotation);
 	float3 InterpVector3D(const float3& first, const float3& second, float lambda) const;
 	Quat InterpQuaternion(const Quat& first, const Quat& second, float lambda) const;
+
+public:
+	PreciseTimer timer;
+	float operationTime;
 
 };
 

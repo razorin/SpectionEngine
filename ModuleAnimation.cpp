@@ -6,6 +6,8 @@
 #include "Scene.h"
 #include "ComponentTransform.h"
 #include "ComponentAnim.h"
+#include "ComponentMesh.h"
+#include "ModuleWindow.h"
 
 using namespace std;
 
@@ -138,10 +140,9 @@ update_status ModuleAnimation::Update(float dt)
 	}
 
 
-	/*UpdateInstances(dt);
-	UpdateBones(dt);*/
-
-	for (int i = 0; i < instances.size(); i++)
+	UpdateInstances(dt);
+	DeformMeshes();
+	/*for (int i = 0; i < instances.size(); i++)
 	{
 		AnimInstance* instance = instances[i];
 		instance->time += dt;
@@ -166,39 +167,12 @@ update_status ModuleAnimation::Update(float dt)
 				}
 			}
 		}
-	}
+	}*/
 
 	return UPDATE_CONTINUE;
 }
 
 void ModuleAnimation::UpdateInstances(float dt)
-{
-	for (int i = 0; i < instances.size(); i++)
-	{
-		AnimInstance* instance = instances[i];
-		instance->time += dt;
-		if (instance->time > instance->animation->duration)
-		{
-			if (instance->loop) {
-				instance->time -= instance->animation->duration;
-			}
-			else
-			{
-				/*RELEASE(instances[instance->id]);
-				holes.push_back(instance->id);
-				return;*/
-			}
-		}
-		else {
-			for (int j = 0; j < instance->animation->numChannels; j++)
-			{
-				GetTransform(instance, &instance->animation->channels[j]);
-			}
-		}
-	}
-}
-
-void ModuleAnimation::UpdateBones(float dt)
 {
 	Scene* scene = App->sceneManager->getCurrentScene();
 
@@ -210,17 +184,85 @@ void ModuleAnimation::UpdateBones(float dt)
 				return;
 
 			AnimInstance* instance = instances[componentAnim->instanceId];
-			for (int j = 0; j < instance->animation->numChannels; j++)
+
+			instance->time += dt;
+			if (instance->time > instance->animation->duration)
 			{
-				GameObject* boneGO = (*it)->FindGoInChilds(instance->animation->channels[j].name.data);
-				if (boneGO == nullptr)
-					int a = 1;
+				if (instance->loop)
+				{
+					while (instance->time > instance->animation->duration)
+					{
+						instance->time -= instance->animation->duration;
+					}
+				}
 				else
-					boneGO->transform->SetTransform(instance->animation->channels[j].currentPos, instance->animation->channels[j].currentRot);
+					return;
+			}
+
+			float3 pos = float3::zero;
+			Quat rot = Quat::identity;
+
+			for (int i = 0; i < instance->animation->numChannels; i++)
+			{
+				GameObject* boneGO = (*it)->FindGoInChilds(instance->animation->channels[i].name.data);
+				if (boneGO != nullptr)
+				{
+					pos = float3::zero;
+					rot = Quat::identity;
+					timer.Stop();
+					timer.Start();
+
+					GetTransform(instance, &instance->animation->channels[i], pos, rot);
+					//GetTransform(instance->id, instance->animation->channels[i].name.data, pos, rot);
+
+					boneGO->transform->SetTransform(pos, rot);
+
+					operationTime = timer.EllapsedInMilliseconds();
+					if (operationTime != 0.000f)
+						App->window->ChangeTitle(std::to_string(operationTime).c_str());
+
+				}
 			}
 		}
 	}
 }
+
+void ModuleAnimation::DeformMeshes()
+{
+	Scene* scene = App->sceneManager->getCurrentScene();
+
+	for (std::list<GameObject*>::iterator it = scene->gameobjects.begin(); it != scene->gameobjects.end(); it++)
+	{
+		if (ComponentAnim* componentAnim = (ComponentAnim*)(*it)->FindComponent(ComponentType::COMPONENT_TYPE_ANIMATION))
+		{
+			if (!componentAnim->isPlaying)
+				return;
+
+			DeformMeshRecursive(*it);
+		}
+	}
+}
+
+void ModuleAnimation::DeformMeshRecursive(GameObject * go)
+{
+	ComponentMesh* componentMesh = nullptr;
+	componentMesh = (ComponentMesh*)go->FindComponent(ComponentType::COMPONENT_TYPE_MESH);
+	if (componentMesh == nullptr)
+		return;
+
+
+	//deformar mesh
+
+
+	for (std::list<GameObject*>::iterator it = go->childs.begin(); it != go->childs.end(); it++)
+	{
+		DeformMeshRecursive(*it);
+	}
+}
+
+
+
+
 
 //Play("Run_Forwards");
 uint ModuleAnimation::Play(const char * animName, bool loop)
@@ -304,20 +346,17 @@ bool ModuleAnimation::GetTransform(uint instanceId, const char * channelName, fl
 		nextIndex = 0;
 	}
 
-	//position = channel.positions[posIndex];
-	//rotation = channel.rotations[rotIndex];
+	position = InterpVector3D(channel.positions[posIndex], channel.positions[nextIndex], posLambda);
+	rotation = InterpQuaternion(channel.rotations[rotIndex], channel.rotations[nextIndex], rotLambda);
 
-	//position = InterpVector3D(channel.positions[posIndex], channel.positions[nextIndex], posLambda);
-	//rotation = InterpQuaternion(channel.rotations[rotIndex], channel.rotations[nextIndex], rotLambda);
-
-	position = channel.positions[posIndex].Lerp(channel.positions[nextIndex], posLambda);
-	rotation = channel.rotations[rotIndex].Lerp(channel.rotations[nextIndex], rotLambda);
+	//position = channel.positions[posIndex].Lerp(channel.positions[nextIndex], posLambda);
+	//rotation = channel.rotations[rotIndex].Lerp(channel.rotations[nextIndex], rotLambda);
 
 	ret = true;
 	return ret;
 }
 
-bool ModuleAnimation::GetTransform(AnimInstance* instance, NodeAnim * channel)
+bool ModuleAnimation::GetTransform(AnimInstance * instance, NodeAnim * channel, float3 & position, Quat & rotation)
 {
 	float positionKey = float(instance->time * (channel->numPositions - 1)) / float(instance->animation->duration);
 	float rotationKey = float(instance->time * (channel->numRotations - 1)) / float(instance->animation->duration);
@@ -340,8 +379,11 @@ bool ModuleAnimation::GetTransform(AnimInstance* instance, NodeAnim * channel)
 		nextIndex = 0;
 	}
 
-	channel->currentPos = channel->positions[posIndex].Lerp(channel->positions[nextIndex], posLambda);
-	channel->currentRot = channel->rotations[rotIndex].Lerp(channel->rotations[nextIndex], rotLambda);
+	//position = channel->positions[posIndex].Lerp(channel->positions[nextIndex], posLambda);
+	//rotation = channel->rotations[rotIndex].Lerp(channel->rotations[nextIndex], rotLambda);
+
+	position = InterpVector3D(channel->positions[posIndex], channel->positions[nextIndex], posLambda);
+	rotation = InterpQuaternion(channel->rotations[rotIndex], channel->rotations[nextIndex], rotLambda);
 
 	return true;
 }
@@ -370,5 +412,6 @@ Quat ModuleAnimation::InterpQuaternion(const Quat & first, const Quat & second, 
 		result.z = first.z*(1.0f - lambda) - second.z*lambda;
 		result.w = first.w*(1.0f - lambda) - second.w*lambda;
 	}
+	result.Normalize();
 	return result;
 }
