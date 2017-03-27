@@ -109,6 +109,10 @@ void Scene::LoadLevel(const char * path, const char * file)
 	RecursiveNodeRead(root, *rootNode, nullptr);
 
 	aiReleaseImport(scene);
+
+	GameObject *go = AddGameObject(root, true);
+
+	go->AddComponent(ComponentType::COMPONENT_TYPE_BILLBOARDING);
 }
 
 void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject * parentGO)

@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleSceneManager.h"
+#include "ModuleCamera.h"
 #include "LightsManager.h"
 #include "Light.h"
 #include "ModuleGUI.h"
@@ -13,6 +14,7 @@
 #include "ComponentMesh.h"
 #include "ComponentScript.h"
 #include "ComponentTransform.h"
+#include "ComponentBillboarding.h"
 
 //IMGUI Includes
 #include "IMGUI\imconfig.h"
@@ -95,7 +97,7 @@ void GameObject::OnTransformChange()
 }
 
 
-Component * GameObject::AddComponent(const ComponentType &type)
+Component * GameObject::AddComponent(const ComponentType &type, ...)
 {
 	++componentCounter;
 	Component *result = nullptr;
@@ -137,6 +139,10 @@ Component * GameObject::AddComponent(const ComponentType &type)
 	case ComponentType::COMPONENT_TYPE_TRANSFORM:
 		result = new ComponentTransform(this, std::to_string(componentCounter));
 		result->maxComponentsByGO = 1;
+		break;
+	case ComponentType::COMPONENT_TYPE_BILLBOARDING:
+		result = new ComponentBillboarding(this, std::to_string(componentCounter), float2(2, 2), aiString("Models/Grass/billboardgrass.png"));
+		result->maxComponentsByGO = 0;
 		break;
 	}
 
@@ -249,6 +255,11 @@ void GameObject::Draw() const
 	//Meshes
 	for (std::list<Component*>::const_iterator it = components.begin(); it != components.end(); it++)
 	{
+		if ((*it)->type == ComponentType::COMPONENT_TYPE_BILLBOARDING && (*it)->IsActive()) {
+			ComponentBillboarding *boardinginging = (ComponentBillboarding*)(*it);
+			//TODO: ComputeQuad
+			boardinginging->ComputeQuad({ 0, 5, 0 });
+		}
 		if ((*it)->type == ComponentType::COMPONENT_TYPE_MESH && (*it)->IsActive())
 		{
 			ComponentMesh* cmesh = (ComponentMesh*)(*it);

@@ -13,6 +13,8 @@
 #include "IMGUI\stb_textedit.h"
 #include "IMGUI\stb_truetype.h"
 
+#include "Globals.h"
+
 
 ComponentCamera::ComponentCamera(GameObject * container, std::string id) : Component(container, ComponentType::COMPONENT_TYPE_CAMERA, id)
 {

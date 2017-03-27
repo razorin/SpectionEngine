@@ -5,11 +5,7 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "MemLeaks.h"
 
-enum Axis {
-	X,
-	Y,
-	Z
-};
+#include "Globals.h"
 
 class ComponentCamera :
 	public Component
