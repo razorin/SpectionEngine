@@ -157,6 +157,13 @@ void ComponentTransform::SetTransform(const float3 & position, const float3 & sc
 	CalculateTransforms();
 }
 
+void ComponentTransform::SetTransform(const float3 & position, const Quat & rotation)
+{
+	this->position = position;
+	this->rotation = rotation;
+	CalculateTransforms();
+}
+
 void ComponentTransform::SetParent(const float4x4 & parentGT)
 {
 	parentGlobalTransform = parentGT;

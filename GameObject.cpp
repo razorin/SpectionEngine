@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "GameObject.h"
 #include "Component.h"
+#include "ComponentAnim.h"
 #include "ComponentCamera.h"
 #include "ComponentLight.h"
 #include "ComponentMaterial.h"
@@ -19,7 +20,6 @@
 #include "IMGUI\stb_truetype.h"
 
 
-//TODO delete empty constuctor.This one below can do the same
 GameObject::GameObject(GameObject * parent, const char * name) : parent(parent), name(name)
 {
 	AddComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
@@ -114,6 +114,10 @@ Component * GameObject::AddComponent(const ComponentType &type)
 	//}
 
 	switch (type) {
+	case ComponentType::COMPONENT_TYPE_ANIMATION:
+		result = new ComponentAnim(this);
+		result->maxComponentsByGO = 1;
+		break;
 	case ComponentType::COMPONENT_TYPE_CAMERA:
 		result = new ComponentCamera(this);
 		result->maxComponentsByGO = 1;
@@ -219,6 +223,7 @@ GameObject * GameObject::FindGoInChilds(const char * name)
 	}
 	return goFound;
 }
+
 
 void GameObject::Draw() const
 {

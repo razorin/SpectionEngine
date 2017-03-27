@@ -1,6 +1,7 @@
 #ifndef _COMPONENTANIM_H
 #define _COMPONENTANIM_H
 
+#include "Globals.h"
 #include "Component.h"
 #include "ModuleAnimation.h"
 #include "AssimpIncludes.h"
@@ -13,18 +14,24 @@ public:
 	ComponentAnim(GameObject* container);
 	~ComponentAnim();
 
-	void AddClip(Anim* clip);
-	void SetCurrentClip (Anim* clip);
+	bool AddClip(Anim* clip);
+	bool SetCurrentClip (Anim* clip);
+	bool CheckClipInList(Anim* clip);
+	bool CheckClipInList(const char* animName);
+
+	void Play(bool loop = true);
 	void Play(bool loop, const char* animName);
 	void Stop();
+	void EndClip();
+
+	bool DrawGUI();
 
 public:
-	Anim* currentCLip = nullptr;
-
+	Anim* currentClip = nullptr;
+	bool isPlaying = false;
 	unsigned numClips = 0;
 	std::vector<Anim*> clips;
-
-	uint playingClipInstanceId = -1;
+	uint instanceId = -1;
 };
 
 #endif

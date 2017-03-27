@@ -25,14 +25,16 @@ public:
 	void RecursiveNodeRead(GameObject* go, aiNode& aiNode, GameObject* parentGO);
 
 	void Draw();
-	GameObject* root;
 	bool CleanUp();
 
 	void DrawHierarchyNodes(GameObject* go);
 	void DrawRecursively(GameObject* go);
 
-private:
+public:
+	GameObject* root;
 	std::list<GameObject *> gameobjects;
+
+private:
 	std::vector<Mesh *> meshes;
 	std::vector<Material *> materials;
 	//std::list<Animation *> animations;

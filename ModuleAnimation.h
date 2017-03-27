@@ -19,6 +19,8 @@ struct NodeAnim
 	uint numPositions = 0;
 	uint numRotations = 0;
 	uint numKeyframes = 0;
+	float3 currentPos = float3::zero;
+	Quat currentRot = Quat::identity;
 };
 
 struct Anim
@@ -61,11 +63,15 @@ public:
 	void Load(const char* path, const char* file);
 	bool CleanUp();
 	update_status Update(float dt = 0);
+	void UpdateInstances(float dt);
+	void UpdateBones(float dt);
 
-	uint Play(const char* animName);
+
+	uint Play(const char* animName, bool loop = true);
 	void Stop(uint instanceId);
 	void BlendTo(uint instanceId, const char* newAnim, uint blendTime);
 	bool GetTransform(uint instanceId, const char* channelName, float3& position, Quat& rotation);
+	bool GetTransform(AnimInstance* instance, NodeAnim* channel);
 	float3 InterpVector3D(const float3& first, const float3& second, float lambda) const;
 	Quat InterpQuaternion(const Quat& first, const Quat& second, float lambda) const;
 

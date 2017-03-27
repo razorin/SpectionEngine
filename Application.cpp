@@ -56,6 +56,8 @@ Application::Application()
 	//Game Modules
 	modules.push_back(testScene = new ModuleTestScene(true));
 	modules.push_back(sceneManager = new ModuleSceneManager(nullptr,true));
+
+	//TODO module animation should go before module render. Animate things before render them!
 	modules.push_back(animator = new ModuleAnimation());
 	
 
