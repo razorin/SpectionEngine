@@ -78,6 +78,7 @@ bool ModuleRender::Init()
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		glClearDepth(1.0f);
 		glClearColor(0.f, 0.f, 0.f, 1.f);
+		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
 		//glEnable(GL_CULL_FACE);
@@ -88,16 +89,6 @@ bool ModuleRender::Init()
 		glFrontFace(GL_CCW);
 		glCullFace(GL_BACK);
 	}
-
-	positionLight = new float[4]{ 1.f, 1.f, 1.f, 1.f };
-	diffuseLight = new float[4]{ 1.f, .8f, .8f, 1.f };
-
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
-	glLightfv(GL_LIGHT0, GL_POSITION, positionLight);
-
-	//App->lightsManager->AddLight(LT_DIRECTIONAL_LIGHT, { 1.0f, 0.0f, 0.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
-	//App->lightsManager->AddLight(LT_POINT_LIGHT, { 0.0f, 1.0f, 0.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 1.0f, 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
-	//App->lightsManager->AddLight(LT_SPOTLIGHT_LIGHT, { 0.0f, 1.0f, 0.0f }, { 0.2f, 0.2f, 0.2f, 1.0f }, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, -1.0f, 0.0f });
 
 	return ret;
 }
@@ -147,8 +138,6 @@ update_status ModuleRender::PostUpdate(float dt)
 // Called before quitting
 bool ModuleRender::CleanUp()
 {
-	RELEASE(positionLight);
-	RELEASE(diffuseLight);
 	App->gui->console.AddLog("Destroying renderer");
 	DLOG("Destroying renderer");
 
