@@ -107,7 +107,17 @@ void Scene::LoadLevel(const char * path, const char * file)
 			for (int j = 0; j < mesh->numBones; j++)
 			{
 				mesh->bones[j].name = aiMesh->mBones[j]->mName;
-				mesh->bones[j].bind = aiMesh->mBones[j]->mOffsetMatrix;
+
+				//mesh->bones[j].bind = aiMesh->mBones[j]->mOffsetMatrix;
+				for (int row = 0; row < 4; row++)
+				{
+					for (int col = 0; col < 4; col++)
+					{
+						mesh->bones[j].bind[row][col] = aiMesh->mBones[j]->mOffsetMatrix[row][col];
+					}
+				}
+
+
 
 				mesh->bones[j].numWegiths = aiMesh->mBones[j]->mNumWeights;
 				mesh->bones[j].weights = new Weight[mesh->bones[j].numWegiths];

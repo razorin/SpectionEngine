@@ -3,10 +3,9 @@
 
 #include <list>
 #include "Globals.h"
-#include "assimp/cimport.h"
-#include "assimp/scene.h"
-#include "assimp/postprocess.h"
-#include "assimp\anim.h"
+#include "AssimpIncludes.h"
+#include "MathGeoLib\include\MathGeoLib.h"
+#include "ComponentTransform.h"
 
 
 
@@ -21,7 +20,7 @@ struct Bone
 	aiString name;
 	Weight* weights = nullptr;
 	unsigned numWegiths = 0;
-	aiMatrix4x4 bind;
+	float4x4 bind;
 };
 
 class Mesh
