@@ -23,6 +23,7 @@ public:
 	GameObject* GetGameObject(std::string name);
 	void LoadLevel(const char* path, const char* file);
 	void RecursiveNodeRead(GameObject* go, aiNode& aiNode, GameObject* parentGO);
+	void BindBonesTransform();
 
 	void Draw();
 	bool CleanUp();

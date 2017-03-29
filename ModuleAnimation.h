@@ -65,7 +65,7 @@ public:
 	update_status Update(float dt = 0);
 	void UpdateInstances(float dt);
 	void DeformMeshes();
-	void DeformMeshRecursive(GameObject* go);
+	void DeformGOMeshes(GameObject* go);
 
 	uint Play(const char* animName, bool loop = true);
 	void Stop(uint instanceId);
@@ -74,10 +74,6 @@ public:
 	bool GetTransform(AnimInstance* instance, NodeAnim* channel, float3& position, Quat& rotation);
 	float3 InterpVector3D(const float3& first, const float3& second, float lambda) const;
 	Quat InterpQuaternion(const Quat& first, const Quat& second, float lambda) const;
-
-public:
-	PreciseTimer timer;
-	float operationTime;
 
 };
 

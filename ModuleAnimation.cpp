@@ -4,6 +4,7 @@
 #include "ModuleInput.h"
 #include "GameObject.h"
 #include "Scene.h"
+#include "Component.h"
 #include "ComponentTransform.h"
 #include "ComponentAnim.h"
 #include "ComponentMesh.h"
@@ -31,8 +32,9 @@ bool ModuleAnimation::Start()
 {
 	Load("Models/ArmyPilot/Animations/", "ArmyPilot_Idle.fbx");
 	Load("Models/ArmyPilot/Animations/", "ArmyPilot_Run_Forwards.fbx");
-
-	GameObject* go = App->sceneManager->getCurrentScene()->GetGameObject("RootFrame");
+	//GameObject* go = App->sceneManager->getCurrentScene()->GetGameObject("RootFrame");
+	GameObject* go = App->sceneManager->getCurrentScene()->GetGameObject("$ColladaAutoName$_0");
+	//GameObject* go = App->sceneManager->getCurrentScene()->GetGameObject("RootFrame");
 	ComponentAnim* compAnim = (ComponentAnim*)go->AddComponent(ComponentType::COMPONENT_TYPE_ANIMATION);
 	AnimationMap::iterator it = animations.find("Idle");
 	compAnim->AddClip((*it).second);
@@ -209,18 +211,10 @@ void ModuleAnimation::UpdateInstances(float dt)
 				{
 					pos = float3::zero;
 					rot = Quat::identity;
-					timer.Stop();
-					timer.Start();
 
 					GetTransform(instance, &instance->animation->channels[i], pos, rot);
-					//GetTransform(instance->id, instance->animation->channels[i].name.data, pos, rot);
 
 					boneGO->transform->SetTransform(pos, rot);
-
-					operationTime = timer.EllapsedInMilliseconds();
-					if (operationTime != 0.000f)
-						App->window->ChangeTitle(std::to_string(operationTime).c_str());
-
 				}
 			}
 		}
@@ -238,25 +232,22 @@ void ModuleAnimation::DeformMeshes()
 			if (!componentAnim->isPlaying)
 				return;
 
-			DeformMeshRecursive(*it);
+			DeformGOMeshes(*it);
 		}
 	}
 }
 
-void ModuleAnimation::DeformMeshRecursive(GameObject * go)
+void ModuleAnimation::DeformGOMeshes(GameObject * go)
 {
-	ComponentMesh* componentMesh = nullptr;
-	componentMesh = (ComponentMesh*)go->FindComponent(ComponentType::COMPONENT_TYPE_MESH);
-	if (componentMesh == nullptr)
-		return;
-
-
-	//deformar mesh
-
+	for (std::list<Component*>::iterator it = go->components.begin(); it != go->components.end(); it++)
+	{
+		if ((*it)->type == COMPONENT_TYPE_MESH)
+			((ComponentMesh*)(*it))->mesh->Deform();
+	}
 
 	for (std::list<GameObject*>::iterator it = go->childs.begin(); it != go->childs.end(); it++)
 	{
-		DeformMeshRecursive(*it);
+		DeformGOMeshes(*it);
 	}
 }
 

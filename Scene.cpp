@@ -119,9 +119,9 @@ void Scene::LoadLevel(const char * path, const char * file)
 
 
 
-				mesh->bones[j].numWegiths = aiMesh->mBones[j]->mNumWeights;
-				mesh->bones[j].weights = new Weight[mesh->bones[j].numWegiths];
-				for (int k = 0; k < mesh->bones[j].numWegiths; k++)
+				mesh->bones[j].numWeights = aiMesh->mBones[j]->mNumWeights;
+				mesh->bones[j].weights = new Weight[mesh->bones[j].numWeights];
+				for (int k = 0; k < mesh->bones[j].numWeights; k++)
 				{
 					mesh->bones[j].weights[k].vertex = aiMesh->mBones[j]->mWeights[k].mVertexId;
 					mesh->bones[j].weights[k].weight = aiMesh->mBones[j]->mWeights[k].mWeight;
@@ -137,6 +137,7 @@ void Scene::LoadLevel(const char * path, const char * file)
 	gameobjects.push_back(root);
 	aiNode* rootNode = scene->mRootNode;
 	RecursiveNodeRead(root, *rootNode, nullptr);
+	BindBonesTransform();
 
 	aiReleaseImport(scene);
 }
@@ -171,6 +172,22 @@ void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject *
 		RecursiveNodeRead(childGO, *aiChildNode, go);
 		go->childs.push_back(childGO);
 		this->gameobjects.push_back(childGO);
+	}
+}
+
+void Scene::BindBonesTransform()
+{
+	for (int i = 0; i < meshes.size(); i++)
+	{
+		for (int j = 0; j < meshes[i]->numBones; j++)
+		{
+			GameObject* boneReference = GetGameObject(meshes[i]->bones[j].name.data);
+
+			if (boneReference != nullptr)
+			{
+				meshes[i]->bones[j].ownerGOTransform = boneReference->transform;
+			}
+		}
 	}
 }
 

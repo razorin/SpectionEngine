@@ -19,8 +19,9 @@ struct Bone
 {
 	aiString name;
 	Weight* weights = nullptr;
-	unsigned numWegiths = 0;
+	unsigned numWeights = 0;
 	float4x4 bind;
+	ComponentTransform* ownerGOTransform;
 };
 
 class Mesh
@@ -32,6 +33,9 @@ public:
 
 	void InitializeBuffers();
 	void Draw() const;
+	void Deform();
+
+
 public:
 	uint vboVertices = 0;
 	uint vboIndices = 0;
