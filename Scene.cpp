@@ -9,21 +9,23 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "MemLeaks.h"
+#include "Mesh.h"
 
 using namespace std;
 
 Scene::Scene()
 {
+	root = AddGameObject(nullptr, false, "Root");
 }
 
 Scene::~Scene()
 {
 }
 
-GameObject* Scene::AddGameObject(GameObject* parent, bool editable)
+GameObject* Scene::AddGameObject(GameObject* parent, bool editable, const std::string &name)
 {
 	++gameObjectsCounter;
-	GameObject* go = new GameObject(std::to_string(gameObjectsCounter), parent, ("Empty Game Object###" + std::to_string(gameObjectsCounter)).c_str(), editable);
+	GameObject* go = new GameObject(std::to_string(gameObjectsCounter), parent, name == "" ? ("Empty Game Object###" + std::to_string(gameObjectsCounter)).c_str() : name.c_str(), editable);
 	if (parent != nullptr) {
 		parent->childs.push_back(go);
 	}
@@ -100,13 +102,45 @@ void Scene::LoadLevel(const char * path, const char * file)
 		}
 
 		mesh->InitializeBuffers();
+
+		// Save bones info
+		if (aiMesh->HasBones())
+		{
+			mesh->numBones = aiMesh->mNumBones;
+			mesh->bones = new Bone[mesh->numBones];
+			for (int j = 0; j < mesh->numBones; j++)
+			{
+				mesh->bones[j].name = aiMesh->mBones[j]->mName;
+
+				//mesh->bones[j].bind = aiMesh->mBones[j]->mOffsetMatrix;
+				for (int row = 0; row < 4; row++)
+				{
+					for (int col = 0; col < 4; col++)
+					{
+						mesh->bones[j].bind[row][col] = aiMesh->mBones[j]->mOffsetMatrix[row][col];
+					}
+				}
+
+
+
+				mesh->bones[j].numWeights = aiMesh->mBones[j]->mNumWeights;
+				mesh->bones[j].weights = new Weight[mesh->bones[j].numWeights];
+				for (int k = 0; k < mesh->bones[j].numWeights; k++)
+				{
+					mesh->bones[j].weights[k].vertex = aiMesh->mBones[j]->mWeights[k].mVertexId;
+					mesh->bones[j].weights[k].weight = aiMesh->mBones[j]->mWeights[k].mWeight;
+				}
+			}
+		}
+
 		meshes.push_back(mesh);
 	}
 
 	//Create Gameobjects recursively
-	root = AddGameObject();
 	aiNode* rootNode = scene->mRootNode;
-	RecursiveNodeRead(root, *rootNode, nullptr);
+	GameObject *rootRelative = AddGameObject(root, false, rootNode->mName.data);
+	RecursiveNodeRead(rootRelative, *rootNode, nullptr);
+	BindBonesTransform();
 
 	aiReleaseImport(scene);
 }
@@ -144,6 +178,22 @@ void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject *
 	}
 }
 
+void Scene::BindBonesTransform()
+{
+	for (int i = 0; i < meshes.size(); i++)
+	{
+		for (int j = 0; j < meshes[i]->numBones; j++)
+		{
+			GameObject* boneReference = GetGameObject(meshes[i]->bones[j].name.data);
+
+			if (boneReference != nullptr)
+			{
+				meshes[i]->bones[j].ownerGOTransform = boneReference->transform;
+			}
+		}
+	}
+}
+
 void Scene::Draw()
 {
 	//for (std::list<GameObject*>::iterator it = root->childs.begin(); it != root->childs.end(); it++) {
@@ -157,6 +207,14 @@ void Scene::Draw()
 	//DrawRecursively(root);
 	root->Draw();
 	DrawHierarchyNodes(root);
+}
+
+void Scene::Update(float dt)
+{
+	root->Update(dt);
+
+
+
 }
 
 bool Scene::CleanUp()

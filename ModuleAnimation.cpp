@@ -4,7 +4,11 @@
 #include "ModuleInput.h"
 #include "GameObject.h"
 #include "Scene.h"
+#include "Component.h"
 #include "ComponentTransform.h"
+#include "ComponentAnim.h"
+#include "ComponentMesh.h"
+#include "ModuleWindow.h"
 
 using namespace std;
 
@@ -27,7 +31,16 @@ bool ModuleAnimation::Start()
 {
 	Load("Models/ArmyPilot/Animations/", "ArmyPilot_Idle.fbx");
 	Load("Models/ArmyPilot/Animations/", "ArmyPilot_Run_Forwards.fbx");
-	Play("Idle");
+	//GameObject* go = App->sceneManager->getCurrentScene()->GetGameObject("RootFrame");
+	GameObject* go = App->sceneManager->getCurrentScene()->GetGameObject("$ColladaAutoName$_0");
+	//GameObject* go = App->sceneManager->getCurrentScene()->GetGameObject("Root Potat");
+	ComponentAnim* compAnim = (ComponentAnim*)go->AddComponent(ComponentType::COMPONENT_TYPE_ANIMATION);
+	AnimationMap::iterator it = animations.find("Idle");
+	compAnim->AddClip((*it).second);
+	compAnim->SetCurrentClip((*it).second);
+	compAnim->Play();
+
+	//Play("Idle");
 	//Play("Run_Forwards");
 
 
@@ -65,11 +78,9 @@ void ModuleAnimation::Load(const char * path, const char * file)
 			anim->channels[j].numKeyframes = numKeyframes;
 			anim->channels[j].numPositions = numKeyframes;
 			anim->channels[j].numRotations = numKeyframes;
-			anim->channels[j].numScales = numKeyframes;
 
 			anim->channels[j].positions = new float3[numKeyframes];
 			anim->channels[j].rotations = new Quat[numKeyframes];
-			anim->channels[j].scales = new float3[numKeyframes];
 
 			for (int k = 0; k < numKeyframes; k++)
 			{
@@ -78,7 +89,6 @@ void ModuleAnimation::Load(const char * path, const char * file)
 				aiVector3D aiScl = aiAnimChannel->mScalingKeys[k].mValue;
 				anim->channels[j].positions[k] = float3(aiPos.x, aiPos.y, aiPos.z);
 				anim->channels[j].rotations[k] = Quat(aiRot.x, aiRot.y, aiRot.z, aiRot.w);
-				anim->channels[j].scales[k] = float3(aiScl.x, aiScl.y, aiScl.z);
 			}
 		}
 
@@ -102,7 +112,6 @@ bool ModuleAnimation::CleanUp()
 		{
 			RELEASE_ARRAY((*it).second->channels[i].positions);
 			RELEASE_ARRAY((*it).second->channels[i].rotations);
-			RELEASE_ARRAY((*it).second->channels[i].scales);
 		}
 		RELEASE_ARRAY((*it).second->channels);
 		RELEASE((*it).second);
@@ -115,18 +124,25 @@ bool ModuleAnimation::CleanUp()
 update_status ModuleAnimation::Update(float dt)
 {
 
+	//Todo Change it so we can have more than 1 animation in the entire game
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
-		Stop(instances[0]->id);
+		if (instances.size() > 0) {
+			Stop(instances[0]->id);
+		}
 		Play("Run_Forwards");
 	}
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		Stop(instances[0]->id);
+		if (instances.size() > 0) {
+			Stop(instances[0]->id);
+		}
 		Play("Idle");
 	}
 
-	for (int i = 0; i < instances.size(); i++)
+
+	UpdateInstances(dt);
+	/*for (int i = 0; i < instances.size(); i++)
 	{
 		AnimInstance* instance = instances[i];
 		instance->time += dt;
@@ -146,20 +162,57 @@ update_status ModuleAnimation::Update(float dt)
 					float3 pos = go->transform->Position();
 					Quat rot = go->transform->Rotation();
 					float3 scale = go->transform->Scale();
-					GetTransform(instance->id, instance->animation->channels[j].name.data, pos, rot, scale);
+					GetTransform(instance->id, instance->animation->channels[j].name.data, pos, rot);
 					go->transform->SetTransform(pos, scale, rot);
 				}
 			}
 		}
-
-		
-	}
+	}*/
 
 	return UPDATE_CONTINUE;
 }
 
+void ModuleAnimation::UpdateInstances(float dt)
+{
+	Scene* scene = App->sceneManager->getCurrentScene();
+
+	for (std::list<GameObject*>::iterator it = scene->gameobjects.begin(); it != scene->gameobjects.end(); it++)
+	{
+		
+	}
+}
+
+
+void ModuleAnimation::DeformGOMeshes(GameObject * go)
+{
+	for (std::list<Component*>::iterator it = go->components.begin(); it != go->components.end(); it++)
+	{
+		if ((*it)->type == COMPONENT_TYPE_MESH)
+			((ComponentMesh*)(*it))->mesh->Deform();
+	}
+
+	for (std::list<GameObject*>::iterator it = go->childs.begin(); it != go->childs.end(); it++)
+	{
+		DeformGOMeshes(*it);
+	}
+}
+
+AnimInstance* ModuleAnimation::GetInstance(unsigned id)
+{
+	AnimInstance* instance = nullptr;
+	if (id < instances.size())
+	{
+		instance = instances[id];
+	}
+	return instance;
+}
+
+
+
+
+
 //Play("Run_Forwards");
-uint ModuleAnimation::Play(const char * animName)
+uint ModuleAnimation::Play(const char * animName, bool loop)
 {
 	uint ret = -1;
 
@@ -168,7 +221,7 @@ uint ModuleAnimation::Play(const char * animName)
 	AnimInstance* animInstance = new AnimInstance();
 	animInstance->animation = (*it).second;
 	animInstance->time = 0;
-	animInstance->loop = true;
+	animInstance->loop = loop;
 
 	if (holes.size() == 0)
 	{
@@ -198,10 +251,9 @@ void ModuleAnimation::BlendTo(uint instanceId, const char * name, uint blendTime
 {
 }
 
-bool ModuleAnimation::GetTransform(uint instanceId, const char * channelName, float3& position, Quat& rotation, float3& scale)
+bool ModuleAnimation::GetTransform(uint instanceId, const char * channelName, float3& position, Quat& rotation)
 {
 	bool ret = false;
-
 
 	AnimInstance *instance = instances[instanceId];
 
@@ -222,11 +274,9 @@ bool ModuleAnimation::GetTransform(uint instanceId, const char * channelName, fl
 
 	float positionKey = float(instance->time * (channel.numPositions - 1)) / float(instance->animation->duration);
 	float rotationKey = float(instance->time * (channel.numRotations - 1)) / float(instance->animation->duration);
-	float scaleKey = float(instance->time * (channel.numScales - 1)) / float(instance->animation->duration);
 
 	uint posIndex = uint(positionKey);
 	uint rotIndex = uint(rotationKey);
-	uint sclIndex = uint(scaleKey);
 
 	if (posIndex >= channel.numKeyframes)
 	{
@@ -235,7 +285,6 @@ bool ModuleAnimation::GetTransform(uint instanceId, const char * channelName, fl
 
 	float posLambda = positionKey - float(posIndex);
 	float rotLambda = rotationKey - float(rotIndex);
-	float sclLambda = scaleKey - float(sclIndex);
 
 	//Next keyframe-Index to interpolate to
 	uint nextIndex = posIndex + 1;
@@ -244,20 +293,46 @@ bool ModuleAnimation::GetTransform(uint instanceId, const char * channelName, fl
 		nextIndex = 0;
 	}
 
-	//position = channel.positions[posIndex];
-	//rotation = channel.rotations[rotIndex];
-	//scale = channel.scales[sclIndex];
+	position = InterpVector3D(channel.positions[posIndex], channel.positions[nextIndex], posLambda);
+	rotation = InterpQuaternion(channel.rotations[rotIndex], channel.rotations[nextIndex], rotLambda);
 
-	//position = InterpVector3D(channel.positions[posIndex], channel.positions[nextIndex], posLambda);
-	//rotation = InterpQuaternion(channel.rotations[rotIndex], channel.rotations[nextIndex], rotLambda);
-	//scale = InterpVector3D(channel.scales[sclIndex], channel.scales[nextIndex], sclLambda);
-
-	position = channel.positions[posIndex].Lerp(channel.positions[nextIndex], posLambda);
-	rotation = channel.rotations[rotIndex].Lerp(channel.rotations[nextIndex], rotLambda);
-	scale = channel.scales[sclIndex].Lerp(channel.scales[nextIndex], sclLambda);
+	//position = channel.positions[posIndex].Lerp(channel.positions[nextIndex], posLambda);
+	//rotation = channel.rotations[rotIndex].Lerp(channel.rotations[nextIndex], rotLambda);
 
 	ret = true;
 	return ret;
+}
+
+bool ModuleAnimation::GetTransform(AnimInstance * instance, NodeAnim * channel, float3 & position, Quat & rotation)
+{
+	float positionKey = float(instance->time * (channel->numPositions - 1)) / float(instance->animation->duration);
+	float rotationKey = float(instance->time * (channel->numRotations - 1)) / float(instance->animation->duration);
+
+	uint posIndex = uint(positionKey);
+	uint rotIndex = uint(rotationKey);
+
+	if (posIndex >= channel->numKeyframes)
+	{
+		int a = 1;
+	}
+
+	float posLambda = positionKey - float(posIndex);
+	float rotLambda = rotationKey - float(rotIndex);
+
+	//Next keyframe-Index to interpolate to
+	uint nextIndex = posIndex + 1;
+	if (nextIndex >= channel->numKeyframes)
+	{
+		nextIndex = 0;
+	}
+
+	//position = channel->positions[posIndex].Lerp(channel->positions[nextIndex], posLambda);
+	//rotation = channel->rotations[rotIndex].Lerp(channel->rotations[nextIndex], rotLambda);
+
+	position = InterpVector3D(channel->positions[posIndex], channel->positions[nextIndex], posLambda);
+	rotation = InterpQuaternion(channel->rotations[rotIndex], channel->rotations[nextIndex], rotLambda);
+
+	return true;
 }
 
 float3 ModuleAnimation::InterpVector3D(const float3 & first, const float3 & second, float lambda) const
@@ -284,5 +359,6 @@ Quat ModuleAnimation::InterpQuaternion(const Quat & first, const Quat & second, 
 		result.z = first.z*(1.0f - lambda) - second.z*lambda;
 		result.w = first.w*(1.0f - lambda) - second.w*lambda;
 	}
+	result.Normalize();
 	return result;
 }

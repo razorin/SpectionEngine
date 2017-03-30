@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "ComponentTransform.h"
+#include <assert.h>
 
 
 ModuleSceneManager::ModuleSceneManager(const JSON_Object *json, bool active) : Module(json, active)
@@ -18,12 +19,13 @@ bool ModuleSceneManager::Start() {
 	//GameObject* go = currentScene->GetGameObject("City_building_010");
 	//if(go != nullptr) go->AddComponent(ComponentType::COMPONENT_TYPE_CAMERA);
 	
-	//loadCurrentScene("Models/ArmyPilot/", "ArmyPilot.dae");
+	loadCurrentScene("Models/ArmyPilot/", "ArmyPilot.dae");
 	//loadCurrentScene("Models/street/", "Street environment_V01.fbx");
-	loadCurrentScene("Models/Batman/", "Batman.obj");
+	//loadCurrentScene("Models/Batman/", "Batman.obj");
 	//loadCurrentScene("Models/street/", "Street.obj");
 	//loadCurrentScene("Models/ArmyPilot/", "ArmyPilot.dae");
-	//GameObject* go = currentScene->GetGameObject("Street.obj");
+	//GameObject* go = currentScene->GetGameObject("RootFrame");
+	//GameObject* goChild = go->FindGoInChilds("Pelvis");
 	return true;
 }
 
@@ -34,6 +36,11 @@ update_status ModuleSceneManager::PreUpdate(float dt)
 
 update_status ModuleSceneManager::Update(float dt)
 {
+	if (currentScene != nullptr) {
+		currentScene->Update(dt);
+	}
+
+
 	return UPDATE_CONTINUE;
 }
 
