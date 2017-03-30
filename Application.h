@@ -37,6 +37,10 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+	void Play();
+	void Pause();
+	void Stop();
+
 	double CalculateAvgFPS();
 
 public:
@@ -56,11 +60,10 @@ public:
 
 
 	JSON_Value *configuration;
-	Timer *gamestartTimer;
 	PreciseTimer *avgTimer;
 	PreciseTimer *updateTimer;
-	PreciseTimer *performanceTimer;
 	PreciseTimer *fpsTimer;
+	PreciseTimer *gameTimer;
 	int frameCountGlobal = 0;
 	int frameCountPerSecond = 0;
 	float lastFrameMilliseconds = 0;

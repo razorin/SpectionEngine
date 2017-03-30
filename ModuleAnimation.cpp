@@ -9,6 +9,7 @@
 #include "ComponentAnim.h"
 #include "ComponentMesh.h"
 #include "ModuleWindow.h"
+#include "PreciseTimer.h"
 
 using namespace std;
 
@@ -124,7 +125,11 @@ bool ModuleAnimation::CleanUp()
 update_status ModuleAnimation::Update(float dt)
 {
 
-	//Todo Change it so we can have more than 1 animation in the entire game
+	if (App->gameTimer->state == TIMER_STATE::TIMER_PAUSED || App->gameTimer->state == TIMER_STATE::TIMER_STOPPED)
+	{
+		return UPDATE_CONTINUE;
+	}
+
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
 		if (instances.size() > 0) {

@@ -7,6 +7,7 @@
 #include "SDL/include/SDL.h"
 #include "IMGUI\imgui.h"
 #include "IMGUI\imgui_impl_sdl_gl3.h"
+#include "PreciseTimer.h"
 
 #define MAX_KEYS 300
 
@@ -145,6 +146,18 @@ update_status ModuleInput::PreUpdate(float dt)
 
 	if(GetWindowEvent(EventWindow::WE_QUIT) == true || GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		return UPDATE_STOP;
+
+	if (GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
+		App->Play();
+	}
+	if (GetKey(SDL_SCANCODE_2) == KEY_DOWN) {
+		App->Pause();
+	}
+
+	if (GetKey(SDL_SCANCODE_3) == KEY_DOWN) {
+		App->Stop();
+	}
+
 
 	return UPDATE_CONTINUE;
 }

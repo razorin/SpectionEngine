@@ -24,13 +24,11 @@ using namespace std;
 
 Application::Application()
 {
-	gamestartTimer = new Timer();
-	gamestartTimer->Start();
 	avgTimer = new PreciseTimer();
 	updateTimer = new PreciseTimer();
-	performanceTimer = new PreciseTimer();
-	performanceTimer->Start();
 	fpsTimer = new PreciseTimer();
+	gameTimer = new PreciseTimer();
+	gameTimer->Stop();
 
 	configuration = json_parse_file("config.json");
 	JSON_Object *root = json_value_get_object(configuration);
@@ -45,7 +43,6 @@ Application::Application()
 	modules.push_back(audio = new ModuleAudio());
 	modules.push_back(primitives = new ModulePrimitives());
 
-
 	//Game Modules
 	modules.push_back(sceneManager = new ModuleSceneManager(nullptr,true));
 
@@ -54,21 +51,11 @@ Application::Application()
 
 	lightsManager = new LightsManager();
 
-	float2 mathGeoLib_test{ 1,2 };
-
 	JSON_Object* parameters = json_object_dotget_object(root, "config.app");
 	int fpsCap = (int)json_object_dotget_number(parameters, "fps_cap");
 	
 	assert(fpsCap > 0);
 	msByFrame = (1.f / (float)fpsCap) * 1000;
-
-	//Configurator *configurator = new Configurator();
-	//configuration = configurator->LoadConfiguration("config.json");
-
-	//DLOG("Read performance timer after App constructor: %f microseconds", performanceTimer->Ellapsed());
-	//DLOG("Read performance timer after App constructor: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
-	
-	//window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
 }
 
 Application::~Application()
@@ -78,40 +65,26 @@ Application::~Application()
 
 	json_value_free(configuration);
 
-	RELEASE(gamestartTimer);
 	RELEASE(avgTimer);
 	RELEASE(updateTimer);
-	RELEASE(performanceTimer);
 	RELEASE(fpsTimer);
+	RELEASE(gameTimer);
 
 	RELEASE(lightsManager);
 }
 
 bool Application::Init()
 {
-	performanceTimer->Restart();
 	bool ret = true;
 
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret; ++it)
 		ret = (*it)->Init(); // we init everything, even if not anabled
-
-	//DLOG("Read performance timer after Init: %f microseconds", performanceTimer->Ellapsed());
-	//DLOG("Read performance timer after Init: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
-
-	//window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
-
-	performanceTimer->Restart();
 
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret; ++it)
 	{
 		if((*it)->IsEnabled() == true)
 			ret = (*it)->Start();
 	}
-
-	//DLOG("Read performance timer after Start: %f microseconds", performanceTimer->Ellapsed());
-	//DLOG("Read performance timer after Start: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
-
-	//window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
 
 	// Gather hardware settings
 	SDL_VERSION(&sdlVersion);
@@ -176,9 +149,7 @@ update_status Application::Update()
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 		if((*it)->IsEnabled() == true) 
 			ret = (*it)->PostUpdate(dt);
-	
-	//DLOG("Read timer since the game started: %i milliseconds", gamestartTimer->Ellapsed());
-	//DLOG("Read update timer: %f microseconds", updateTimer->Ellapsed());
+
 	//DLOG("Average FPS: %f", CalculateAvgFPS());
 	
 	return ret;
@@ -186,7 +157,6 @@ update_status Application::Update()
 
 bool Application::CleanUp()
 {
-	performanceTimer->Restart();
 	bool ret = true;
 
 	for(list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rend() && ret; ++it)
@@ -194,11 +164,26 @@ bool Application::CleanUp()
 			ret = (*it)->CleanUp();
 
 	lightsManager->CleanUp();
-
-	//DLOG("Read performance timer after CleanUp: %f microseconds", performanceTimer->Ellapsed());
-	//DLOG("Read performance timer after CleanUp: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
 	
 	return ret;
+}
+
+void Application::Play()
+{
+	gameTimer->Start();
+	DLOG("PLAY");
+}
+
+void Application::Pause()
+{
+	gameTimer->Pause();
+	DLOG("PAUSE");
+}
+
+void Application::Stop()
+{
+	gameTimer->Stop();
+	DLOG("STOP");
 }
 
 double Application::CalculateAvgFPS()
