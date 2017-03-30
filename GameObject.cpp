@@ -136,13 +136,13 @@ Component * GameObject::AddComponent(const ComponentType &type, ...)
 		result = new ComponentScript(this, std::to_string(componentCounter));
 		result->maxComponentsByGO = 0;
 		break;
-	case ComponentType::COMPONENT_TYPE_TRANSFORM:
-		result = new ComponentTransform(this, std::to_string(componentCounter));
-		result->maxComponentsByGO = 1;
-		break;
 	case ComponentType::COMPONENT_TYPE_BILLBOARDING:
 		result = new ComponentBillboarding(this, std::to_string(componentCounter), float2(2, 2), aiString("Models/Grass/billboardgrass.png"));
 		result->maxComponentsByGO = 0;
+		break;
+	case ComponentType::COMPONENT_TYPE_TRANSFORM:
+		result = new ComponentTransform(this, std::to_string(componentCounter));
+		result->maxComponentsByGO = 1;
 		break;
 	}
 
@@ -257,8 +257,8 @@ void GameObject::Draw() const
 	{
 		if ((*it)->type == ComponentType::COMPONENT_TYPE_BILLBOARDING && (*it)->IsActive()) {
 			ComponentBillboarding *boardinginging = (ComponentBillboarding*)(*it);
-			//TODO: ComputeQuad
-			boardinginging->ComputeQuad({ 0, 5, 0 });
+			boardinginging->ComputeQuad(App->camera->pos);
+			//boardinginging->ComputeQuad({ 1, 0, 0 });
 		}
 		if ((*it)->type == ComponentType::COMPONENT_TYPE_MESH && (*it)->IsActive())
 		{
@@ -493,7 +493,7 @@ void GameObject::SetStatic(bool value)
 }
 
 void GameObject::DrawGUIPanel() {
-	const char* items[] = { "CAMERA", "SCRIPT", "LIGHT", "MATERIAL", "MESH" };
+	const char* items[] = { "CAMERA", "SCRIPT", "LIGHT", "MATERIAL", "MESH", "BILLBOARD" };
 	int componentType = newComponentType;
 	// GameObject Name
 	if (editableName) {
