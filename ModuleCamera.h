@@ -5,12 +5,6 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "MemLeaks.h"
 
-enum Axis {
-	X,
-	Y,
-	Z
-};
-
 class ModuleCamera :
 	public Module
 {
@@ -47,6 +41,7 @@ public:
 	bool invertXAxis = false;
 	bool invertYAxis = false;
 
+	math::vec pos = { 0,0,0 };
 private:
 	Frustum frustum;
 	float aspectRatio = 1.78;
@@ -55,7 +50,6 @@ private:
 	float nearPlane = 0;
 	float farPlane = 0;
 
-	math::vec pos = { 0,0,0 };
 
 	bool mouseBlocked = false;
 };
