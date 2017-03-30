@@ -143,7 +143,6 @@ update_status ModuleAnimation::Update(float dt)
 
 
 	UpdateInstances(dt);
-	DeformMeshes();
 	/*for (int i = 0; i < instances.size(); i++)
 	{
 		AnimInstance* instance = instances[i];
@@ -217,25 +216,12 @@ void ModuleAnimation::UpdateInstances(float dt)
 					boneGO->transform->SetTransform(pos, rot);
 				}
 			}
-		}
-	}
-}
-
-void ModuleAnimation::DeformMeshes()
-{
-	Scene* scene = App->sceneManager->getCurrentScene();
-
-	for (std::list<GameObject*>::iterator it = scene->gameobjects.begin(); it != scene->gameobjects.end(); it++)
-	{
-		if (ComponentAnim* componentAnim = (ComponentAnim*)(*it)->FindComponent(ComponentType::COMPONENT_TYPE_ANIMATION))
-		{
-			if (!componentAnim->isPlaying)
-				return;
-
 			DeformGOMeshes(*it);
+
 		}
 	}
 }
+
 
 void ModuleAnimation::DeformGOMeshes(GameObject * go)
 {
