@@ -10,6 +10,8 @@
 #include "ModuleCamera.h"
 #include "ModuleSceneManager.h"
 #include "ModulePrimitives.h"
+#include "Scene.h"
+#include "ComponentTransform.h"
 
 #include "Timer.h"
 #include "PreciseTimer.h"
@@ -170,8 +172,19 @@ bool Application::CleanUp()
 
 void Application::Play()
 {
-	gameTimer->Start();
-	DLOG("PLAY");
+	if (gameTimer->state != TIMER_STATE::TIMER_STARTED) {
+		gameTimer->Start();
+		DLOG("PLAY");
+		//"Save" the gameobjects transforms
+		std::list<GameObject*> list = sceneManager->getCurrentScene()->gameobjects;
+		for (std::list<GameObject*>::iterator it = list.begin(); it != list.end(); ++it) {
+			GameObject* go = (*it);
+			go->backupPosition = go->transform->Position();
+			go->backupRotation = go->transform->Rotation();
+			go->backupScale = go->transform->Scale();
+		}
+	}
+	
 }
 
 void Application::Pause()
@@ -182,8 +195,18 @@ void Application::Pause()
 
 void Application::Stop()
 {
-	gameTimer->Stop();
-	DLOG("STOP");
+	if (gameTimer->state != TIMER_STATE::TIMER_STOPPED) {
+		gameTimer->Stop();
+		DLOG("STOP");
+		//"Load" the gameobjects transforms
+		std::list<GameObject*> list = sceneManager->getCurrentScene()->gameobjects;
+		for (std::list<GameObject*>::iterator it = list.begin(); it != list.end(); ++it) {
+			GameObject* go = (*it);
+			go->transform->SetPosition(go->backupPosition);
+			go->transform->SetRotation(go->backupRotation);
+			go->transform->SetScale(go->backupScale);
+		}
+	}
 }
 
 double Application::CalculateAvgFPS()

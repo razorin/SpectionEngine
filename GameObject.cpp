@@ -447,6 +447,7 @@ bool GameObject::CleanUp()
 		RELEASE(*it);
 		it = childs.erase(it);
 	}
+
 	return false;
 }
 

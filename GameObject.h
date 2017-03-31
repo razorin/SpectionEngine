@@ -69,6 +69,9 @@ private:
 
 public:
 	ComponentTransform* transform = nullptr;
+	float3 backupPosition;
+	Quat backupRotation;
+	float3 backupScale;
 	std::list<GameObject *> childs;
 	std::list<Component *> components;
 };
