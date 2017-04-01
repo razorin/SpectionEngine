@@ -8,6 +8,7 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "Component.h"
+#include "ComponentAnim.h"
 #include "ComponentCamera.h"
 #include "ComponentLight.h"
 #include "ComponentMaterial.h"
@@ -25,7 +26,7 @@
 #include "IMGUI\stb_truetype.h"
 
 
-//TODO delete empty constuctor.This one below can do the same
+
 GameObject::GameObject(std::string id, GameObject * parent, const char * name, bool editableName) : id(id), parent(parent), name(name), editableName(editableName)
 {
 	AddComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
@@ -112,6 +113,10 @@ Component * GameObject::AddComponent(const ComponentType &type)
 	//}
 
 	switch (type) {
+	case ComponentType::COMPONENT_TYPE_ANIMATION:
+		result = new ComponentAnim(this, std::to_string(componentCounter));
+		result->maxComponentsByGO = 1;
+		break;
 	case ComponentType::COMPONENT_TYPE_CAMERA:
 		result = new ComponentCamera(this, std::to_string(componentCounter));
 		result->maxComponentsByGO = 1;
@@ -214,6 +219,7 @@ Component * GameObject::FindComponent(const ComponentType & type)
 	return componentFound;
 }
 
+
 GameObject * GameObject::FindGOByName(const std::string & name)
 {
 	GameObject* ret = nullptr;
@@ -231,6 +237,28 @@ GameObject * GameObject::FindGOByName(const std::string & name)
 	}
 	return ret;
 }
+
+GameObject * GameObject::FindGoInChilds(const char * name)
+{
+	GameObject * goFound = nullptr;
+	bool found = false;
+
+	for (std::list<GameObject *>::iterator it = childs.begin(); (it != childs.end() && !found); it++) {
+		if ((*it)->name.compare(name) == 0) {
+			goFound = *it;
+			found = true;
+		}
+		else
+		{
+			goFound = (*it)->FindGoInChilds(name);
+			if (goFound != nullptr) {
+				found = true;
+			}
+		}
+	}
+	return goFound;
+}
+
 
 void GameObject::Draw() const
 {
@@ -277,6 +305,56 @@ void GameObject::Draw() const
 				}
 				
 			}
+
+			if ((*it)->type == ComponentType::COMPONENT_TYPE_ANIMATION)
+			{
+				ComponentAnim* componentAnim = (ComponentAnim*)(*it);
+
+				if (!componentAnim->isPlaying)
+					break;
+
+				AnimInstance* instance = App->animator->GetInstance(componentAnim->instanceId);
+
+				if (instance == nullptr)
+				{
+					break;
+				}
+
+				//instance->time += dt;
+				//if (instance->time > instance->animation->duration)
+				//{
+				//	if (instance->loop)
+				//	{
+				//		while (instance->time > instance->animation->duration)
+				//		{
+				//			instance->time -= instance->animation->duration;
+				//		}
+				//	}
+				//	else
+				//		return;
+				//}
+
+				//float3 pos = float3::zero;
+				//Quat rot = Quat::identity;
+
+				//for (int i = 0; i < instance->animation->numChannels; i++)
+				//{
+				//	GameObject* boneGO = (*it)->FindGoInChilds(instance->animation->channels[i].name.data);
+				//	if (boneGO != nullptr)
+				//	{
+				//		pos = float3::zero;
+				//		rot = Quat::identity;
+
+				//		GetTransform(instance, &instance->animation->channels[i], pos, rot);
+
+				//		boneGO->transform->SetTransform(pos, rot);
+				//	}
+				//}
+				//DeformGOMeshes(*it);
+
+			}
+
+
 		}
 	}
 
@@ -289,6 +367,71 @@ void GameObject::Draw() const
 	{
 		(*it)->Draw();
 	}
+}
+
+void GameObject::Update(float dt)
+{
+	for (std::list<Component*>::const_iterator it = components.begin(); it != components.end(); it++)
+	{
+		if ((*it)->IsActive()) {
+
+			if ((*it)->type == ComponentType::COMPONENT_TYPE_ANIMATION)
+			{
+				ComponentAnim* componentAnim = (ComponentAnim*)(*it);
+
+				if (!componentAnim->isPlaying)
+					break;
+
+				AnimInstance* instance = App->animator->GetInstance(componentAnim->instanceId);
+
+				if (instance == nullptr)
+				{
+					break;
+				}
+
+				instance->time += dt;
+				if (instance->time > instance->animation->duration)
+				{
+					if (instance->loop)
+					{
+						while (instance->time > instance->animation->duration)
+						{
+							instance->time -= instance->animation->duration;
+						}
+					}
+					else
+						return;
+				}
+
+				float3 pos = float3::zero;
+				Quat rot = Quat::identity;
+
+				for (int i = 0; i < instance->animation->numChannels; i++)
+				{
+					GameObject* boneGO = FindGoInChilds(instance->animation->channels[i].name.data);
+					if (boneGO != nullptr)
+					{
+						pos = float3::zero;
+						rot = Quat::identity;
+
+						App->animator->GetTransform(instance, &instance->animation->channels[i], pos, rot);
+
+						boneGO->transform->SetTransform(pos, rot);
+					}
+				}
+				//TODO:REFACTOR
+				App->animator->DeformGOMeshes(this);
+
+			}
+
+
+		}
+	}
+	for (std::list<GameObject*>::const_iterator it = childs.begin(); it != childs.end(); it++)
+	{
+		(*it)->Update(dt);
+	}
+
 }
 
 bool GameObject::CleanUp()

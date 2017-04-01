@@ -15,10 +15,13 @@ Mesh::~Mesh()
 	RELEASE(this->colors);
 	RELEASE(this->indices);
 	RELEASE(this->vertices);
-	//for (int i = 0; i < numTextures; i++) {
-	//	RELEASE_ARRAY(this->textureCoords[i]);
-	//}
 	RELEASE_ARRAY(this->textureCoords);
+
+	for (int i = 0; i < numBones; i++)
+	{
+		RELEASE_ARRAY(this->bones[i].weights);
+	}
+	RELEASE_ARRAY(this->bones);
 }
 
 void Mesh::InitializeBuffers()
@@ -70,7 +73,7 @@ void Mesh::InitializeBuffers()
 			}
 		}
 	}*/
-	
+
 }
 
 void Mesh::Draw() const
@@ -78,14 +81,14 @@ void Mesh::Draw() const
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, vboVertices);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	
-	
+
+
 
 	if (normals != nullptr)
 	{
 		glEnableClientState(GL_NORMAL_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, vboNormals);
-		glNormalPointer(GL_FLOAT, sizeof(float)*3, 0);
+		glNormalPointer(GL_FLOAT, sizeof(float) * 3, 0);
 	}
 
 	if (colors != nullptr)
@@ -119,4 +122,37 @@ void Mesh::Draw() const
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void Mesh::Deform()
+{
+	if (numBones <= 0)
+		return;
+
+	float *newVertices = new float[numVertices*3];
+	memset(newVertices, 0, 3* numVertices * sizeof(float));
+
+
+	//memset(vertices, 0, numVertices * sizeof(float3));
+	float4x4 influenceMatrix = float4x4::identity;
+
+	for (int i = 0; i < numBones; i++)
+	{
+		influenceMatrix = bones[i].ownerGOTransform->GlobalTransform() * bones[i].bind;
+
+		for (int j = 0; j < bones[i].numWeights; j++)
+		{
+			uint vertexIndex = bones[i].weights[j].vertex * 3;
+			float3 originalVertex = float3{ vertices[vertexIndex], vertices[vertexIndex + 1], vertices[vertexIndex + 2] };
+			float3 vertexOffset = 100 * bones[i].weights[j].weight * influenceMatrix.TransformPos(originalVertex);
+
+			newVertices[vertexIndex] += vertexOffset.x;
+			newVertices[vertexIndex + 1] += vertexOffset.y;
+			newVertices[vertexIndex + 2] += vertexOffset.z;
+		}
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, vboVertices);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*numVertices * 3, newVertices, GL_STATIC_DRAW);
+
+	delete(newVertices);
 }

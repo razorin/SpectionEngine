@@ -19,7 +19,6 @@ class ModuleAnimation;
 class ModuleParticles;
 class ModuleSceneManager;
 class ModulePrimitives;
-class ModuleAnimation;
 
 
 class Timer;
@@ -50,7 +49,6 @@ public:
 	ModuleGUI* gui;
 	ModuleFadeToBlack* fade;
 	ModuleCollision* collision;
-	ModuleAnimation* animations;
 	ModuleParticles* particles;
 	ModuleSceneManager* sceneManager;
 	ModulePrimitives* primitives;

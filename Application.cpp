@@ -10,7 +10,6 @@
 #include "ModuleCamera.h"
 #include "ModuleSceneManager.h"
 #include "ModulePrimitives.h"
-#include "ModuleAnimation.h"
 
 #include "Timer.h"
 #include "PreciseTimer.h"
@@ -49,6 +48,8 @@ Application::Application()
 
 	//Game Modules
 	modules.push_back(sceneManager = new ModuleSceneManager(nullptr,true));
+
+	//TODO module animation should go before module render. Animate things before render them!
 	modules.push_back(animator = new ModuleAnimation());
 
 	lightsManager = new LightsManager();
@@ -137,6 +138,7 @@ update_status Application::Update()
 	else if (fpsTimer->EllapsedInMilliseconds() >= 1000) {
 		//DLOG("Current FPS: %d", frameCountPerSecond);
 		gui->AddFpsLog(frameCountPerSecond);
+		window->ChangeTitle((std::to_string(frameCountPerSecond)).c_str());
 		frameCountPerSecond = 0;
 		fpsTimer->Restart();
 	}
@@ -147,8 +149,9 @@ update_status Application::Update()
 	float previousFrameTime = lastFrameMilliseconds;
 	lastFrameMilliseconds = avgTimer->EllapsedInMilliseconds();
 	float dt = lastFrameMilliseconds - previousFrameTime;
+	assert(dt >= 0);
 	//DLOG("DT: %f milliseconds", dt);
-	window->ChangeTitle((std::to_string(dt)).c_str());
+	//window->ChangeTitle((std::to_string(dt)).c_str());
 
 	if (ellapsedTime < this->msByFrame) {
 		gui->AddMsLog(msByFrame);

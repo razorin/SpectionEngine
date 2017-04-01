@@ -30,8 +30,10 @@ public:
 	Component* FindComponent(const ComponentType &type);
 
 	GameObject* FindGOByName(const std::string &name);
+	GameObject* FindGoInChilds(const char* name);
 
 	void Draw() const;
+	void Update(float dt);
 	bool CleanUp();
 
 	void AddComponentMesh(Mesh * mesh);

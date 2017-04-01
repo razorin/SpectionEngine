@@ -126,7 +126,8 @@ update_status ModuleRender::Update(float dt)
 	App->lightsManager->Draw();
 
 	// Draw the current scene
-	if (App->sceneManager->getCurrentScene() != nullptr) App->sceneManager->Draw();
+	if (App->sceneManager->getCurrentScene() != nullptr) 
+		App->sceneManager->Draw();
 
 	//DrawDirectCube();
 
