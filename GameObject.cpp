@@ -375,7 +375,7 @@ void GameObject::Update(float dt)
 	{
 		if ((*it)->IsActive()) {
 
-			if ((*it)->type == ComponentType::COMPONENT_TYPE_ANIMATION)
+			if ((*it)->type == ComponentType::COMPONENT_TYPE_ANIMATION && App->gameTimer->state == TIMER_STATE::TIMER_STARTED)
 			{
 				ComponentAnim* componentAnim = (ComponentAnim*)(*it);
 
