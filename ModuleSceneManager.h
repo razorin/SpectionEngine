@@ -16,6 +16,10 @@ public:
 	void deleteCurrentScene();
 	void loadCurrentScene(const char* path, const char* file);
 
+	Scene* CopyCurrentScene();
+	void CreateBackupScene();
+	void LoadBackupScene();
+
 	bool Start();
 	update_status PreUpdate(float dt);
 	update_status Update(float dt = 0);
@@ -27,6 +31,7 @@ public:
 
 private:
 	Scene* currentScene = nullptr;
+	Scene* backupScene = nullptr;
 };
 
 #endif // __MODULESCENEMANAGER_H__

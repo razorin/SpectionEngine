@@ -176,10 +176,10 @@ void ModuleAnimation::UpdateInstances(float dt)
 {
 	Scene* scene = App->sceneManager->getCurrentScene();
 
-	for (std::list<GameObject*>::iterator it = scene->gameobjects.begin(); it != scene->gameobjects.end(); it++)
+	/*for (std::list<GameObject*>::iterator it = scene->gameobjects.begin(); it != scene->gameobjects.end(); it++)
 	{
 		
-	}
+	}*/
 }
 
 

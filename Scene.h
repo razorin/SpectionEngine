@@ -33,9 +33,10 @@ public:
 	void DrawHierarchyNodes(GameObject* go);
 	void DrawRecursively(GameObject* go);
 
+
 public:
 	GameObject* root;
-	std::list<GameObject *> gameobjects;
+	//std::list<GameObject *> gameobjects;
 
 private:
 	int gameObjectsCounter = 0;

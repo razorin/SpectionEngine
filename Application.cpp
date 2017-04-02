@@ -176,13 +176,7 @@ void Application::Play()
 		gameTimer->Start();
 		DLOG("PLAY");
 		//"Save" the gameobjects transforms
-		std::list<GameObject*> list = sceneManager->getCurrentScene()->gameobjects;
-		for (std::list<GameObject*>::iterator it = list.begin(); it != list.end(); ++it) {
-			GameObject* go = (*it);
-			go->backupPosition = go->transform->Position();
-			go->backupRotation = go->transform->Rotation();
-			go->backupScale = go->transform->Scale();
-		}
+		sceneManager->CreateBackupScene();
 	}
 	
 }
@@ -199,13 +193,7 @@ void Application::Stop()
 		gameTimer->Stop();
 		DLOG("STOP");
 		//"Load" the gameobjects transforms
-		std::list<GameObject*> list = sceneManager->getCurrentScene()->gameobjects;
-		for (std::list<GameObject*>::iterator it = list.begin(); it != list.end(); ++it) {
-			GameObject* go = (*it);
-			go->transform->SetPosition(go->backupPosition);
-			go->transform->SetRotation(go->backupRotation);
-			go->transform->SetScale(go->backupScale);
-		}
+		sceneManager->LoadBackupScene();
 	}
 }
 

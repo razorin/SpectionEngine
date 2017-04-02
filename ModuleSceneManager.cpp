@@ -99,3 +99,30 @@ void ModuleSceneManager::loadCurrentScene(const char * path, const char * file)
 		currentScene->LoadLevel(path, file);
 	}
 }
+
+Scene * ModuleSceneManager::CopyCurrentScene()
+{
+	Scene* scene = new Scene();
+	
+	for (std::list<GameObject*>::iterator it = scene->root->childs.begin(); it != scene->root->childs.end(); it++) {
+		GameObject* go = go->CopyGameObject(*it);
+	}
+
+	return scene;
+}
+
+//When "Play" is pressed we save the current scene in a backup that will not be affected by the changes in play time
+void ModuleSceneManager::CreateBackupScene()
+{
+	if (backupScene != nullptr) {
+		//backupScene->CleanUp();
+		RELEASE(backupScene);
+	}
+	backupScene = CopyCurrentScene();
+
+}
+
+//When "Stop" is pressed we recover the saved scene
+void ModuleSceneManager::LoadBackupScene()
+{
+}

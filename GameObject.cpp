@@ -669,3 +669,12 @@ void GameObject::DrawGUIPanel() {
 		}
 	}
 }
+
+GameObject * GameObject::CopyGameObject(GameObject * toCopy)
+{
+	GameObject* go = new GameObject(toCopy->GetID(), toCopy->GetParent(), toCopy->GetName().c_str(), toCopy->IsEditableName());
+	
+
+	
+	return go;
+}

@@ -50,6 +50,8 @@ public:
 	void SetSelected(bool value);
 	void DrawGUIPanel();
 
+	GameObject* CopyGameObject(GameObject* toCopy);
+
 
 private:
 	std::string id = "";

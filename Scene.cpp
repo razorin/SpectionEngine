@@ -142,6 +142,8 @@ void Scene::LoadLevel(const char * path, const char * file)
 	RecursiveNodeRead(rootRelative, *rootNode, nullptr);
 	BindBonesTransform();
 
+	root;
+
 	aiReleaseImport(scene);
 }
 
@@ -212,9 +214,6 @@ void Scene::Draw()
 void Scene::Update(float dt)
 {
 	root->Update(dt);
-
-
-
 }
 
 bool Scene::CleanUp()
