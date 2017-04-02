@@ -15,6 +15,7 @@
 #include "IMGUI\stb_textedit.h"
 #include "IMGUI\stb_truetype.h"
 
+#include "ModuleCamera.h"
 
 ComponentCamera::ComponentCamera(GameObject * container, std::string id) : Component(container, ComponentType::COMPONENT_TYPE_CAMERA, id)
 {
@@ -23,7 +24,9 @@ ComponentCamera::ComponentCamera(GameObject * container, std::string id) : Compo
 
 	verticalFov = 60 * DEGTORAD;
 	horizontalFov = 60 * DEGTORAD;
+
 	SetAspectRatio(aspectRatio);
+	
 	frustum.SetPerspective(horizontalFov, verticalFov);
 
 	SetPosition(math::vec{ 0,2,4 });
@@ -32,10 +35,13 @@ ComponentCamera::ComponentCamera(GameObject * container, std::string id) : Compo
 	SetPlaneDistances(0.1f, 300.0f);
 
 	frustum.SetKind(FrustumProjectiveSpace::FrustumSpaceGL, FrustumHandedness::FrustumRightHanded);
+
+	App->camera->AddCamera(this);
 }
 
 ComponentCamera::~ComponentCamera()
 {
+	App->camera->RemoveCamera(this);
 }
 
 void ComponentCamera::SetFOV(float verticalFov)

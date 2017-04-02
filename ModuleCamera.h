@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "MemLeaks.h"
+#include <list>
 
 class ComponentCamera;
 
@@ -43,6 +44,10 @@ public:
 	ComponentCamera* GetEditorCamera() const;
 	ComponentCamera* GetActiveCamera() const;
 
+	void AddCamera(ComponentCamera *camera);
+	void RemoveCamera(ComponentCamera *camera);
+	void ChangeActiveCamera(ComponentCamera *camera);
+
 public:
 	//These two params may be added as json config
 	float movementSpeed = NULL;
@@ -54,7 +59,8 @@ public:
 private:
 	ComponentCamera *activeCamera = nullptr;
 	ComponentCamera *editorCamera = nullptr;
-	//std::list<ComponentCamera *> cameras;
+	std::list<ComponentCamera *> cameras;
+
 	Frustum frustum;
 	float aspectRatio = 1.78;
 	float verticalFov = 30;

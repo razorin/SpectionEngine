@@ -203,3 +203,24 @@ ComponentCamera* ModuleCamera::GetEditorCamera() const
 ComponentCamera* ModuleCamera::GetActiveCamera() const {
 	return activeCamera;
 }
+
+void ModuleCamera::AddCamera(ComponentCamera *camera) {
+	if (camera->active == true)
+		activeCamera = camera;
+	cameras.push_back(camera);
+}
+void ModuleCamera::RemoveCamera(ComponentCamera *camera) {
+	if (camera->active)
+		activeCamera = nullptr;
+	cameras.remove(camera);
+}
+void ModuleCamera::ChangeActiveCamera(ComponentCamera *camera) {
+	for (std::list<ComponentCamera*>::iterator it = cameras.begin(); it != cameras.end(); ++it) {
+		if ((*it) == camera) {
+			(*it)->active = true;
+		}
+		else {
+			(*it)->active = false;
+		}
+	}
+}
