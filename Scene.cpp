@@ -178,10 +178,15 @@ void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject *
 	}
 }
 
+//TODO fix function to accept the rootframe node 
 void Scene::BindBonesTransform()
 {
+	ComponentTransform* ct = GetGameObject("RootFrame")->transform;
+	//ComponentTransform* ct = GetGameObject("$ColladaAutoName$_0")->transform;
+
 	for (int i = 0; i < meshes.size(); i++)
 	{
+		meshes[i]->relRoot = ct;
 		for (int j = 0; j < meshes[i]->numBones; j++)
 		{
 			GameObject* boneReference = GetGameObject(meshes[i]->bones[j].name.data);
@@ -203,7 +208,7 @@ void Scene::Draw()
 	//	}
 	//}
 	//TransformHierarchy();
-	
+
 	//DrawRecursively(root);
 	root->Draw();
 	DrawHierarchyNodes(root);
@@ -229,7 +234,7 @@ bool Scene::CleanUp()
 	RELEASE(root);
 
 	return true;
-	
+
 }
 
 void Scene::DrawHierarchyNodes(GameObject * go)

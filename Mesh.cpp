@@ -138,13 +138,14 @@ void Mesh::Deform()
 
 	for (int i = 0; i < numBones; i++)
 	{
-		influenceMatrix = bones[i].ownerGOTransform->GlobalTransform() * bones[i].bind;
+		influenceMatrix = bones[i].ownerGOTransform->PartialGlobalT(relRoot) * bones[i].bind;
+		//influenceMatrix = bones[i].ownerGOTransform->GlobalTransform() * bones[i].bind;
 
 		for (int j = 0; j < bones[i].numWeights; j++)
 		{
 			uint vertexIndex = bones[i].weights[j].vertex * 3;
 			float3 originalVertex = float3{ vertices[vertexIndex], vertices[vertexIndex + 1], vertices[vertexIndex + 2] };
-			float3 vertexOffset = 100 * bones[i].weights[j].weight * influenceMatrix.TransformPos(originalVertex);
+			float3 vertexOffset = bones[i].weights[j].weight * influenceMatrix.TransformPos(originalVertex);
 
 			newVertices[vertexIndex] += vertexOffset.x;
 			newVertices[vertexIndex + 1] += vertexOffset.y;

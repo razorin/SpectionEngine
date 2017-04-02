@@ -91,6 +91,18 @@ float4x4 ComponentTransform::GlobalTransform() const
 	return globalTransform;
 }
 
+float4x4 ComponentTransform::PartialGlobalT(ComponentTransform * relRoot)
+{
+	float4x4 partialGlobalT = localTransform;
+
+	if (this != relRoot)
+	{
+		partialGlobalT = container->GetParent()->transform->PartialGlobalT(relRoot) * partialGlobalT;
+	}
+
+	return partialGlobalT;
+}
+
 
 void ComponentTransform::CalculateTransforms()
 {

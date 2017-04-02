@@ -60,8 +60,6 @@ public:
 	void Load(const char* path, const char* file);
 	bool CleanUp();
 	update_status Update(float dt = 0);
-	void UpdateInstances(float dt);
-	void DeformMeshes();
 	void DeformGOMeshes(GameObject* go);
 	AnimInstance* GetInstance(unsigned id);
 

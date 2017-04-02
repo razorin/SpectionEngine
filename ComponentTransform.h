@@ -27,6 +27,7 @@ public:
 	float3 EulerAngles(SpaceMode space = SpaceMode::SPACE_LOCAL) const;
 	float4x4 LocalTransform() const;
 	float4x4 GlobalTransform() const;
+	float4x4 PartialGlobalT(ComponentTransform* relRoot);
 
 	void CalculateTransforms();
 	void CalculateLocalT();

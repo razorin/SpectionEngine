@@ -292,16 +292,16 @@ void GameObject::Draw() const
 					// Draw mesh if its inside the frustum
 					if (contained) {
 						static_cast<ComponentMesh*>(*it)->DrawMesh();
-						App->gui->console.AddLog("PRINTING MESH %s", this->name.c_str());
+						//App->gui->console.AddLog("PRINTING MESH %s", this->name.c_str());
 					}
 					else {
-						App->gui->console.AddLog("NOT PRINTING MESH %s", this->name.c_str());
+						//App->gui->console.AddLog("NOT PRINTING MESH %s", this->name.c_str());
 					}
 				}
 				else {
 					// Draw mesh
 					static_cast<ComponentMesh*>(*it)->DrawMesh();
-					App->gui->console.AddLog("PRINTING MESH %s", this->name.c_str());
+					//App->gui->console.AddLog("PRINTING MESH %s", this->name.c_str());
 				}
 				
 			}

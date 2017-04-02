@@ -57,6 +57,8 @@ public:
 	Bone* bones = nullptr;
 	unsigned numBones = 0;
 
+	ComponentTransform* relRoot = nullptr;
+
 };
 
 #endif /* _MESH_H_ */

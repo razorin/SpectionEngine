@@ -140,48 +140,8 @@ update_status ModuleAnimation::Update(float dt)
 		Play("Idle");
 	}
 
-
-	UpdateInstances(dt);
-	/*for (int i = 0; i < instances.size(); i++)
-	{
-		AnimInstance* instance = instances[i];
-		instance->time += dt;
-		if (instance->time > instance->animation->duration)
-		{
-			if(instance->loop) instance->time -= instance->animation->duration;
-		}
-		else {
-			for (int j = 0; j < instance->animation->numChannels; j++)
-			{
-				GameObject* go = App->sceneManager->getCurrentScene()->GetGameObject(instance->animation->channels[j].name.data);
-				if (go == nullptr)
-				{
-					int a = 1;
-				}
-				else {
-					float3 pos = go->transform->Position();
-					Quat rot = go->transform->Rotation();
-					float3 scale = go->transform->Scale();
-					GetTransform(instance->id, instance->animation->channels[j].name.data, pos, rot);
-					go->transform->SetTransform(pos, scale, rot);
-				}
-			}
-		}
-	}*/
-
 	return UPDATE_CONTINUE;
 }
-
-void ModuleAnimation::UpdateInstances(float dt)
-{
-	Scene* scene = App->sceneManager->getCurrentScene();
-
-	for (std::list<GameObject*>::iterator it = scene->gameobjects.begin(); it != scene->gameobjects.end(); it++)
-	{
-		
-	}
-}
-
 
 void ModuleAnimation::DeformGOMeshes(GameObject * go)
 {
