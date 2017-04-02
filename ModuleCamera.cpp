@@ -14,29 +14,20 @@ ModuleCamera::ModuleCamera(const JSON_Object *json) : Module(json)
 	frustum = Frustum();
 	invertXAxis = (bool)json_object_dotget_boolean(json, "invertHorizontalCamera");
 	invertYAxis = (bool)json_object_dotget_boolean(json, "invertVerticalCamera");
+	movementSpeed = 5.0f;
+	rotationSpeed = .1f;
 }
 
 
 ModuleCamera::~ModuleCamera()
 {
-	RELEASE(activeCamera);
+	RELEASE(editorCamera);
 }
 
 bool ModuleCamera::Init()
 {
 
-	activeCamera = new ComponentCamera(nullptr, "");
-	//aspectRatio = App->window->screen_width / App->window->screen_height;
-	//verticalFov = 60 * DEGTORAD;
-	//horizontalFov = 60 * DEGTORAD;
-	//frustum.SetPerspective(horizontalFov, verticalFov);
-
-	//SetPosition(math::vec{ 0,0.5f,4 });
-	//SetLookAt(math::vec{ 0,1,0 }, math::vec{ 0,0,-1 });
-
-	//SetPlaneDistances(0.1f, 100.0f);
-
-	//frustum.SetKind(FrustumProjectiveSpace::FrustumSpaceGL, FrustumHandedness::FrustumRightHanded);
+	editorCamera = new ComponentCamera(nullptr, "");
 
 	return true;
 }
@@ -50,8 +41,28 @@ update_status ModuleCamera::Update(float dt)
 {
 	mouseBlocked = App->gui->uiInput;
 	
-	activeCamera->SetMouseBlocked(mouseBlocked);
-	activeCamera->Update(dt);
+	editorCamera->SetMouseBlocked(mouseBlocked);
+	float3 movement = float3::zero;
+	float angleX = 0;
+	float angleY = 0;
+
+	Move(dt, movement);
+	Zoom(dt, movement);
+	Rotate(dt, angleX, angleY);
+
+	editorCamera->Traslate(movement, angleX, angleY);
+
+	// Print position and orientation
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
+		App->gui->console.AddLog("Camera position: %f, %f, %f", pos.x, pos.y, pos.z);
+		DLOG("Camera position: %f, %f, %f", pos.x, pos.y, pos.z);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN) {
+		App->gui->console.AddLog("Camera UP vector: %f, %f, %f", frustum.Up().x, frustum.Up().y, frustum.Up().z);
+		DLOG("Camera UP vector: %f, %f, %f", frustum.Up().x, frustum.Up().y, frustum.Up().z);
+		App->gui->console.AddLog("Camera FRONT vector: %f, %f, %f", frustum.Front().x, frustum.Front().y, frustum.Front().z);
+		DLOG("Camera FRONT vector: %f, %f, %f", frustum.Front().x, frustum.Front().y, frustum.Front().z);
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -64,149 +75,98 @@ bool ModuleCamera::CleanUp()
 
 void ModuleCamera::SetFOV(float verticalFov)
 {
-	activeCamera->SetFOV(verticalFov);
-	//this->verticalFov = verticalFov;
-	//frustum.SetVerticalFovAndAspectRatio(verticalFov, this->aspectRatio);
+	editorCamera->SetFOV(verticalFov);
 }
 
 void ModuleCamera::SetAspectRatio(float aspectRatio)
 {
-	activeCamera->SetAspectRatio(aspectRatio);
-	//this->aspectRatio = aspectRatio;
-	//horizontalFov = 2 * atan(tan(verticalFov * 0.5) * aspectRatio);
-	//frustum.SetHorizontalFovAndAspectRatio(this->horizontalFov, aspectRatio);
+	editorCamera->SetAspectRatio(aspectRatio);
 }
 
 void ModuleCamera::ChangeWindowSize(int width, int height)
 {
-	activeCamera->ChangeWindowSize(width, height);
-	//App->window->screen_width = width;
-	//App->window->screen_height = height;
-	//aspectRatio = (float)width / (float)height;
-	//SetAspectRatio(aspectRatio);
-	//glViewport(0, 0, width, height);
+	editorCamera->ChangeWindowSize(width, height);
 }
 
 void ModuleCamera::SetPlaneDistances(float near, float far)
 {
-	activeCamera->SetPlaneDistances(near, far);
-	//this->nearPlane = near;
-	//this->farPlane = far;
-	//frustum.SetViewPlaneDistances(near, far);
+	editorCamera->SetPlaneDistances(near, far);
 }
 
-void ModuleCamera::Move(float dt)
+void ModuleCamera::Move(float dt, float3 &movement)
 {
-	activeCamera->Move(dt);
 	//float3 movement = float3::zero;
+	float speed = movementSpeed;
 
-	//if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-	//	movement -= frustum.WorldRight();
-	//if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-	//	movement += frustum.WorldRight();
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		movement -= editorCamera->frustum.WorldRight();
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		movement += editorCamera->frustum.WorldRight();
 
-	//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-	//	movement += frustum.Front();
-	//if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-	//	movement -= frustum.Front();
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+		movement += editorCamera->frustum.Front();
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+		movement -= editorCamera->frustum.Front();
 
-	//if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT)
-	//	movement += float3::unitY;
-	//if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_REPEAT)
-	//	movement -= float3::unitY;
-
-	//movementSpeed = 5.0f;
-
-	//if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-	//	movement *= 3;
+	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT)
+		movement += float3::unitY;
+	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_REPEAT)
+		movement -= float3::unitY;
 
 
-	//if (movement.Equals(float3::zero) == false)
-	//{
-	//	frustum.Translate(movement * movementSpeed * dt / 1000);
-	//	//This line below is required so viewmatrix is actualized.
-	//	SetPosition(frustum.Pos());
-	//}
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+		speed *= 3;
+
+	movement = movement * speed * dt / 1000;
 }
 
 
-void ModuleCamera::Zoom(float dt)
+void ModuleCamera::Zoom(float dt, float3 &movement)
 {
-	activeCamera->Zoom(dt);
 	//float3 movement = float3::zero;
-	//float zoomSpeed = 20.0f;
-	//int mouseWheel = App->input->GetMouseWheel();
-	//
-	//if (mouseWheel != 0 && mouseBlocked == false) {
-	//	movement += frustum.Front() * mouseWheel * zoomSpeed * dt / 1000;
-	//}
+	float zoomSpeed = 20.0f;
+	int mouseWheel = App->input->GetMouseWheel();
+	
+	if (mouseWheel != 0 && mouseBlocked == false) {
+		movement += editorCamera->frustum.Front() * mouseWheel * zoomSpeed * dt / 1000;
+	}
 
-	//if (movement.Equals(float3::zero) == false)
-	//{
-	//	frustum.Translate(movement);
-	//	//This line below is required so viewmatrix is actualized.
-	//	SetPosition(frustum.Pos());
-	//}
 }
 
 
-void ModuleCamera::Rotate(float dt)
+void ModuleCamera::Rotate(float dt, float &angleX, float &angleY)
 {
-	activeCamera->Rotate(dt);
-	//Quat rotation = Quat::identity;
+	fPoint mouseMotion = App->input->GetMouseMotion();
+	float angleChange = rotationSpeed * (dt / 1000);
 
-	//rotationSpeed = 2.0f;
-	//if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-	//	rotationSpeed *= 3;
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && mouseBlocked == false) {
+		if (invertYAxis) {
+			angleX += (mouseMotion.y / 4) * angleChange;
+		}
+		else {
+			angleX -= (mouseMotion.y / 4) * angleChange;
+		}
+		if (invertXAxis) {
+			angleY += (mouseMotion.x / 4) * angleChange;
+		}
+		else {
+			angleY -= (mouseMotion.x / 4) * angleChange;
+		}
+	}
 
-	//float angleX = 0;
-	//float angleY = 0;
-	//float angleChange = rotationSpeed * (dt / 1000);
-
-	//fPoint mouseMotion = App->input->GetMouseMotion();
-	//if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_REPEAT && mouseBlocked == false)
-	//{
-	//	if (invertYAxis) {
-	//		angleX += (mouseMotion.y / 4) * angleChange;
-	//	}
-	//	else {
-	//		angleX -= (mouseMotion.y / 4) * angleChange;
-	//	}
-	//	if (invertXAxis) {
-	//		angleY += (mouseMotion.x / 4) * angleChange;
-	//	}
-	//	else {
-	//		angleY -= (mouseMotion.x / 4) * angleChange;
-	//	}
-	//}
-
-	//if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-	//	angleY += angleChange;
-	//if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-	//	angleY -= angleChange;
-	//if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-	//	angleX += angleChange;
-	//if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-	//	angleX -= angleChange;
-
-	//if (angleY != 0)
-	//{
-	//	rotation = Quat::RotateY(angleY);
-	//	frustum.SetFront(rotation.Transform(frustum.Front()));
-	//	frustum.SetUp(rotation.Transform(frustum.Up()));
-	//}
-	//if (angleX != 0)
-	//{
-	//	rotation = Quat::RotateAxisAngle(frustum.WorldRight(), (angleX));
-	//	frustum.SetFront(rotation.Transform(frustum.Front()));
-	//	frustum.SetUp(rotation.Transform(frustum.Up()));
-	//}
-
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		angleY += angleChange;
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		angleY -= angleChange;
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		angleX += angleChange;
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		angleX -= angleChange;
 }
 
 void ModuleCamera::SetPosition(const math::vec &pos)
 {
-	activeCamera->SetPosition(pos);
+	editorCamera->SetPosition(pos);
 	//this->pos = pos;
 	//frustum.SetPos(pos);
 }
@@ -214,14 +174,14 @@ void ModuleCamera::SetPosition(const math::vec &pos)
 // TODO An assert must check Front and Up vectors are in a 90 degree angle
 void ModuleCamera::SetLookAt(const math::vec & up, const math::vec & front)
 {
-	activeCamera->SetLookAt(up, front);
+	editorCamera->SetLookAt(up, front);
 	//frustum.SetUp(up);
 	//frustum.SetFront(front);
 }
 
 float * ModuleCamera::GetMatrixProjection() const
 {
-	return activeCamera->GetMatrixProjection();
+	return editorCamera->GetMatrixProjection();
 	//float4x4 projectionMatrix = frustum.ProjectionMatrix();
 	//float4x4 m = projectionMatrix.Transposed();
 	//return &(m[0][0]);
@@ -229,13 +189,17 @@ float * ModuleCamera::GetMatrixProjection() const
 
 float * ModuleCamera::GetMatrixView() const
 {
-	return activeCamera->GetMatrixView();
+	return editorCamera->GetMatrixView();
 	//float4x4 viewMatrix = frustum.ViewMatrix();
 	//float4x4 m = viewMatrix.Transposed();
 	//return &(m[0][0]);
 }
 
-ComponentCamera* ModuleCamera::GetActiveCamera() const
+ComponentCamera* ModuleCamera::GetEditorCamera() const
 {
+	return editorCamera;
+}
+
+ComponentCamera* ModuleCamera::GetActiveCamera() const {
 	return activeCamera;
 }

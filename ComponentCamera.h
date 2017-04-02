@@ -15,6 +15,7 @@ class ComponentCamera :
 	public Component
 {
 public:
+	friend class ModuleCamera;
 	ComponentCamera(GameObject* container, std::string id);
 	~ComponentCamera();
 
@@ -24,10 +25,7 @@ public:
 	void SetAspectRatio(float aspectRatio);
 	void SetPlaneDistances(float near, float far);
 
-	//View Related Functions
-	void Move(float dt);
-	void Zoom(float dt);
-	void Rotate(float dt);
+	
 	void SetPosition(const math::vec &pos);
 	/**
 	Sets the camera Up vector and Front vector
@@ -48,6 +46,9 @@ public:
 	bool DrawGUI();
 
 	bool IsFrustumCulling();
+
+private:
+	void Traslate(const float3 &movement, const float angleX, const float angleY);
 
 public:
 	//These two params may be added as json config

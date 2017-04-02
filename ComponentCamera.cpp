@@ -19,9 +19,11 @@
 ComponentCamera::ComponentCamera(GameObject * container, std::string id) : Component(container, ComponentType::COMPONENT_TYPE_CAMERA, id)
 {
 	name = "Camera";
-	aspectRatio = App->window->screen_width / App->window->screen_height;
+	aspectRatio = App->window->screen_width / (float)App->window->screen_height;
+
 	verticalFov = 60 * DEGTORAD;
 	horizontalFov = 60 * DEGTORAD;
+	SetAspectRatio(aspectRatio);
 	frustum.SetPerspective(horizontalFov, verticalFov);
 
 	SetPosition(math::vec{ 0,2,4 });
@@ -65,110 +67,25 @@ void ComponentCamera::SetPlaneDistances(float near, float far)
 	frustum.SetViewPlaneDistances(near, far);
 }
 
-void ComponentCamera::Move(float dt)
-{
-	float3 movement = float3::zero;
+void ComponentCamera::Traslate(const float3 & movement, const float angleX, const float angleY) {
+	Quat rotation = Quat::identity;
 
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-		movement -= frustum.WorldRight();
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		movement += frustum.WorldRight();
-
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-		movement += frustum.Front();
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-		movement -= frustum.Front();
-
-	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_REPEAT)
-		movement += float3::unitY;
-	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT)
-		movement -= float3::unitY;
-
-	movementSpeed = 5.0f;
-
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-		movement *= 3;
-
-
-	if (movement.Equals(float3::zero) == false)
-	{
-		frustum.Translate(movement * movementSpeed * dt / 1000);
-		//This line below is required so viewmatrix is actualized.
-		SetPosition(frustum.Pos());
-	}
-}
-
-
-void ComponentCamera::Zoom(float dt)
-{
-	float3 movement = float3::zero;
-	float zoomSpeed = 20.0f;
-	int mouseWheel = App->input->GetMouseWheel();
-
-	if (mouseWheel != 0 && mouseBlocked == false) {
-		movement += frustum.Front() * mouseWheel * zoomSpeed * dt / 1000;
-	}
-
-	if (movement.Equals(float3::zero) == false)
-	{
+	if (movement.Equals(float3::zero) == false) {
 		frustum.Translate(movement);
 		//This line below is required so viewmatrix is actualized.
 		SetPosition(frustum.Pos());
 	}
-}
 
-
-void ComponentCamera::Rotate(float dt)
-{
-	Quat rotation = Quat::identity;
-
-	rotationSpeed = 2.0f;
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-		rotationSpeed *= 3;
-
-	float angleX = 0;
-	float angleY = 0;
-	float angleChange = rotationSpeed * (dt / 1000);
-
-	fPoint mouseMotion = App->input->GetMouseMotion();
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && mouseBlocked == false)
-	{
-		if (invertYAxis) {
-			angleX += (mouseMotion.y / 4) * angleChange;
-		}
-		else {
-			angleX -= (mouseMotion.y / 4) * angleChange;
-		}
-		if (invertXAxis) {
-			angleY += (mouseMotion.x / 4) * angleChange;
-		}
-		else {
-			angleY -= (mouseMotion.x / 4) * angleChange;
-		}
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		angleY += angleChange;
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		angleY -= angleChange;
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		angleX += angleChange;
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		angleX -= angleChange;
-
-	if (angleY != 0)
-	{
+	if (angleY != 0) {
 		rotation = Quat::RotateY(angleY);
 		frustum.SetFront(rotation.Transform(frustum.Front()));
 		frustum.SetUp(rotation.Transform(frustum.Up()));
 	}
-	if (angleX != 0)
-	{
+	if (angleX != 0) {
 		rotation = Quat::RotateAxisAngle(frustum.WorldRight(), (angleX));
 		frustum.SetFront(rotation.Transform(frustum.Front()));
 		frustum.SetUp(rotation.Transform(frustum.Up()));
 	}
-
 }
 
 void ComponentCamera::SetPosition(const math::vec &pos)
@@ -200,21 +117,7 @@ float * ComponentCamera::GetMatrixView() const
 
 void ComponentCamera::Update(float dt)
 {
-	Move(dt);
-	Zoom(dt);
-	Rotate(dt);
-
-	// Print position and orientation
-	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
-		App->gui->console.AddLog("Camera position: %f, %f, %f", pos.x, pos.y, pos.z);
-		DLOG("Camera position: %f, %f, %f", pos.x, pos.y, pos.z);
-	}
-	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN) {
-		App->gui->console.AddLog("Camera UP vector: %f, %f, %f", frustum.Up().x, frustum.Up().y, frustum.Up().z);
-		DLOG("Camera UP vector: %f, %f, %f", frustum.Up().x, frustum.Up().y, frustum.Up().z);
-		App->gui->console.AddLog("Camera FRONT vector: %f, %f, %f", frustum.Front().x, frustum.Front().y, frustum.Front().z);
-		DLOG("Camera FRONT vector: %f, %f, %f", frustum.Front().x, frustum.Front().y, frustum.Front().z);
-	}
+	
 }
 
 void ComponentCamera::SetMouseBlocked(bool mouseBlocked)

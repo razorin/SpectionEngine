@@ -31,15 +31,16 @@ public:
 	void SetPlaneDistances(float near, float far);
 
 	//View Related Functions
-	void Move(float dt);
-	void Zoom(float dt);
-	void Rotate(float dt);
+	void Move(float dt, float3 &movement);
+	void Zoom(float dt, float3 &movement);
+	void Rotate(float dt, float &angleX, float &angleY);
 	void SetPosition(const math::vec &pos);
 	void SetLookAt(const math::vec &up, const math::vec &front);
 
 	float * GetMatrixProjection() const;
 	float * GetMatrixView() const;
 
+	ComponentCamera* GetEditorCamera() const;
 	ComponentCamera* GetActiveCamera() const;
 
 public:
@@ -52,6 +53,7 @@ public:
 
 private:
 	ComponentCamera *activeCamera = nullptr;
+	ComponentCamera *editorCamera = nullptr;
 	//std::list<ComponentCamera *> cameras;
 	Frustum frustum;
 	float aspectRatio = 1.78;
