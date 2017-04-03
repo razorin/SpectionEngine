@@ -105,7 +105,7 @@ Scene * ModuleSceneManager::CopyCurrentScene()
 	Scene* scene = new Scene();
 	
 	for (std::list<GameObject*>::iterator it = scene->root->childs.begin(); it != scene->root->childs.end(); it++) {
-		GameObject* go = go->CopyGameObject(*it);
+		//GameObject* go = go->CopyGameObject(*it);
 	}
 
 	return scene;
