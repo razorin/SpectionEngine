@@ -9,18 +9,18 @@
 class GameObject;
 
 struct Billboard {
-	unsigned texture = 0;
+	Billboard() {};
+	Billboard(float2 size) : size(size) {}
 	float2 size = { 0, 0 };
-	aiString texturePath;
 };
 
 class ComponentBillboarding : public Component
 {
 public:
-	ComponentBillboarding(GameObject* container, std::string id, float2 size, aiString texturePath);
+	ComponentBillboarding(GameObject* container, std::string id, float2 size);
 	~ComponentBillboarding();
 
-	void ComputeQuad(const float3 cameraPosition);
+	std::vector<float3> ComputeQuad(const float3 cameraPosition);
 	bool DrawGUI();
 
 private:

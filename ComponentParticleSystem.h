@@ -6,16 +6,17 @@
 #include "AssimpIncludes.h"
 
 struct Particle {
+	Particle(aiVector3D position, aiVector3D velocity, unsigned lifetime, Billboard billboard) : position(position), velocity(velocity), lifetime(lifetime), billboard(billboard) {}
 	aiVector3D position;
 	aiVector3D velocity;
 	unsigned lifetime;
+	Billboard billboard;
 };
 
 class ComponentParticleSystem :
 	public Component
 {
 private:
-	typedef std::vector<Billboard> BillboardList;
 	typedef std::vector<Particle> ParticlePool;
 	typedef std::vector<unsigned> ParticleList;
 
@@ -23,7 +24,7 @@ public:
 	ComponentParticleSystem(GameObject* container, std::string id);
 	~ComponentParticleSystem();
 
-	void Init(unsigned maxParticles, const aiVector2D& emitArea, unsigned fallingTime, float fallingHeight, const char* textureFile, const aiVector2D particleSize);
+	void Init(unsigned maxParticles, const aiVector2D& emitArea, unsigned fallingTime, float fallingHeight, const char* textureFile, const float2 particleSize);
 	void Clear();
 	void Update(unsigned elapsed, const float3 cameraPosition);
 	void Draw();
@@ -33,7 +34,6 @@ private:
 	ParticlePool particles;
 	ParticleList alive;
 	ParticleList dead;
-	BillboardList billboards;
 
 	aiVector2D emitArea;
 	unsigned fallingTime = 0;

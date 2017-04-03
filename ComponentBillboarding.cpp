@@ -14,19 +14,18 @@
 #include "IMGUI\stb_textedit.h"
 #include "IMGUI\stb_truetype.h"
 
-ComponentBillboarding::ComponentBillboarding(GameObject* container, std::string id, float2 size, aiString texturePath) : Component(container, ComponentType::COMPONENT_TYPE_BILLBOARDING, id)
+// TODO: Delete billboard as a component
+ComponentBillboarding::ComponentBillboarding(GameObject * container, std::string id, float2 size) : Component(container, ComponentType::COMPONENT_TYPE_BILLBOARDING, id)
 {
 	name = "Billboard";
 	billboard.size = size;
-	billboard.texturePath = texturePath;
 }
-
 
 ComponentBillboarding::~ComponentBillboarding()
 {
 }
 
-void ComponentBillboarding::ComputeQuad(const float3 cameraPosition)
+std::vector<float3> ComponentBillboarding::ComputeQuad(const float3 cameraPosition)
 {
 	ComponentTransform *transform = (ComponentTransform *)container->FindComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
 	float3 up = float3(0, 1, 0);
@@ -46,22 +45,9 @@ void ComponentBillboarding::ComputeQuad(const float3 cameraPosition)
 	float3 upperLeftCorner = position + (up * billboard.size.y * 0.5 - right * billboard.size.x * 0.5);
 	float3 bottomRightCorner = position + (-up * billboard.size.y * 0.5 + right * billboard.size.x * 0.5);
 	float3 bottomLeftCorner = position + (-up * billboard.size.y * 0.5 - right * billboard.size.x * 0.5);
-
-	billboard.texture = App->textures->LoadTexture(billboard.texturePath);
-
-	// TODO Change texture printing from direct to buffer mode
-	glBindTexture(GL_TEXTURE_2D, billboard.texture);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0, 0);
-	glVertex3f(bottomLeftCorner.x, bottomLeftCorner.y, bottomLeftCorner.z);
-	glTexCoord2f(0, 1);
-	glVertex3f(upperLeftCorner.x, upperLeftCorner.y, upperLeftCorner.z);
-	glTexCoord2f(1, 1);
-	glVertex3f(upperRightCorner.x, upperRightCorner.y, upperRightCorner.z);
-	glTexCoord2f(1, 0);
-	glVertex3f(bottomRightCorner.x, bottomRightCorner.y, bottomRightCorner.z);
-	glEnd();
-	glBindTexture(GL_TEXTURE_2D, 0);
+	
+	std::vector<float3> ret = { upperRightCorner,upperLeftCorner,bottomRightCorner,bottomLeftCorner };
+	return ret;
 }
 
 bool ComponentBillboarding::DrawGUI()

@@ -120,7 +120,7 @@ Component * GameObject::AddComponent(const ComponentType &type, ...)
 		result->maxComponentsByGO = 1;
 		break;
 	case ComponentType::COMPONENT_TYPE_BILLBOARDING:
-		result = new ComponentBillboarding(this, std::to_string(componentCounter), float2(2, 2), aiString("Models/Grass/billboardgrass.png"));
+		result = new ComponentBillboarding(this, std::to_string(componentCounter), float2(2, 2));
 		result->maxComponentsByGO = 1;
 		break;
 	case ComponentType::COMPONENT_TYPE_CAMERA:
