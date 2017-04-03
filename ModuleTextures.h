@@ -26,9 +26,11 @@ public:
 	~ModuleTextures();
 
 	bool Init();
-	bool CleanUp();
+	unsigned LoadTexture(const aiString & file);
 
-	uint LoadTexture(const aiString &imagePath);
+	void Clear();
+
+	unsigned ForceLoad(const aiString & file);
 
 private:
 	TextureList textures;

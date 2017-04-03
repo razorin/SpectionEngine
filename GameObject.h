@@ -23,7 +23,7 @@ public:
 	void SetParent(GameObject* parentGO);
 	void OnTransformChange();
 
-	Component * AddComponent(const ComponentType &type);
+	Component * AddComponent(const ComponentType &type, ...);
 	bool RemoveComponent(Component* component);
 	bool RemoveChild(GameObject* go);
 	std::list<Component *> * FindComponents(const ComponentType &type);

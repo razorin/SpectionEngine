@@ -48,9 +48,6 @@ public:
 
 	SDL_GLContext context;
 
-
-	float* positionLight = nullptr;
-	float* diffuseLight = nullptr;
 };
 
 #endif // __MODULERENDER_H__

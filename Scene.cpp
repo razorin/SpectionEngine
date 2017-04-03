@@ -143,6 +143,12 @@ void Scene::LoadLevel(const char * path, const char * file)
 	BindBonesTransform();
 
 	aiReleaseImport(scene);
+
+	// TODO: Grid of billboardings (not finished)
+	//for (int i = -20; i < 20; i++) {
+	//	GameObject *go = AddGameObject(root, true);
+	//	go->AddComponent(ComponentType::COMPONENT_TYPE_BILLBOARDING);
+	//}
 }
 
 void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject * parentGO)

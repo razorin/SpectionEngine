@@ -15,6 +15,7 @@
 #include "ComponentMesh.h"
 #include "ComponentScript.h"
 #include "ComponentTransform.h"
+#include "ComponentBillboarding.h"
 
 //IMGUI Includes
 #include "IMGUI\imconfig.h"
@@ -97,7 +98,7 @@ void GameObject::OnTransformChange()
 }
 
 
-Component * GameObject::AddComponent(const ComponentType &type)
+Component * GameObject::AddComponent(const ComponentType &type, ...)
 {
 	++componentCounter;
 	Component *result = nullptr;
@@ -138,6 +139,10 @@ Component * GameObject::AddComponent(const ComponentType &type)
 		break;
 	case ComponentType::COMPONENT_TYPE_SCRIPT:
 		result = new ComponentScript(this, std::to_string(componentCounter));
+		result->maxComponentsByGO = 0;
+		break;
+	case ComponentType::COMPONENT_TYPE_BILLBOARDING:
+		result = new ComponentBillboarding(this, std::to_string(componentCounter), float2(2, 2), aiString("Models/Grass/billboardgrass.png"));
 		result->maxComponentsByGO = 0;
 		break;
 	case ComponentType::COMPONENT_TYPE_TRANSFORM:
@@ -275,6 +280,12 @@ void GameObject::Draw() const
 			if ((*it)->type == ComponentType::COMPONENT_TYPE_CAMERA)
 			{
 				static_cast<ComponentCamera*>(*it)->DrawFrustum();
+			}
+			//Billboarding
+			if ((*it)->type == ComponentType::COMPONENT_TYPE_BILLBOARDING) {
+				ComponentBillboarding *boardinginging = (ComponentBillboarding*)(*it);
+				//boardinginging->ComputeQuad(App->camera->pos);
+				boardinginging->ComputeQuad({ 0.0f,0.0f,5.0f });
 			}
 			//Meshes
 			else if ((*it)->type == ComponentType::COMPONENT_TYPE_MESH)
@@ -613,7 +624,7 @@ void GameObject::SetSelected(bool value)
 }
 
 void GameObject::DrawGUIPanel() {
-	const char* items[] = { "CAMERA", "SCRIPT", "LIGHT", "MATERIAL", "MESH" };
+	const char* items[] = { "ANIMATION", "BILLBOARD", "CAMERA", "LIGHT", "MATERIAL", "MESH", "SCRIPT" };
 	int componentType = newComponentType;
 	// GameObject Name
 	if (editableName) {

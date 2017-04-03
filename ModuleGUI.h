@@ -91,7 +91,7 @@ private:
 	bool showPreferences = false;
 	//Assets
 	//GameObject
-	bool showGOHierarchy = true;
+	bool showGOHierarchy = false;
 	//bool showLights = false;
 	//Component
 	//Window

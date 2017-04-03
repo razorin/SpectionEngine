@@ -128,7 +128,7 @@ bool LightsManager::EnableLight(Light* light) {
 bool LightsManager::DisableLight(ptrdiff_t position) {
 	GLenum lightNumber = lightsMap.find(position)->second;
 	glDisable(lightNumber);
-	if (lights.size() == 1) {
+	if (lights.size() <= 0) {
 		glDisable(GL_LIGHTING);
 	}
 	return true;
@@ -145,7 +145,7 @@ bool LightsManager::DisableLight(Light* light) {
 	}
 	GLenum lightNumber = lightsMap.find(lightPos)->second;
 	glDisable(lightNumber);
-	if (lights.size() == 1) {
+	if (lights.size() <= 0) {
 		glDisable(GL_LIGHTING);
 	}
 	return true;

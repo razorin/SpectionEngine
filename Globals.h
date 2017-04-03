@@ -7,6 +7,11 @@
 #define DLOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
 #define DLOGS(format, ...) logs(__LINE__, format, __VA_ARGS__);
 
+enum Axis {
+	X,
+	Y,
+	Z
+};
 
 void log(const char file[], int line, const char* format, ...);
 void logs(int line, const char* format, ...);

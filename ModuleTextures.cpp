@@ -51,27 +51,71 @@ bool ModuleTextures::Init()
 	return ret;
 }
 
-// Called before quitting
-bool ModuleTextures::CleanUp()
+unsigned ModuleTextures::LoadTexture(const aiString& file)
 {
-	return true;
-}
-
-
-uint ModuleTextures::LoadTexture(const aiString &imagePath) {
-	GLuint imageID = 0;
-	ILboolean success;
-	std::map<aiString, GLuint, LessString>::iterator it = textures.find(imagePath);
+	TextureList::iterator it = textures.find(file);
 
 	if (it != textures.end())
+	{
 		return it->second;
-
-	success = ilLoadImage(imagePath.data);
-
-	if (success) {
-		imageID = ilutGLBindTexImage();
-		textures[imagePath] = imageID;
 	}
 
-	return imageID;
+	return textures[file] = ForceLoad(file);
+}
+
+void ModuleTextures::Clear()
+{
+	for (TextureList::iterator it = textures.begin(); it != textures.end(); ++it)
+	{
+		glDeleteTextures(1, &it->second);
+	}
+
+	textures.clear();
+}
+
+unsigned ModuleTextures::ForceLoad(const aiString& file)
+{
+	ILuint imageId;
+	ilGenImages(1, &imageId);
+	ilBindImage(imageId);
+
+	if (ilLoadImage(file.data))
+	{
+		GLuint textureId = 0;
+		glGenTextures(1, &textureId);
+
+		glBindTexture(GL_TEXTURE_2D, textureId);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+		ILinfo ImageInfo;
+		iluGetImageInfo(&ImageInfo);
+		if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
+		{
+			iluFlipImage();
+		}
+
+		int channels = ilGetInteger(IL_IMAGE_CHANNELS);
+		if (channels == 3) {
+			ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+		}
+		else if (channels == 4) {
+			ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+		}
+
+		ILubyte* data = ilGetData();
+		int width = ilGetInteger(IL_IMAGE_WIDTH);
+		int height = ilGetInteger(IL_IMAGE_HEIGHT);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_FORMAT), width,
+			height, 0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, data);
+
+		ilDeleteImages(1, &imageId);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		return textureId;
+	}
+
+	return 0;
 }
