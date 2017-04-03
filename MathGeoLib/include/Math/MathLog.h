@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Log.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The LOG and LOGUSER macros. Provides an unified mechanism for logging. */
 #pragma once
 
@@ -64,11 +64,11 @@ void PrintToConsole(MathLogChannel channel, const char *str);
 #define LOGW_NS(...) PrintToConsoleVariadic(MathLogWarningNoCallstack, __VA_ARGS__)
 #define LOGE(...) PrintToConsoleVariadic(MathLogError, __VA_ARGS__)
 #define LOGE_NS(...) PrintToConsoleVariadic(MathLogErrorNoCallstack, __VA_ARGS__)
-#define LOG(channel, ...) PrintToConsoleVariadic(channel, __VA_ARGS__)
+#define LOGM(channel, ...) PrintToConsoleVariadic(channel, __VA_ARGS__)
 
 #else
 
-#define LOG(...) ((void)0)
+#define LOGM(...) ((void)0)
 #define LOGW(...) ((void)0)
 #define LOGW_NS(...) ((void)0)
 #define LOGE(...) ((void)0)
