@@ -18,6 +18,20 @@ struct NodeAnim
 	uint numPositions = 0;
 	uint numRotations = 0;
 	uint numKeyframes = 0;
+
+	NodeAnim() {}
+	NodeAnim(const NodeAnim *node) : name[node->name], numPositions(node->numPositions), 
+		numRotations(node->numRotations), numKeyframes(node->numKeyframes)
+	{
+		if (node->positions != nullptr) {
+			positions = new float3[numPositions];
+			std::copy(node->positions, node->positions + numPositions, positions);
+		}
+		if (node->rotations != nullptr) {
+			rotations = new Quat[numRotations];
+			std::copy(node->rotations, node->rotations + numRotations, rotations);
+		}
+	}
 };
 
 struct Anim
@@ -26,6 +40,18 @@ struct Anim
 	uint duration = 0;
 	uint numChannels = 0;
 	NodeAnim* channels = nullptr;
+
+	Anim(){}
+	Anim(const Anim *anim) : name(anim->name), duration(anim->duration), numChannels(anim->numChannels) 
+	{
+		if (numChannels > 0) {
+			/*channels = NodeAnim[numChannels];
+			for (int i = 0; i < numChannels; ++i) {
+				channels[i] = anim->channels[i];
+			}*/
+		}
+	}
+
 };
 
 struct AnimInstance

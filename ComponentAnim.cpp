@@ -8,6 +8,12 @@ ComponentAnim::ComponentAnim(GameObject * container, std::string id) : Component
 {
 }
 
+ComponentAnim::ComponentAnim(const ComponentAnim * animation, GameObject * container) : isPlaying(animation->isPlaying),
+numClips(animation->numClips), instanceId(animation->instanceId)
+{
+
+}
+
 ComponentAnim::~ComponentAnim()
 {
 }

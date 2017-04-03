@@ -12,6 +12,7 @@ class ComponentAnim : public Component
 {
 public:
 	ComponentAnim(GameObject* container, std::string name);
+	ComponentAnim(const ComponentAnim *animation, GameObject * container);
 	~ComponentAnim();
 
 	bool AddClip(Anim* clip);
