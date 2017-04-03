@@ -6,6 +6,11 @@ Component::Component(GameObject * container, ComponentType type, std::string id)
 {
 }
 
+Component::Component(const Component * component, GameObject * container) : container(component->container), active(component->active), 
+toDelete(component->toDelete), id(component->id), name(component->name), maxComponentsByGO(component->maxComponentsByGO)
+{
+}
+
 Component::~Component()
 {
 }

@@ -26,6 +26,13 @@ ComponentTransform::ComponentTransform(GameObject* container, Quat& rotation, fl
 	name = "Transform";
 }
 
+ComponentTransform::ComponentTransform(const ComponentTransform * transform, GameObject * container) : Component(transform, container), 
+position(transform->position), scale(transform->scale), rotation(transform->rotation), eulerAngles(transform->eulerAngles), 
+localTransform(transform->localTransform), globalTransform(transform->globalTransform), parentGlobalTransform(transform->parentGlobalTransform)
+{
+	
+}
+
 ComponentTransform::~ComponentTransform()
 {
 }

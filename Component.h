@@ -21,7 +21,9 @@ class GameObject;
 class Component
 {
 public:
+	Component(){}
 	Component(GameObject* container, ComponentType type, std::string id);
+	Component(const Component *component, GameObject * container);
 	virtual ~Component();
 
 	//We just do active for go and components. Unity uses enable = .. for components
