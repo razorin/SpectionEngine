@@ -166,9 +166,6 @@
     <ClInclude Include="Scene.h">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="Level.h">
-      <Filter>Resources</Filter>
-    </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>Resources</Filter>
     </ClInclude>
@@ -177,6 +174,9 @@
     </ClInclude>
     <ClInclude Include="Model.h">
       <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentParticleSystem.h">
+      <Filter>GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -258,6 +258,9 @@
     <ClCompile Include="Component.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="ComponentBillboarding.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
     <ClCompile Include="ComponentCamera.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
@@ -285,14 +288,10 @@
     <ClCompile Include="ModuleAnimation.cpp">
       <Filter>Core Modules</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="ComponentAnim.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="Level.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
@@ -304,10 +303,8 @@
     <ClCompile Include="Model.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
-=======
-    <ClCompile Include="ComponentBillboarding.cpp">
+    <ClCompile Include="ComponentParticleSystem.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
->>>>>>> feature/billboarding
   </ItemGroup>
 </Project>

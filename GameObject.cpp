@@ -9,13 +9,14 @@
 #include "GameObject.h"
 #include "Component.h"
 #include "ComponentAnim.h"
+#include "ComponentBillboarding.h"
 #include "ComponentCamera.h"
 #include "ComponentLight.h"
 #include "ComponentMaterial.h"
 #include "ComponentMesh.h"
+#include "ComponentParticleSystem.h"
 #include "ComponentScript.h"
 #include "ComponentTransform.h"
-#include "ComponentBillboarding.h"
 
 //IMGUI Includes
 #include "IMGUI\imconfig.h"
@@ -118,6 +119,10 @@ Component * GameObject::AddComponent(const ComponentType &type, ...)
 		result = new ComponentAnim(this, std::to_string(componentCounter));
 		result->maxComponentsByGO = 1;
 		break;
+	case ComponentType::COMPONENT_TYPE_BILLBOARDING:
+		result = new ComponentBillboarding(this, std::to_string(componentCounter), float2(2, 2), aiString("Models/Grass/billboardgrass.png"));
+		result->maxComponentsByGO = 1;
+		break;
 	case ComponentType::COMPONENT_TYPE_CAMERA:
 		result = new ComponentCamera(this, std::to_string(componentCounter));
 		result->maxComponentsByGO = 1;
@@ -137,13 +142,13 @@ Component * GameObject::AddComponent(const ComponentType &type, ...)
 		result = new ComponentMesh(this, std::to_string(componentCounter));
 		result->maxComponentsByGO = 1;
 		break;
+	case ComponentType::COMPONENT_TYPE_PARTICLE_SYSTEM:
+		result = new ComponentParticleSystem(this, std::to_string(componentCounter));
+		result->maxComponentsByGO = 10;
+		break;
 	case ComponentType::COMPONENT_TYPE_SCRIPT:
 		result = new ComponentScript(this, std::to_string(componentCounter));
-		result->maxComponentsByGO = 0;
-		break;
-	case ComponentType::COMPONENT_TYPE_BILLBOARDING:
-		result = new ComponentBillboarding(this, std::to_string(componentCounter), float2(2, 2), aiString("Models/Grass/billboardgrass.png"));
-		result->maxComponentsByGO = 0;
+		result->maxComponentsByGO = 10;
 		break;
 	case ComponentType::COMPONENT_TYPE_TRANSFORM:
 		result = new ComponentTransform(this, std::to_string(componentCounter));
@@ -624,7 +629,7 @@ void GameObject::SetSelected(bool value)
 }
 
 void GameObject::DrawGUIPanel() {
-	const char* items[] = { "ANIMATION", "BILLBOARD", "CAMERA", "LIGHT", "MATERIAL", "MESH", "SCRIPT" };
+	const char* items[] = { "ANIMATION", "BILLBOARD", "CAMERA", "LIGHT", "MATERIAL", "MESH", "PARTICLE SYSTEM", "SCRIPT" };
 	int componentType = newComponentType;
 	// GameObject Name
 	if (editableName) {

@@ -1,3 +1,6 @@
+#ifndef COMPONENT_BILLBOARDING_H
+#define COMPONENT_BILLBOARDING_H
+
 #include "Component.h"
 #include "assimp\cimport.h"
 #include "MathGeoLib\include\MathGeoLib.h"
@@ -5,6 +8,11 @@
 
 class GameObject;
 
+struct Billboard {
+	unsigned texture = 0;
+	float2 size = { 0, 0 };
+	aiString texturePath;
+};
 
 class ComponentBillboarding : public Component
 {
@@ -12,13 +20,11 @@ public:
 	ComponentBillboarding(GameObject* container, std::string id, float2 size, aiString texturePath);
 	~ComponentBillboarding();
 
-	void ComputeQuad(float3 cameraPosition);
+	void ComputeQuad(const float3 cameraPosition);
 	bool DrawGUI();
 
 private:
-	unsigned texture = 0;
-	float2 size = { 0, 0 };
-	aiString texturePath;
-
+	Billboard billboard;
 };
 
+#endif // !COMPONENT_BILLBOARDING_H

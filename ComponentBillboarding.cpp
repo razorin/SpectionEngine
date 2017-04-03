@@ -14,10 +14,11 @@
 #include "IMGUI\stb_textedit.h"
 #include "IMGUI\stb_truetype.h"
 
-ComponentBillboarding::ComponentBillboarding(GameObject* container, std::string id, float2 size, aiString texturePath) : Component(container, ComponentType::COMPONENT_TYPE_BILLBOARDING, id),
-size(size), texturePath(texturePath)
+ComponentBillboarding::ComponentBillboarding(GameObject* container, std::string id, float2 size, aiString texturePath) : Component(container, ComponentType::COMPONENT_TYPE_BILLBOARDING, id)
 {
 	name = "Billboard";
+	billboard.size = size;
+	billboard.texturePath = texturePath;
 }
 
 
@@ -25,7 +26,7 @@ ComponentBillboarding::~ComponentBillboarding()
 {
 }
 
-void ComponentBillboarding::ComputeQuad(float3 cameraPosition)
+void ComponentBillboarding::ComputeQuad(const float3 cameraPosition)
 {
 	ComponentTransform *transform = (ComponentTransform *)container->FindComponent(ComponentType::COMPONENT_TYPE_TRANSFORM);
 	float3 up = float3(0, 1, 0);
@@ -41,15 +42,15 @@ void ComponentBillboarding::ComputeQuad(float3 cameraPosition)
 		App->gui->console.AddLog("ERROR ON BILLBOARD: Right vector can't be normalized");
 	}
 
-	float3 upperRightCorner = position + (up * size.y * 0.5 + right * size.x * 0.5);
-	float3 upperLeftCorner = position + (up * size.y * 0.5 - right * size.x * 0.5);
-	float3 bottomRightCorner = position + (-up * size.y * 0.5 + right * size.x * 0.5);
-	float3 bottomLeftCorner = position + (-up * size.y * 0.5 - right * size.x * 0.5);
+	float3 upperRightCorner = position + (up * billboard.size.y * 0.5 + right * billboard.size.x * 0.5);
+	float3 upperLeftCorner = position + (up * billboard.size.y * 0.5 - right * billboard.size.x * 0.5);
+	float3 bottomRightCorner = position + (-up * billboard.size.y * 0.5 + right * billboard.size.x * 0.5);
+	float3 bottomLeftCorner = position + (-up * billboard.size.y * 0.5 - right * billboard.size.x * 0.5);
 
-	texture = App->textures->LoadTexture(texturePath);
+	billboard.texture = App->textures->LoadTexture(billboard.texturePath);
 
 	// TODO Change texture printing from direct to buffer mode
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE_2D, billboard.texture);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0, 0);
 	glVertex3f(bottomLeftCorner.x, bottomLeftCorner.y, bottomLeftCorner.z);
