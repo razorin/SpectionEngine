@@ -3,6 +3,7 @@
 #include "ModuleAnimation.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include "Material.h"
 #include "ModuleTextures.h"
 #include "Component.h"
 #include "ComponentTransform.h"
@@ -29,7 +30,7 @@ maxFrames(scene->maxFrames), textureIds(scene->textureIds)
 			meshes.push_back(new Mesh(scene->meshes[i]));
 		}
 		if (i < scene->materials.size()) {
-			//materials[i] = new Material(scene->materials[i]);
+			materials.push_back(new Material(scene->materials[i]));
 		}
 	}
 
