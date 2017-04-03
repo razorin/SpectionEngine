@@ -172,28 +172,33 @@ bool Application::CleanUp()
 
 void Application::Play()
 {
-	if (gameTimer->state != TIMER_STATE::TIMER_STARTED) {
+	if (state != APP_STATE::APP_PLAY) {
 		gameTimer->Start();
+		state = APP_PLAY;
 		DLOG("PLAY");
 		//"Save" the gameobjects transforms
-		sceneManager->CreateBackupScene();
+		sceneManager->Play();
 	}
 	
 }
 
 void Application::Pause()
 {
-	gameTimer->Pause();
-	DLOG("PAUSE");
+	if (state == APP_STATE::APP_PLAY) {
+		gameTimer->Pause();
+		state = APP_PAUSE;
+		DLOG("PAUSE");
+	}
 }
 
 void Application::Stop()
 {
-	if (gameTimer->state != TIMER_STATE::TIMER_STOPPED) {
+	if (state != APP_STATE::APP_STOP) {
 		gameTimer->Stop();
+		state = APP_STOP;
 		DLOG("STOP");
 		//"Load" the gameobjects transforms
-		sceneManager->LoadBackupScene();
+		sceneManager->Stop();
 	}
 }
 

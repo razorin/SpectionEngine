@@ -16,9 +16,8 @@ public:
 	void deleteCurrentScene();
 	void loadCurrentScene(const char* path, const char* file);
 
-	Scene* CopyCurrentScene();
-	void CreateBackupScene();
-	void LoadBackupScene();
+	void Play();
+	void Stop();
 
 	bool Start();
 	update_status PreUpdate(float dt);

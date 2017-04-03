@@ -8,11 +8,43 @@ Mesh::Mesh()
 {
 }
 
+Mesh::Mesh(Mesh * mesh) : vboVertices(mesh->vboVertices), vboIndices(mesh->vboIndices), vboColors(mesh->vboColors),
+vboNormals(mesh->vboNormals), vboTextures(mesh->vboTextures), numVertices(mesh->numVertices), numIndices(mesh->numIndices),
+numTextures(mesh->numTextures), imageName(mesh->imageName), numBones(mesh->numBones)
+{
+	if (indices != nullptr) {
+		indices = new uint[numIndices];
+		std::copy(mesh->indices, mesh->indices + numIndices, indices);
+	}
+	if (vertices != nullptr) {
+		vertices = new float[numVertices];
+		std::copy(mesh->vertices, mesh->vertices + numVertices, vertices);
+	}
+	if (colors != nullptr) {
+		colors = new float[numIndices];
+		std::copy(mesh->colors, mesh->colors + numIndices, colors);
+	}
+	if (normals != nullptr) {
+		normals = new float[numIndices];
+		std::copy(mesh->normals, mesh->normals + numIndices, normals);
+	}
+	if (textureCoords != nullptr) {
+		textureCoords = new float[numTextures];
+		std::copy(mesh->textureCoords, mesh->textureCoords + numTextures, textureCoords);
+	}
+	if (bones != nullptr) {
+		bones = new Bone[numBones];
+		for (int i = 0; i < numBones; ++i) {
+			bones[i] = new Bone(mesh->bones[i]);
+		}
+	}
+}
+
 
 Mesh::~Mesh()
 {
 	RELEASE(this->normals);
-	RELEASE(this->colors);
+	//RELEASE(this->colors);
 	RELEASE(this->indices);
 	RELEASE(this->vertices);
 	RELEASE_ARRAY(this->textureCoords);

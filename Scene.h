@@ -17,6 +17,7 @@ class Scene
 {
 public:
 	Scene();
+	Scene(const Scene* scene);
 	~Scene();
 
 	GameObject* AddGameObject(GameObject* parent = nullptr, bool editable = false, const std::string &name = "");
@@ -35,7 +36,7 @@ public:
 
 
 public:
-	GameObject* root;
+	GameObject* root = nullptr;
 	//std::list<GameObject *> gameobjects;
 
 private:
@@ -45,10 +46,10 @@ private:
 	//std::list<Animation *> animations;
 
 	int frame = 0;
-	int maxFrames;
+	int maxFrames = 0;
 
 	//TODO use the texture manager instead of this
-	uint* textureIds;
+	uint* textureIds = 0;
 
 };
 

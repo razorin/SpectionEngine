@@ -26,6 +26,12 @@ class PreciseTimer;
 
 class LightsManager;
 
+enum APP_STATE {
+	APP_PLAY,
+	APP_PAUSE,
+	APP_STOP
+};
+
 class Application
 {
 public:
@@ -76,6 +82,7 @@ public:
 	const char *currentPlatform;
 
 	LightsManager *lightsManager;
+	APP_STATE state = APP_STOP;
 
 private:
 	float msByFrame = 0;
