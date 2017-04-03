@@ -52,6 +52,32 @@ GameObject::GameObject(std::string id, GameObject * parent, const char * name, b
 	}
 }
 
+GameObject::GameObject(const GameObject * other, GameObject *parent) : id(other->id), name(other->name),
+editableName(other->editableName), enable(other->enable), staticObject(other->staticObject),
+selectedGO(other->selectedGO), toDelete(other->toDelete)
+{
+	parent = parent;
+	for (std::list<GameObject*>::const_iterator it = other->childs.begin(); it != other->childs.end(); ++it) {
+		childs.push_back(new GameObject((*it), this));
+	}
+
+	for (std::list<Component*>::const_iterator it = other->components.begin(); it != other->components.end(); ++it) {
+		switch ((*it)->type) {
+			case ComponentType::COMPONENT_TYPE_TRANSFORM:
+				transform = new ComponentTransform(other->transform, this);
+				++componentCounter;
+				++componentCounterByType[(*it)->type];
+			break;
+			default:
+				//TODO: Create copy constructor for each Component and use here!
+				AddComponent((*it)->type);
+			break;
+
+		}
+	}
+
+}
+
 
 GameObject::~GameObject()
 {
@@ -668,13 +694,4 @@ void GameObject::DrawGUIPanel() {
 			AddComponent(newComponentType);
 		}
 	}
-}
-
-GameObject * GameObject::CopyGameObject(GameObject * toCopy)
-{
-	GameObject* go = new GameObject(toCopy->GetID(), toCopy->GetParent(), toCopy->GetName().c_str(), toCopy->IsEditableName());
-	
-
-	
-	return go;
 }

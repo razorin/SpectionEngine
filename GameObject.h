@@ -16,6 +16,8 @@ class GameObject
 public:
 	GameObject(std::string id, GameObject* parent, const char* name, bool editableName);
 	GameObject(std::string id, GameObject* parent, const char* name, bool editableName, const float3& position, const float3& scale, const Quat& rotation);
+	GameObject(const GameObject *other, GameObject *parent = nullptr);
+
 	virtual ~GameObject();
 
 	void AssignTransform();
@@ -50,30 +52,27 @@ public:
 	void SetSelected(bool value);
 	void DrawGUIPanel();
 
-	GameObject* CopyGameObject(GameObject* toCopy);
-
 
 private:
 	std::string id = "";
 	std::string name = "";
 	bool editableName = false;
-	GameObject *parent = nullptr;
 	bool enable = true;
 	bool staticObject = false;
 	bool selectedGO = false;
-	std::map<ComponentType, int> componentCounterByType;
+	bool toDelete = false;
+
+	//This attrs shouldn't be copied
 	int componentCounter = 0;
+	std::map<ComponentType, int> componentCounterByType;
+	GameObject *parent = nullptr;
 	std::list<math::AABB> AABBoxes;
 
 	ComponentType newComponentType;
 
-	bool toDelete = false;
 
 public:
 	ComponentTransform* transform = nullptr;
-	float3 backupPosition;
-	Quat backupRotation;
-	float3 backupScale;
 	std::list<GameObject *> childs;
 	std::list<Component *> components;
 };

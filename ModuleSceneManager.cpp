@@ -103,10 +103,12 @@ void ModuleSceneManager::loadCurrentScene(const char * path, const char * file)
 
 void ModuleSceneManager::Play()
 {
-	backupScene = new Scene(currentScene);
-	Scene* auxScene = backupScene;
-	backupScene = currentScene;
-	currentScene = auxScene;
+	Scene* scene = new Scene();
+	
+	for (std::list<GameObject*>::iterator it = scene->root->childs.begin(); it != scene->root->childs.end(); it++) {
+		//GameObject* go = go->CopyGameObject(*it);
+	}
+
 }
 
 void ModuleSceneManager::Stop()
