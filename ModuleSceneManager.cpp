@@ -20,6 +20,7 @@ bool ModuleSceneManager::Start() {
 	//if(go != nullptr) go->AddComponent(ComponentType::COMPONENT_TYPE_CAMERA);
 	
 	loadCurrentScene("Models/ArmyPilot/", "ArmyPilot.dae");
+	
 	//loadCurrentScene("Models/street/", "Street environment_V01.fbx");
 	//loadCurrentScene("Models/Batman/", "Batman.obj");
 	//loadCurrentScene("Models/street/", "Street.obj");
@@ -100,7 +101,7 @@ void ModuleSceneManager::loadCurrentScene(const char * path, const char * file)
 	}
 }
 
-Scene * ModuleSceneManager::CopyCurrentScene()
+void ModuleSceneManager::Play()
 {
 	Scene* scene = new Scene();
 	
@@ -108,21 +109,13 @@ Scene * ModuleSceneManager::CopyCurrentScene()
 		//GameObject* go = go->CopyGameObject(*it);
 	}
 
-	return scene;
 }
 
-//When "Play" is pressed we save the current scene in a backup that will not be affected by the changes in play time
-void ModuleSceneManager::CreateBackupScene()
+void ModuleSceneManager::Stop()
 {
-	if (backupScene != nullptr) {
-		//backupScene->CleanUp();
-		RELEASE(backupScene);
-	}
-	backupScene = CopyCurrentScene();
-
+	delete currentScene;
+	currentScene = backupScene;
+	backupScene = nullptr;
 }
 
-//When "Stop" is pressed we recover the saved scene
-void ModuleSceneManager::LoadBackupScene()
-{
-}
+

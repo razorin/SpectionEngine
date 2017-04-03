@@ -7,6 +7,7 @@ class Material
 {
 public:
 	Material();
+	Material(const Material *material);
 	virtual ~Material();
 
 public:

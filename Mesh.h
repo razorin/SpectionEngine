@@ -13,6 +13,12 @@ struct Weight
 {
 	unsigned vertex = 0;
 	float weight = 0.0f;
+
+	Weight(){
+	}
+	Weight(const Weight *weight) : vertex(weight->vertex), weight(weight->weight) {
+
+	}
 };
 
 struct Bone
@@ -22,6 +28,19 @@ struct Bone
 	unsigned numWeights = 0;
 	float4x4 bind;
 	ComponentTransform* ownerGOTransform;
+
+	Bone() {
+
+	}
+	Bone(const Bone *bone) : name(bone->name), numWeights(bone->numWeights)
+	{
+		weights = new Weight[numWeights];
+		for (int i = 0; i < numWeights; ++i) {
+			weights[i] = new Weight(bone->weights[i]);
+		}
+		bind = float4x4(bone->bind);
+
+	}
 };
 
 class Mesh
@@ -29,6 +48,7 @@ class Mesh
 
 public:
 	Mesh();
+	Mesh(Mesh* mesh);
 	~Mesh();
 
 	void InitializeBuffers();
@@ -46,15 +66,15 @@ public:
 	uint numVertices = 0;
 	uint numIndices = 0;
 	uint numTextures = 0;
+	uint imageName;
 
 	uint *indices = nullptr;
-	uint imageName;
 	float *vertices = nullptr;
 	float *colors = nullptr;
-	float* normals = nullptr;
+	float *normals = nullptr;
 	float *textureCoords = nullptr;
 
-	Bone* bones = nullptr;
+	Bone *bones = nullptr;
 	unsigned numBones = 0;
 
 };

@@ -62,8 +62,18 @@ selectedGO(other->selectedGO), toDelete(other->toDelete)
 	}
 
 	for (std::list<Component*>::const_iterator it = other->components.begin(); it != other->components.end(); ++it) {
-		AddComponent((*it)->type);
-		//TODO: Create copy constructor for each Component and use here!
+		switch ((*it)->type) {
+			case ComponentType::COMPONENT_TYPE_TRANSFORM:
+				transform = new ComponentTransform(other->transform, this);
+				++componentCounter;
+				++componentCounterByType[(*it)->type];
+			break;
+			default:
+				//TODO: Create copy constructor for each Component and use here!
+				AddComponent((*it)->type);
+			break;
+
+		}
 	}
 
 }

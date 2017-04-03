@@ -3,6 +3,7 @@
 #include "ModuleAnimation.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include "Material.h"
 #include "ModuleTextures.h"
 #include "Component.h"
 #include "ComponentTransform.h"
@@ -16,6 +17,23 @@ using namespace std;
 Scene::Scene()
 {
 	root = AddGameObject(nullptr, false, "Root");
+}
+
+Scene::Scene(const Scene * scene) : gameObjectsCounter(scene->gameObjectsCounter), frame(scene->frame), 
+maxFrames(scene->maxFrames), textureIds(scene->textureIds)
+{
+	meshes.reserve(scene->meshes.size());
+	materials.reserve(scene->materials.size());
+
+	for (int i = 0; i < scene->meshes.size() || i < scene->materials.size(); ++i) {
+		if (i < scene->meshes.size()) {
+			meshes.push_back(new Mesh(scene->meshes[i]));
+		}
+		if (i < scene->materials.size()) {
+			materials.push_back(new Material(scene->materials[i]));
+		}
+	}
+
 }
 
 Scene::~Scene()
