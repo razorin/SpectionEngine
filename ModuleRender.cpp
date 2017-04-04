@@ -114,11 +114,13 @@ update_status ModuleRender::Update(float dt)
 	DrawGrid();
 	//DrawGizmo();
 
-	App->lightsManager->Draw();
-
 	// Draw the current scene
-	if (App->sceneManager->getCurrentScene() != nullptr) 
+	if (App->sceneManager->getCurrentScene() != nullptr) {
+		App->sceneManager->Update(dt);
 		App->sceneManager->Draw();
+	}
+
+	App->lightsManager->Draw();
 
 	//DrawDirectCube();
 

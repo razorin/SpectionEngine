@@ -127,9 +127,6 @@
     <ClInclude Include="GameObject.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentBillboarding.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="ComponentCamera.h">
       <Filter>GameObject</Filter>
     </ClInclude>
@@ -177,6 +174,9 @@
     </ClInclude>
     <ClInclude Include="ComponentParticleSystem.h">
       <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Billboard.h">
+      <Filter>Geometric primitive</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -258,9 +258,6 @@
     <ClCompile Include="Component.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentBillboarding.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="ComponentCamera.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
@@ -305,6 +302,9 @@
     </ClCompile>
     <ClCompile Include="ComponentParticleSystem.cpp">
       <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Billboard.cpp">
+      <Filter>Geometric primitive</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -9,7 +9,6 @@
 #include "GameObject.h"
 #include "Component.h"
 #include "ComponentAnim.h"
-#include "ComponentBillboarding.h"
 #include "ComponentCamera.h"
 #include "ComponentLight.h"
 #include "ComponentMaterial.h"
@@ -119,10 +118,6 @@ Component * GameObject::AddComponent(const ComponentType &type, ...)
 		result = new ComponentAnim(this, std::to_string(componentCounter));
 		result->maxComponentsByGO = 1;
 		break;
-	case ComponentType::COMPONENT_TYPE_BILLBOARDING:
-		result = new ComponentBillboarding(this, std::to_string(componentCounter), float2(2, 2));
-		result->maxComponentsByGO = 1;
-		break;
 	case ComponentType::COMPONENT_TYPE_CAMERA:
 		result = new ComponentCamera(this, std::to_string(componentCounter));
 		result->maxComponentsByGO = 1;
@@ -144,6 +139,7 @@ Component * GameObject::AddComponent(const ComponentType &type, ...)
 		break;
 	case ComponentType::COMPONENT_TYPE_PARTICLE_SYSTEM:
 		result = new ComponentParticleSystem(this, std::to_string(componentCounter));
+		static_cast<ComponentParticleSystem*>(result)->Init(70, { 5,5 }, 50, 4, "Models/Particles/rainSprite.tga", { 0.15f,0.15f });
 		result->maxComponentsByGO = 10;
 		break;
 	case ComponentType::COMPONENT_TYPE_SCRIPT:
@@ -286,12 +282,6 @@ void GameObject::Draw() const
 			{
 				static_cast<ComponentCamera*>(*it)->DrawFrustum();
 			}
-			//Billboarding
-			if ((*it)->type == ComponentType::COMPONENT_TYPE_BILLBOARDING) {
-				ComponentBillboarding *boardinginging = (ComponentBillboarding*)(*it);
-				//boardinginging->ComputeQuad(App->camera->pos);
-				boardinginging->ComputeQuad({ 0.0f,0.0f,5.0f });
-			}
 			//Meshes
 			else if ((*it)->type == ComponentType::COMPONENT_TYPE_MESH)
 			{
@@ -319,9 +309,14 @@ void GameObject::Draw() const
 					static_cast<ComponentMesh*>(*it)->DrawMesh();
 					//App->gui->console.AddLog("PRINTING MESH %s", this->name.c_str());
 				}
-				
+
 			}
 
+			//Particle System
+			if ((*it)->type == ComponentType::COMPONENT_TYPE_PARTICLE_SYSTEM)
+			{
+				static_cast<ComponentParticleSystem*>(*it)->Draw();
+			}
 			if ((*it)->type == ComponentType::COMPONENT_TYPE_ANIMATION)
 			{
 				ComponentAnim* componentAnim = (ComponentAnim*)(*it);
@@ -440,7 +435,11 @@ void GameObject::Update(float dt)
 
 			}
 
-
+			//Particle System
+			if ((*it)->type == ComponentType::COMPONENT_TYPE_PARTICLE_SYSTEM)
+			{
+				static_cast<ComponentParticleSystem*>(*it)->Update({ 0,0,5 });
+			}
 		}
 	}
 	for (std::list<GameObject*>::const_iterator it = childs.begin(); it != childs.end(); it++)
@@ -629,7 +628,7 @@ void GameObject::SetSelected(bool value)
 }
 
 void GameObject::DrawGUIPanel() {
-	const char* items[] = { "ANIMATION", "BILLBOARD", "CAMERA", "LIGHT", "MATERIAL", "MESH", "PARTICLE SYSTEM", "SCRIPT" };
+	const char* items[] = { "ANIMATION", "CAMERA", "LIGHT", "MATERIAL", "MESH", "PARTICLE SYSTEM", "SCRIPT" };
 	int componentType = newComponentType;
 	// GameObject Name
 	if (editableName) {
@@ -675,7 +674,8 @@ void GameObject::DrawGUIPanel() {
 		}
 		// Add component
 		ImGui::Separator();
-		if (ImGui::Combo("", &componentType, items, IM_ARRAYSIZE(items))) {
+		std::string comboLabel = "##" + id;
+		if (ImGui::Combo(comboLabel.c_str(), &componentType, items, IM_ARRAYSIZE(items))) {
 			newComponentType = static_cast<ComponentType>(componentType);
 		}
 		ImGui::SameLine();

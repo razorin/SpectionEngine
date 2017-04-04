@@ -8,6 +8,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
+#include "ComponentParticleSystem.h"
 #include "MemLeaks.h"
 #include "Mesh.h"
 
@@ -144,11 +145,8 @@ void Scene::LoadLevel(const char * path, const char * file)
 
 	aiReleaseImport(scene);
 
-	// TODO: Grid of billboardings (not finished)
-	//for (int i = -20; i < 20; i++) {
-	//	GameObject *go = AddGameObject(root, true);
-	//	go->AddComponent(ComponentType::COMPONENT_TYPE_BILLBOARDING);
-	//}
+	GameObject *go = AddGameObject(root, true);
+	go->AddComponent(ComponentType::COMPONENT_TYPE_PARTICLE_SYSTEM);
 }
 
 void Scene::RecursiveNodeRead(GameObject * go, aiNode & assimpNode, GameObject * parentGO)
