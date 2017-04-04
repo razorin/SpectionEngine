@@ -29,7 +29,7 @@ ComponentParticleSystem::~ComponentParticleSystem()
 	RELEASE(indices);
 }
 
-void ComponentParticleSystem::Init(unsigned maxParticles, const aiVector2D & emitArea, unsigned fallingTime,
+void ComponentParticleSystem::Init(int maxParticles, const aiVector2D & emitArea, int fallingTime,
 	float fallingHeight, const char * textureFile, const float2 particleSize)
 {
 	this->maxParticles = maxParticles;
@@ -37,6 +37,7 @@ void ComponentParticleSystem::Init(unsigned maxParticles, const aiVector2D & emi
 	this->fallingTime = fallingTime;
 	this->fallingHeight = fallingHeight;
 	this->texture = App->textures->LoadTexture(aiString(textureFile));
+	this->textureFile = textureFile;
 	this->particleSize = particleSize;
 
 	aiVector3D particleVelocity = { 0, fallingHeight / fallingTime, 0 };
@@ -52,7 +53,7 @@ void ComponentParticleSystem::Init(unsigned maxParticles, const aiVector2D & emi
 
 	for (int i = 0; i < numSideParticles; ++i) {
 		for (int j = 0; j < numSideParticles; ++j) {
-			float yInitPos = (float)(rand() % ((int)fallingHeight*1000))/1000;
+			float yInitPos = (float)(rand() % ((int)fallingHeight * 1000)) / 1000;
 			Particle tempPart = Particle({ particlePos.x,yInitPos,particlePos.y }, particleVelocity, fallingTime, Billboard(particleSize));
 			particles.push_back(tempPart);
 
@@ -61,10 +62,18 @@ void ComponentParticleSystem::Init(unsigned maxParticles, const aiVector2D & emi
 		particlePos.y = -emitArea.y / 2;
 		particlePos.x += spacing.x;
 	}
+
+	newMaxParticles = maxParticles;
+	newEmitArea = emitArea;
+	newFallingTime = fallingTime;
+	newFallingHeight = fallingHeight;
+	newTextureFile = textureFile;
+	newParticleSize = particleSize;
 }
 
 void ComponentParticleSystem::Clear()
 {
+	particles.clear();
 }
 
 void ComponentParticleSystem::Update(const float3 cameraPosition)
@@ -109,15 +118,7 @@ void ComponentParticleSystem::Draw()
 bool ComponentParticleSystem::DrawGUI()
 {
 	const char* items[] = { "Rain", "Snow", "Grass" };
-	int selection = 0;
 	const char* texturePaths[3] = { "Models/Particles/rainSprite.tga","Models/Particles/simpleflake.tga","Models/Grass/billboardgrass.png" };
-
-	unsigned newMaxParticles = maxParticles;
-	aiVector2D newEmitArea = emitArea;
-	unsigned newFallingTime = fallingTime;
-	float newFallingHeight = fallingHeight;
-	const char * newTextureFile;
-	float2 newParticleSize = particleSize;
 
 	std::string headerLabel = name + "##" + id;
 	if (ImGui::CollapsingHeader(headerLabel.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
@@ -125,11 +126,37 @@ bool ComponentParticleSystem::DrawGUI()
 		std::string checkboxLabel = "Active##" + id;
 		ImGui::Checkbox(checkboxLabel.c_str(), &active);
 
+		std::string maxPartLabel = "Max Particles##" + id;
+		if (ImGui::DragInt(maxPartLabel.c_str(), &newMaxParticles, 1.0f, 1, 5000)) {
+		}
+
+		std::string areaLabel = "Area##" + id;
+		float tempArea = newEmitArea.x;
+		if (ImGui::DragFloat(areaLabel.c_str(), &tempArea, 0.1f, 0.1f, 1000.0f)) {
+			newEmitArea = { tempArea,tempArea };
+		}
+
+		std::string timeLabel = "Falling Time##" + id;
+		if (ImGui::DragInt(timeLabel.c_str(), &newFallingTime, 1.0f, 1.0f, 2000.0f)) {
+		}
+
+		std::string heightLabel = "Falling Height##" + id;
+		if (ImGui::DragFloat(heightLabel.c_str(), &newFallingHeight, 0.1f, 1.0f, 1000.0f)) {
+		}
+
+		std::string sizeLabel = "Particle Size##" + id;
+		if (ImGui::DragFloat2(sizeLabel.c_str(), (float*)&newParticleSize, 0.001f, 0.0f, 50.0f)) {
+		}
+
 		std::string comboLabel = "##" + id;
 		if (ImGui::Combo(comboLabel.c_str(), &selection, items, IM_ARRAYSIZE(items))) {
 			newTextureFile = texturePaths[selection];
 		}
-		//Init(newMaxParticles, newEmitArea, newFallingTime, newFallingHeight, newTextureFile, newParticleSize);
+		std::string applyLabel = "Apply##" + id;
+		if (ImGui::Button(applyLabel.c_str())) {
+			Clear();
+			Init(newMaxParticles, newEmitArea, newFallingTime, newFallingHeight, newTextureFile, newParticleSize);
+		}
 	}
 	std::string removeLabel = "Remove Component##" + id;
 	if (ImGui::Button(removeLabel.c_str())) {

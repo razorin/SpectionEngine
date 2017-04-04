@@ -26,7 +26,7 @@ public:
 	ComponentParticleSystem(GameObject* container, std::string id);
 	~ComponentParticleSystem();
 
-	void Init(unsigned maxParticles, const aiVector2D& emitArea, unsigned fallingTime, float fallingHeight,
+	void Init(int maxParticles, const aiVector2D& emitArea, int fallingTime, float fallingHeight,
 		const char* textureFile, const float2 particleSize);
 	void Clear();
 	void Update(const float3 cameraPosition);
@@ -38,13 +38,23 @@ private:
 	ParticleList alive;
 	ParticleList dead;
 
-	unsigned maxParticles = 10;
+	int maxParticles = 10;
 	aiVector2D emitArea = { 1,1 };
-	unsigned fallingTime = 0;
+	int fallingTime = 0;
 	float fallingHeight = 0.0f;
 	unsigned texture = 0;
+	const char * textureFile;
 	float2 particleSize = { 1,1 };
 	//unsigned accumElapsed = 0;
+
+	//Copy variables for GUI
+	int newMaxParticles = 10;
+	aiVector2D newEmitArea = { 1,1 };
+	int newFallingTime = 0;
+	float newFallingHeight = 0.0f;
+	const char * newTextureFile;
+	float2 newParticleSize = { 1,1 };
+	int selection = 0;
 
 	aiVector3D* vertices = nullptr;
 	aiVector2D* textureCoords = nullptr;
