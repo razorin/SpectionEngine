@@ -10,27 +10,27 @@ Mesh::Mesh()
 
 Mesh::Mesh(Mesh * mesh) : vboVertices(mesh->vboVertices), vboIndices(mesh->vboIndices), vboColors(mesh->vboColors),
 vboNormals(mesh->vboNormals), vboTextures(mesh->vboTextures), numVertices(mesh->numVertices), numIndices(mesh->numIndices),
-numTextures(mesh->numTextures), imageName(mesh->imageName), numBones(mesh->numBones)
+imageName(mesh->imageName), numBones(mesh->numBones)
 {
 	if (mesh->indices != nullptr) {
 		indices = new uint[numIndices];
 		std::copy(mesh->indices, mesh->indices + numIndices, indices);
 	}
 	if (mesh->vertices != nullptr) {
-		vertices = new float[numVertices];
-		std::copy(mesh->vertices, mesh->vertices + numVertices, vertices);
+		vertices = new float[numVertices * 3];
+		std::copy(mesh->vertices, mesh->vertices + numVertices * 3, vertices);
 	}
 	if (mesh->colors != nullptr) {
-		colors = new float[numIndices];
-		std::copy(mesh->colors, mesh->colors + numIndices, colors);
+		colors = new float[numIndices * 3];
+		std::copy(mesh->colors, mesh->colors + numIndices * 3, colors);
 	}
 	if (mesh->normals != nullptr) {
-		normals = new float[numIndices];
-		std::copy(mesh->normals, mesh->normals + numIndices, normals);
+		normals = new float[numIndices * 3];
+		std::copy(mesh->normals, mesh->normals + numIndices * 3, normals);
 	}
 	if (mesh->textureCoords != nullptr) {
-		textureCoords = new float[numTextures];
-		std::copy(mesh->textureCoords, mesh->textureCoords + numTextures, textureCoords);
+		textureCoords = new float[vboTextures];
+		std::copy(mesh->textureCoords, mesh->textureCoords + vboTextures, textureCoords);
 	}
 	if (mesh->bones != nullptr) {
 		bones = new Bone[numBones];
@@ -43,16 +43,16 @@ numTextures(mesh->numTextures), imageName(mesh->imageName), numBones(mesh->numBo
 
 Mesh::~Mesh()
 {
-	RELEASE(this->normals);
-	//RELEASE(this->colors);
-	RELEASE(this->indices);
-	RELEASE(this->vertices);
+	RELEASE_ARRAY(this->normals);
+	RELEASE_ARRAY(this->colors);
+	RELEASE_ARRAY(this->indices);
+	RELEASE_ARRAY(this->vertices);
 	RELEASE_ARRAY(this->textureCoords);
 
-	for (int i = 0; i < numBones; i++)
-	{
-		RELEASE_ARRAY(this->bones[i].weights);
-	}
+	//for (int i = 0; i < numBones; i++)
+	//{
+	//	RELEASE_ARRAY(this->bones[i].weights);
+	//}
 	RELEASE_ARRAY(this->bones);
 }
 

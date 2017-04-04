@@ -3,6 +3,8 @@
 #include "GameObject.h"
 #include "ComponentTransform.h"
 #include <assert.h>
+#include "Application.h"
+#include "ModuleGUI.h"
 
 
 ModuleSceneManager::ModuleSceneManager(const JSON_Object *json, bool active) : Module(json, active)
@@ -32,13 +34,16 @@ bool ModuleSceneManager::Start() {
 
 update_status ModuleSceneManager::PreUpdate(float dt)
 {
+	
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleSceneManager::Update(float dt)
 {
-	if (currentScene != nullptr) {
-		currentScene->Update(dt);
+	if (App->state == APP_PLAY) {
+		if (currentScene != nullptr) {
+			currentScene->Update(dt);
+		}
 	}
 
 
@@ -60,11 +65,9 @@ void ModuleSceneManager::Draw()
 bool ModuleSceneManager::CleanUp()
 {
 	//TODO Clean up
-	if (currentScene != nullptr)
-	{
-		currentScene->CleanUp();
-		RELEASE(currentScene);
-	}
+	RELEASE(currentScene);
+	RELEASE(backupScene);
+
 	return true;
 }
 
@@ -103,16 +106,15 @@ void ModuleSceneManager::loadCurrentScene(const char * path, const char * file)
 
 void ModuleSceneManager::Play()
 {
-	Scene* scene = new Scene();
-	
-	for (std::list<GameObject*>::iterator it = scene->root->childs.begin(); it != scene->root->childs.end(); it++) {
-		//GameObject* go = go->CopyGameObject(*it);
-	}
-
+	backupScene = new Scene(currentScene);
+	Scene *aux = currentScene;
+	currentScene = backupScene;
+	backupScene = aux;
 }
 
 void ModuleSceneManager::Stop()
 {
+	App->gui->ClearSelection();
 	delete currentScene;
 	currentScene = backupScene;
 	backupScene = nullptr;

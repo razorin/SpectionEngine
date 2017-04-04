@@ -62,18 +62,7 @@ selectedGO(other->selectedGO), toDelete(other->toDelete)
 	}
 
 	for (std::list<Component*>::const_iterator it = other->components.begin(); it != other->components.end(); ++it) {
-		switch ((*it)->type) {
-			case ComponentType::COMPONENT_TYPE_TRANSFORM:
-				transform = new ComponentTransform(other->transform, this);
-				++componentCounter;
-				++componentCounterByType[(*it)->type];
-			break;
-			default:
-				//TODO: Create copy constructor for each Component and use here!
-				AddComponent((*it)->type);
-			break;
-
-		}
+		AddComponent((*it));
 	}
 
 }
@@ -122,6 +111,45 @@ void GameObject::OnTransformChange()
 	}
 }
 
+void GameObject::AddComponent(const Component *component) {
+	Component *result = nullptr;
+
+	switch (component->type) {
+	case ComponentType::COMPONENT_TYPE_ANIMATION:
+		result = new ComponentAnim(this, (ComponentAnim *)component);
+		result->maxComponentsByGO = 1;
+		break;
+	case ComponentType::COMPONENT_TYPE_CAMERA:
+		result = new ComponentCamera(this, (ComponentCamera *)component);
+		result->maxComponentsByGO = 1;
+		break;
+	case ComponentType::COMPONENT_TYPE_LIGHT:
+		result = new ComponentLight(this, (ComponentLight *)component);
+		break;
+	case ComponentType::COMPONENT_TYPE_MATERIAL:
+		result = new ComponentMaterial(this, (ComponentMaterial *)component);
+		result->maxComponentsByGO = 0;
+		break;
+	case ComponentType::COMPONENT_TYPE_MESH:
+		result = new ComponentMesh(this, (ComponentMesh *)component);
+		result->maxComponentsByGO = 1;
+		break;
+	case ComponentType::COMPONENT_TYPE_SCRIPT:
+		result = new ComponentScript(this, (ComponentScript *)component);
+		result->maxComponentsByGO = 0;
+		break;
+	case ComponentType::COMPONENT_TYPE_TRANSFORM:
+		result = new ComponentTransform(this, (ComponentTransform *)component);
+		result->maxComponentsByGO = 1;
+		transform = (ComponentTransform *)result;
+		break;
+	}
+
+	if (result != nullptr) {
+		++componentCounterByType[component->type];
+		components.push_back(result);
+	}
+}
 
 Component * GameObject::AddComponent(const ComponentType &type)
 {
@@ -401,7 +429,7 @@ void GameObject::Update(float dt)
 	{
 		if ((*it)->IsActive()) {
 
-			if ((*it)->type == ComponentType::COMPONENT_TYPE_ANIMATION && App->gameTimer->state == TIMER_STATE::TIMER_STARTED)
+			if ((*it)->type == ComponentType::COMPONENT_TYPE_ANIMATION)
 			{
 				ComponentAnim* componentAnim = (ComponentAnim*)(*it);
 
@@ -594,11 +622,11 @@ void GameObject::DrawBoundingBoxes() const {
 	}
 }
 
-std::string GameObject::GetID() {
+std::string GameObject::GetID() const {
 	return id;
 }
 
-std::string GameObject::GetName() {
+std::string GameObject::GetName() const {
 	return name;
 }
 

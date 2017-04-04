@@ -17,7 +17,7 @@ public:
 	ComponentTransform() {}
 	ComponentTransform(GameObject* container, std::string id);
 	ComponentTransform(GameObject* container, Quat& rotation, float3& position, float3& scale, std::string id);
-	ComponentTransform(const ComponentTransform *transform, GameObject * container);
+	ComponentTransform(GameObject * container, const ComponentTransform *transform);
 	~ComponentTransform();
 
 	void ResetTransforms();

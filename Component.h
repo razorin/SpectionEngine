@@ -30,6 +30,7 @@ public:
 	void SetActive(bool active);
 	bool IsActive();
 	bool IsToDelete() const;
+	const GameObject *getGameObject() const;
 
 	virtual bool DrawGUI() = 0;
 

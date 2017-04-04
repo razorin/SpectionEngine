@@ -12,7 +12,7 @@ class ComponentAnim : public Component
 {
 public:
 	ComponentAnim(GameObject* container, std::string name);
-	ComponentAnim(const ComponentAnim *animation, GameObject * container);
+	ComponentAnim(GameObject * container, const ComponentAnim *animation);
 	~ComponentAnim();
 
 	bool AddClip(Anim* clip);
@@ -31,7 +31,8 @@ public:
 	Anim* currentClip = nullptr;
 	bool isPlaying = false;
 	unsigned numClips = 0;
-	std::vector<Anim*> clips;
+	std::map<std::string, Anim*> clips;
+	//std::vector<Anim*> clips;
 	uint instanceId = -1;
 };
 

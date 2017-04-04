@@ -26,6 +26,8 @@ public:
 	void OnTransformChange();
 
 	Component * AddComponent(const ComponentType &type);
+	void AddComponent(const Component * component);
+
 	bool RemoveComponent(Component* component);
 	bool RemoveChild(GameObject* go);
 	std::list<Component *> * FindComponents(const ComponentType &type);
@@ -40,8 +42,8 @@ public:
 
 	void AddComponentMesh(Mesh * mesh);
 	void DrawBoundingBoxes() const;
-	std::string GetID();
-	std::string GetName();
+	std::string GetID() const;
+	std::string GetName() const;
 	void SetName(std::string value, bool editable = false);
 	bool IsEditableName();
 	bool IsToDelete();

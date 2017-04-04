@@ -20,7 +20,7 @@ Scene::Scene()
 }
 
 Scene::Scene(const Scene * scene) : gameObjectsCounter(scene->gameObjectsCounter), frame(scene->frame), 
-maxFrames(scene->maxFrames), textureIds(scene->textureIds)
+maxFrames(scene->maxFrames) //, textureIds(scene->textureIds)
 {
 	meshes.reserve(scene->meshes.size());
 	materials.reserve(scene->materials.size());
@@ -34,10 +34,13 @@ maxFrames(scene->maxFrames), textureIds(scene->textureIds)
 		}
 	}
 
+	root = new GameObject(scene->root);
+
 }
 
 Scene::~Scene()
 {
+	CleanUp();
 }
 
 GameObject* Scene::AddGameObject(GameObject* parent, bool editable, const std::string &name)
@@ -60,6 +63,7 @@ void Scene::LoadLevel(const char * path, const char * file)
 	aiString folderPath = aiString(path);
 	aiString filePath = folderPath;
 	filePath.Append(file);
+	uint* textureIds = 0;
 
 	const aiScene* scene = aiImportFile(filePath.data,
 		aiProcess_CalcTangentSpace |
@@ -236,13 +240,14 @@ void Scene::Update(float dt)
 
 bool Scene::CleanUp()
 {
-	RELEASE(textureIds);
+	//RELEASE(textureIds);
 	for (int i = 0; i < meshes.size(); i++)
 	{
 		RELEASE(meshes[i]);
 	}
 
-	root->CleanUp();
+	RELEASE(root);
+	//root->CleanUp();
 	RELEASE(root);
 
 	return true;

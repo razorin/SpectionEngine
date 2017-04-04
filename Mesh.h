@@ -6,6 +6,9 @@
 #include "AssimpIncludes.h"
 #include "MathGeoLib\include\MathGeoLib.h"
 #include "ComponentTransform.h"
+#include "Application.h"
+#include "ModuleSceneManager.h"
+#include "Scene.h"
 
 
 
@@ -35,11 +38,17 @@ struct Bone
 	Bone(const Bone *bone) : name(bone->name), numWeights(bone->numWeights)
 	{
 		weights = new Weight[numWeights];
+		const GameObject *go = bone->ownerGOTransform->getGameObject();
+		std::string name = go->GetName();
+		GameObject *parent =  App->sceneManager->getCurrentScene()->GetGameObject(name);
+		ownerGOTransform =  parent->transform;
 		for (int i = 0; i < numWeights; ++i) {
 			weights[i] = new Weight(bone->weights[i]);
 		}
 		bind = float4x4(bone->bind);
-
+	}
+	~Bone() {
+		RELEASE_ARRAY(this->weights);
 	}
 };
 
@@ -65,8 +74,8 @@ public:
 
 	uint numVertices = 0;
 	uint numIndices = 0;
-	uint numTextures = 0;
-	uint imageName;
+	//uint numTextures = 0;
+	uint imageName = 0;
 
 	uint *indices = nullptr;
 	float *vertices = nullptr;

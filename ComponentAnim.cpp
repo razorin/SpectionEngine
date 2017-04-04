@@ -3,12 +3,13 @@
 #include "ModuleAnimation.h"
 #include "ComponentTransform.h"
 #include "GameObject.h"
+#include <map>
 
 ComponentAnim::ComponentAnim(GameObject * container, std::string id) : Component(container, ComponentType::COMPONENT_TYPE_ANIMATION, id), isPlaying(false)
 {
 }
 
-ComponentAnim::ComponentAnim(const ComponentAnim * animation, GameObject * container) : isPlaying(animation->isPlaying),
+ComponentAnim::ComponentAnim(GameObject * container, const ComponentAnim * animation) : Component(container, ComponentType::COMPONENT_TYPE_ANIMATION, animation->id), isPlaying(animation->isPlaying),
 numClips(animation->numClips), instanceId(animation->instanceId)
 {
 
@@ -18,13 +19,15 @@ ComponentAnim::~ComponentAnim()
 {
 }
 
+
 bool ComponentAnim::AddClip(Anim * clip)
 {
 	bool ret = false;
 
 	if (!(ret = CheckClipInList(clip)))
 	{
-		clips.push_back(clip);
+		//clips.push_back(clip);
+		clips[clip->name.data] =  clip;
 		numClips++;
 		ret = true;
 	}
@@ -46,24 +49,13 @@ bool ComponentAnim::SetCurrentClip(Anim * clip)
 
 bool ComponentAnim::CheckClipInList(Anim * clip)
 {
-	bool found = false;
-	for (int i = 0; (i < clips.size() && !found); i++)
-	{
-		if (clip->name == clips[i]->name)
-			found = true;
-	}
-	return found;
+	return CheckClipInList(clip->name.data);
 }
 
 bool ComponentAnim::CheckClipInList(const char * animName)
 {
-	bool found = false;
-	for (int i = 0; (i < clips.size() && !found); i++)
-	{
-		if (animName == clips[i]->name.data)
-			found = true;
-	}
-	return found;
+	std::map<std::string, Anim*>::iterator it = clips.find(animName);
+	return it != clips.end();
 }
 
 void ComponentAnim::Play(bool loop)

@@ -7,7 +7,7 @@ Component::Component(GameObject * container, ComponentType type, std::string id)
 }
 
 Component::Component(const Component * component, GameObject * container) : container(component->container), active(component->active), 
-toDelete(component->toDelete), id(component->id), name(component->name), maxComponentsByGO(component->maxComponentsByGO)
+toDelete(component->toDelete), id(component->id), name(component->name), maxComponentsByGO(component->maxComponentsByGO), type(component->type)
 {
 }
 
@@ -28,4 +28,9 @@ bool Component::IsActive()
 bool Component::IsToDelete() const
 {
 	return toDelete;
+}
+
+const GameObject * Component::getGameObject() const
+{
+	return container;
 }

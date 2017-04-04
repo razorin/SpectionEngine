@@ -26,7 +26,7 @@ ComponentTransform::ComponentTransform(GameObject* container, Quat& rotation, fl
 	name = "Transform";
 }
 
-ComponentTransform::ComponentTransform(const ComponentTransform * transform, GameObject * container) : Component(transform, container)
+ComponentTransform::ComponentTransform(GameObject * container, const ComponentTransform * transform) : Component(transform, container)
 {
 	position = float3(transform->position);
 	scale = float3(transform->scale);

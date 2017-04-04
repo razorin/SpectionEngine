@@ -49,7 +49,7 @@ private:
 	int maxFrames = 0;
 
 	//TODO use the texture manager instead of this
-	uint* textureIds = 0;
+	//
 
 };
 
