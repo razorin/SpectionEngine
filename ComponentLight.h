@@ -10,6 +10,7 @@ class ComponentLight :
 {
 public:
 	ComponentLight(GameObject* container, std::string id, Light* light);
+	ComponentLight(GameObject* container, ComponentLight* component);
 	~ComponentLight();
 
 	bool DrawGUI();

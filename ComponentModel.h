@@ -7,6 +7,7 @@ class ComponentModel :
 {
 public:
 	ComponentModel(GameObject* container, std::string id);
+	ComponentModel(GameObject* container, ComponentModel *component) : Component(component, container){}
 	~ComponentModel();
 
 	bool DrawGUI();

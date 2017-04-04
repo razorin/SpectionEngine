@@ -7,6 +7,7 @@ class ComponentScript :
 {
 public:
 	ComponentScript(GameObject* container, std::string id);
+	ComponentScript(GameObject* container, ComponentScript *component) : Component(component, container){}
 	~ComponentScript();
 
 	bool DrawGUI();

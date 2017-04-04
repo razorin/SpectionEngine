@@ -17,6 +17,7 @@ class Light
 public:
 	Light(LightType type, fPoint position, float4 ambient, float4 diffuse, float4 specular, float constantAttenuation = 1.0f, float linearAttenuation = 0.0f, float quadraticAttenuation = 0.0f);
 	Light(LightType type, fPoint position, float4 ambient, float4 diffuse, float4 specular, fPoint direction, float exponent = 0.0f, float cutoff = 180.0f, float constantAttenuation = 1.0f, float linearAttenuation = 0.0f, float quadraticAttenuation = 0.0f);
+	Light(Light* light);
 	virtual ~Light();
 
 public:

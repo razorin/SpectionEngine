@@ -16,6 +16,13 @@ ComponentMesh::ComponentMesh(GameObject * container, std::string id) :Component(
 	name = "Mesh";
 }
 
+ComponentMesh::ComponentMesh(GameObject * container, ComponentMesh * component) : Component(component, container)
+{
+	if (component->mesh != nullptr) {
+		mesh = new Mesh(component->mesh);
+	}
+}
+
 ComponentMesh::~ComponentMesh()
 {
 }

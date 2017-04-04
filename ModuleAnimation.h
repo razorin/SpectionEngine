@@ -20,7 +20,7 @@ struct NodeAnim
 	uint numKeyframes = 0;
 
 	NodeAnim() {}
-	NodeAnim(const NodeAnim *node) : name[node->name], numPositions(node->numPositions), 
+	NodeAnim(const NodeAnim *node) : name(node->name), numPositions(node->numPositions), 
 		numRotations(node->numRotations), numKeyframes(node->numKeyframes)
 	{
 		if (node->positions != nullptr) {
@@ -45,10 +45,10 @@ struct Anim
 	Anim(const Anim *anim) : name(anim->name), duration(anim->duration), numChannels(anim->numChannels) 
 	{
 		if (numChannels > 0) {
-			/*channels = NodeAnim[numChannels];
+			//channels = new NodeAnim[numChannels];
 			for (int i = 0; i < numChannels; ++i) {
-				channels[i] = anim->channels[i];
-			}*/
+				channels[i] = new NodeAnim(anim->channels[i]);
+			}
 		}
 	}
 

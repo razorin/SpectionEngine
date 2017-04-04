@@ -39,6 +39,32 @@ Light::Light(LightType type, fPoint position, float4 ambient, float4 diffuse, fl
 	this->quadraticAttenuation = quadraticAttenuation;
 }
 
+Light::Light(Light * light) : type(light->type), constantAttenuation(light->constantAttenuation),
+linearAttenuation(light->linearAttenuation), quadraticAttenuation(light->quadraticAttenuation),
+exponent(light->exponent), cutoff(light->cutoff)
+{
+	if (light->position != nullptr) {
+		position = new float[4];
+		std::copy(light->position, light->position + 4, position);
+	}
+	if (light->ambient != nullptr) {
+		ambient = new float[4];
+		std::copy(light->ambient, light->ambient + 4, ambient);
+	}
+	if (light->diffuse != nullptr) {
+		diffuse = new float[4];
+		std::copy(light->diffuse, light->diffuse + 4, diffuse);
+	}
+	if (light->specular != nullptr) {
+		specular = new float[4];
+		std::copy(light->specular, light->specular + 4, specular);
+	}
+	if (light->direction != nullptr) {
+		direction = new float[3];
+		std::copy(light->direction, light->direction + 3, direction);
+	}
+}
+
 Light::~Light()
 {
 	RELEASE(position);

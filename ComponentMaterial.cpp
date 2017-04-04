@@ -15,6 +15,10 @@ ComponentMaterial::ComponentMaterial(GameObject * container, std::string id) : C
 	name = "Material";
 }
 
+ComponentMaterial::ComponentMaterial(GameObject * container, ComponentMaterial * mat) : Component(mat, container)
+{
+}
+
 ComponentMaterial::~ComponentMaterial()
 {
 }

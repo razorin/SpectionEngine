@@ -32,6 +32,12 @@ ComponentCamera::ComponentCamera(GameObject * container, std::string id) : Compo
 	frustum.SetKind(FrustumProjectiveSpace::FrustumSpaceGL, FrustumHandedness::FrustumRightHanded);
 }
 
+ComponentCamera::ComponentCamera(GameObject * container, ComponentCamera * component) : Component(component, container), aspectRatio(component->aspectRatio), 
+verticalFov(component->verticalFov), horizontalFov(component->horizontalFov), nearPlane(component->nearPlane), farPlane(component->farPlane), 
+pos(component->pos), mouseBlocked(component->mouseBlocked), active(component->active), frustumCulling(component->frustumCulling), frustum(component->frustum)
+{
+}
+
 ComponentCamera::~ComponentCamera()
 {
 }

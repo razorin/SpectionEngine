@@ -19,6 +19,13 @@ ComponentLight::ComponentLight(GameObject * container, std::string id, Light* li
 	name = "Light";
 }
 
+ComponentLight::ComponentLight(GameObject * container, ComponentLight * component) : Component(component, container)
+{
+	if (component->light != nullptr) {
+		light = new Light(component->light);
+	}
+}
+
 ComponentLight::~ComponentLight()
 {
 }

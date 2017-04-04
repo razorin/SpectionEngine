@@ -12,6 +12,7 @@ class ComponentMesh :
 {
 public:
 	ComponentMesh(GameObject* container, std::string id);
+	ComponentMesh(GameObject* container, ComponentMesh* component);
 	~ComponentMesh();
 
 	void DrawMesh();
