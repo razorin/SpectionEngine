@@ -69,5 +69,5 @@ unsigned PTimer::GetTimeMS() const
 
 unsigned PTimer::GetTimeS() const
 {
-	return GetTimeS() / 1000000;
+	return GetTimeUS() / 1000000;
 }

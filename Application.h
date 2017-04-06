@@ -38,8 +38,6 @@ public:
 	update_status Update();
 	bool CleanUp();
 
-	double CalculateAvgFPS();
-
 	void LogInTitle(std::string info) const;
 
 public:
@@ -57,13 +55,7 @@ public:
 	ModulePrimitives* primitives;
 	ModuleAnimation* animator;
 
-
 	JSON_Value *configuration;
-	Timer *gamestartTimer;
-	PreciseTimer *avgTimer;
-	PreciseTimer *updateTimer;
-	PreciseTimer *performanceTimer;
-	PreciseTimer *fpsTimer;
 
 	//Timer to measure app constructor, awake, start, cleanup 
 	PTimer* measureTimer;
@@ -72,10 +64,6 @@ public:
 	unsigned averageFPS = 0;
 	unsigned lastUpdateUS = 0;
 	unsigned framceCountPerSecond = 0;
-
-	int frameCountGlobal = 0;
-	int frameCountPerSecond = 0;
-	float lastFrameMilliseconds = 0;
 
 	// HW info
 	SDL_version sdlVersion;

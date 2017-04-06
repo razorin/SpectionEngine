@@ -27,17 +27,16 @@ Application::Application()
 {
 	measureTimer = new PTimer();
 
-
-	gamestartTimer = new Timer();
-	gamestartTimer->Start();
-	avgTimer = new PreciseTimer();
-	updateTimer = new PreciseTimer();
-	performanceTimer = new PreciseTimer();
-	performanceTimer->Start();
-	fpsTimer = new PreciseTimer();
-
 	configuration = json_parse_file("config.json");
 	JSON_Object *root = json_value_get_object(configuration);
+
+	JSON_Object* parameters = json_object_dotget_object(root, "config.app");
+	int fpsCap = (int)json_object_dotget_number(parameters, "fps_cap");
+
+	assert(fpsCap > 0);
+	msByFrame = (1.f / (float)fpsCap) * 1000;
+
+
 	// Order matters: they will init/start/pre/update/post in this order
 	modules.push_back(input = new ModuleInput());
 	modules.push_back(camera = new ModuleCamera(json_object_dotget_object(root, "config.camera")));
@@ -49,25 +48,12 @@ Application::Application()
 	modules.push_back(audio = new ModuleAudio());
 	modules.push_back(primitives = new ModulePrimitives());
 
-
 	//Game Modules
 	modules.push_back(sceneManager = new ModuleSceneManager(nullptr,true));
 
 	modules.push_back(animator = new ModuleAnimation());
 
 	lightsManager = new LightsManager();
-
-
-	JSON_Object* parameters = json_object_dotget_object(root, "config.app");
-	int fpsCap = (int)json_object_dotget_number(parameters, "fps_cap");
-	
-	assert(fpsCap > 0);
-	msByFrame = (1.f / (float)fpsCap) * 1000;
-
-	//Configurator *configurator = new Configurator();
-	//configuration = configurator->LoadConfiguration("config.json");
-
-	
 }
 
 Application::~Application()
@@ -77,29 +63,18 @@ Application::~Application()
 
 	json_value_free(configuration);
 
-	RELEASE(gamestartTimer);
-	RELEASE(avgTimer);
-	RELEASE(updateTimer);
-	RELEASE(performanceTimer);
-	RELEASE(fpsTimer);
+	RELEASE(measureTimer);
 
 	RELEASE(lightsManager);
 }
 
 bool Application::Init()
 {
-	performanceTimer->Restart();
 	bool ret = true;
 
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret; ++it)
 		ret = (*it)->Init(); // we init everything, even if not anabled
 
-	//DLOG("Read performance timer after Init: %f microseconds", performanceTimer->Ellapsed());
-	//DLOG("Read performance timer after Init: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
-
-	//window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
-
-	performanceTimer->Restart();
 
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret; ++it)
 	{
@@ -107,17 +82,13 @@ bool Application::Init()
 			ret = (*it)->Start();
 	}
 
-	//DLOG("Read performance timer after Start: %f microseconds", performanceTimer->Ellapsed());
-	//DLOG("Read performance timer after Start: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
-
-	//window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
-
 	// Gather hardware settings
 	SDL_VERSION(&sdlVersion);
 	CPUCount = SDL_GetCPUCount();
 	CPUCache = SDL_GetCPUCacheLineSize();
 	systemRAM = (float)SDL_GetSystemRAM() * 8 / 1024;
 	currentPlatform = SDL_GetPlatform();
+
 	return ret;
 }
 
@@ -125,44 +96,7 @@ update_status Application::Update()
 {
 	update_status ret = UPDATE_CONTINUE;
 
-	if (avgTimer->state != TIMER_STATE::TIMER_STARTED) {
-		avgTimer->Start();
-	}
-	if (updateTimer->state != TIMER_STATE::TIMER_STARTED) {
-		updateTimer->Start();
-	}
-	if (fpsTimer->state != TIMER_STATE::TIMER_STARTED) {
-		fpsTimer->Start();
-	}
-	else if (fpsTimer->EllapsedInMilliseconds() >= 1000) {
-		//DLOG("Current FPS: %d", frameCountPerSecond);
-		gui->AddFpsLog(frameCountPerSecond);
-		//window->ChangeTitle((std::to_string(frameCountPerSecond)).c_str());
-		frameCountPerSecond = 0;
-		fpsTimer->Restart();
-	}
-
-	auto ellapsedTime = updateTimer->EllapsedInMilliseconds();
-
-	//Delta Time calculated
-	float previousFrameTime = lastFrameMilliseconds;
-	lastFrameMilliseconds = avgTimer->EllapsedInMilliseconds();
-	float dt = lastFrameMilliseconds - previousFrameTime;
-	assert(dt >= 0);
-	//DLOG("DT: %f milliseconds", dt);
-	//window->ChangeTitle((std::to_string(dt)).c_str());
-
-	if (ellapsedTime < this->msByFrame) {
-		gui->AddMsLog(msByFrame);
-		float beforeDelay = updateTimer->EllapsedInMilliseconds();
-		SDL_Delay(msByFrame - ellapsedTime);
-		float afterDelay = updateTimer->EllapsedInMilliseconds();
-		//DLOG("We waited for %f milliseconds and got back in %f milliseconds", msByFrame - ellapsedTime, afterDelay - beforeDelay);
-	}
-		
-	updateTimer->Restart();
-	++frameCountGlobal;
-	++frameCountPerSecond;
+	float dt = 20;
 
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 		if((*it)->IsEnabled() == true) 
@@ -176,16 +110,17 @@ update_status Application::Update()
 		if((*it)->IsEnabled() == true) 
 			ret = (*it)->PostUpdate(dt);
 	
-	//DLOG("Read timer since the game started: %i milliseconds", gamestartTimer->Ellapsed());
-	//DLOG("Read update timer: %f microseconds", updateTimer->Ellapsed());
-	//DLOG("Average FPS: %f", CalculateAvgFPS());
-	
+
+	frameCountSinceStartup++;
+	framceCountPerSecond++;
+
+
+
 	return ret;
 }
 
 bool Application::CleanUp()
 {
-	performanceTimer->Restart();
 	bool ret = true;
 
 	for(list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rend() && ret; ++it)
@@ -194,16 +129,9 @@ bool Application::CleanUp()
 
 	lightsManager->CleanUp();
 
-	//DLOG("Read performance timer after CleanUp: %f microseconds", performanceTimer->Ellapsed());
-	//DLOG("Read performance timer after CleanUp: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
-	
 	return ret;
 }
 
-double Application::CalculateAvgFPS()
-{
-	return (double)frameCountGlobal / (avgTimer->Ellapsed() / 1000000.0f);
-}
 
 void Application::LogInTitle(std::string info) const
 {
