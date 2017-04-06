@@ -23,6 +23,7 @@ class ModulePrimitives;
 
 class Timer;
 class PreciseTimer;
+class PTimer;
 
 class LightsManager;
 
@@ -38,6 +39,8 @@ public:
 	bool CleanUp();
 
 	double CalculateAvgFPS();
+
+	void LogInTitle(std::string info) const;
 
 public:
 	ModuleRender* renderer;
@@ -61,6 +64,15 @@ public:
 	PreciseTimer *updateTimer;
 	PreciseTimer *performanceTimer;
 	PreciseTimer *fpsTimer;
+
+	//Timer to measure app constructor, awake, start, cleanup 
+	PTimer* measureTimer;
+
+	unsigned frameCountSinceStartup = 0;
+	unsigned averageFPS = 0;
+	unsigned lastUpdateUS = 0;
+	unsigned framceCountPerSecond = 0;
+
 	int frameCountGlobal = 0;
 	int frameCountPerSecond = 0;
 	float lastFrameMilliseconds = 0;

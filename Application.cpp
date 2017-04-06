@@ -13,6 +13,7 @@
 
 #include "Timer.h"
 #include "PreciseTimer.h"
+#include "PTimer.h"
 #include "LightsManager.h"
 #include "Parson.h"
 #include "MathGeoLib\include\MathGeoLib.h"
@@ -24,6 +25,9 @@ using namespace std;
 
 Application::Application()
 {
+	measureTimer = new PTimer();
+
+
 	gamestartTimer = new Timer();
 	gamestartTimer->Start();
 	avgTimer = new PreciseTimer();
@@ -49,12 +53,10 @@ Application::Application()
 	//Game Modules
 	modules.push_back(sceneManager = new ModuleSceneManager(nullptr,true));
 
-	//TODO module animation should go before module render. Animate things before render them!
 	modules.push_back(animator = new ModuleAnimation());
 
 	lightsManager = new LightsManager();
 
-	float2 mathGeoLib_test{ 1,2 };
 
 	JSON_Object* parameters = json_object_dotget_object(root, "config.app");
 	int fpsCap = (int)json_object_dotget_number(parameters, "fps_cap");
@@ -65,10 +67,7 @@ Application::Application()
 	//Configurator *configurator = new Configurator();
 	//configuration = configurator->LoadConfiguration("config.json");
 
-	//DLOG("Read performance timer after App constructor: %f microseconds", performanceTimer->Ellapsed());
-	//DLOG("Read performance timer after App constructor: %f milliseconds", performanceTimer->EllapsedInMilliseconds());
 	
-	//window->ChangeTitle((std::to_string(performanceTimer->Ellapsed())).c_str());
 }
 
 Application::~Application()
@@ -138,7 +137,7 @@ update_status Application::Update()
 	else if (fpsTimer->EllapsedInMilliseconds() >= 1000) {
 		//DLOG("Current FPS: %d", frameCountPerSecond);
 		gui->AddFpsLog(frameCountPerSecond);
-		window->ChangeTitle((std::to_string(frameCountPerSecond)).c_str());
+		//window->ChangeTitle((std::to_string(frameCountPerSecond)).c_str());
 		frameCountPerSecond = 0;
 		fpsTimer->Restart();
 	}
@@ -204,4 +203,9 @@ bool Application::CleanUp()
 double Application::CalculateAvgFPS()
 {
 	return (double)frameCountGlobal / (avgTimer->Ellapsed() / 1000000.0f);
+}
+
+void Application::LogInTitle(std::string info) const
+{
+	window->ChangeTitle(info.c_str());
 }
