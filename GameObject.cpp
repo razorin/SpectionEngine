@@ -660,7 +660,7 @@ void GameObject::DrawGUIPanel() {
 		// Add component
 		ImGui::Separator();
 		if (ImGui::Combo("", &componentType, items, IM_ARRAYSIZE(items))) {
-			newComponentType = static_cast<ComponentType>(componentType);
+			newComponentType = static_cast<ComponentType>(componentType + 1);
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Add Component")) {

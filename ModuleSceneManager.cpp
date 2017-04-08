@@ -19,9 +19,9 @@ bool ModuleSceneManager::Start() {
 	//GameObject* go = currentScene->GetGameObject("City_building_010");
 	//if(go != nullptr) go->AddComponent(ComponentType::COMPONENT_TYPE_CAMERA);
 	
-	loadCurrentScene("Models/ArmyPilot/", "ArmyPilot.dae");
+	//loadCurrentScene("Models/ArmyPilot/", "ArmyPilot.dae");
 	//loadCurrentScene("Models/street/", "Street environment_V01.fbx");
-	//loadCurrentScene("Models/Batman/", "Batman.obj");
+	loadCurrentScene("Models/Batman/", "Batman.obj");
 	//loadCurrentScene("Models/street/", "Street.obj");
 	//loadCurrentScene("Models/ArmyPilot/", "ArmyPilot.dae");
 	//GameObject* go = currentScene->GetGameObject("RootFrame");

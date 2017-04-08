@@ -33,12 +33,15 @@ bool ModuleAnimation::Start()
 	Load("Models/ArmyPilot/Animations/", "ArmyPilot_Run_Forwards.fbx");
 	//GameObject* go = App->sceneManager->getCurrentScene()->GetGameObject("RootFrame");
 	GameObject* go = App->sceneManager->getCurrentScene()->GetGameObject("$ColladaAutoName$_0");
+	//TODO: Collect all GO with animations in a map in this module
+	if (go != nullptr) {
+		ComponentAnim* compAnim = (ComponentAnim*)go->AddComponent(ComponentType::COMPONENT_TYPE_ANIMATION);
+		AnimationMap::iterator it = animations.find("Idle");
+		compAnim->AddClip((*it).second);
+		compAnim->SetCurrentClip((*it).second);
+		compAnim->Play();
+	}
 	//GameObject* go = App->sceneManager->getCurrentScene()->GetGameObject("Root Potat");
-	ComponentAnim* compAnim = (ComponentAnim*)go->AddComponent(ComponentType::COMPONENT_TYPE_ANIMATION);
-	AnimationMap::iterator it = animations.find("Idle");
-	compAnim->AddClip((*it).second);
-	compAnim->SetCurrentClip((*it).second);
-	compAnim->Play();
 
 	//Play("Idle");
 	//Play("Run_Forwards");

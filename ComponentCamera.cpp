@@ -187,6 +187,11 @@ bool ComponentCamera::DrawGUI()
 		std::string checkboxLabel2 = "Frustum Culling##" + id;
 		ImGui::Checkbox(checkboxLabel2.c_str(), &frustumCulling);
 
+		std::string checkboxLabelActive = "Active Camera##" + id;
+		if (ImGui::Checkbox(checkboxLabelActive.c_str(), &active)) {
+			App->camera->ChangeActiveCamera(this);
+		}
+
 		float fov = this->verticalFov;
 		float near = this->nearPlane;
 		float far = this->farPlane;
