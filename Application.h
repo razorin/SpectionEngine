@@ -20,12 +20,8 @@ class ModuleParticles;
 class ModuleSceneManager;
 class ModulePrimitives;
 
-
-class Timer;
-class PreciseTimer;
-class PTimer;
-
 class LightsManager;
+class PTimer;
 
 class Application
 {
@@ -35,7 +31,9 @@ public:
 	~Application();
 
 	bool Init();
+	void ManageTimersPreUpdate();
 	update_status Update();
+	void ManageTimersPostUpdate();
 	bool CleanUp();
 
 	void LogInTitle(std::string info) const;
@@ -57,13 +55,7 @@ public:
 
 	JSON_Value *configuration;
 
-	//Timer to measure app constructor, awake, start, cleanup 
-	PTimer* measureTimer;
-
-	unsigned frameCountSinceStartup = 0;
-	unsigned averageFPS = 0;
-	unsigned lastUpdateUS = 0;
-	unsigned framceCountPerSecond = 0;
+	
 
 	// HW info
 	SDL_version sdlVersion;
@@ -75,7 +67,17 @@ public:
 	LightsManager *lightsManager;
 
 private:
-	float msByFrame = 0;
+	PTimer* updateTimer = nullptr;
+	PTimer* fpsTimer = nullptr;
+
+	unsigned fps = 0;
+	unsigned fpsCount = 0;
+	unsigned fpsCap = 0;
+	float dt = 0;
+	unsigned frameMS = 0;
+
+	unsigned msByFrame = 0;
+
 	std::list<Module*> modules;
 
 

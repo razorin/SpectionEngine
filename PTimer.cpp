@@ -1,8 +1,9 @@
 #include "PTimer.h"
-#include "SDL\include\SDL.h"
+#include "SDL\include\SDL_timer.h"
 
 
-unsigned PTimer::frequency = SDL_GetPerformanceFrequency();
+
+Uint64 PTimer::frequency = SDL_GetPerformanceFrequency();
 
 PTimer::PTimer()
 {
@@ -42,9 +43,9 @@ void PTimer::Restart()
 	Start();
 }
 
-unsigned PTimer::GetTimeUS() const
+Uint64 PTimer::GetTimeUS() const
 {
-	unsigned timeUS = 0;
+	Uint64 timeUS = 0;
 
 	if (isStarted)
 	{
@@ -54,20 +55,19 @@ unsigned PTimer::GetTimeUS() const
 		}
 		else
 		{
-			timeUS = (SDL_GetPerformanceCounter() - start) / frequency;
+			timeUS = (SDL_GetPerformanceCounter() - start) * 1000000 / frequency;
 		}
 	}
 
 	return timeUS;
 }
 
-unsigned PTimer::GetTimeMS() const
+Uint64 PTimer::GetTimeMS() const
 {
-
 	return GetTimeUS() / 1000;
 }
 
-unsigned PTimer::GetTimeS() const
+Uint64 PTimer::GetTimeS() const
 {
 	return GetTimeUS() / 1000000;
 }

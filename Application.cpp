@@ -11,8 +11,6 @@
 #include "ModuleSceneManager.h"
 #include "ModulePrimitives.h"
 
-#include "Timer.h"
-#include "PreciseTimer.h"
 #include "PTimer.h"
 #include "LightsManager.h"
 #include "Parson.h"
@@ -25,16 +23,18 @@ using namespace std;
 
 Application::Application()
 {
-	measureTimer = new PTimer();
+	updateTimer = new PTimer();
+	fpsTimer = new PTimer();
+	fpsTimer->Start();
 
 	configuration = json_parse_file("config.json");
 	JSON_Object *root = json_value_get_object(configuration);
 
 	JSON_Object* parameters = json_object_dotget_object(root, "config.app");
-	int fpsCap = (int)json_object_dotget_number(parameters, "fps_cap");
+	fpsCap = (unsigned)json_object_dotget_number(parameters, "fps_cap");
 
 	assert(fpsCap > 0);
-	msByFrame = (1.f / (float)fpsCap) * 1000;
+	msByFrame = 1000 / fpsCap;
 
 
 	// Order matters: they will init/start/pre/update/post in this order
@@ -63,9 +63,11 @@ Application::~Application()
 
 	json_value_free(configuration);
 
-	RELEASE(measureTimer);
-
 	RELEASE(lightsManager);
+
+
+	RELEASE(updateTimer);
+	RELEASE(fpsTimer);
 }
 
 bool Application::Init()
@@ -92,11 +94,17 @@ bool Application::Init()
 	return ret;
 }
 
+void Application::ManageTimersPreUpdate()
+{
+	dt = (float)updateTimer->GetTimeUS() / 1000.0f;
+	updateTimer->Restart();
+}
+
 update_status Application::Update()
 {
 	update_status ret = UPDATE_CONTINUE;
 
-	float dt = 20;
+	ManageTimersPreUpdate();
 
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 		if((*it)->IsEnabled() == true) 
@@ -110,13 +118,30 @@ update_status Application::Update()
 		if((*it)->IsEnabled() == true) 
 			ret = (*it)->PostUpdate(dt);
 	
-
-	frameCountSinceStartup++;
-	framceCountPerSecond++;
-
-
+	
+	ManageTimersPostUpdate();
 
 	return ret;
+}
+
+void Application::ManageTimersPostUpdate()
+{
+	fpsCount++;
+
+	if (fpsTimer->GetTimeUS() >= 1000000)
+	{
+		fps = fpsCount;
+		fpsCount = 0;
+		fpsTimer->Restart();
+	}
+
+	//We cant work with US here because sdlDelay works with ms
+	frameMS = updateTimer->GetTimeMS();
+	if (frameMS < msByFrame)
+	{
+		SDL_Delay(msByFrame - frameMS);
+	}
+
 }
 
 bool Application::CleanUp()
@@ -133,7 +158,7 @@ bool Application::CleanUp()
 }
 
 
-void Application::LogInTitle(std::string info) const
+void Application::LogInTitle(string info) const
 {
 	window->ChangeTitle(info.c_str());
 }
