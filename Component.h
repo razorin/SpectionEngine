@@ -2,7 +2,6 @@
 #define COMPONENT_H
 
 #include <string>
-#include "GameObject.h"
 #include "MemLeaks.h"
 
 enum ComponentType {
@@ -36,7 +35,7 @@ public:
 	ComponentType type = ComponentType::COMPONENT_TYPE_UNDEFINED;
 
 protected:
-	GameObject *container = nullptr;
+	GameObject *container;
 	bool active = true;
 	bool toDelete = false;
 	std::string id = "";

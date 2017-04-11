@@ -2,10 +2,10 @@
 #include "Application.h"
 #include "ModuleSceneManager.h"
 #include "ModuleCamera.h"
+#include "ModuleAnimation.h"
 #include "LightsManager.h"
 #include "Light.h"
 #include "ModuleGUI.h"
-#include "Scene.h"
 #include "GameObject.h"
 #include "Component.h"
 #include "ComponentAnim.h"
@@ -314,58 +314,8 @@ void GameObject::Draw() const
 					static_cast<ComponentMesh*>(*it)->DrawMesh();
 					//App->gui->console.AddLog("PRINTING MESH %s", this->name.c_str());
 				}
-				
-			}
-
-			if ((*it)->type == ComponentType::COMPONENT_TYPE_ANIMATION)
-			{
-				ComponentAnim* componentAnim = (ComponentAnim*)(*it);
-
-				if (!componentAnim->isPlaying)
-					break;
-
-				AnimInstance* instance = App->animator->GetInstance(componentAnim->instanceId);
-
-				if (instance == nullptr)
-				{
-					break;
-				}
-
-				//instance->time += dt;
-				//if (instance->time > instance->animation->duration)
-				//{
-				//	if (instance->loop)
-				//	{
-				//		while (instance->time > instance->animation->duration)
-				//		{
-				//			instance->time -= instance->animation->duration;
-				//		}
-				//	}
-				//	else
-				//		return;
-				//}
-
-				//float3 pos = float3::zero;
-				//Quat rot = Quat::identity;
-
-				//for (int i = 0; i < instance->animation->numChannels; i++)
-				//{
-				//	GameObject* boneGO = (*it)->FindGoInChilds(instance->animation->channels[i].name.data);
-				//	if (boneGO != nullptr)
-				//	{
-				//		pos = float3::zero;
-				//		rot = Quat::identity;
-
-				//		GetTransform(instance, &instance->animation->channels[i], pos, rot);
-
-				//		boneGO->transform->SetTransform(pos, rot);
-				//	}
-				//}
-				//DeformGOMeshes(*it);
 
 			}
-
-
 		}
 	}
 
@@ -384,65 +334,83 @@ void GameObject::Update(float dt)
 {
 	for (std::list<Component*>::const_iterator it = components.begin(); it != components.end(); it++)
 	{
-		if ((*it)->IsActive()) {
+		if (!(*it)->IsActive())
+			continue;
 
-			if ((*it)->type == ComponentType::COMPONENT_TYPE_ANIMATION)
+		if (!(*it)->type == ComponentType::COMPONENT_TYPE_ANIMATION)
+			continue;
+
+		ComponentAnim* componentAnim = (ComponentAnim*)(*it);
+		if (!componentAnim->isPlaying)
+			continue;
+
+		AnimInstance* instance = App->animator->GetInstance(componentAnim->instanceId);
+		if (instance == nullptr)
+			continue;
+
+		if (instance->next != nullptr)
+		{
+			//TODO::delete instance
+			instance->blendTime += dt;
+			if (instance->blendTime > instance->blendDuration)
 			{
-				ComponentAnim* componentAnim = (ComponentAnim*)(*it);
-
-				if (!componentAnim->isPlaying)
-					break;
-
-				AnimInstance* instance = App->animator->GetInstance(componentAnim->instanceId);
-
-				if (instance == nullptr)
-				{
-					break;
-				}
-
-				instance->time += dt;
-				if (instance->time > instance->animation->duration)
-				{
-					if (instance->loop)
-					{
-						while (instance->time > instance->animation->duration)
-						{
-							instance->time -= instance->animation->duration;
-						}
-					}
-					else
-						return;
-				}
-
-				float3 pos = float3::zero;
-				Quat rot = Quat::identity;
-
-				for (int i = 0; i < instance->animation->numChannels; i++)
-				{
-					GameObject* boneGO = FindGoInChilds(instance->animation->channels[i].name.data);
-					if (boneGO != nullptr)
-					{
-						pos = float3::zero;
-						rot = Quat::identity;
-
-						App->animator->GetTransform(instance, &instance->animation->channels[i], pos, rot);
-
-						boneGO->transform->SetTransform(pos, rot);
-					}
-				}
-				//TODO:REFACTOR
-				App->animator->DeformGOMeshes(this);
-
+				componentAnim->instanceId = instance->next->id;
+				instance = App->animator->GetInstance(componentAnim->instanceId);
 			}
-
-
+			else
+			{
+				AnimInstance* next = instance->next;
+				next->time += dt;
+				while (next->time > next->animation->duration)
+				{
+					next->time -= next->animation->duration;
+				}
+			}
 		}
+
+
+		instance->time += dt;
+		if (instance->time > instance->animation->duration)
+		{
+			if (instance->loop)
+			{
+				while (instance->time > instance->animation->duration)
+				{
+					instance->time -= instance->animation->duration;
+				}
+			}
+			else
+				return;
+			//TODO::delete instance
+		}
+
+		float3 pos = float3::zero;
+		Quat rot = Quat::identity;
+
+		for (int i = 0; i < instance->animation->numChannels; i++)
+		{
+			GameObject* boneGO = FindGoInChilds(instance->animation->channels[i].name.data);
+			if (boneGO != nullptr)
+			{
+				pos = float3::zero;
+				rot = Quat::identity;
+
+				//This method below wont blend because of param's "channel" nature
+				//App->animator->GetTransform(instance, &instance->animation->channels[i], pos, rot);
+
+				App->animator->GetTransform(instance->id, instance->animation->channels[i].name.data, pos, rot);
+
+				boneGO->transform->SetTransform(pos, rot);
+			}
+		}
+		//TODO:REFACTOR
+		App->animator->DeformGOMeshes(this);
 	}
+
 	for (std::list<GameObject*>::const_iterator it = childs.begin(); it != childs.end(); it++)
 	{
 		(*it)->Update(dt);
 	}
-
 }
 
 bool GameObject::CleanUp()

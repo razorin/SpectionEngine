@@ -7,8 +7,6 @@
 #include <vector>
 #include "AssimpIncludes.h"
 #include "MathGeoLib\include\MathGeoLib.h"
-#include "PreciseTimer.h"
-#include "GameObject.h"
 
 struct NodeAnim
 {
@@ -39,6 +37,9 @@ struct AnimInstance
 	uint blendTime = 0;
 };
 
+
+class GameObject;
+
 class ModuleAnimation : public Module
 {
 
@@ -64,10 +65,13 @@ public:
 	AnimInstance* GetInstance(unsigned id);
 
 	uint Play(const char* animName, bool loop = true);
+	uint Play(Anim* anim, bool loop = true);
+	uint CreateAnimInstance(Anim* anim, bool loop);
 	void Stop(uint instanceId);
 	void BlendTo(uint instanceId, const char* newAnim, uint blendTime);
 	bool GetTransform(uint instanceId, const char* channelName, float3& position, Quat& rotation);
 	bool GetTransform(AnimInstance* instance, NodeAnim* channel, float3& position, Quat& rotation);
+	bool GetBlendTransform(AnimInstance* blendSource, AnimInstance* blendTarget);
 	float3 InterpVector3D(const float3& first, const float3& second, float lambda) const;
 	Quat InterpQuaternion(const Quat& first, const Quat& second, float lambda) const;
 
