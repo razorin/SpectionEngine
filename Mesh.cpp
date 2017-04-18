@@ -24,7 +24,7 @@ Mesh::~Mesh()
 	RELEASE_ARRAY(this->bones);
 }
 
-void Mesh::InitializeBuffers()
+void Mesh::InitializeBuffers(bool dynamic)
 {
 	glGenBuffers(1, (GLuint*) &(vboVertices));
 	glBindBuffer(GL_ARRAY_BUFFER, vboVertices);
@@ -73,6 +73,24 @@ void Mesh::InitializeBuffers()
 			}
 		}
 	}*/
+
+	// Now we pack all buffers using a VAO (Vertex Attribute Object)
+	/*glGenVertexArrays(1, &ret); // generate one VAO and fill its id in ret
+	glBindVertexArray(ret);	// start using this VAO
+	// From OpenGL 3.2+ on we can use VAO (but this ill require a shader) --- 
+	// Add our vertices on position 0
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vbo_vertices);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	// Add our normals on position 1
+	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vbo_normals);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	// Add our texture coordinates on position 2
+	glEnableVertexAttribArray(2);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vbo_texture_coords);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	LOG("New VAO with id %u", ret);*/
 
 }
 

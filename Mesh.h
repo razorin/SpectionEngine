@@ -31,7 +31,7 @@ public:
 	Mesh();
 	~Mesh();
 
-	void InitializeBuffers();
+	void InitializeBuffers(bool dynamic = false);
 	void Draw() const;
 	void Deform();
 
