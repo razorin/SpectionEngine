@@ -475,10 +475,7 @@ void GameObject::Update(float dt)
 				}
 				//TODO:REFACTOR
 				App->animator->DeformGOMeshes(this);
-
 			}
-
-
 		}
 	}
 	for (std::list<GameObject*>::const_iterator it = childs.begin(); it != childs.end(); it++)

@@ -32,10 +32,13 @@ imageName(mesh->imageName), numBones(mesh->numBones)
 		textureCoords = new float[vboTextures];
 		std::copy(mesh->textureCoords, mesh->textureCoords + vboTextures, textureCoords);
 	}
-	if (mesh->bones != nullptr) {
+	//numBones = 1;
+	if (mesh->bones != nullptr && numBones > 0) {
+		Bone *bone = nullptr;
 		bones = new Bone[numBones];
 		for (int i = 0; i < numBones; ++i) {
-			bones[i] = new Bone(mesh->bones[i]);
+			bone = new Bone(mesh->bones[i]);
+			bones[i] = bone;
 		}
 	}
 }
@@ -49,10 +52,6 @@ Mesh::~Mesh()
 	RELEASE_ARRAY(this->vertices);
 	RELEASE_ARRAY(this->textureCoords);
 
-	//for (int i = 0; i < numBones; i++)
-	//{
-	//	RELEASE_ARRAY(this->bones[i].weights);
-	//}
 	RELEASE_ARRAY(this->bones);
 }
 

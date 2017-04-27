@@ -40,13 +40,31 @@ struct Bone
 		weights = new Weight[numWeights];
 		const GameObject *go = bone->ownerGOTransform->getGameObject();
 		std::string name = go->GetName();
-		GameObject *parent =  App->sceneManager->getCurrentScene()->GetGameObject(name);
-		ownerGOTransform =  parent->transform;
+		GameObject *parent = App->sceneManager->getCurrentScene()->GetGameObject(name);
+		ownerGOTransform = parent->transform;
+		for (int i = 0; i < numWeights; ++i) {
+			weights[i] = new Weight(bone->weights[i]);
+		}
+
+		bind = float4x4(bone->bind);
+	}
+
+	Bone& operator= (const Bone *bone) {
+		name = aiString(bone->name);
+		numWeights = bone->numWeights;
+		weights = new Weight[numWeights];
+		const GameObject *go = bone->ownerGOTransform->getGameObject();
+		std::string name = go->GetName();
+		GameObject *parent = App->sceneManager->getCurrentScene()->GetGameObject(name);
+		ownerGOTransform = parent->transform;
 		for (int i = 0; i < numWeights; ++i) {
 			weights[i] = new Weight(bone->weights[i]);
 		}
 		bind = float4x4(bone->bind);
+
+		return *this;
 	}
+
 	~Bone() {
 		RELEASE_ARRAY(this->weights);
 	}

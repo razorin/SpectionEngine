@@ -12,7 +12,9 @@ ComponentAnim::ComponentAnim(GameObject * container, std::string id) : Component
 ComponentAnim::ComponentAnim(GameObject * container, const ComponentAnim * animation) : Component(container, ComponentType::COMPONENT_TYPE_ANIMATION, animation->id), isPlaying(animation->isPlaying),
 numClips(animation->numClips), instanceId(animation->instanceId)
 {
-
+	for (auto it = animation->clips.begin(); it != animation->clips.end(); ++it) {
+		AddClip((*it).second);
+	}
 }
 
 ComponentAnim::~ComponentAnim()
