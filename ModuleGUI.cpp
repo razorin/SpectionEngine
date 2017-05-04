@@ -11,8 +11,9 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "SDL\include\SDL_version.h"
+#include "Brofiler\Brofiler.h"
 #include "Point.h"
-#include<list>
+#include <list>
 
 //IMGUI Includes
 #include "IMGUI\imconfig.h"
@@ -45,6 +46,7 @@ update_status ModuleGUI::PreUpdate(float dt)
 
 update_status ModuleGUI::Update(float dt)
 {
+	BROFILER_CATEGORY("UpdateModuleGUI", Profiler::Color::Pink)
 	update_status ret = UPDATE_CONTINUE;
 	ImGuiIO& io = ImGui::GetIO();
 	uiInput = io.WantCaptureMouse;

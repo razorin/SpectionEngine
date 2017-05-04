@@ -7,6 +7,7 @@
 #include "SDL/include/SDL.h"
 #include "IMGUI\imgui.h"
 #include "IMGUI\imgui_impl_sdl_gl3.h"
+#include "Brofiler\Brofiler.h"
 
 #define MAX_KEYS 300
 
@@ -50,6 +51,8 @@ bool ModuleInput::Start()
 // Called each loop iteration
 update_status ModuleInput::PreUpdate(float dt)
 {
+	BROFILER_CATEGORY("PreUpdateModuleInput", Profiler::Color::Blue)
+
 	ImGui_ImplSdlGL3_NewFrame(App->window->window);
 
 	static SDL_Event event;

@@ -18,6 +18,7 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "IMGUI\imgui.h"
 #include "IMGUI\imgui_impl_sdl_gl3.h"
+#include "Brofiler\Brofiler.h"
 
 
 ModuleRender::ModuleRender(const JSON_Object *json) : Module(json)
@@ -110,6 +111,7 @@ update_status ModuleRender::PreUpdate(float dt)
 // Called every draw update
 update_status ModuleRender::Update(float dt)
 {
+	BROFILER_CATEGORY("UpdateModuleRender", Profiler::Color::Orange)
 	glBindTexture(GL_TEXTURE_2D, 0);
 	DrawGrid();
 	//DrawGizmo();
