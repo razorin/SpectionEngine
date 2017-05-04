@@ -2,8 +2,11 @@
 #include "Application.h"
 #include "Globals.h"
 #include "SDL/include/SDL.h"
+#include "Brofiler\Brofiler.h"
+
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
+//#pragma comment(lib, "Brofiler/ProfilerCore32.lib")
 
 #ifdef _MSC_VER
 #	pragma comment (lib, "opengl32.lib")
@@ -52,6 +55,7 @@ int main(int argc, char ** argv)
 
 	while (state != MAIN_EXIT)
 	{
+		BROFILER_FRAME("frameName")
 		switch (state)
 		{
 		case MAIN_CREATION:

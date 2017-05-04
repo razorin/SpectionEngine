@@ -9,6 +9,7 @@
 #include "ComponentAnim.h"
 #include "ComponentMesh.h"
 #include "ModuleWindow.h"
+#include "Brofiler\Brofiler.h"
 
 using namespace std;
 
@@ -114,7 +115,7 @@ bool ModuleAnimation::CleanUp()
 
 //We update every instance time and blendTime if there's any
 update_status ModuleAnimation::Update(float dt)
-{
+{ BROFILER_CATEGORY("UpdateModuleAnimation", Profiler::Color::Orange)
 
 	//Todo Change it so we can have more than 1 animation in the entire game
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)

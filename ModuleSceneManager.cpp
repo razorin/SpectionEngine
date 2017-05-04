@@ -3,7 +3,7 @@
 #include "GameObject.h"
 #include "ComponentTransform.h"
 #include <assert.h>
-
+#include "Brofiler\Brofiler.h"
 
 ModuleSceneManager::ModuleSceneManager(const JSON_Object *json, bool active) : Module(json, active)
 {
@@ -35,7 +35,8 @@ update_status ModuleSceneManager::PreUpdate(float dt)
 }
 
 update_status ModuleSceneManager::Update(float dt)
-{
+{ BROFILER_CATEGORY("UpdateModuleSceneManager", Profiler::Color::Green)
+	
 	if (currentScene != nullptr) {
 		currentScene->Update(dt);
 	}
