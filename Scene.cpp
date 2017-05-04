@@ -37,7 +37,7 @@ GameObject * Scene::GetGameObject(std::string name)
 	return root->FindGOByName(name);
 }
 
-void Scene::LoadLevel(const char * path, const char * file)
+void Scene::LoadLevel(const char * path, const char * file, bool dynamic)
 {
 	aiString folderPath = aiString(path);
 	aiString filePath = folderPath;
@@ -101,7 +101,7 @@ void Scene::LoadLevel(const char * path, const char * file)
 			memcpy(&mesh->indices[j * 3], aiFace.mIndices, sizeof(uint) * 3);
 		}
 
-		mesh->InitializeBuffers();
+		mesh->InitializeBuffers(dynamic);
 
 		// Save bones info
 		if (aiMesh->HasBones())

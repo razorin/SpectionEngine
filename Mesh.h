@@ -37,6 +37,10 @@ public:
 
 
 public:
+	int glDrawMode;
+
+	uint ret;
+
 	uint vboVertices = 0;
 	uint vboIndices = 0;
 	uint vboColors = 0;

@@ -26,26 +26,33 @@ Mesh::~Mesh()
 
 void Mesh::InitializeBuffers(bool dynamic)
 {
+	if (dynamic) {
+		glDrawMode = GL_DYNAMIC_DRAW;
+	}
+	else {
+		glDrawMode = GL_STATIC_DRAW;
+	}
+
 	glGenBuffers(1, (GLuint*) &(vboVertices));
 	glBindBuffer(GL_ARRAY_BUFFER, vboVertices);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*numVertices * 3, vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*numVertices * 3, vertices, glDrawMode);
 
 	glGenBuffers(1, (GLuint*) &(vboIndices));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndices);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)* numIndices, indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)* numIndices, indices, glDrawMode);
 
 	if (normals != nullptr)
 	{
 		glGenBuffers(1, (GLuint*)&(vboNormals));
 		glBindBuffer(GL_ARRAY_BUFFER, vboNormals);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * numVertices * 3, normals, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * numVertices * 3, normals, glDrawMode);
 	}
 
 	if (colors != nullptr)
 	{
 		glGenBuffers(1, (GLuint*) &(vboColors));
 		glBindBuffer(GL_ARRAY_BUFFER, vboColors);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float)* numVertices * 3, colors, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)* numVertices * 3, colors, glDrawMode);
 	}
 
 	if (textureCoords != nullptr)
@@ -58,7 +65,7 @@ void Mesh::InitializeBuffers(bool dynamic)
 		//}
 		glGenBuffers(1, (GLuint*)&(vboTextures));
 		glBindBuffer(GL_ARRAY_BUFFER, vboTextures);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float)* numVertices * 3, textureCoords, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)* numVertices * 3, textureCoords, glDrawMode);
 	}
 
 	//Multiple textures
@@ -75,22 +82,22 @@ void Mesh::InitializeBuffers(bool dynamic)
 	}*/
 
 	// Now we pack all buffers using a VAO (Vertex Attribute Object)
-	/*glGenVertexArrays(1, &ret); // generate one VAO and fill its id in ret
+	/*glGenVertexArrays(1, ret); // generate one VAO and fill its id in ret
 	glBindVertexArray(ret);	// start using this VAO
 	// From OpenGL 3.2+ on we can use VAO (but this ill require a shader) --- 
 	// Add our vertices on position 0
 	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->vbo_vertices);
+	glBindBuffer(GL_ARRAY_BUFFER, vboVertices);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	// Add our normals on position 1
 	glEnableVertexAttribArray(1);
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->vbo_normals);
+	glBindBuffer(GL_ARRAY_BUFFER, vboNormals);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	// Add our texture coordinates on position 2
 	glEnableVertexAttribArray(2);
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->vbo_texture_coords);
+	glBindBuffer(GL_ARRAY_BUFFER, vboTextures);
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-	LOG("New VAO with id %u", ret);*/
+	//DLOG("New VAO with id %u", ret);*/
 
 }
 
@@ -171,7 +178,7 @@ void Mesh::Deform()
 		}
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, vboVertices);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*numVertices * 3, newVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*numVertices * 3, newVertices, glDrawMode);
 
 	delete(newVertices);
 }

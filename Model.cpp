@@ -25,7 +25,7 @@ Model::~Model()
 
 }
 
-void Model::Load(const char* path, const char* file)
+void Model::Load(const char* path, const char* file, bool dynamic)
 {
 	aiString folderPath = aiString(path);
 	aiString filePath = folderPath;
@@ -120,7 +120,7 @@ void Model::Load(const char* path, const char* file)
 
 
 			//After all info is on our mesh we can initialize VBOs
-			meshes[i].InitializeBuffers();
+			meshes[i].InitializeBuffers(dynamic);
 		}
 	}
 }

@@ -22,7 +22,7 @@ public:
 	GameObject* AddGameObject(GameObject* parent = nullptr, bool editable = false, const std::string &name = "");
 
 	GameObject* GetGameObject(std::string code);
-	void LoadLevel(const char* path, const char* file);
+	void LoadLevel(const char* path, const char* file, bool dynamic = false);
 	void RecursiveNodeRead(GameObject* go, aiNode& aiNode, GameObject* parentGO);
 	void BindBonesTransform();
 
