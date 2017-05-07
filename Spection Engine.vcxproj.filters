@@ -178,6 +178,10 @@
     <ClInclude Include="PTimer.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="ProgramManager.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -306,5 +310,19 @@
     <ClCompile Include="PTimer.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="ProgramManager.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SpectionEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="FragmentShader.txt">
+      <Filter>Resources</Filter>
+    </Text>
+    <Text Include="VertexShader.txt">
+      <Filter>Resources</Filter>
+    </Text>
   </ItemGroup>
 </Project>

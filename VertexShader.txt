@@ -1,0 +1,6 @@
+varying vex2 myTexCoord;
+
+void Main(){
+	glPosition = gl_ProjectionMatrix*gl_ModelViewMatrix*gl_Vertex;
+	myTexCoord = vec2(gl_MultiTexCoord0);
+}
