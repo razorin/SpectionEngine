@@ -10,6 +10,7 @@
 #include "ModuleCamera.h"
 #include "ModuleSceneManager.h"
 #include "ModulePrimitives.h"
+#include "ProgramManager.h";
 
 #include "PTimer.h"
 #include "LightsManager.h"
@@ -54,6 +55,8 @@ Application::Application()
 	modules.push_back(animator = new ModuleAnimation());
 
 	lightsManager = new LightsManager();
+
+	
 }
 
 Application::~Application()
@@ -90,6 +93,10 @@ bool Application::Init()
 	CPUCache = SDL_GetCPUCacheLineSize();
 	systemRAM = (float)SDL_GetSystemRAM() * 8 / 1024;
 	currentPlatform = SDL_GetPlatform();
+
+	//Program Manager
+	ProgramManager* programManager = ProgramManager::GetInstance();
+	programManager->Load("First Shader", "Shaders/VertexShader.txt", "Shaders/FragmentShader.txt");
 
 	return ret;
 }

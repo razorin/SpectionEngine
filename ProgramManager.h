@@ -1,13 +1,18 @@
 #ifndef __MODULEPROGRAM_H__
 #define __MODULEPROGRAM_H__
 
-#include "Module.h"
+#include "Globals.h"
 #include "assimp\cimport.h"
 #include <map>
+#include "Glew/include/GL/glew.h"
+#include "SDL/include/SDL_opengl.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
+
 
 class ProgramManager
 {
-private:
+public:
 
 	struct LessString {
 		bool operator()(const aiString& left, const aiString& right) {
@@ -18,10 +23,12 @@ private:
 	typedef std::map<aiString, LessString> ProgramList;
 
 	ProgramList programs;
-	static std::auto_ptr<ProgramManager> instance;
+	static ProgramManager* instance;
+
+private:
+	ProgramManager();
 
 public:
-	ProgramManager();
 	~ProgramManager();
 
 	void Load(const char* name, const char* vertexShaderPath, const char* fragmentShaderPath);
