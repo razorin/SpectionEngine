@@ -1,8 +1,7 @@
-#pragma once
-#include "Module.h"
 #ifndef __MODULEPROGRAM_H__
 #define __MODULEPROGRAM_H__
 
+#include "Module.h"
 #include "assimp\cimport.h"
 #include <map>
 
@@ -25,12 +24,14 @@ public:
 	ProgramManager();
 	~ProgramManager();
 
-	void Load(const char* name, const char* vertexShader, const char* fragmentShader);
+	void Load(const char* name, const char* vertexShaderPath, const char* fragmentShaderPath);
 	void Clear();
 
 	int GetUniformLocation(const char* name, const char* uniform);
 	void UseProgram(const char* name);
 	void UnuseProgram();
+
+	char* ReadShader(const char* name);
 
 	static ProgramManager* GetInstance();
 };
