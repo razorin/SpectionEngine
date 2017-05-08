@@ -31,7 +31,7 @@ public:
 	void UseProgram(const char* name);
 	void UnuseProgram();
 
-	char* ReadShader(const char* name);
+	std::string ReadShader(const char *filePath);
 
 	static ProgramManager* GetInstance();
 };
