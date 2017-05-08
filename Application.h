@@ -22,6 +22,7 @@ class ModulePrimitives;
 
 class LightsManager;
 class PTimer;
+class ProgramManager;
 
 class Application
 {
@@ -52,6 +53,8 @@ public:
 	ModuleSceneManager* sceneManager;
 	ModulePrimitives* primitives;
 	ModuleAnimation* animator;
+
+	ProgramManager* programManager;
 
 	JSON_Value *configuration;
 

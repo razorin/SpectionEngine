@@ -56,6 +56,8 @@ Application::Application()
 
 	lightsManager = new LightsManager();
 
+	//Program Manager
+	programManager = ProgramManager::GetInstance();
 	
 }
 
@@ -94,8 +96,7 @@ bool Application::Init()
 	systemRAM = (float)SDL_GetSystemRAM() * 8 / 1024;
 	currentPlatform = SDL_GetPlatform();
 
-	//Program Manager
-	ProgramManager* programManager = ProgramManager::GetInstance();
+	//Load Shaders
 	programManager->Load("First Shader", "Shaders/VertexShader.txt", "Shaders/FragmentShader.txt");
 
 	return ret;
@@ -160,6 +161,8 @@ bool Application::CleanUp()
 			ret = (*it)->CleanUp();
 
 	lightsManager->CleanUp();
+
+	programManager->Clear();
 
 	return ret;
 }

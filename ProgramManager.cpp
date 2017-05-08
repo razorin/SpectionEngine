@@ -9,15 +9,16 @@
 ProgramManager* ProgramManager::instance = nullptr;
 
 ProgramManager::ProgramManager()
-{	
+{
 }
 
 
 ProgramManager::~ProgramManager()
 {
+	
 }
 
-void ProgramManager::Load(const char * name, const char * vertexShaderPath, const char * fragmentShaderPath)
+void ProgramManager::Load(const std::string name, const std::string vertexShaderPath, const std::string fragmentShaderPath)
 {
 	//Create Shaders
 	GLuint vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
@@ -72,12 +73,29 @@ void ProgramManager::Load(const char * name, const char * vertexShaderPath, cons
 	DLOG(programError);
 
 	//Use this program for everything to test
-	glUseProgram(id);
+	//glUseProgram(id);
 
+	//Save Shader
+	Program loadedProgram;
+	loadedProgram.id = id;
+	programs[name] = loadedProgram;
+
+
+	//Releasing
+	glDeleteShader(vertexShaderId);
+	glDeleteShader(fragmentShaderId);
+	RELEASE(vertShaderError);
+	RELEASE(fragShaderError);
+	RELEASE(programError);
 }
 
 void ProgramManager::Clear()
 {
+	programs.clear();
+	if (instance != nullptr) {
+		RELEASE(instance);
+		instance = nullptr;
+	}
 }
 
 int ProgramManager::GetUniformLocation(const char * name, const char * uniform)
@@ -85,16 +103,32 @@ int ProgramManager::GetUniformLocation(const char * name, const char * uniform)
 	return 0;
 }
 
-void ProgramManager::UseProgram(const char * name)
+void ProgramManager::UseProgram(const std::string name)
 {
-	//glUseProgram(id);
+	ProgramList::iterator it = programs.find(name);
+	if (it != programs.end()) {
+		SetProgramsToFalse();
+		glUseProgram(it->second.id);
+		it->second.active = true;
+	}
+	else {
+		DLOG("Program not found!");
+	}
 }
 
 void ProgramManager::UnuseProgram()
 {
+	GLint data;
+	glGetIntegerv(GL_CURRENT_PROGRAM,&data);
+	if (data != 0) {
+		glUseProgram(0);
+		SetProgramsToFalse();
+	}else {
+		DLOG("No program active to unuse!");
+	}
 }
 
-std::string ProgramManager::ReadShader(const char *filePath) {
+std::string ProgramManager::ReadShader(const std::string filePath) {
 	std::string content;
 	std::ifstream fileStream(filePath, std::ios::in);
 	
@@ -112,6 +146,13 @@ std::string ProgramManager::ReadShader(const char *filePath) {
 	
 	fileStream.close();
 	return content;
+}
+
+void ProgramManager::SetProgramsToFalse()
+{
+	for (ProgramList::iterator it = programs.begin(); it != programs.end(); it++) {
+		it->second.active = false;
+	}
 }
 
 ProgramManager * ProgramManager::GetInstance()

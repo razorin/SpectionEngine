@@ -14,13 +14,12 @@ class ProgramManager
 {
 public:
 
-	struct LessString {
-		bool operator()(const aiString& left, const aiString& right) {
-			return ::strcmp(left.data, right.data) < 0;
-		}
+	struct Program {
+		GLuint id;
+		bool active = false;
 	};
 
-	typedef std::map<aiString, LessString> ProgramList;
+	typedef std::map<std::string, Program> ProgramList;
 
 	ProgramList programs;
 	static ProgramManager* instance;
@@ -31,14 +30,15 @@ private:
 public:
 	~ProgramManager();
 
-	void Load(const char* name, const char* vertexShaderPath, const char* fragmentShaderPath);
+	void Load(const std::string name, const std::string vertexShaderPath, const std::string fragmentShaderPath);
 	void Clear();
 
 	int GetUniformLocation(const char* name, const char* uniform);
-	void UseProgram(const char* name);
+	void UseProgram(const std::string name);
 	void UnuseProgram();
 
-	std::string ReadShader(const char *filePath);
+	std::string ReadShader(const std::string filePath);
+	void SetProgramsToFalse();
 
 	static ProgramManager* GetInstance();
 };

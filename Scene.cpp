@@ -10,6 +10,7 @@
 #include "ComponentMaterial.h"
 #include "MemLeaks.h"
 #include "Mesh.h"
+#include "ProgramManager.h";
 
 using namespace std;
 
@@ -216,7 +217,9 @@ void Scene::Draw()
 	//TransformHierarchy();
 
 	//DrawRecursively(root);
+	App->programManager->UseProgram("First Shader");
 	root->Draw();
+	App->programManager->UnuseProgram();
 	DrawHierarchyNodes(root);
 }
 
