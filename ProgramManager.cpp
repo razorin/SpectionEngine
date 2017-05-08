@@ -36,31 +36,43 @@ void ProgramManager::Load(const char * name, const char * vertexShaderPath, cons
 	DLOG("Compiling vertex shader.");
 	glShaderSource(vertexShaderId, 1, &vertexShader, NULL);
 	glCompileShader(vertexShaderId);
-	// Check vertex shader
+	//Check Vertex Shader
 	glGetShaderiv(vertexShaderId, GL_COMPILE_STATUS, &result);
 	glGetShaderiv(vertexShaderId, GL_INFO_LOG_LENGTH, &logLength);
 	char* vertShaderError = new char[logLength];
-	//char* error_message = new char[logLength];
-	char error_message[1024];
-	int real_size = 0;
 	glGetShaderInfoLog(vertexShaderId, logLength, NULL, vertShaderError);
+	DLOG("Check result is: %d", result);
 	DLOG(vertShaderError);
 
 
-	//Compile Vertex Shader
+	//Compile Fragment Shader
 	DLOG("Compiling fragment shader.");
 	glShaderSource(fragmentShaderId, 1, &fragmentShader, NULL);
-	glCompileShader(vertexShaderId);
-
-	//glShaderSource(vertexShaderId,1,&vertexShader,NULL);
-	
 	glCompileShader(fragmentShaderId);
+	//Check Fragment Shader
+	glGetShaderiv(fragmentShaderId, GL_COMPILE_STATUS, &result);
+	glGetShaderiv(fragmentShaderId, GL_INFO_LOG_LENGTH, &logLength);
+	char* fragShaderError = new char[logLength];
+	glGetShaderInfoLog(fragmentShaderId, logLength, NULL, fragShaderError);
+	DLOG("Check result is: %d",result);
+	DLOG(fragShaderError);
+
 	//Create Program
+	DLOG("Linking program.");
 	GLuint id = glCreateProgram();
 	glAttachShader(id, vertexShaderId);
 	glAttachShader(id, fragmentShaderId);
 	glLinkProgram(id);
-	
+	//Check Program
+	glGetProgramiv(id, GL_LINK_STATUS, &result);
+	glGetProgramiv(id, GL_INFO_LOG_LENGTH, &logLength);
+	char* programError = new char[logLength];
+	glGetProgramInfoLog(id, logLength, NULL, programError);
+	DLOG("Check result is: %d", result);
+	DLOG(programError);
+
+	//Use this program for everything to test
+	glUseProgram(id);
 
 }
 

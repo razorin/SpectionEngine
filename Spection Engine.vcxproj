@@ -170,8 +170,8 @@
     <ResourceCompile Include="SpectionEngine.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="FragmentShader.txt" />
-    <Text Include="VertexShader.txt" />
+    <Text Include="Game\Shaders\FragmentShader.txt" />
+    <Text Include="Game\Shaders\VertexShader.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

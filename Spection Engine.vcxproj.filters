@@ -318,10 +318,10 @@
     <ResourceCompile Include="SpectionEngine.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="FragmentShader.txt">
+    <Text Include="Game\Shaders\FragmentShader.txt">
       <Filter>Resources</Filter>
     </Text>
-    <Text Include="VertexShader.txt">
+    <Text Include="Game\Shaders\VertexShader.txt">
       <Filter>Resources</Filter>
     </Text>
   </ItemGroup>
