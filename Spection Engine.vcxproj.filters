@@ -324,5 +324,11 @@
     <Text Include="Game\Shaders\VertexShader.txt">
       <Filter>Resources</Filter>
     </Text>
+    <Text Include="Game\Shaders\FragmentShader_DiffuseLighting.txt">
+      <Filter>Resources</Filter>
+    </Text>
+    <Text Include="Game\Shaders\VertexShader_DiffuseLighting.txt">
+      <Filter>Resources</Filter>
+    </Text>
   </ItemGroup>
 </Project>

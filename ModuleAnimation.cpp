@@ -34,7 +34,7 @@ bool ModuleAnimation::Start()
 
 	GameObject* go = App->sceneManager->getCurrentScene()->GetGameObject("$ColladaAutoName$_0");
 	ComponentAnim* compAnim = (ComponentAnim*)go->AddComponent(ComponentType::COMPONENT_TYPE_ANIMATION);
-	compAnim->Play("Idle");
+	//compAnim->Play("Idle");
 
 	return true;
 }

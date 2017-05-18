@@ -171,7 +171,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Game\Shaders\FragmentShader.txt" />
+    <Text Include="Game\Shaders\FragmentShader_DiffuseLighting.txt" />
     <Text Include="Game\Shaders\VertexShader.txt" />
+    <Text Include="Game\Shaders\VertexShader_DiffuseLighting.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
