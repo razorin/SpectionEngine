@@ -217,7 +217,7 @@ void Scene::Draw()
 	//TransformHierarchy();
 
 	//DrawRecursively(root);
-	App->programManager->UseProgram("First Shader");
+	App->programManager->UseProgram("Second Shader");
 	root->Draw();
 	App->programManager->UnuseProgram();
 	DrawHierarchyNodes(root);
