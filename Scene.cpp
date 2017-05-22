@@ -218,8 +218,12 @@ void Scene::Draw()
 
 	//DrawRecursively(root);
 	App->programManager->UseProgram("Second Shader");
+	GLfloat value[3] = { 0.0f, 5.0f, 0.0f };
+	GLint locUniform = glGetUniformLocation(App->programManager->GetProgramId("Second Shader"), "light_position");
+	glUniform3fv(locUniform, 3, value);
+	DLOG("%d", locUniform);
 	root->Draw();
-	App->programManager->UnuseProgram();
+	App->programManager->UnuseProgram(); 
 	DrawHierarchyNodes(root);
 }
 

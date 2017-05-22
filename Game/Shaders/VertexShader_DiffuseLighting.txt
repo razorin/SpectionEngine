@@ -1,12 +1,24 @@
 varying vec2 myTexCoord;
 varying float diffuse;
 uniform vec3 light_position;
+uniform float z;
 
 void main(){
 	gl_Position = gl_ProjectionMatrix*gl_ModelViewMatrix*gl_Vertex;
 	myTexCoord = vec2(gl_MultiTexCoord0);
+	
 	mat3 glNormalMatrix = gl_NormalMatrix;
-	vec3 n = glNormalMatrix * glNormal;
+	vec3 n = glNormalMatrix * gl_Normal;
+
+	//mat3 glModelViewMatrix = gl_ModelViewMatrix;
+	vec3 v = gl_ModelViewMatrix * gl_Vertex;
+	
+	vec3 l = gl_ModelViewMatrix * vec4(light_position,1);
+
+	vec3 light_dir = normalize(light_position - gl_Vertex);
+
 	//diffuse = dot( (matrixCompMult(gl_Normal,gl_NormalMatrix)), normalize((light_position*gl_ModelViewMatrix - gl_Vertex)*gl_ModelViewMatrix));
+
+	//glUniform3f(glGetUniformLocation(program_id,“light_position”), x, y, z);
 	
 }

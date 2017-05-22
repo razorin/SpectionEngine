@@ -34,6 +34,7 @@ public:
 	void Clear();
 
 	int GetUniformLocation(const char* name, const char* uniform);
+	GLint GetProgramId(const char* name);
 	void UseProgram(const std::string name);
 	void UnuseProgram();
 

@@ -80,6 +80,8 @@ void ProgramManager::Load(const std::string name, const std::string vertexShader
 	loadedProgram.id = id;
 	programs[name] = loadedProgram;
 
+	GLint locUniform = glGetUniformLocation(id, "z");
+	GLenum error = glGetError();
 
 	//Releasing
 	glDeleteShader(vertexShaderId);
@@ -101,6 +103,11 @@ void ProgramManager::Clear()
 int ProgramManager::GetUniformLocation(const char * name, const char * uniform)
 {
 	return 0;
+}
+
+GLint ProgramManager::GetProgramId(const char * name)
+{
+	return programs[name].id;
 }
 
 void ProgramManager::UseProgram(const std::string name)

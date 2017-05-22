@@ -97,8 +97,10 @@ bool Application::Init()
 	currentPlatform = SDL_GetPlatform();
 
 	//Load Shaders
-	//programManager->Load("First Shader", "Shaders/VertexShader.txt", "Shaders/FragmentShader.txt");
+	programManager->Load("First Shader", "Shaders/VertexShader.txt", "Shaders/FragmentShader.txt");
 	programManager->Load("Second Shader", "Shaders/VertexShader_DiffuseLighting.txt", "Shaders/FragmentShader_DiffuseLighting.txt");
+	//glUniform3f(glGetUniformLocation(programManager->GetProgramId("Second Shader"), "light_position"), 0.0f, 5.0f,5.0f);
+	
 
 	return ret;
 }
